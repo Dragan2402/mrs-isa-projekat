@@ -13,7 +13,7 @@ public class Slot {
     private Long id;
 
     private LocalDateTime startingTime;
-    private int durationHours;
+    private SlotType type;
     private boolean free;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,9 +32,9 @@ public class Slot {
     public Slot() {
     }
 
-    public Slot(LocalDateTime startingTime, int durationHours, boolean free) {
+    public Slot(LocalDateTime startingTime, SlotType type, boolean free) {
         this.startingTime = startingTime;
-        this.durationHours = durationHours;
+        this.type = type;
         this.free = free;
     }
 
@@ -54,12 +54,12 @@ public class Slot {
         this.startingTime = startingTime;
     }
 
-    public int getDurationHours() {
-        return durationHours;
+    public SlotType getType() {
+        return type;
     }
 
-    public void setDurationHours(int durationHours) {
-        this.durationHours = durationHours;
+    public void setType(SlotType type) {
+        this.type = type;
     }
 
     public boolean isFree() {

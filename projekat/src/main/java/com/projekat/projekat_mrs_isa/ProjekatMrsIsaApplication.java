@@ -112,14 +112,14 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
 
         //(LocalDateTime startingTime, int durationHours, boolean free)
-        Slot slotTemp= new Slot(LocalDateTime.of(2022,01,01,0,0,0,0),1,true);
+        Slot slotTemp= new Slot(LocalDateTime.of(2022,01,01,0,0,0,0),SlotType.FishingClass,true);
         fishingClassTemp.addSlot(slotTemp);
 
-        Slot slotTemp2= new Slot(LocalDateTime.of(2022,01,01,0,0,0,0),5,false);
+        Slot slotTemp2= new Slot(LocalDateTime.of(2022,01,01,0,0,0,0),SlotType.Ship,false);
         fishingClassTemp.addSlot(slotTemp2);
         offerTemp.addSlot(slotTemp2);
 
-        Slot slotTemp3= new Slot(LocalDateTime.of(2022,01,01,0,0,0,0),2,false);
+        Slot slotTemp3= new Slot(LocalDateTime.of(2022,01,01,0,0,0,0),SlotType.VacationHouse,false);
         fishingClassTemp.addSlot(slotTemp3);
         reservationTemp.addSlot(slotTemp3);
 
