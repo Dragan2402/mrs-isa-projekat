@@ -28,6 +28,9 @@ public abstract class RentingEntity {
     @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Set<Offer> offers = new HashSet<Offer>();
 
+    @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    private Set<Reservation> reservations = new HashSet<Reservation>();
+
     @Column(name = "behaviourRules", nullable = false)
     private String behaviourRules;
 
@@ -143,6 +146,26 @@ public abstract class RentingEntity {
         offers.remove(offer);
         offer.setRentingEntity(null);
     }
+
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Set<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+
+    public void addReservation(Reservation reservation){
+        reservations.add(reservation);
+        reservation.setRentingEntity(this);
+    }
+
+    public void removeReservation(Reservation reservation){
+        reservations.remove(reservation);
+        reservation.setRentingEntity(null);
+    }
+
+
 
     @Override
     public String toString() {

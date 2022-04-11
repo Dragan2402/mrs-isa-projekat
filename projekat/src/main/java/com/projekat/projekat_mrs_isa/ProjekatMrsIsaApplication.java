@@ -40,6 +40,9 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
     @Autowired
     private VacationHouseRepository vacationHouseRep;
 
+    @Autowired
+    private ReservationRepository reservationRep;
+
 
 
     public static void main(String[] args) {
@@ -96,5 +99,12 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         vacHouseOwnerTemp1.addVacationHouse(vacationHouseTemp);
         vacationHouseRep.save(vacationHouseTemp);
         offerRep.save(offerTemp);
+
+        //public Reservation(String firstSlot, Long slotQuantity, String place, Integer clientNum, Set<String> additionalServices, Double price) {
+        Reservation reservationTemp = new Reservation("firstSlot",5L,"Brcko",5,addService,50.0);
+        vacationHouseTemp.addReservation(reservationTemp);
+        clientTemp1.addReservation(reservationTemp);
+        reservationRep.save(reservationTemp);
+
     }
 }
