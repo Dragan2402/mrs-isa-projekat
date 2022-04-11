@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.controller;
 
 
+import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.Client;
 import com.projekat.projekat_mrs_isa.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class ClientController {
     private ClientService clientService;
 
     @GetMapping(value = "/all")
-    public ResponseEntity<List<Client>> getAllClients() {
-        List<Client> clients = clientService.findAll();
+    public ResponseEntity<List<UserDTO>> getAllClients() {
+        List<UserDTO> clients = clientService.findAllDTO();
         return new ResponseEntity<>(clients, HttpStatus.OK);
     }
 }

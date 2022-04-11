@@ -1,5 +1,6 @@
 package com.projekat.projekat_mrs_isa.service;
 
+import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.Client;
 import com.projekat.projekat_mrs_isa.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ public class ClientService {
     private ClientRepository clientRepository;
 
     public Client findById(long id) { return clientRepository.findById(id).orElse(null) ;}
+
+    public List<UserDTO> findAllDTO() { return clientRepository.findAllDTO(); }
 
     public List<Client> findAll() { return clientRepository.findAll(); }
 
