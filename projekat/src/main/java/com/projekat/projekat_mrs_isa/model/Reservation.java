@@ -23,6 +23,7 @@ public class Reservation {
     private Integer clientLimit;
 
     @Column(name = "additional_services")
+    @ElementCollection(targetClass=String.class)
     private Set<String> additionalServices;
 
     @Column(name = "price", nullable = false)

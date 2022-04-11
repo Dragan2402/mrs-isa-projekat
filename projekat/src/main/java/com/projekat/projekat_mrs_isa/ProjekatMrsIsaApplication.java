@@ -7,6 +7,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SpringBootApplication
 public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
@@ -24,6 +27,18 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
     @Autowired
     private FishingInstructorRepository fishingInstructorRep;
+
+    @Autowired
+    private ReservationRepository reservationRep;
+
+    @Autowired
+    private BoatRepository boatRep;
+
+    @Autowired
+    private FishingClassRepository fishingClassRep;
+
+    @Autowired
+    private VacationHouseRepository vacationHouseRep;
 
     public static void main(String[] args) {
         SpringApplication.run(ProjekatMrsIsaApplication.class, args);
@@ -57,7 +72,19 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
         fishingInstructorRep.save(fishingInstructorTemp);
 
+        List<String> pics1 = new ArrayList<String>();
+        List<Reservation> reservations1 = new ArrayList<Reservation>();
+        List<String> nav1 = new ArrayList<String>();
+        List<String> fisheq1 = new ArrayList<String>();
 
+        Boat boatTemp = new Boat("Russki vojeni karabil", "Snake Island", "Ima svacega", pics1, reservations1, "Nema jajarenja", "100 dinara", "Ponesite svoje pice", "Nema para nazad", "Raketni razarac", 90, "1234412541", 550, 115, nav1, 55, fisheq1);
+        boatRep.save(boatTemp);
+
+        FishingClass fishingClassTemp = new FishingClass("Lovim i brojim", "Plaza u kurcu mome", "Bice interesantno", pics1, reservations1, "Nema jajarenja", "200 dinara", "Ponesite svoje pice", "Nema para nazad", "Triput osudjivan za pokusaj silovanja na radnom mestu", 10, fisheq1);
+        fishingClassRep.save(fishingClassTemp);
+
+        VacationHouse vacationHouseTemp = new VacationHouse("Golden Rose", "Rakovac", "Glavni kuvar Milos pravi gulas od cevapa", pics1, reservations1, "Nema jajarenja", "500 dinara", "Ponesite svoje pice", "Nema para nazad", 10, 5);
+        vacationHouseRep.save(vacationHouseTemp);
 
     }
 }
