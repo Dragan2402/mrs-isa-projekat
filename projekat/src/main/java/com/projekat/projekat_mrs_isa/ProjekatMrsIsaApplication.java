@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,6 +43,9 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
     @Autowired
     private ReservationRepository reservationRep;
+
+    @Autowired
+    private SlotRepository slotRep;
 
 
 
@@ -105,6 +109,24 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         vacationHouseTemp.addReservation(reservationTemp);
         clientTemp1.addReservation(reservationTemp);
         reservationRep.save(reservationTemp);
+
+
+        //(LocalDateTime startingTime, int durationHours, boolean free)
+        Slot slotTemp= new Slot(LocalDateTime.of(2022,01,01,0,0,0,0),1,true);
+        fishingClassTemp.addSlot(slotTemp);
+
+        Slot slotTemp2= new Slot(LocalDateTime.of(2022,01,01,0,0,0,0),5,false);
+        fishingClassTemp.addSlot(slotTemp2);
+        offerTemp.addSlot(slotTemp2);
+
+        Slot slotTemp3= new Slot(LocalDateTime.of(2022,01,01,0,0,0,0),2,false);
+        fishingClassTemp.addSlot(slotTemp3);
+        reservationTemp.addSlot(slotTemp3);
+
+
+        slotRep.save(slotTemp);
+        slotRep.save(slotTemp2);
+        slotRep.save(slotTemp3);
 
 
     }

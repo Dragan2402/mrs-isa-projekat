@@ -3,6 +3,9 @@ package com.projekat.projekat_mrs_isa.model;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+
+
+
 @Entity
 public class Slot {
     @Id
