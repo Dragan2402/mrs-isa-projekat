@@ -1,7 +1,7 @@
 package com.projekat.projekat_mrs_isa.model;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 public class FishingClass extends RentingEntity{
@@ -14,18 +14,16 @@ public class FishingClass extends RentingEntity{
 
     @Column(name = "fishingEquipment", nullable = false)
     @ElementCollection(targetClass=String.class)
-    private List<String> fishingEquipment;
-
+    private Set<String> fishingEquipment;
 
     @ManyToOne
     @JoinColumn(name = "fishing_instructor_id",nullable = false)
     private FishingInstructor fishingInstructor;
 
-
     public FishingClass() {
     }
 
-    public FishingClass(String name, String address, String promoDescription, List<String> pictures, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String instructorBiography, Integer clientLimit, List<String> fishingEquipment) {
+    public FishingClass(String name, String address, String promoDescription, Set<String> pictures, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String instructorBiography, Integer clientLimit, Set<String> fishingEquipment) {
         super(name, address, promoDescription, pictures, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.instructorBiography = instructorBiography;
         this.clientLimit = clientLimit;
@@ -48,11 +46,11 @@ public class FishingClass extends RentingEntity{
         this.clientLimit = clientLimit;
     }
 
-    public List<String> getFishingEquipment() {
+    public Set<String> getFishingEquipment() {
         return fishingEquipment;
     }
 
-    public void setFishingEquipment(List<String> fishingEquipment) {
+    public void setFishingEquipment(Set<String> fishingEquipment) {
         this.fishingEquipment = fishingEquipment;
     }
 
@@ -63,8 +61,6 @@ public class FishingClass extends RentingEntity{
     public void setFishingInstructor(FishingInstructor fishingInstructor) {
         this.fishingInstructor = fishingInstructor;
     }
-
-
 
     @Override
     public String toString() {

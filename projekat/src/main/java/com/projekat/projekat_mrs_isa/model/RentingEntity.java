@@ -2,7 +2,6 @@ package com.projekat.projekat_mrs_isa.model;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,7 +23,7 @@ public abstract class RentingEntity {
 
     @Column(name = "pictures", nullable = false)
     @ElementCollection(targetClass=String.class)
-    private List<String> pictures;
+    private Set<String> pictures;
 
     @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Set<Offer> offers = new HashSet<Offer>();
@@ -44,12 +43,11 @@ public abstract class RentingEntity {
     public RentingEntity() {
     }
 
-    public RentingEntity(String name, String address, String promoDescription, List<String> pictures, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions) {
+    public RentingEntity(String name, String address, String promoDescription, Set<String> pictures, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions) {
         this.name = name;
         this.address = address;
         this.promoDescription = promoDescription;
         this.pictures = pictures;
-
         this.behaviourRules = behaviourRules;
         this.priceList = priceList;
         this.additionalInfo = additionalInfo;
@@ -88,11 +86,11 @@ public abstract class RentingEntity {
         this.promoDescription = promoDescription;
     }
 
-    public List<String> getPictures() {
+    public Set<String> getPictures() {
         return pictures;
     }
 
-    public void setPictures(List<String> pictures) {
+    public void setPictures(Set<String> pictures) {
         this.pictures = pictures;
     }
 

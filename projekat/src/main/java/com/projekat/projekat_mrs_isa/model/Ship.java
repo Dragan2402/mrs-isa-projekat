@@ -1,7 +1,7 @@
 package com.projekat.projekat_mrs_isa.model;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Ship extends RentingEntity{
@@ -23,14 +23,14 @@ public class Ship extends RentingEntity{
 
     @Column(name = "navigationEquipment", nullable = false)
     @ElementCollection(targetClass=String.class)
-    private List<String> navigationEquipment;
+    private Set<String> navigationEquipment;
 
     @Column(name = "clientLimit", nullable = false)
     private Integer clientLimit;
 
     @Column(name = "fishingEquipment", nullable = false)
     @ElementCollection(targetClass=String.class)
-    private List<String> fishingEquipment;
+    private Set<String> fishingEquipment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ship_owner_id",nullable = false)
@@ -39,7 +39,7 @@ public class Ship extends RentingEntity{
     public Ship() {
     }
 
-    public Ship(String name, String address, String promoDescription, List<String> pictures,  String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String type, Integer length, String engineNumber, Integer enginePower, Integer topSpeed, List<String> navigationEquipment, Integer clientLimit, List<String> fishingEquipment) {
+    public Ship(String name, String address, String promoDescription, Set<String> pictures,  String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String type, Integer length, String engineNumber, Integer enginePower, Integer topSpeed, Set<String> navigationEquipment, Integer clientLimit, Set<String> fishingEquipment) {
         super(name, address, promoDescription, pictures, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.type = type;
         this.length = length;
@@ -91,11 +91,11 @@ public class Ship extends RentingEntity{
         this.topSpeed = topSpeed;
     }
 
-    public List<String> getNavigationEquipment() {
+    public Set<String> getNavigationEquipment() {
         return navigationEquipment;
     }
 
-    public void setNavigationEquipment(List<String> navigationEquipment) {
+    public void setNavigationEquipment(Set<String> navigationEquipment) {
         this.navigationEquipment = navigationEquipment;
     }
 
@@ -107,11 +107,11 @@ public class Ship extends RentingEntity{
         this.clientLimit = clientLimit;
     }
 
-    public List<String> getFishingEquipment() {
+    public Set<String> getFishingEquipment() {
         return fishingEquipment;
     }
 
-    public void setFishingEquipment(List<String> fishingEquipment) {
+    public void setFishingEquipment(Set<String> fishingEquipment) {
         this.fishingEquipment = fishingEquipment;
     }
 

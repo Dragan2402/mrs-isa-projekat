@@ -1,7 +1,7 @@
 package com.projekat.projekat_mrs_isa.model;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 public class VacationHouse extends RentingEntity{
@@ -19,7 +19,7 @@ public class VacationHouse extends RentingEntity{
     public VacationHouse() {
     }
 
-    public VacationHouse(String name, String address, String promoDescription, List<String> pictures, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, Integer roomsQuantity, Integer bedsPerRoom) {
+    public VacationHouse(String name, String address, String promoDescription, Set<String> pictures, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, Integer roomsQuantity, Integer bedsPerRoom) {
         super(name, address, promoDescription, pictures, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.roomsQuantity = roomsQuantity;
         this.bedsPerRoom = bedsPerRoom;

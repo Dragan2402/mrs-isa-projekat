@@ -7,9 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @SpringBootApplication
@@ -76,11 +74,10 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
         fishingInstructorRep.save(fishingInstructorTemp);
 
-        List<String> pics1 = new ArrayList<String>();
-
-        List<Offer> offer1 = new ArrayList<Offer>();
-        List<String> nav1 = new ArrayList<String>();
-        List<String> fisheq1 = new ArrayList<String>();
+        Set<String> pics1 = new HashSet<String>();
+        Set<Offer> offer1 = new HashSet<Offer>();
+        Set<String> nav1 = new HashSet<String>();
+        Set<String> fisheq1 = new HashSet<String>();
         Set<String> addService= new HashSet<>();
         //Integer id, String firstSlot, Long slotQuantity, String place, Integer clientLimit, Set<String> additionalServices, Double price)
         Offer offerTemp = new Offer("firstSlot",5L,"Brcko",5,addService, 500.0);
