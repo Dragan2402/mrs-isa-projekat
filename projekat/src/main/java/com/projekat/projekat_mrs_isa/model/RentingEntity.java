@@ -9,7 +9,7 @@ public abstract class RentingEntity {
     @Id
     @SequenceGenerator(name = "rentingEntitiesSeqGenV1", sequenceName = "rentingEntitiesSeqV1", initialValue = 1, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rentingEntitiesSeqGenV1")
-    private Integer id;
+    private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -55,11 +55,11 @@ public abstract class RentingEntity {
         this.cancellationConditions = cancellationConditions;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

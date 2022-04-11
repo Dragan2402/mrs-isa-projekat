@@ -8,7 +8,7 @@ public abstract class User {
     @Id
     @SequenceGenerator(name = "usersSeqGenV1",sequenceName = "usersSeqV1",initialValue = 1,allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usersSeqGenV1")
-    private Integer id;
+    private Long id;
 
     @Column(name="email",unique = true,nullable = false)
     private String email;
@@ -51,11 +51,11 @@ public abstract class User {
         this.phoneNum = phoneNum;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
