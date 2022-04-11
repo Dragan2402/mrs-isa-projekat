@@ -26,6 +26,9 @@ public abstract class RentingEntity {
     private Set<String> pictures;
 
     @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    private Set<Slot> slots = new HashSet<Slot>();
+
+    @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Set<Offer> offers = new HashSet<Offer>();
 
     @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
@@ -163,6 +166,24 @@ public abstract class RentingEntity {
     public void removeReservation(Reservation reservation){
         reservations.remove(reservation);
         reservation.setRentingEntity(null);
+    }
+
+    public Set<Slot> getSlots() {
+        return slots;
+    }
+
+    public void setSlots(Set<Slot> slots) {
+        this.slots = slots;
+    }
+
+    public void addSlot(Slot slot){
+        slots.add(slot);
+        slot.setRentingEntity(this);
+    }
+
+    public void removeSlot(Slot slot){
+        slots.remove(slot);
+        slot.setRentingEntity(null);
     }
 
 

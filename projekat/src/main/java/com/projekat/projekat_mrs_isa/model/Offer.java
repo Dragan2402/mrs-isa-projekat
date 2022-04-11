@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -8,12 +9,6 @@ public class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "firstSlot", nullable = false)
-    private String firstSlot;
-
-    @Column(name = "slotQuantity", nullable = false)
-    private Long slotQuantity;
 
     @Column(name = "place", nullable = false)
     private String place;
@@ -32,12 +27,13 @@ public class Offer {
     @JoinColumn(name = "renting_entity_id",nullable = false)
     private RentingEntity rentingEntity;
 
+    @OneToMany(mappedBy = "offer" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    private Set<Slot> slots = new HashSet<Slot>();
+
     public Offer() {
     }
 
-    public Offer(String firstSlot, Long slotQuantity, String place, Integer clientLimit, Set<String> additionalServices, Double price) {
-        this.firstSlot = firstSlot;
-        this.slotQuantity = slotQuantity;
+    public Offer( String place, Integer clientLimit, Set<String> additionalServices, Double price) {
         this.place = place;
         this.clientLimit = clientLimit;
         this.additionalServices = additionalServices;
@@ -50,22 +46,6 @@ public class Offer {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getFirstSlot() {
-        return firstSlot;
-    }
-
-    public void setFirstSlot(String firstSlot) {
-        this.firstSlot = firstSlot;
-    }
-
-    public Long getSlotQuantity() {
-        return slotQuantity;
-    }
-
-    public void setSlotQuantity(Long slotQuantity) {
-        this.slotQuantity = slotQuantity;
     }
 
     public String getPlace() {
@@ -109,12 +89,28 @@ public class Offer {
         this.rentingEntity = rentingEntity;
     }
 
+    public Set<Slot> getSlots() {
+        return slots;
+    }
+
+    public void setSlots(Set<Slot> slots) {
+        this.slots = slots;
+    }
+
+    public void addSlot(Slot slot){
+        slots.add(slot);
+        slot.setOffer(this);
+    }
+
+    public void removeSlot(Slot slot){
+        slots.remove(slot);
+        slot.setOffer(null);
+    }
+
     @Override
     public String toString() {
         return "Offer{" +
                 "id=" + id +
-                ", firstSlot='" + firstSlot + '\'' +
-                ", slotQuantity=" + slotQuantity +
                 ", place='" + place + '\'' +
                 ", clientLimit=" + clientLimit +
                 ", additionalServices=" + additionalServices +

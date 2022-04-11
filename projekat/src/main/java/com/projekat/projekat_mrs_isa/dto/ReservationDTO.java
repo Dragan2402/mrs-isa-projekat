@@ -2,20 +2,25 @@ package com.projekat.projekat_mrs_isa.dto;
 
 import com.projekat.projekat_mrs_isa.model.Offer;
 import com.projekat.projekat_mrs_isa.model.Reservation;
+import com.projekat.projekat_mrs_isa.model.Slot;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class ReservationDTO {
     private Long id;
-    private String firstSlot;
-    private Long slotQuantity;
     private String place;
+    private Set<Long> slotIds;
     private Integer clientNum;
     private Double price;
 
     public ReservationDTO(@NotNull Reservation reservation) {
         id = reservation.getId();
-        firstSlot = reservation.getFirstSlot();
-        slotQuantity = reservation.getSlotQuantity();
+        this.slotIds=new HashSet<Long>();
+        for (Slot slot : reservation.getSlots()){
+            this.slotIds.add(slot.getId());
+        }
         place = reservation.getPlace();
         clientNum = reservation.getClientNum();
         price = reservation.getPrice();
@@ -29,20 +34,20 @@ public class ReservationDTO {
         this.id = id;
     }
 
-    public String getFirstSlot() {
-        return firstSlot;
+    public Set<Long> getSlotIds() {
+        return slotIds;
     }
 
-    public void setFirstSlot(String firstSlot) {
-        this.firstSlot = firstSlot;
+    public void setSlotIds(Set<Long> slotIds) {
+        this.slotIds = slotIds;
     }
 
-    public Long getSlotQuantity() {
-        return slotQuantity;
+    public Integer getClientNum() {
+        return clientNum;
     }
 
-    public void setSlotQuantity(Long slotQuantity) {
-        this.slotQuantity = slotQuantity;
+    public void setClientNum(Integer clientNum) {
+        this.clientNum = clientNum;
     }
 
     public String getPlace() {
@@ -51,14 +56,6 @@ public class ReservationDTO {
 
     public void setPlace(String place) {
         this.place = place;
-    }
-
-    public Integer getClientLimit() {
-        return clientNum;
-    }
-
-    public void setClientLimit(Integer clientLimit) {
-        this.clientNum = clientLimit;
     }
 
     public Double getPrice() {

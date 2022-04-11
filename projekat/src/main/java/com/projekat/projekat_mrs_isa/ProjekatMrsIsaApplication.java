@@ -83,7 +83,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         Set<String> fisheq1 = new HashSet<String>();
         Set<String> addService= new HashSet<>();
         //Integer id, String firstSlot, Long slotQuantity, String place, Integer clientLimit, Set<String> additionalServices, Double price)
-        Offer offerTemp = new Offer("firstSlot",5L,"Brcko",5,addService, 500.0);
+        Offer offerTemp = new Offer("Brcko",5,addService, 500.0);
 
 
         Ship shipTemp = new Ship("Russki vojeni karabil", "Snake Island", "Ima svacega", pics1, "Nema jajarenja", "100 dinara", "Ponesite svoje pice", "Nema para nazad", "Raketni razarac", 90, "1234412541", 550, 115, nav1, 55, fisheq1);
@@ -101,10 +101,11 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         offerRep.save(offerTemp);
 
         //public Reservation(String firstSlot, Long slotQuantity, String place, Integer clientNum, Set<String> additionalServices, Double price) {
-        Reservation reservationTemp = new Reservation("firstSlot",5L,"Brcko",5,addService,50.0);
+        Reservation reservationTemp = new Reservation("Brcko",5,addService,50.0);
         vacationHouseTemp.addReservation(reservationTemp);
         clientTemp1.addReservation(reservationTemp);
         reservationRep.save(reservationTemp);
+
 
     }
 }

@@ -1,20 +1,27 @@
 package com.projekat.projekat_mrs_isa.dto;
 
 import com.projekat.projekat_mrs_isa.model.Offer;
+import com.projekat.projekat_mrs_isa.model.Slot;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class OfferDTO {
     private Long id;
-    private String firstSlot;
-    private Long slotQuantity;
+    private Set<Long> slotIds;
     private String place;
     private Integer clientLimit;
     private Double price;
 
     public OfferDTO(@NotNull Offer offer) {
         id = offer.getId();
-        firstSlot = offer.getFirstSlot();
-        slotQuantity = offer.getSlotQuantity();
+
+        this.slotIds=new HashSet<Long>();
+        for (Slot slot : offer.getSlots()){
+            this.slotIds.add(slot.getId());
+        }
+
         place = offer.getPlace();
         clientLimit = offer.getClientLimit();
         price = offer.getPrice();
@@ -28,21 +35,7 @@ public class OfferDTO {
         this.id = id;
     }
 
-    public String getFirstSlot() {
-        return firstSlot;
-    }
 
-    public void setFirstSlot(String firstSlot) {
-        this.firstSlot = firstSlot;
-    }
-
-    public Long getSlotQuantity() {
-        return slotQuantity;
-    }
-
-    public void setSlotQuantity(Long slotQuantity) {
-        this.slotQuantity = slotQuantity;
-    }
 
     public String getPlace() {
         return place;
@@ -66,5 +59,13 @@ public class OfferDTO {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Set<Long> getSlotIds() {
+        return slotIds;
+    }
+
+    public void setSlotIds(Set<Long> slotIds) {
+        this.slotIds = slotIds;
     }
 }

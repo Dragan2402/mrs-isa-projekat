@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -10,11 +11,7 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "firstSlot", nullable = false)
-    private String firstSlot;
 
-    @Column(name = "slotQuantity", nullable = false)
-    private Long slotQuantity;
 
     @Column(name = "place", nullable = false)
     private String place;
@@ -37,12 +34,14 @@ public class Reservation {
     @JoinColumn(name="client_id",nullable = false)
     private Client client;
 
+    @OneToMany(mappedBy = "reservation" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    private Set<Slot> slots = new HashSet<Slot>();
+
     public Reservation() {
     }
 
-    public Reservation(String firstSlot, Long slotQuantity, String place, Integer clientNum, Set<String> additionalServices, Double price) {
-        this.firstSlot = firstSlot;
-        this.slotQuantity = slotQuantity;
+    public Reservation( String place, Integer clientNum, Set<String> additionalServices, Double price) {
+
         this.place = place;
         this.clientNum = clientNum;
         this.additionalServices = additionalServices;
@@ -55,22 +54,6 @@ public class Reservation {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getFirstSlot() {
-        return firstSlot;
-    }
-
-    public void setFirstSlot(String firstSlot) {
-        this.firstSlot = firstSlot;
-    }
-
-    public Long getSlotQuantity() {
-        return slotQuantity;
-    }
-
-    public void setSlotQuantity(Long slotQuantity) {
-        this.slotQuantity = slotQuantity;
     }
 
     public String getPlace() {
@@ -121,12 +104,28 @@ public class Reservation {
         this.client = client;
     }
 
+    public Set<Slot> getSlots() {
+        return slots;
+    }
+
+    public void setSlots(Set<Slot> slots) {
+        this.slots = slots;
+    }
+
+    public void addSlot(Slot slot){
+        slots.add(slot);
+        slot.setReservation(this);
+    }
+
+    public void removeSlot(Slot slot){
+        slots.remove(slot);
+        slot.setReservation(null);
+    }
+
     @Override
     public String toString() {
         return "Reservation{" +
                 "id=" + id +
-                ", firstSlot='" + firstSlot + '\'' +
-                ", slotQuantity=" + slotQuantity +
                 ", place='" + place + '\'' +
                 ", clientNum=" + clientNum +
                 ", additionalServices=" + additionalServices +
