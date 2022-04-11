@@ -3,7 +3,6 @@ package com.projekat.projekat_mrs_isa.model;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.util.List;
 
 @Entity
@@ -38,8 +37,8 @@ public class Ship extends RentingEntity{
     public Ship() {
     }
 
-    public Ship(String name, String address, String promoDescription, List<String> pictures, List<Reservation> availableReservations, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String type, Integer length, String engineNumber, Integer enginePower, Integer topSpeed, List<String> navigationEquipment, Integer clientLimit, List<String> fishingEquipment) {
-        super(name, address, promoDescription, pictures, availableReservations, behaviourRules, priceList, additionalInfo, cancellationConditions);
+    public Ship(String name, String address, String promoDescription, List<String> pictures, List<Offer> availableOffers, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String type, Integer length, String engineNumber, Integer enginePower, Integer topSpeed, List<String> navigationEquipment, Integer clientLimit, List<String> fishingEquipment) {
+        super(name, address, promoDescription, pictures, availableOffers, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.type = type;
         this.length = length;
         this.engineNumber = engineNumber;

@@ -1,8 +1,5 @@
 package com.projekat.projekat_mrs_isa.model;
 
-import org.hibernate.annotations.Polymorphism;
-import org.hibernate.annotations.PolymorphismType;
-
 import javax.persistence.Entity;
 
 

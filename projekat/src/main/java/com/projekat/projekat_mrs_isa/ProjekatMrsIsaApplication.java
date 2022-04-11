@@ -29,7 +29,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
     private FishingInstructorRepository fishingInstructorRep;
 
     @Autowired
-    private ReservationRepository reservationRep;
+    private OfferRepository reservationRep;
 
     @Autowired
     private ShipRepository shipRep;
@@ -73,20 +73,17 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         fishingInstructorRep.save(fishingInstructorTemp);
 
         List<String> pics1 = new ArrayList<String>();
-        List<Reservation> reservations1 = new ArrayList<Reservation>();
+        List<Offer> offer1 = new ArrayList<Offer>();
         List<String> nav1 = new ArrayList<String>();
         List<String> fisheq1 = new ArrayList<String>();
 
-        Ship shipTemp = new Ship("Russki vojeni karabil", "Snake Island", "Ima svacega", pics1, reservations1, "Nema jajarenja", "100 dinara", "Ponesite svoje pice", "Nema para nazad", "Raketni razarac", 90, "1234412541", 550, 115, nav1, 55, fisheq1);
+        Ship shipTemp = new Ship("Russki vojeni karabil", "Snake Island", "Ima svacega", pics1, offer1, "Nema jajarenja", "100 dinara", "Ponesite svoje pice", "Nema para nazad", "Raketni razarac", 90, "1234412541", 550, 115, nav1, 55, fisheq1);
         shipRep.save(shipTemp);
 
-        FishingClass fishingClassTemp = new FishingClass("Lovim i brojim", "Plaza u kurcu mome", "Bice interesantno", pics1, reservations1, "Nema jajarenja", "200 dinara", "Ponesite svoje pice", "Nema para nazad", "Triput osudjivan za pokusaj silovanja na radnom mestu", 10, fisheq1);
+        FishingClass fishingClassTemp = new FishingClass("Lovim i brojim", "Plaza u kurcu mome", "Bice interesantno", pics1, offer1, "Nema jajarenja", "200 dinara", "Ponesite svoje pice", "Nema para nazad", "Triput osudjivan za pokusaj silovanja na radnom mestu", 10, fisheq1);
         fishingClassRep.save(fishingClassTemp);
 
-        VacationHouse vacationHouseTemp = new VacationHouse("Golden Rose", "Rakovac", "Glavni kuvar Milos pravi gulas od cevapa", pics1, reservations1, "Nema jajarenja", "500 dinara", "Ponesite svoje pice", "Nema para nazad", 10, 5);
+        VacationHouse vacationHouseTemp = new VacationHouse("Golden Rose", "Rakovac", "Glavni kuvar Milos pravi gulas od cevapa", pics1, offer1, "Nema jajarenja", "500 dinara", "Ponesite svoje pice", "Nema para nazad", 10, 5);
         vacationHouseRep.save(vacationHouseTemp);
-
-
-
     }
 }

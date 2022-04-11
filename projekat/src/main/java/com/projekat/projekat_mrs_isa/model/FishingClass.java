@@ -3,7 +3,6 @@ package com.projekat.projekat_mrs_isa.model;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.util.List;
 
 @Entity
@@ -22,8 +21,8 @@ public class FishingClass extends RentingEntity{
     public FishingClass() {
     }
 
-    public FishingClass(String name, String address, String promoDescription, List<String> pictures, List<Reservation> availableReservations, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String instructorBiography, Integer clientLimit, List<String> fishingEquipment) {
-        super(name, address, promoDescription, pictures, availableReservations, behaviourRules, priceList, additionalInfo, cancellationConditions);
+    public FishingClass(String name, String address, String promoDescription, List<String> pictures, List<Offer> availableOffers, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String instructorBiography, Integer clientLimit, List<String> fishingEquipment) {
+        super(name, address, promoDescription, pictures, availableOffers, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.instructorBiography = instructorBiography;
         this.clientLimit = clientLimit;
         this.fishingEquipment = fishingEquipment;

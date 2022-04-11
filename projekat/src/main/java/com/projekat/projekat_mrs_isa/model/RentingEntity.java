@@ -24,9 +24,9 @@ public abstract class RentingEntity {
     @ElementCollection(targetClass=String.class)
     private List<String> pictures;
 
-    @Column(name = "availableReservations", nullable = false)
-    @ElementCollection(targetClass=Reservation.class)
-    private List<Reservation> availableReservations;
+    @Column(name = "availableOffers", nullable = false)
+    @ElementCollection(targetClass= Offer.class)
+    private List<Offer> availableOffers;
 
     @Column(name = "behaviourRules", nullable = false)
     private String behaviourRules;
@@ -43,12 +43,12 @@ public abstract class RentingEntity {
     public RentingEntity() {
     }
 
-    public RentingEntity(String name, String address, String promoDescription, List<String> pictures, List<Reservation> availableReservations, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions) {
+    public RentingEntity(String name, String address, String promoDescription, List<String> pictures, List<Offer> availableOffers, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions) {
         this.name = name;
         this.address = address;
         this.promoDescription = promoDescription;
         this.pictures = pictures;
-        this.availableReservations = availableReservations;
+        this.availableOffers = availableOffers;
         this.behaviourRules = behaviourRules;
         this.priceList = priceList;
         this.additionalInfo = additionalInfo;
@@ -95,12 +95,12 @@ public abstract class RentingEntity {
         this.pictures = pictures;
     }
 
-    public List<Reservation> getAvailableReservations() {
-        return availableReservations;
+    public List<Offer> getAvailableReservations() {
+        return availableOffers;
     }
 
-    public void setAvailableReservations(List<Reservation> availableReservations) {
-        this.availableReservations = availableReservations;
+    public void setAvailableReservations(List<Offer> availableOffers) {
+        this.availableOffers = availableOffers;
     }
 
     public String getBehaviourRules() {
@@ -143,7 +143,7 @@ public abstract class RentingEntity {
                 ", address='" + address + '\'' +
                 ", promoDescription='" + promoDescription + '\'' +
                 ", pictures=" + pictures +
-                ", availableReservations=" + availableReservations +
+                ", availableOffers=" + availableOffers +
                 ", behaviourRules='" + behaviourRules + '\'' +
                 ", priceList='" + priceList + '\'' +
                 ", additionalInfo='" + additionalInfo + '\'' +
