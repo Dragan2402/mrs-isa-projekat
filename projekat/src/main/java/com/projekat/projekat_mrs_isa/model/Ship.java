@@ -7,8 +7,8 @@ import javax.persistence.Table;
 import java.util.List;
 
 @Entity
-@Table(name="v1_boat")
-public class Boat extends RentingEntity{
+@Table(name="v1_ship")
+public class Ship extends RentingEntity{
 
     @Column(name = "type", nullable = false)
     private String type;
@@ -36,10 +36,10 @@ public class Boat extends RentingEntity{
     @ElementCollection(targetClass=String.class)
     private List<String> fishingEquipment;
 
-    public Boat() {
+    public Ship() {
     }
 
-    public Boat(String name, String address, String promoDescription, List<String> pictures, List<Reservation> availableReservations, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String type, Integer length, String engineNumber, Integer enginePower, Integer topSpeed, List<String> navigationEquipment, Integer clientLimit, List<String> fishingEquipment) {
+    public Ship(String name, String address, String promoDescription, List<String> pictures, List<Reservation> availableReservations, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String type, Integer length, String engineNumber, Integer enginePower, Integer topSpeed, List<String> navigationEquipment, Integer clientLimit, List<String> fishingEquipment) {
         super(name, address, promoDescription, pictures, availableReservations, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.type = type;
         this.length = length;
@@ -117,7 +117,7 @@ public class Boat extends RentingEntity{
 
     @Override
     public String toString() {
-        return "Boat{" +
+        return "Ship{" +
                 "type='" + type + '\'' +
                 ", length=" + length +
                 ", engineNumber='" + engineNumber + '\'' +

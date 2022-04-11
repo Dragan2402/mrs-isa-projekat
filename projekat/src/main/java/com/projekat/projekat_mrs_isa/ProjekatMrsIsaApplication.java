@@ -32,7 +32,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
     private ReservationRepository reservationRep;
 
     @Autowired
-    private BoatRepository boatRep;
+    private ShipRepository shipRep;
 
     @Autowired
     private FishingClassRepository fishingClassRep;
@@ -77,8 +77,8 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         List<String> nav1 = new ArrayList<String>();
         List<String> fisheq1 = new ArrayList<String>();
 
-        Boat boatTemp = new Boat("Russki vojeni karabil", "Snake Island", "Ima svacega", pics1, reservations1, "Nema jajarenja", "100 dinara", "Ponesite svoje pice", "Nema para nazad", "Raketni razarac", 90, "1234412541", 550, 115, nav1, 55, fisheq1);
-        boatRep.save(boatTemp);
+        Ship shipTemp = new Ship("Russki vojeni karabil", "Snake Island", "Ima svacega", pics1, reservations1, "Nema jajarenja", "100 dinara", "Ponesite svoje pice", "Nema para nazad", "Raketni razarac", 90, "1234412541", 550, 115, nav1, 55, fisheq1);
+        shipRep.save(shipTemp);
 
         FishingClass fishingClassTemp = new FishingClass("Lovim i brojim", "Plaza u kurcu mome", "Bice interesantno", pics1, reservations1, "Nema jajarenja", "200 dinara", "Ponesite svoje pice", "Nema para nazad", "Triput osudjivan za pokusaj silovanja na radnom mestu", 10, fisheq1);
         fishingClassRep.save(fishingClassTemp);
