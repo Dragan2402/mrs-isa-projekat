@@ -7,7 +7,7 @@ import java.util.Set;
 public class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "firstSlot", nullable = false)
     private String firstSlot;
@@ -28,11 +28,14 @@ public class Offer {
     @Column(name = "price", nullable = false)
     private Double price;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "renting_entity_id",nullable = false)
+    private RentingEntity rentingEntity;
+
     public Offer() {
     }
 
-    public Offer(Integer id, String firstSlot, Long slotQuantity, String place, Integer clientLimit, Set<String> additionalServices, Double price) {
-        this.id = id;
+    public Offer(String firstSlot, Long slotQuantity, String place, Integer clientLimit, Set<String> additionalServices, Double price) {
         this.firstSlot = firstSlot;
         this.slotQuantity = slotQuantity;
         this.place = place;
@@ -41,11 +44,11 @@ public class Offer {
         this.price = price;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -95,6 +98,15 @@ public class Offer {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+
+    public RentingEntity getRentingEntity() {
+        return rentingEntity;
+    }
+
+    public void setRentingEntity(RentingEntity rentingEntity) {
+        this.rentingEntity = rentingEntity;
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.projekat.projekat_mrs_isa.model.Offer;
 import org.jetbrains.annotations.NotNull;
 
 public class OfferDTO {
-    private Integer id;
+    private Long id;
     private String firstSlot;
     private Long slotQuantity;
     private String place;
@@ -20,11 +20,11 @@ public class OfferDTO {
         price = offer.getPrice();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

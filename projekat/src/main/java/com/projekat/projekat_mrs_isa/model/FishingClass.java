@@ -1,8 +1,6 @@
 package com.projekat.projekat_mrs_isa.model;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -18,11 +16,17 @@ public class FishingClass extends RentingEntity{
     @ElementCollection(targetClass=String.class)
     private List<String> fishingEquipment;
 
+
+    @ManyToOne
+    @JoinColumn(name = "fishing_instructor_id",nullable = false)
+    private FishingInstructor fishingInstructor;
+
+
     public FishingClass() {
     }
 
-    public FishingClass(String name, String address, String promoDescription, List<String> pictures, List<Offer> availableOffers, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String instructorBiography, Integer clientLimit, List<String> fishingEquipment) {
-        super(name, address, promoDescription, pictures, availableOffers, behaviourRules, priceList, additionalInfo, cancellationConditions);
+    public FishingClass(String name, String address, String promoDescription, List<String> pictures, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String instructorBiography, Integer clientLimit, List<String> fishingEquipment) {
+        super(name, address, promoDescription, pictures, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.instructorBiography = instructorBiography;
         this.clientLimit = clientLimit;
         this.fishingEquipment = fishingEquipment;
@@ -51,6 +55,16 @@ public class FishingClass extends RentingEntity{
     public void setFishingEquipment(List<String> fishingEquipment) {
         this.fishingEquipment = fishingEquipment;
     }
+
+    public FishingInstructor getFishingInstructor() {
+        return fishingInstructor;
+    }
+
+    public void setFishingInstructor(FishingInstructor fishingInstructor) {
+        this.fishingInstructor = fishingInstructor;
+    }
+
+
 
     @Override
     public String toString() {

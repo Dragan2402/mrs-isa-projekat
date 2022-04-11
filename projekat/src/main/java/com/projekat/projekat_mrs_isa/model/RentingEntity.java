@@ -1,7 +1,9 @@
 package com.projekat.projekat_mrs_isa.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -24,9 +26,8 @@ public abstract class RentingEntity {
     @ElementCollection(targetClass=String.class)
     private List<String> pictures;
 
-    @Column(name = "availableOffers", nullable = false)
-    @ElementCollection(targetClass= Offer.class)
-    private List<Offer> availableOffers;
+    @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    private Set<Offer> offers = new HashSet<Offer>();
 
     @Column(name = "behaviourRules", nullable = false)
     private String behaviourRules;
@@ -43,12 +44,12 @@ public abstract class RentingEntity {
     public RentingEntity() {
     }
 
-    public RentingEntity(String name, String address, String promoDescription, List<String> pictures, List<Offer> availableOffers, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions) {
+    public RentingEntity(String name, String address, String promoDescription, List<String> pictures, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions) {
         this.name = name;
         this.address = address;
         this.promoDescription = promoDescription;
         this.pictures = pictures;
-        this.availableOffers = availableOffers;
+
         this.behaviourRules = behaviourRules;
         this.priceList = priceList;
         this.additionalInfo = additionalInfo;
@@ -95,14 +96,6 @@ public abstract class RentingEntity {
         this.pictures = pictures;
     }
 
-    public List<Offer> getAvailableReservations() {
-        return availableOffers;
-    }
-
-    public void setAvailableReservations(List<Offer> availableOffers) {
-        this.availableOffers = availableOffers;
-    }
-
     public String getBehaviourRules() {
         return behaviourRules;
     }
@@ -135,6 +128,24 @@ public abstract class RentingEntity {
         this.cancellationConditions = cancellationConditions;
     }
 
+    public Set<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(Set<Offer> offers) {
+        this.offers = offers;
+    }
+
+    public void addOffer(Offer offer){
+        offers.add(offer);
+        offer.setRentingEntity(this);
+    }
+
+    public void removeOffer(Offer offer){
+        offers.remove(offer);
+        offer.setRentingEntity(null);
+    }
+
     @Override
     public String toString() {
         return "RentingEntity{" +
@@ -143,7 +154,6 @@ public abstract class RentingEntity {
                 ", address='" + address + '\'' +
                 ", promoDescription='" + promoDescription + '\'' +
                 ", pictures=" + pictures +
-                ", availableOffers=" + availableOffers +
                 ", behaviourRules='" + behaviourRules + '\'' +
                 ", priceList='" + priceList + '\'' +
                 ", additionalInfo='" + additionalInfo + '\'' +

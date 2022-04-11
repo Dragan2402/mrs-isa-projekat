@@ -1,8 +1,6 @@
 package com.projekat.projekat_mrs_isa.model;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -34,11 +32,15 @@ public class Ship extends RentingEntity{
     @ElementCollection(targetClass=String.class)
     private List<String> fishingEquipment;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ship_owner_id",nullable = false)
+    private ShipOwner shipOwner;
+
     public Ship() {
     }
 
-    public Ship(String name, String address, String promoDescription, List<String> pictures, List<Offer> availableOffers, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String type, Integer length, String engineNumber, Integer enginePower, Integer topSpeed, List<String> navigationEquipment, Integer clientLimit, List<String> fishingEquipment) {
-        super(name, address, promoDescription, pictures, availableOffers, behaviourRules, priceList, additionalInfo, cancellationConditions);
+    public Ship(String name, String address, String promoDescription, List<String> pictures,  String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String type, Integer length, String engineNumber, Integer enginePower, Integer topSpeed, List<String> navigationEquipment, Integer clientLimit, List<String> fishingEquipment) {
+        super(name, address, promoDescription, pictures, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.type = type;
         this.length = length;
         this.engineNumber = engineNumber;
@@ -111,6 +113,14 @@ public class Ship extends RentingEntity{
 
     public void setFishingEquipment(List<String> fishingEquipment) {
         this.fishingEquipment = fishingEquipment;
+    }
+
+    public ShipOwner getShipOwner() {
+        return shipOwner;
+    }
+
+    public void setShipOwner(ShipOwner shipOwner) {
+        this.shipOwner = shipOwner;
     }
 
     @Override

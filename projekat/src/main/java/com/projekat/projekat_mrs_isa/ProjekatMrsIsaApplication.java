@@ -8,7 +8,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @SpringBootApplication
 public class ProjekatMrsIsaApplication implements CommandLineRunner {
@@ -29,7 +31,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
     private FishingInstructorRepository fishingInstructorRep;
 
     @Autowired
-    private OfferRepository reservationRep;
+    private OfferRepository offerRep;
 
     @Autowired
     private ShipRepository shipRep;
@@ -39,6 +41,8 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
     @Autowired
     private VacationHouseRepository vacationHouseRep;
+
+
 
     public static void main(String[] args) {
         SpringApplication.run(ProjekatMrsIsaApplication.class, args);
@@ -73,17 +77,27 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         fishingInstructorRep.save(fishingInstructorTemp);
 
         List<String> pics1 = new ArrayList<String>();
+
         List<Offer> offer1 = new ArrayList<Offer>();
         List<String> nav1 = new ArrayList<String>();
         List<String> fisheq1 = new ArrayList<String>();
+        Set<String> addService= new HashSet<>();
+        //Integer id, String firstSlot, Long slotQuantity, String place, Integer clientLimit, Set<String> additionalServices, Double price)
+        Offer offerTemp = new Offer("firstSlot",5L,"Brcko",5,addService, 500.0);
 
-        Ship shipTemp = new Ship("Russki vojeni karabil", "Snake Island", "Ima svacega", pics1, offer1, "Nema jajarenja", "100 dinara", "Ponesite svoje pice", "Nema para nazad", "Raketni razarac", 90, "1234412541", 550, 115, nav1, 55, fisheq1);
+
+        Ship shipTemp = new Ship("Russki vojeni karabil", "Snake Island", "Ima svacega", pics1, "Nema jajarenja", "100 dinara", "Ponesite svoje pice", "Nema para nazad", "Raketni razarac", 90, "1234412541", 550, 115, nav1, 55, fisheq1);
+        shipOwnerTemp1.addShip(shipTemp);
         shipRep.save(shipTemp);
 
-        FishingClass fishingClassTemp = new FishingClass("Lovim i brojim", "Plaza u kurcu mome", "Bice interesantno", pics1, offer1, "Nema jajarenja", "200 dinara", "Ponesite svoje pice", "Nema para nazad", "Triput osudjivan za pokusaj silovanja na radnom mestu", 10, fisheq1);
+        FishingClass fishingClassTemp = new FishingClass("Lovim i brojim", "Plaza u kurcu mome", "Bice interesantno", pics1, "Nema jajarenja", "200 dinara", "Ponesite svoje pice", "Nema para nazad", "Triput osudjivan za pokusaj silovanja na radnom mestu", 10, fisheq1);
+        fishingInstructorTemp.addFishingClass(fishingClassTemp);
         fishingClassRep.save(fishingClassTemp);
 
-        VacationHouse vacationHouseTemp = new VacationHouse("Golden Rose", "Rakovac", "Glavni kuvar Milos pravi gulas od cevapa", pics1, offer1, "Nema jajarenja", "500 dinara", "Ponesite svoje pice", "Nema para nazad", 10, 5);
+        VacationHouse vacationHouseTemp = new VacationHouse("Golden Rose", "Rakovac", "Glavni kuvar Milos pravi gulas od cevapa", pics1, "Nema jajarenja", "500 dinara", "Ponesite svoje pice", "Nema para nazad", 10, 5);
+        vacationHouseTemp.addOffer(offerTemp);
+        vacHouseOwnerTemp1.addVacationHouse(vacationHouseTemp);
         vacationHouseRep.save(vacationHouseTemp);
+        offerRep.save(offerTemp);
     }
 }

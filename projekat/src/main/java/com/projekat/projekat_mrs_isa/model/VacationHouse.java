@@ -1,7 +1,6 @@
 package com.projekat.projekat_mrs_isa.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -13,11 +12,15 @@ public class VacationHouse extends RentingEntity{
     @Column(name = "bedsPerRoom", nullable = false)
     private Integer bedsPerRoom;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vacation_house_owner_id",nullable = false)
+    private VacationHouseOwner vacationHouseOwner;
+
     public VacationHouse() {
     }
 
-    public VacationHouse(String name, String address, String promoDescription, List<String> pictures, List<Offer> availableOffers, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, Integer roomsQuantity, Integer bedsPerRoom) {
-        super(name, address, promoDescription, pictures, availableOffers, behaviourRules, priceList, additionalInfo, cancellationConditions);
+    public VacationHouse(String name, String address, String promoDescription, List<String> pictures, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, Integer roomsQuantity, Integer bedsPerRoom) {
+        super(name, address, promoDescription, pictures, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.roomsQuantity = roomsQuantity;
         this.bedsPerRoom = bedsPerRoom;
     }
@@ -36,6 +39,14 @@ public class VacationHouse extends RentingEntity{
 
     public void setBedsPerRoom(Integer bedsPerRoom) {
         this.bedsPerRoom = bedsPerRoom;
+    }
+
+    public VacationHouseOwner getVacationHouseOwner() {
+        return vacationHouseOwner;
+    }
+
+    public void setVacationHouseOwner(VacationHouseOwner vacationHouseOwner) {
+        this.vacationHouseOwner = vacationHouseOwner;
     }
 
     @Override
