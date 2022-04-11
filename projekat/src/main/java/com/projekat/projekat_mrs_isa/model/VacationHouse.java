@@ -6,7 +6,6 @@ import javax.persistence.Table;
 import java.util.List;
 
 @Entity
-@Table(name="v1_vacation_house")
 public class VacationHouse extends RentingEntity{
 
     @Column(name = "roomsQuantity", nullable = false)

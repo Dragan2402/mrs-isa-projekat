@@ -86,5 +86,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         VacationHouse vacationHouseTemp = new VacationHouse("Golden Rose", "Rakovac", "Glavni kuvar Milos pravi gulas od cevapa", pics1, reservations1, "Nema jajarenja", "500 dinara", "Ponesite svoje pice", "Nema para nazad", 10, 5);
         vacationHouseRep.save(vacationHouseTemp);
 
+
+
     }
 }

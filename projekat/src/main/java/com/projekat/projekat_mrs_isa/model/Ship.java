@@ -7,7 +7,6 @@ import javax.persistence.Table;
 import java.util.List;
 
 @Entity
-@Table(name="v1_ship")
 public class Ship extends RentingEntity{
 
     @Column(name = "type", nullable = false)

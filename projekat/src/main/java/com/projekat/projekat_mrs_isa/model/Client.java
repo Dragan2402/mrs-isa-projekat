@@ -1,10 +1,12 @@
 package com.projekat.projekat_mrs_isa.model;
 
+import org.hibernate.annotations.Polymorphism;
+import org.hibernate.annotations.PolymorphismType;
+
 import javax.persistence.Entity;
-import javax.persistence.Table;
+
 
 @Entity
-@Table(name="v1_client")
 public class Client extends User {
 
     public Client() {
