@@ -1,5 +1,7 @@
 package com.projekat.projekat_mrs_isa.model;
 
+import com.projekat.projekat_mrs_isa.dto.UserDTO;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -37,5 +39,14 @@ public class Client extends User {
     public void removeReservation(Reservation reservation){
         reservations.remove(reservation);
         reservation.setClient(null);
+    }
+
+    public void update(UserDTO userDTO) {
+        this.setFirstName(userDTO.getFirstName());
+        this.setLastName(userDTO.getLastName());
+        this.setAddress(userDTO.getAddress());
+        this.setCity(userDTO.getCity());
+        this.setCountry(userDTO.getCountry());
+        this.setPhoneNum(userDTO.getPhoneNum());
     }
 }

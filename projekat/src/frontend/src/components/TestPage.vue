@@ -1,7 +1,7 @@
 <template>
   <h1>TEST</h1>
   <router-link to="/helloWorld">Link</router-link>
-  <button @click="goToHome()">Dugme</button>
+  <button @click="goToUserProfile()">CheckProfile</button>
 </template>
 
 <script>
@@ -14,8 +14,8 @@ export default {
   },
   //this.$router.push({name:'home', params: {id: '[paramdata]'}});
   methods: {
-    goToHome(){
-    this.$router.push('/helloWorld'); 
+    goToUserProfile(){
+    this.$router.push('/clientProfile'); 
       }
   }
   
