@@ -46,6 +46,9 @@ public abstract class RentingEntity {
     @Column(name = "cancellationConditions", nullable = false)
     private String cancellationConditions;
 
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted;
+
     public RentingEntity() {
     }
 
@@ -58,6 +61,7 @@ public abstract class RentingEntity {
         this.priceList = priceList;
         this.additionalInfo = additionalInfo;
         this.cancellationConditions = cancellationConditions;
+        this.deleted = false;
     }
 
     public Long getId() {
@@ -186,7 +190,13 @@ public abstract class RentingEntity {
         slot.setRentingEntity(null);
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
 
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     @Override
     public String toString() {
@@ -200,6 +210,7 @@ public abstract class RentingEntity {
                 ", priceList='" + priceList + '\'' +
                 ", additionalInfo='" + additionalInfo + '\'' +
                 ", cancellationConditions='" + cancellationConditions + '\'' +
+                ", deleted=" + deleted +
                 '}';
     }
 }

@@ -36,6 +36,9 @@ public abstract class User {
     @Column(name="phoneNum",nullable = false)
     private String phoneNum;
 
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted;
+
     public User() {
 
     }
@@ -50,6 +53,7 @@ public abstract class User {
         this.city = city;
         this.country = country;
         this.phoneNum = phoneNum;
+        this.deleted = false;
     }
 
     public Long getId() {
@@ -124,6 +128,14 @@ public abstract class User {
         this.phoneNum = phoneNum;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -136,6 +148,7 @@ public abstract class User {
                 ", city='" + city + '\'' +
                 ", country='" + country + '\'' +
                 ", phoneNum='" + phoneNum + '\'' +
+                ", deleted=" + deleted +
                 '}';
     }
 }

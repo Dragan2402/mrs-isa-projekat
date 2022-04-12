@@ -30,6 +30,9 @@ public class Offer {
     @OneToMany(mappedBy = "offer" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Set<Slot> slots = new HashSet<Slot>();
 
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted;
+
     public Offer() {
     }
 
@@ -38,6 +41,7 @@ public class Offer {
         this.clientLimit = clientLimit;
         this.additionalServices = additionalServices;
         this.price = price;
+        this.deleted = false;
     }
 
     public Long getId() {
@@ -107,6 +111,14 @@ public class Offer {
         slot.setOffer(null);
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @Override
     public String toString() {
         return "Offer{" +
@@ -115,6 +127,7 @@ public class Offer {
                 ", clientLimit=" + clientLimit +
                 ", additionalServices=" + additionalServices +
                 ", price=" + price +
+                ", deleted=" + deleted +
                 '}';
     }
 }

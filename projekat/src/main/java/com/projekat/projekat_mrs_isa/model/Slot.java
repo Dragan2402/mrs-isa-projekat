@@ -28,6 +28,8 @@ public class Slot {
     @JoinColumn(name = "offer_id")
     private Offer offer;
 
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted;
 
     public Slot() {
     }
@@ -36,6 +38,7 @@ public class Slot {
         this.startingTime = startingTime;
         this.type = type;
         this.free = free;
+        this.deleted = false;
     }
 
     public Long getId() {
@@ -92,5 +95,13 @@ public class Slot {
 
     public void setOffer(Offer offer) {
         this.offer = offer;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }
