@@ -4,13 +4,13 @@ import { createApp } from 'vue'
 import {createRouter, createWebHistory} from 'vue-router'
 import HelloWorld from "./components/HelloWorld";
 import TestPage from "./components/TestPage";
-
-
-
+import ClientProfile from "./components/ClientProfile";
+import Toaster from '@meforma/vue-toaster';
 
 const routes= [
     { path: "/" , component : HelloWorld},
     { path: "/testPage" , component : TestPage},
+    { path: "/clientProfile" , component:ClientProfile}
 ];
 
 const router = new createRouter({
@@ -18,4 +18,4 @@ const router = new createRouter({
     routes
 }) 
 
-createApp(App).use(router).mount('#app')
+createApp(App).use(router).use(Toaster,{position: 'top',duration : 2000}).mount('#app')
