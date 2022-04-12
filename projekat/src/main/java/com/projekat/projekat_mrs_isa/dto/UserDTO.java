@@ -13,6 +13,19 @@ public class UserDTO {
     private String country;
     private String phoneNum;
 
+    public UserDTO(){}
+
+    public UserDTO(Long id, String email, String firstName, String lastName, String address, String city, String country, String phoneNum) {
+        this.id = id;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.city = city;
+        this.country = country;
+        this.phoneNum = phoneNum;
+    }
+
     public UserDTO(@NotNull User user) {
         id = user.getId();
         email = user.getEmail();

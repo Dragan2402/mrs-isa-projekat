@@ -1,6 +1,4 @@
-<template>
-  <h1>Welcome to App</h1>
-  <p>{{msg}}</p>
+<template>  
   <router-view></router-view>
 </template>
 

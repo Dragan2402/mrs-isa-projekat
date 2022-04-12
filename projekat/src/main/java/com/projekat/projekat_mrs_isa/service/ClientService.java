@@ -19,11 +19,15 @@ public class ClientService {
 
     public List<UserDTO> findAllDTO() { return clientRepository.findAllDTO(); }
 
+    public UserDTO findUserDTO(Long id) { return  clientRepository.findUserDTO(id) ; }
+
     public List<Client> findAll() { return clientRepository.findAll(); }
 
     public Page<Client> findAll(Pageable page) { return clientRepository.findAll(page);}
 
     public Client save(Client client) { return clientRepository.save(client); }
+
+    public void flush() {  clientRepository.flush(); }
 
     public void remove(long id) {  clientRepository.deleteById(id);}
 
