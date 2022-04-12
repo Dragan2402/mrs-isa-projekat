@@ -1,10 +1,11 @@
 <template>
-  <h1>{{ msg }}</h1>
+  <h1>Welcome to App</h1>
+  <p>{{msg}}</p>
+  <router-view></router-view>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
   data() {
     return {
       msg: ''
@@ -14,7 +15,7 @@ export default {
     fetch("/api/clients/all")
         .then((response) => response.text())
         .then((data) => {
-          this.msg = data;
+         this.msg = data;
         });
   }
 }
