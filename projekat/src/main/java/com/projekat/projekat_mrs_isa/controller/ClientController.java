@@ -21,6 +21,7 @@ public class ClientController {
     @GetMapping(value = "/all")
     public ResponseEntity<List<UserDTO>> getAllClients() {
         List<UserDTO> clients = clientService.findAllDTO();
+
         return new ResponseEntity<>(clients, HttpStatus.OK);
     }
 }

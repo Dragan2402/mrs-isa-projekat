@@ -1,8 +1,6 @@
 package com.projekat.projekat_mrs_isa.model;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
