@@ -1,8 +1,6 @@
 package com.projekat.projekat_mrs_isa.controller;
 
-
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
-import com.projekat.projekat_mrs_isa.model.Client;
 import com.projekat.projekat_mrs_isa.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

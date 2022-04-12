@@ -15,7 +15,7 @@ export default {
         .then((response) => response.text())
         .then((data) => {
           this.msg = data;
-        })
+        });
   }
 }
 </script>
