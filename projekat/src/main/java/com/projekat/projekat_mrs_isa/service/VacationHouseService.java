@@ -1,6 +1,6 @@
 package com.projekat.projekat_mrs_isa.service;
 
-import com.projekat.projekat_mrs_isa.model.ShipOwner;
+import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
 import com.projekat.projekat_mrs_isa.repository.VacationHouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,10 @@ public class VacationHouseService {
 
     public List<VacationHouse> findAll() {
         return vacationHouseRepository.findAll();
+    }
+
+    public List<VacationHouseDTO> findAllDTO() {
+        return vacationHouseRepository.findAllDTO();
     }
 
     public VacationHouse save(VacationHouse vacationHouse) {

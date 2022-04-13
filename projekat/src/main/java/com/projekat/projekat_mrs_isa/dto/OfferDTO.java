@@ -14,6 +14,10 @@ public class OfferDTO {
     private Integer clientLimit;
     private Double price;
 
+    public OfferDTO() {
+
+    }
+
     public OfferDTO(@NotNull Offer offer) {
         id = offer.getId();
 

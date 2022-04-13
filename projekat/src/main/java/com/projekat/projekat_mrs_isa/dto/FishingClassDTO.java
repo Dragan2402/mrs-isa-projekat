@@ -7,6 +7,10 @@ public class FishingClassDTO extends RentingEntityDTO {
     private String instructorBiography;
     private Integer clientLimit;
 
+    public FishingClassDTO() {
+        super();
+    }
+
     public FishingClassDTO(@NotNull FishingClass fishingClass) {
         super(fishingClass);
         instructorBiography = fishingClass.getInstructorBiography();

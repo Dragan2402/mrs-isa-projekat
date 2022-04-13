@@ -1,5 +1,7 @@
 package com.projekat.projekat_mrs_isa.model;
 
+import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -55,5 +57,11 @@ public class VacationHouse extends RentingEntity{
                 "roomsQuantity=" + roomsQuantity +
                 ", bedsPerRoom=" + bedsPerRoom +
                 "} " + super.toString();
+    }
+
+    public void update(VacationHouseDTO vacationHouseDTO) {
+        super.update(vacationHouseDTO);
+        this.roomsQuantity = vacationHouseDTO.getRoomsQuantity();
+        this.bedsPerRoom = vacationHouseDTO.getBedsPerRoom();
     }
 }

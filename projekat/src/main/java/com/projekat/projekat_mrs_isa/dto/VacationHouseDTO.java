@@ -7,6 +7,10 @@ public class VacationHouseDTO extends RentingEntityDTO {
     private Integer roomsQuantity;
     private Integer bedsPerRoom;
 
+    public VacationHouseDTO() {
+
+    }
+
     public VacationHouseDTO(@NotNull VacationHouse vacationHouse) {
         super(vacationHouse);
         roomsQuantity = vacationHouse.getRoomsQuantity();
