@@ -90,15 +90,15 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         Offer offerTemp = new Offer("Brcko",5,addService, 500.0);
 
 
-        Ship shipTemp = new Ship("Russki vojeni karabil", "Snake Island", "Ima svacega", pics1, "Nema jajarenja", "100 dinara", "Ponesite svoje pice", "Nema para nazad", "Raketni razarac", 90, "1234412541", 550, 115, nav1, 55, fisheq1);
+        Ship shipTemp = new Ship("Takanik", "Porto Montenegro", "Skupo je", pics1, "Zabranjeno skakanje bombe sa broda", "100 evara", "Zabranjeni kerovi", "Nema para nazad", "Ledolomac", 90, "1234412541", 550, 115, nav1, 55, fisheq1);
         shipOwnerTemp1.addShip(shipTemp);
         shipRep.save(shipTemp);
 
-        FishingClass fishingClassTemp = new FishingClass("Lovim i brojim", "Plaza u kurcu mome", "Bice interesantno", pics1, "Nema jajarenja", "200 dinara", "Ponesite svoje pice", "Nema para nazad", "Triput osudjivan za pokusaj silovanja na radnom mestu", 10, fisheq1);
+        FishingClass fishingClassTemp = new FishingClass("Pecajmo s Milosem", "Palicko jezero", "Bice interesantno", pics1, "Zabranjeno loviti dinamitom", "150 evara", "Pice obezbedjeno", "Nema para nazad", "Instruktor upitne biografije", 10, fisheq1);
         fishingInstructorTemp.addFishingClass(fishingClassTemp);
         fishingClassRep.save(fishingClassTemp);
 
-        VacationHouse vacationHouseTemp = new VacationHouse("Golden Rose", "Rakovac", "Glavni kuvar Milos pravi gulas od cevapa", pics1, "Nema jajarenja", "500 dinara", "Ponesite svoje pice", "Nema para nazad", 10, 5);
+        VacationHouse vacationHouseTemp = new VacationHouse("Golden Rose", "Rakovac", "Glavni kuvar Milos pravi gulas od cevapa", pics1, "Sve je dozvoljeno", "5000 dinara", "Ponesite svoje pice", "Nema para nazad", 10, 5);
         vacationHouseTemp.addOffer(offerTemp);
         vacHouseOwnerTemp1.addVacationHouse(vacationHouseTemp);
         vacationHouseRep.save(vacationHouseTemp);

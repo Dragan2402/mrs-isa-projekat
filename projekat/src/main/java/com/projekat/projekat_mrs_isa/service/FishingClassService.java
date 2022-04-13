@@ -1,5 +1,7 @@
 package com.projekat.projekat_mrs_isa.service;
 
+import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
+import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.FishingClass;
 import com.projekat.projekat_mrs_isa.repository.FishingClassRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,10 @@ public class FishingClassService {
     public FishingClass findById(Long id) {
         return fishingClassRepository.findById(id).orElse(null);
     }
+
+    public FishingClassDTO findFishingClassDTO(Long id) { return  fishingClassRepository.findFishingClassDTO(id) ; }
+
+    public List<FishingClassDTO> findAllDTO() { return fishingClassRepository.findAllDTO(); }
 
     public List<FishingClass> findAll() {
         return fishingClassRepository.findAll();

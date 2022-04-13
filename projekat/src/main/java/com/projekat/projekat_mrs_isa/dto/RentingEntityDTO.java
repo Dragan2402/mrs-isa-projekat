@@ -17,6 +17,9 @@ public class RentingEntityDTO {
     private String additionalInfo;
     private String cancellationConditions;
 
+    public RentingEntityDTO() {
+    }
+
     public RentingEntityDTO(@NotNull RentingEntity rentingEntity) {
         id = rentingEntity.getId();
         name = rentingEntity.getName();

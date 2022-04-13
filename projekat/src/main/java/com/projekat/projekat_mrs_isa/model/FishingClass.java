@@ -1,5 +1,7 @@
 package com.projekat.projekat_mrs_isa.model;
 
+import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -60,6 +62,18 @@ public class FishingClass extends RentingEntity{
 
     public void setFishingInstructor(FishingInstructor fishingInstructor) {
         this.fishingInstructor = fishingInstructor;
+    }
+
+    public void update(FishingClassDTO fishingClassDTO) {
+        this.setName(fishingClassDTO.getName());
+        this.setAddress(fishingClassDTO.getAddress());
+        this.setPromoDescription(fishingClassDTO.getPromoDescription());
+        this.setInstructorBiography(fishingClassDTO.getInstructorBiography());
+        this.setBehaviourRules(fishingClassDTO.getBehaviourRules());
+        this.setPriceList(fishingClassDTO.getPriceList());
+        this.setClientLimit(fishingClassDTO.getClientLimit());
+        this.setAdditionalInfo(fishingClassDTO.getAdditionalInfo());
+        this.setCancellationConditions(fishingClassDTO.getCancellationConditions());
     }
 
     @Override
