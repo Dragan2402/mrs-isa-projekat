@@ -16,6 +16,10 @@ public class ShipDTO extends RentingEntityDTO{
     private Integer topSpeed;
     private Integer clientLimit;
 
+    public ShipDTO() {
+
+    }
+
     public ShipDTO(@NotNull Ship ship) {
         super(ship);
         type = ship.getType();

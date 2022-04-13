@@ -1,5 +1,7 @@
 package com.projekat.projekat_mrs_isa.model;
 
+import com.projekat.projekat_mrs_isa.dto.RentingEntityDTO;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -212,5 +214,15 @@ public abstract class RentingEntity {
                 ", cancellationConditions='" + cancellationConditions + '\'' +
                 ", deleted=" + deleted +
                 '}';
+    }
+
+    public void update(RentingEntityDTO rentingEntityDTO)
+    {
+        this.name = rentingEntityDTO.getName();
+        this.address = rentingEntityDTO.getAddress();
+        this.promoDescription = rentingEntityDTO.getPromoDescription();
+        this.behaviourRules = rentingEntityDTO.getBehaviourRules();
+        this.additionalInfo = rentingEntityDTO.getAdditionalInfo();
+        this.cancellationConditions = rentingEntityDTO.getCancellationConditions();
     }
 }

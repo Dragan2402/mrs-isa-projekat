@@ -1,5 +1,6 @@
 <template>
   <div class="hello">
+    <h1>alo</h1>
     <h1>{{ msg }}</h1>    
   </div>
 </template>
@@ -14,10 +15,10 @@ export default {
   },
   mounted() {
     fetch("/api/clients/all")
-        .then((response) => response.text())
-        .then((data) => {
-          this.msg = data;
-        });
+      .then((response) => response.text())
+      .then((data) => {
+        this.msg = data;
+      });
   }
 }
 </script>

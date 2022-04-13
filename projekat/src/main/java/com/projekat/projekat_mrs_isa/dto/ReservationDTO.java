@@ -15,6 +15,10 @@ public class ReservationDTO {
     private Integer clientNum;
     private Double price;
 
+    public ReservationDTO() {
+
+    }
+
     public ReservationDTO(@NotNull Reservation reservation) {
         id = reservation.getId();
         this.slotIds=new HashSet<Long>();

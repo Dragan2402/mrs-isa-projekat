@@ -1,4 +1,3 @@
-
 import App from './App.vue';
 import { createApp } from 'vue'
 import {createRouter, createWebHistory} from 'vue-router'
@@ -7,12 +6,14 @@ import TestPage from "./components/TestPage";
 import ClientProfile from "./components/ClientProfile";
 import Toaster from '@meforma/vue-toaster';
 import FishingClassProfile from './components/FishingClassProfile';
+import VacationHouseProfile from "@/components/VacationHouseProfile";
 
 const routes= [
     { path: "/" , component : HelloWorld},
     { path: "/testPage" , component : TestPage},
     { path: "/clientProfile" , component:ClientProfile},
-    { path: "/fishingClassProfile", component: FishingClassProfile}
+    { path: "/fishingClassProfile", component: FishingClassProfile},
+    { path: "/vacationHouses", component: VacationHouseProfile}
 ];
 
 const router = new createRouter({

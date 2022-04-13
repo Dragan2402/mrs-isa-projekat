@@ -12,6 +12,10 @@ public class SlotDTO {
     private SlotType type;
     private boolean free;
 
+    public SlotDTO() {
+
+    }
+
     public SlotDTO(@NotNull Slot slot) {
         this.id= slot.getId();
         this.startingTime = slot.getStartingTime();

@@ -1,11 +1,7 @@
 package com.projekat.projekat_mrs_isa.dto;
 
-import com.projekat.projekat_mrs_isa.model.Offer;
 import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import org.jetbrains.annotations.NotNull;
-
-import javax.persistence.*;
-import java.util.List;
 
 public class RentingEntityDTO {
     private Long id;
