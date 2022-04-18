@@ -1,11 +1,13 @@
 package com.projekat.projekat_mrs_isa.model;
 
 import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@SQLDelete(sql = "UPDATE fishing_class SET deleted = true WHERE id = ?")
 public class FishingClass extends RentingEntity{
 
     @Column(name = "instructorBiography", nullable = false)

@@ -1,9 +1,12 @@
 package com.projekat.projekat_mrs_isa.model;
 
+import org.hibernate.annotations.SQLDelete;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@SQLDelete(sql = "UPDATE ship SET deleted = true WHERE id = ?")
 public class Ship extends RentingEntity{
 
     @Column(name = "type", nullable = false)

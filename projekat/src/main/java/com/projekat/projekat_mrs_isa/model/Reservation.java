@@ -1,10 +1,15 @@
 package com.projekat.projekat_mrs_isa.model;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@SQLDelete(sql = "UPDATE reservation SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class Reservation {
 
     @Id

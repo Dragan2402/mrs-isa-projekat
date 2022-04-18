@@ -1,9 +1,12 @@
 package com.projekat.projekat_mrs_isa.model;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Where(clause = "deleted = false")
 public abstract class User {
     @Id
     @SequenceGenerator(name = "usersSeqGenV1",sequenceName = "usersSeqV1",initialValue = 1,allocationSize = 1)

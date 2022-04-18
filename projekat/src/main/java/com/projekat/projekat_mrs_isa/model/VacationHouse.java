@@ -1,11 +1,13 @@
 package com.projekat.projekat_mrs_isa.model;
 
 import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@SQLDelete(sql = "UPDATE vacation_house SET deleted = true WHERE id = ?")
 public class VacationHouse extends RentingEntity{
 
     @Column(name = "roomsQuantity", nullable = false)

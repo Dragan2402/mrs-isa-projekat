@@ -1,6 +1,8 @@
 package com.projekat.projekat_mrs_isa.model;
 
 
+import org.hibernate.annotations.SQLDelete;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@SQLDelete(sql = "UPDATE ship_owner SET deleted = true WHERE id = ?")
 public class ShipOwner extends User {
 
     @OneToMany(mappedBy = "shipOwner" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)

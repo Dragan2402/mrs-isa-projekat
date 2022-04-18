@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.model;
 
 import com.projekat.projekat_mrs_isa.dto.RentingEntityDTO;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Where(clause = "deleted = false")
 public abstract class RentingEntity {
     @Id
     @SequenceGenerator(name = "rentingEntitiesSeqGenV1", sequenceName = "rentingEntitiesSeqV1", initialValue = 1, allocationSize = 1)

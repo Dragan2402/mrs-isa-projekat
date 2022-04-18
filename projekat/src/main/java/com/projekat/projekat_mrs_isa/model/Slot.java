@@ -1,5 +1,8 @@
 package com.projekat.projekat_mrs_isa.model;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -7,6 +10,8 @@ import java.time.LocalDateTime;
 
 
 @Entity
+@SQLDelete(sql = "UPDATE slot SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class Slot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

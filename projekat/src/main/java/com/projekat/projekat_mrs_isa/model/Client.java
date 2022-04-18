@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.model;
 
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
+import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -11,6 +12,7 @@ import java.util.Set;
 
 
 @Entity
+@SQLDelete(sql = "UPDATE client SET deleted = true WHERE id = ?")
 public class Client extends User {
 
     @OneToMany(mappedBy = "client" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)

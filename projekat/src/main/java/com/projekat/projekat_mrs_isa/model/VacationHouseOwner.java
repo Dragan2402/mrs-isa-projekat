@@ -1,6 +1,8 @@
 package com.projekat.projekat_mrs_isa.model;
 
 
+import org.hibernate.annotations.SQLDelete;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@SQLDelete(sql = "UPDATE vacation_house_owner SET deleted = true WHERE id = ?")
 public class VacationHouseOwner extends User{
     public VacationHouseOwner() {
     }

@@ -1,9 +1,12 @@
 package com.projekat.projekat_mrs_isa.model;
 
 
+import org.hibernate.annotations.SQLDelete;
+
 import javax.persistence.Entity;
 
 @Entity
+@SQLDelete(sql = "UPDATE admin SET deleted = true WHERE id = ?")
 public class Admin extends User{
     public Admin() {
     }
