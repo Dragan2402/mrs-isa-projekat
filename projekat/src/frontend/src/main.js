@@ -6,12 +6,14 @@ import Toaster from '@meforma/vue-toaster';
 import FishingClassProfile from './components/FishingClassProfile';
 import HomePage from "./components/HomePage";
 import VacationHouseProfile from "@/components/VacationHouseProfile";
+import RentingEntityPreview from "@/components/RentingEntityPreview";
 
 const routes = [
     {path: "/", component: HomePage},
     {path: "/clientProfile", component: ClientProfile},
     {path: "/fishingClassProfile", component: FishingClassProfile},
-    {path: "/vacationHouses", component: VacationHouseProfile}
+    {path: "/vacationHouses", component: VacationHouseProfile},
+    {name: "rentingEntityPreview",path:"/rentingEntityPreview/rID:id$dT:displayType", component: RentingEntityPreview}
 ];
 
 const router = new createRouter({

@@ -127,7 +127,5 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         slotRep.save(slotTemp);
         slotRep.save(slotTemp2);
         slotRep.save(slotTemp3);
-
-
     }
 }
