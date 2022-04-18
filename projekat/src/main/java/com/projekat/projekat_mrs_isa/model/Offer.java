@@ -42,8 +42,7 @@ public class Offer {
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
-    public Offer() {
-    }
+    public Offer() {}
 
     public Offer( String place, Integer clientLimit, Set<String> additionalServices, Double price,
                   RentingEntity rentingEntity, LocalDateTime start, Duration duration) {

@@ -11,13 +11,13 @@ import java.util.Set;
 @SQLDelete(sql = "UPDATE fishing_class SET deleted = true WHERE id = ?")
 public class FishingClass extends RentingEntity{
 
-    @Column(name = "instructorBiography", nullable = false)
+    @Column(name = "instructor_biography", nullable = false)
     private String instructorBiography;
 
-    @Column(name = "clientLimit", nullable = false)
+    @Column(name = "client_limit", nullable = false)
     private Integer clientLimit;
 
-    @Column(name = "fishingEquipment", nullable = false)
+    @Column(name = "fishing_equipment", nullable = false)
     @ElementCollection(targetClass=String.class)
     private Set<String> fishingEquipment;
 
@@ -25,10 +25,11 @@ public class FishingClass extends RentingEntity{
     @JoinColumn(name = "fishing_instructor_id",nullable = false)
     private FishingInstructor fishingInstructor;
 
-    public FishingClass() {
-    }
+    public FishingClass() {}
 
-    public FishingClass(String name, String address, String promoDescription, List<String> pictures, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String instructorBiography, Integer clientLimit, Set<String> fishingEquipment) {
+    public FishingClass(String name, String address, String promoDescription, List<String> pictures,
+                        String behaviourRules, String priceList, String additionalInfo, String cancellationConditions,
+                        String instructorBiography, Integer clientLimit, Set<String> fishingEquipment) {
         super(name, address, promoDescription, pictures, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.instructorBiography = instructorBiography;
         this.clientLimit = clientLimit;

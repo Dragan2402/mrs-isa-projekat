@@ -17,9 +17,10 @@ public class VacationHouseOwner extends User{
     }
 
     @OneToMany(mappedBy = "vacationHouseOwner" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
-    private Set<VacationHouse> vacationHouses = new HashSet<VacationHouse>();
+    private Set<VacationHouse> vacationHouses = new HashSet<>();
 
-    public VacationHouseOwner(String email, String password, String firstName, String lastName, String address, String city, String country, String phoneNum) {
+    public VacationHouseOwner(String email, String password, String firstName, String lastName, String address,
+                              String city, String country, String phoneNum) {
         super(email, password, firstName, lastName, address, city, country, phoneNum);
     }
 

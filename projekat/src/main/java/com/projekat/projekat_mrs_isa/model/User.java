@@ -9,8 +9,8 @@ import javax.persistence.*;
 @Where(clause = "deleted = false")
 public abstract class User {
     @Id
-    @SequenceGenerator(name = "usersSeqGenV1",sequenceName = "usersSeqV1",initialValue = 1,allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usersSeqGenV1")
+    @SequenceGenerator(name = "usersSeqGen",sequenceName = "usersSeq",initialValue = 1,allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usersSeqGen")
     private Long id;
 
     @Column(name="email",unique = true,nullable = false)
@@ -19,10 +19,10 @@ public abstract class User {
     @Column(name="password",nullable = false)
     private String password;
 
-    @Column(name="firstName",nullable = false)
+    @Column(name="first_name",nullable = false)
     private String firstName;
 
-    @Column(name="lastName",nullable = false)
+    @Column(name="last_name",nullable = false)
     private String lastName;
 
     @Column(name="address",nullable = false)
@@ -34,18 +34,16 @@ public abstract class User {
     @Column(name="country",nullable = false)
     private String country;
 
-    @Column(name="phoneNum",nullable = false)
+    @Column(name="phone_num",nullable = false)
     private String phoneNum;
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
-    public User() {
+    public User() {}
 
-    }
-
-    public User( String email, String password, String firstName, String lastName, String address, String city, String country, String phoneNum) {
-
+    public User( String email, String password, String firstName, String lastName, String address, String city,
+                 String country, String phoneNum) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;

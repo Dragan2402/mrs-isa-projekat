@@ -15,12 +15,12 @@ import java.util.Set;
 public class ShipOwner extends User {
 
     @OneToMany(mappedBy = "shipOwner" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
-    private Set<Ship> ships = new HashSet<Ship>();
+    private Set<Ship> ships = new HashSet<>();
 
-    public ShipOwner() {
-    }
+    public ShipOwner() {}
 
-    public ShipOwner(String email, String password, String firstName, String lastName, String address, String city, String country, String phoneNum) {
+    public ShipOwner(String email, String password, String firstName, String lastName, String address, String city,
+                     String country, String phoneNum) {
         super(email, password, firstName, lastName, address, city, country, phoneNum);
     }
 

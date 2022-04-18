@@ -14,8 +14,8 @@ import java.util.Set;
 @Where(clause = "deleted = false")
 public abstract class RentingEntity {
     @Id
-    @SequenceGenerator(name = "rentingEntitiesSeqGenV1", sequenceName = "rentingEntitiesSeqV1", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rentingEntitiesSeqGenV1")
+    @SequenceGenerator(name = "rentingEntitiesSeqGen", sequenceName = "rentingEntitiesSeq", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rentingEntitiesSeqGen")
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -24,7 +24,7 @@ public abstract class RentingEntity {
     @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "promoDescription", nullable = false)
+    @Column(name = "promo_description", nullable = false)
     private String promoDescription;
 
     @Column(name = "pictures", nullable = false)
@@ -46,23 +46,22 @@ public abstract class RentingEntity {
     @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Set<Reservation> reservations = new HashSet<>();
 
-    @Column(name = "behaviourRules", nullable = false)
+    @Column(name = "behaviour_rules", nullable = false)
     private String behaviourRules;
 
-    @Column(name = "priceList", nullable = false)
+    @Column(name = "price_list", nullable = false)
     private String priceList;
 
-    @Column(name = "additionalInfo", nullable = false)
+    @Column(name = "additional_info", nullable = false)
     private String additionalInfo;
 
-    @Column(name = "cancellationConditions", nullable = false)
+    @Column(name = "cancellation_conditions", nullable = false)
     private String cancellationConditions;
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
-    public RentingEntity() {
-    }
+    public RentingEntity() {}
 
     public RentingEntity(String name, String address, String promoDescription, List<String> pictures,
                          String behaviourRules, String priceList, String additionalInfo, String cancellationConditions) {

@@ -14,12 +14,12 @@ import java.util.Set;
 public class FishingInstructor extends  User{
 
     @OneToMany(mappedBy = "fishingInstructor" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
-    private Set<FishingClass> fishingClasses = new HashSet<FishingClass>();
+    private Set<FishingClass> fishingClasses = new HashSet<>();
 
-    public FishingInstructor() {
-    }
+    public FishingInstructor() {}
 
-    public FishingInstructor(String email, String password, String firstName, String lastName, String address, String city, String country, String phoneNum) {
+    public FishingInstructor(String email, String password, String firstName, String lastName, String address,
+                             String city, String country, String phoneNum) {
         super(email, password, firstName, lastName, address, city, country, phoneNum);
     }
 

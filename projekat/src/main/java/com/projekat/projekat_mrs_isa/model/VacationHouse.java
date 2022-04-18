@@ -10,20 +10,21 @@ import java.util.List;
 @SQLDelete(sql = "UPDATE vacation_house SET deleted = true WHERE id = ?")
 public class VacationHouse extends RentingEntity{
 
-    @Column(name = "roomsQuantity", nullable = false)
+    @Column(name = "rooms_quantity", nullable = false)
     private Integer roomsQuantity;
 
-    @Column(name = "bedsPerRoom", nullable = false)
+    @Column(name = "beds_per_room", nullable = false)
     private Integer bedsPerRoom;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vacation_house_owner_id",nullable = false)
     private VacationHouseOwner vacationHouseOwner;
 
-    public VacationHouse() {
-    }
+    public VacationHouse() {}
 
-    public VacationHouse(String name, String address, String promoDescription, List<String> pictures, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, Integer roomsQuantity, Integer bedsPerRoom) {
+    public VacationHouse(String name, String address, String promoDescription, List<String> pictures,
+                         String behaviourRules, String priceList, String additionalInfo, String cancellationConditions,
+                         Integer roomsQuantity, Integer bedsPerRoom) {
         super(name, address, promoDescription, pictures, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.roomsQuantity = roomsQuantity;
         this.bedsPerRoom = bedsPerRoom;

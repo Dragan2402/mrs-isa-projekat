@@ -51,8 +51,7 @@ public class Reservation {
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
-    public Reservation() {
-    }
+    public Reservation() {}
 
     public Reservation( String place, Integer clientLimit, Set<String> additionalServices, Double price,
                         RentingEntity rentingEntity, Client client, LocalDateTime start, Duration duration) {

@@ -16,23 +16,23 @@ public class Ship extends RentingEntity{
     @Column(name = "length", nullable = false)
     private Integer length;
 
-    @Column(name = "engineNumber", nullable = false)
+    @Column(name = "engine_number", nullable = false)
     private String engineNumber;
 
-    @Column(name = "enginePower", nullable = false)
+    @Column(name = "engine_power", nullable = false)
     private Integer enginePower;
 
-    @Column(name = "topSpeed", nullable = false)
+    @Column(name = "top_speed", nullable = false)
     private Integer topSpeed;
 
-    @Column(name = "navigationEquipment", nullable = false)
+    @Column(name = "navigation_equipment", nullable = false)
     @ElementCollection(targetClass=String.class)
     private Set<String> navigationEquipment;
 
-    @Column(name = "clientLimit", nullable = false)
+    @Column(name = "client_limit", nullable = false)
     private Integer clientLimit;
 
-    @Column(name = "fishingEquipment", nullable = false)
+    @Column(name = "fishing_equipment", nullable = false)
     @ElementCollection(targetClass=String.class)
     private Set<String> fishingEquipment;
 
@@ -40,10 +40,12 @@ public class Ship extends RentingEntity{
     @JoinColumn(name = "ship_owner_id",nullable = false)
     private ShipOwner shipOwner;
 
-    public Ship() {
-    }
+    public Ship() {}
 
-    public Ship(String name, String address, String promoDescription, List<String> pictures, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String type, Integer length, String engineNumber, Integer enginePower, Integer topSpeed, Set<String> navigationEquipment, Integer clientLimit, Set<String> fishingEquipment) {
+    public Ship(String name, String address, String promoDescription, List<String> pictures, String behaviourRules,
+                String priceList, String additionalInfo, String cancellationConditions, String type, Integer length,
+                String engineNumber, Integer enginePower, Integer topSpeed, Set<String> navigationEquipment,
+                Integer clientLimit, Set<String> fishingEquipment) {
         super(name, address, promoDescription, pictures, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.type = type;
         this.length = length;
