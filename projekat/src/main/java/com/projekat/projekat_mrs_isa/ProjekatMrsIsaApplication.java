@@ -7,7 +7,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,8 +46,8 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
     @Autowired
     private ReservationRepository reservationRep;
 
-    @Autowired
-    private SlotRepository slotRep;
+//    @Autowired
+//    private SlotRepository slotRep;
 
 
 
@@ -81,6 +83,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
         fishingInstructorRep.save(fishingInstructorTemp);
 
+<<<<<<< Updated upstream
         Set<String> pics1 = new HashSet<String>();
         Set<Offer> offer1 = new HashSet<Offer>();
         Set<String> nav1 = new HashSet<String>();
@@ -99,17 +102,100 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         fishingClassRep.save(fishingClassTemp);
 
         VacationHouse vacationHouseTemp = new VacationHouse("Golden Rose", "Rakovac", "Glavni kuvar Milos pravi gulas od cevapa", pics1, "Sve je dozvoljeno", "5000 dinara", "Ponesite svoje pice", "Nema para nazad", 10, 5);
+=======
+        List<String> pics1 = new ArrayList<>();
+        Set<Offer> offer1 = new HashSet<>();
+        Set<String> nav1 = new HashSet<>();
+        Set<String> fisheq1 = new HashSet<>();
+        Set<String> addService = new HashSet<>();
+
+        Ship shipTemp = new Ship(
+                "Takanik",
+                "Porto Montenegro",
+                "Skupo je",
+                pics1,
+                "Zabranjeno skakanje bombe sa broda",
+                "100 evara",
+                "Zabranjeni kerovi",
+                "Nema para nazad",
+                "Ledolomac",
+                90,
+                "1234412541",
+                550,
+                115,
+                nav1,
+                55,
+                fisheq1
+        );
+        shipOwnerTemp1.addShip(shipTemp);
+        shipRep.save(shipTemp);
+
+        FishingClass fishingClassTemp = new FishingClass(
+                "Pecajmo s Milosem",
+                "Palicko jezero",
+                "Bice interesantno",
+                pics1,
+                "Zabranjeno loviti dinamitom",
+                "150 evara",
+                "Pice obezbedjeno",
+                "Nema para nazad",
+                "Instruktor upitne biografije",
+                10,
+                fisheq1
+        );
+
+        fishingInstructorTemp.addFishingClass(fishingClassTemp);
+        fishingClassRep.save(fishingClassTemp);
+
+        VacationHouse vacationHouseTemp = new VacationHouse(
+                "Golden Rose",
+                "Rakovac",
+                "Glavni kuvar Milos pravi gulas od cevapa",
+                pics1,
+                "Sve je dozvoljeno",
+                "5000 dinara",
+                "Ponesite svoje pice",
+                "Nema para nazad",
+                10,
+                5
+        );
+
+        Offer offerTemp = new Offer(
+                "Brcko",
+                5,
+                new HashSet<>(),
+                500.0,
+                vacationHouseTemp,
+                LocalDateTime.now(),
+                Duration.ofHours(4)
+        );
+
+>>>>>>> Stashed changes
         vacationHouseTemp.addOffer(offerTemp);
         vacHouseOwnerTemp1.addVacationHouse(vacationHouseTemp);
         vacationHouseRep.save(vacationHouseTemp);
         offerRep.save(offerTemp);
 
         //public Reservation(String firstSlot, Long slotQuantity, String place, Integer clientNum, Set<String> additionalServices, Double price) {
+<<<<<<< Updated upstream
         Reservation reservationTemp = new Reservation("Brcko",5,addService,50.0);
+=======
+        Reservation reservationTemp = new Reservation(
+                "Brcko",
+                5,
+                new HashSet<>(),
+                50.0,
+                vacationHouseTemp,
+                clientTemp1,
+                LocalDateTime.now(),
+                Duration.ofDays(3)
+        );
+>>>>>>> Stashed changes
         vacationHouseTemp.addReservation(reservationTemp);
         clientTemp1.addReservation(reservationTemp);
         reservationRep.save(reservationTemp);
 
+<<<<<<< Updated upstream
 
         //(LocalDateTime startingTime, int durationHours, boolean free)
         Slot slotTemp= new Slot(LocalDateTime.of(2022,01,01,0,0,0,0),SlotType.FishingClass,true);
@@ -127,5 +213,19 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         slotRep.save(slotTemp);
         slotRep.save(slotTemp2);
         slotRep.save(slotTemp3);
+=======
+        List<Client> clients = clientRep.findAll();
+        for (Client c: clients) {
+            System.out.println(c);
+        }
+
+        clientRep.delete(clientTemp3);
+        clientRep.delete(clientTemp4);
+
+        clients = clientRep.findAll();
+        for (Client c: clients) {
+            System.out.println(c);
+        }
+>>>>>>> Stashed changes
     }
 }

@@ -1,33 +1,32 @@
 package com.projekat.projekat_mrs_isa.dto;
 
-import com.projekat.projekat_mrs_isa.model.Offer;
 import com.projekat.projekat_mrs_isa.model.Reservation;
-import com.projekat.projekat_mrs_isa.model.Slot;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class ReservationDTO {
     private Long id;
     private String place;
-    private Set<Long> slotIds;
-    private Integer clientNum;
+    private Integer clientLimit;
     private Double price;
+    private Long rentingEntityId;
+    private Long clientId;
+    private LocalDateTime start;
+    private Duration duration;
 
-    public ReservationDTO() {
-
-    }
+    public ReservationDTO() {}
 
     public ReservationDTO(@NotNull Reservation reservation) {
-        id = reservation.getId();
-        this.slotIds=new HashSet<Long>();
-        for (Slot slot : reservation.getSlots()){
-            this.slotIds.add(slot.getId());
-        }
-        place = reservation.getPlace();
-        clientNum = reservation.getClientNum();
-        price = reservation.getPrice();
+        this.id = reservation.getId();
+        this.place = reservation.getPlace();
+        this.clientLimit = reservation.getClientLimit();
+        this.price = reservation.getPrice();
+        this.rentingEntityId = reservation.getRentingEntity().getId();
+        this.clientId = reservation.getClient().getId();
+        this.start = reservation.getStart();
+        this.duration = reservation.getDuration();
     }
 
     public Long getId() {
@@ -38,28 +37,20 @@ public class ReservationDTO {
         this.id = id;
     }
 
-    public Set<Long> getSlotIds() {
-        return slotIds;
-    }
-
-    public void setSlotIds(Set<Long> slotIds) {
-        this.slotIds = slotIds;
-    }
-
-    public Integer getClientNum() {
-        return clientNum;
-    }
-
-    public void setClientNum(Integer clientNum) {
-        this.clientNum = clientNum;
-    }
-
     public String getPlace() {
         return place;
     }
 
     public void setPlace(String place) {
         this.place = place;
+    }
+
+    public Integer getClientNum() {
+        return clientLimit;
+    }
+
+    public void setClientNum(Integer clientNum) {
+        this.clientLimit = clientNum;
     }
 
     public Double getPrice() {
@@ -70,4 +61,49 @@ public class ReservationDTO {
         this.price = price;
     }
 
+    public Long getRentingEntityId() {
+        return rentingEntityId;
+    }
+
+    public void setRentingEntityId(Long rentingEntityId) {
+        this.rentingEntityId = rentingEntityId;
+    }
+
+    public Long getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
+    }
+
+    public LocalDateTime getStart() {
+        return start;
+    }
+
+    public void setStart(LocalDateTime start) {
+        this.start = start;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    @Override
+    public String toString() {
+        return "ReservationDTO{" +
+                "id=" + id +
+                ", place='" + place + '\'' +
+                ", clientLimit=" + clientLimit +
+                ", price=" + price +
+                ", rentingEntityId=" + rentingEntityId +
+                ", clientId=" + clientId +
+                ", start=" + start +
+                ", duration=" + duration +
+                '}';
+    }
 }

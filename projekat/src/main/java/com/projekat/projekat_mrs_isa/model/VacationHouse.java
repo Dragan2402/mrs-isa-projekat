@@ -4,7 +4,7 @@ import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
 import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @SQLDelete(sql = "UPDATE vacation_house SET deleted = true WHERE id = ?")
@@ -23,7 +23,7 @@ public class VacationHouse extends RentingEntity{
     public VacationHouse() {
     }
 
-    public VacationHouse(String name, String address, String promoDescription, Set<String> pictures, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, Integer roomsQuantity, Integer bedsPerRoom) {
+    public VacationHouse(String name, String address, String promoDescription, List<String> pictures, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, Integer roomsQuantity, Integer bedsPerRoom) {
         super(name, address, promoDescription, pictures, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.roomsQuantity = roomsQuantity;
         this.bedsPerRoom = bedsPerRoom;

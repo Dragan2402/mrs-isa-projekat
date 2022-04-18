@@ -4,7 +4,8 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.util.HashSet;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -18,10 +19,10 @@ public class Offer {
     @Column(name = "place", nullable = false)
     private String place;
 
-    @Column(name = "clientLimit", nullable = false)
+    @Column(name = "client_limit", nullable = false)
     private Integer clientLimit;
 
-    @Column(name = "additionalServices")
+    @Column(name = "additional_services")
     @ElementCollection(targetClass=String.class)
     private Set<String> additionalServices;
 
@@ -32,8 +33,11 @@ public class Offer {
     @JoinColumn(name = "renting_entity_id",nullable = false)
     private RentingEntity rentingEntity;
 
-    @OneToMany(mappedBy = "offer" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
-    private Set<Slot> slots = new HashSet<Slot>();
+    @Column(name = "start", nullable = false)
+    private LocalDateTime start;
+
+    @Column(name = "duration", nullable = false)
+    private Duration duration;
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
@@ -41,11 +45,15 @@ public class Offer {
     public Offer() {
     }
 
-    public Offer( String place, Integer clientLimit, Set<String> additionalServices, Double price) {
+    public Offer( String place, Integer clientLimit, Set<String> additionalServices, Double price,
+                  RentingEntity rentingEntity, LocalDateTime start, Duration duration) {
         this.place = place;
         this.clientLimit = clientLimit;
         this.additionalServices = additionalServices;
         this.price = price;
+        this.rentingEntity = rentingEntity;
+        this.start = start;
+        this.duration = duration;
         this.deleted = false;
     }
 
@@ -89,7 +97,6 @@ public class Offer {
         this.price = price;
     }
 
-
     public RentingEntity getRentingEntity() {
         return rentingEntity;
     }
@@ -98,22 +105,20 @@ public class Offer {
         this.rentingEntity = rentingEntity;
     }
 
-    public Set<Slot> getSlots() {
-        return slots;
+    public LocalDateTime getStart() {
+        return start;
     }
 
-    public void setSlots(Set<Slot> slots) {
-        this.slots = slots;
+    public void setStart(LocalDateTime start) {
+        this.start = start;
     }
 
-    public void addSlot(Slot slot){
-        slots.add(slot);
-        slot.setOffer(this);
+    public Duration getDuration() {
+        return duration;
     }
 
-    public void removeSlot(Slot slot){
-        slots.remove(slot);
-        slot.setOffer(null);
+    public void setDuration(Duration duration) {
+        this.duration = duration;
     }
 
     public boolean isDeleted() {
@@ -132,6 +137,9 @@ public class Offer {
                 ", clientLimit=" + clientLimit +
                 ", additionalServices=" + additionalServices +
                 ", price=" + price +
+                ", rentingEntity=" + rentingEntity.getId() +
+                ", start=" + start +
+                ", duration=" + duration +
                 ", deleted=" + deleted +
                 '}';
     }

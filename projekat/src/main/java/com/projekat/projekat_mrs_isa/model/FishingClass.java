@@ -4,6 +4,7 @@ import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
 import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -27,7 +28,7 @@ public class FishingClass extends RentingEntity{
     public FishingClass() {
     }
 
-    public FishingClass(String name, String address, String promoDescription, Set<String> pictures, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String instructorBiography, Integer clientLimit, Set<String> fishingEquipment) {
+    public FishingClass(String name, String address, String promoDescription, List<String> pictures, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String instructorBiography, Integer clientLimit, Set<String> fishingEquipment) {
         super(name, address, promoDescription, pictures, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.instructorBiography = instructorBiography;
         this.clientLimit = clientLimit;

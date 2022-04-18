@@ -3,6 +3,7 @@ package com.projekat.projekat_mrs_isa.model;
 import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -42,7 +43,7 @@ public class Ship extends RentingEntity{
     public Ship() {
     }
 
-    public Ship(String name, String address, String promoDescription, Set<String> pictures,  String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String type, Integer length, String engineNumber, Integer enginePower, Integer topSpeed, Set<String> navigationEquipment, Integer clientLimit, Set<String> fishingEquipment) {
+    public Ship(String name, String address, String promoDescription, List<String> pictures, String behaviourRules, String priceList, String additionalInfo, String cancellationConditions, String type, Integer length, String engineNumber, Integer enginePower, Integer topSpeed, Set<String> navigationEquipment, Integer clientLimit, Set<String> fishingEquipment) {
         super(name, address, promoDescription, pictures, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.type = type;
         this.length = length;

@@ -4,6 +4,8 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,12 +21,12 @@ public class Reservation {
     @Column(name = "place", nullable = false)
     private String place;
 
-    @Column(name = "clientNum", nullable = false)
-    private Integer clientNum;
+    @Column(name = "client_limit", nullable = false)
+    private Integer clientLimit;
 
-    @Column(name = "additionalServices")
+    @Column(name = "additional_services")
     @ElementCollection(targetClass=String.class)
-    private Set<String> additionalServices;
+    private Set<String> additionalServices = new HashSet<>();
 
     @Column(name = "price", nullable = false)
     private Double price;
@@ -37,8 +39,14 @@ public class Reservation {
     @JoinColumn(name="client_id",nullable = false)
     private Client client;
 
-    @OneToMany(mappedBy = "reservation" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
-    private Set<Slot> slots = new HashSet<Slot>();
+//    @OneToMany(mappedBy = "reservation" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+//    private Set<Slot> slots = new HashSet<Slot>();
+
+    @Column(name = "start", nullable = false)
+    private LocalDateTime start;
+
+    @Column(name = "duration", nullable = false)
+    private Duration duration;
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
@@ -46,12 +54,17 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation( String place, Integer clientNum, Set<String> additionalServices, Double price) {
+    public Reservation( String place, Integer clientLimit, Set<String> additionalServices, Double price,
+                        RentingEntity rentingEntity, Client client, LocalDateTime start, Duration duration) {
 
         this.place = place;
-        this.clientNum = clientNum;
+        this.clientLimit = clientLimit;
         this.additionalServices = additionalServices;
         this.price = price;
+        this.rentingEntity = rentingEntity;
+        this.client = client;
+        this.start = start;
+        this.duration = duration;
         this.deleted = false;
     }
 
@@ -71,12 +84,12 @@ public class Reservation {
         this.place = place;
     }
 
-    public Integer getClientNum() {
-        return clientNum;
+    public Integer getClientLimit() {
+        return clientLimit;
     }
 
-    public void setClientNum(Integer clientNum) {
-        this.clientNum = clientNum;
+    public void setClientLimit(Integer clientLimit) {
+        this.clientLimit = clientLimit;
     }
 
     public Set<String> getAdditionalServices() {
@@ -111,22 +124,20 @@ public class Reservation {
         this.client = client;
     }
 
-    public Set<Slot> getSlots() {
-        return slots;
+    public LocalDateTime getStart() {
+        return start;
     }
 
-    public void setSlots(Set<Slot> slots) {
-        this.slots = slots;
+    public void setStart(LocalDateTime start) {
+        this.start = start;
     }
 
-    public void addSlot(Slot slot){
-        slots.add(slot);
-        slot.setReservation(this);
+    public Duration getDuration() {
+        return duration;
     }
 
-    public void removeSlot(Slot slot){
-        slots.remove(slot);
-        slot.setReservation(null);
+    public void setDuration(Duration duration) {
+        this.duration = duration;
     }
 
     public boolean isDeleted() {
@@ -142,11 +153,13 @@ public class Reservation {
         return "Reservation{" +
                 "id=" + id +
                 ", place='" + place + '\'' +
-                ", clientNum=" + clientNum +
+                ", clientLimit=" + clientLimit +
                 ", additionalServices=" + additionalServices +
                 ", price=" + price +
-                ", rentingEntity=" + rentingEntity +
-                ", client=" + client +
+                ", rentingEntity=" + rentingEntity.getId() +
+                ", client=" + client.getId() +
+                ", start=" + start +
+                ", duration=" + duration +
                 ", deleted=" + deleted +
                 '}';
     }
