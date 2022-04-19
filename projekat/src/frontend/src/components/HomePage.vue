@@ -25,7 +25,7 @@
         <table>
           <thead>
           <th>Name</th>
-          <th>Address</th>
+          <th>Location</th>
           <th>Price</th>
           <th></th>
           </thead>
@@ -199,8 +199,11 @@ button {
 }
 
 .entities-div table {
-  width: 100%;
-  height: 100%;
+  margin: auto;
+}
+
+.entities-div table td{
+  width: 250px;
 }
 
 .radio {
@@ -208,8 +211,8 @@ button {
 }
 
 .inputSearch {
-  width: 80%;
-  height: 80%;
+  width: 90%;
+  height: 50px;
 }
 
 
