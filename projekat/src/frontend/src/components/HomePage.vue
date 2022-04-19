@@ -170,7 +170,6 @@ export default {
   margin: 10px;
 }
 
-
 .input-group-text {
   width: 100%;
   margin: auto;
@@ -253,6 +252,8 @@ button {
 [type=radio]:checked + label {
   outline: 2px solid darkgrey;
   border-radius: 5px;
+  transform: scale(1.2);
+  transition: all 0.1s ease;
 }
 
 </style>
