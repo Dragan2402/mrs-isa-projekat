@@ -81,4 +81,8 @@ a {
 .navbar ul .active {
     background-color: #272727;
   }
+
+.navbar .brand:hover {
+  cursor: pointer;
+}
 </style>
