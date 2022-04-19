@@ -14,6 +14,8 @@
       <p>Client limit: {{ fishingClass.clientLimit }}</p>
       <p>Additional info: {{ fishingClass.additionalInfo }} </p>
       <p>Cancellation conditions: {{ fishingClass.cancellationConditions }}</p>
+      <p>From: {{ fishingClass.availableFrom }}</p>
+      <p>To: {{ fishingClass.availableTo }}</p>
     </div>
     <div v-else class="user-data-div">
       <p>Name: <input type="text" v-model="fishingClass.name"/></p>

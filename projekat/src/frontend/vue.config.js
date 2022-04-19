@@ -10,6 +10,5 @@ module.exports = defineConfig({
                 changeOrigin: true
             }
         }
-    },
-    publicPath:''
+    }
 })

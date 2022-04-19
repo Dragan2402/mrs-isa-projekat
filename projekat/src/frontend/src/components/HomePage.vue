@@ -1,8 +1,8 @@
 <template>
   <div class="main">
-    <!-- <button class="btn btn-primary" @click="goToUserProfile()">User Profile</button>
+    <button class="btn btn-primary" @click="goToUserProfile()">User Profile</button>
     <button class="btn btn-primary" @click="goToFishingClassProfile()">Fishing Class Profile</button>
-    <button class="btn btn-primary" @click="goToVacationHousesProfile()">Vacation House Profile</button> -->
+    <button class="btn btn-primary" @click="goToVacationHousesProfile()">Vacation House Profile</button>
     <br>
     <div class="entities-div">
       <div>
