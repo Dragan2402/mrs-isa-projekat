@@ -14,6 +14,8 @@
       <p>Client limit: {{ fishingClass.clientLimit }}</p>
       <p>Additional info: {{ fishingClass.additionalInfo }} </p>
       <p>Cancellation conditions: {{ fishingClass.cancellationConditions }}</p>
+      <p>Available from: {{ fishingClass.availableFrom }}</p>
+      <p>Available to: {{ fishingClass.availableTo }}</p>
     </div>
     <div v-else class="user-data-div">
       <p>Name: <input type="text" v-model="fishingClass.name"/></p>
@@ -27,6 +29,8 @@
       <p>Cancellation conditions: <input type="text" v-model="fishingClass.cancellationConditions"/></p>
     </div>
     <br>
+    <Datepicker :format ='format' v-if="this.editing" v-model="dateFrom" vertical />
+    <Datepicker :format ='format' v-if="this.editing" v-model="dateTo" vertical />
     <button v-if="!this.editing" @click="toggleEdit()" class="btn btn-primary">Edit Info</button>
     <button v-else @click="saveEdit()" class="btn btn-primary">Save</button>
     <br>
@@ -42,7 +46,9 @@ export default {
   data() {
     return {
       fishingClass: {},
-      editing: false
+      editing: false,
+      dateFrom: null,
+      dateTo: null
     }
   },
   mounted() {
@@ -54,7 +60,18 @@ export default {
     toggleEdit() {
       this.editing = true;
     },
+
+    parseDate(date) {
+      const day = ("0" + date.getDate()).slice(-2);
+      const month = ("0" + (date.getMonth() + 1)).slice(-2);
+      const year = date.getFullYear();
+      const hours = ("0" + date.getHours()).slice(-2);
+      const minutes = ("0" + date.getMinutes()).slice(-2);
+      return `${day}.${month}.${year} ${hours}:${minutes}`;
+    },
     saveEdit() {
+      this.fishingClass.availableFrom = this.parseDate(this.dateFrom);
+      this.fishingClass.availableTo = this.parseDate(this.dateTo);
       axios.put("/api/fishingClasses/update", this.fishingClass).then(response => this.fishingClass = response.data).then(this.toastMessage());
       this.editing = false;
     },

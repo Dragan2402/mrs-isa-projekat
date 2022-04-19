@@ -132,6 +132,9 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 fisheq1
         );
 
+        fishingClassTemp.setAvailableFrom(LocalDateTime.of(2021,1,1, 20, 15));
+        fishingClassTemp.setAvailableTo(LocalDateTime.of(2021,2,1, 20, 30));
+
         fishingInstructorTemp.addFishingClass(fishingClassTemp);
         fishingClassRep.save(fishingClassTemp);
 

@@ -1,5 +1,6 @@
 package com.projekat.projekat_mrs_isa.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +11,9 @@ public class RentingEntityDTO {
     private String name;
     private String address;
     private String promoDescription;
+    @JsonFormat(pattern = ("dd.MM.yyyy HH:mm"))
     private LocalDateTime availableFrom;
+    @JsonFormat(pattern = ("dd.MM.yyyy HH:mm"))
     private LocalDateTime availableTo;
     private String behaviourRules;
     private String priceList;

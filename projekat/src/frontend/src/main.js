@@ -3,6 +3,8 @@ import {createApp} from 'vue'
 import {createRouter, createWebHistory} from 'vue-router'
 import ClientProfile from "./components/ClientProfile";
 import Toaster from '@meforma/vue-toaster';
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 import FishingClassProfile from './components/FishingClassProfile';
 import HomePage from "./components/HomePage";
 import VacationHouseProfile from "@/components/VacationHouseProfile";
