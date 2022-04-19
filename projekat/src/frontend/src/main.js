@@ -7,13 +7,16 @@ import FishingClassProfile from './components/FishingClassProfile';
 import HomePage from "./components/HomePage";
 import VacationHouseProfile from "@/components/VacationHouseProfile";
 import RentingEntityPreview from "@/components/RentingEntityPreview";
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const routes = [
     {path: "/", component: HomePage},
     {path: "/clientProfile", component: ClientProfile},
     {path: "/fishingClassProfile", component: FishingClassProfile},
-    {path: "/vacationHouses", component: VacationHouseProfile},
+    {name: "vacationHouses", path: "/vacationHouses", component: VacationHouseProfile},
     {name: "rentingEntityPreview",path:"/rentingEntityPreview/rID:id$dT:displayType", component: RentingEntityPreview}
 ];
 
@@ -22,4 +25,10 @@ const router = new createRouter({
     routes
 })
 
-createApp(App).use(router).use(Toaster, {position: 'top', duration: 2000}).mount('#app')
+
+createApp(App)
+    .use(router)
+    .use(Toaster, {position: 'top', duration: 2000})
+    .component('Datepicker', Datepicker)
+    .mount('#app')
+

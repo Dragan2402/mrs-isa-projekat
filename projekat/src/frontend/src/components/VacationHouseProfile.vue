@@ -22,8 +22,13 @@
       <p>Rooms: <input type="text" v-model="vacationHouse.roomsQuantity"></p>
       <p>Beds per room: <input type="text" v-model="vacationHouse.bedsPerRoom"></p>
     </div>
-    <button v-if="!this.editing" @click="toggleEdit()" class="edit-button">Edit Info</button>
-    <button v-else @click="saveEdit()" class="edit-button">Save</button>
+    <div v-if="!this.editing">
+      <button @click="toggleEdit()" class="edit-button">Edit Info</button>
+    </div>
+    <div v-else>
+      <Datepicker :format ='format' v-if="this.editing" v-model="dateFrom" vertical />
+      <button @click="saveEdit()" class="edit-button">Save</button>
+    </div>
   </div>
 
 <!--  <div v-for="(picture, index) in pictures" :key="index">-->
@@ -47,6 +52,7 @@ export default {
   name: "VacationHouseProfile",
   data() {
     return {
+      id: null,
       vacationHouse: {
         id: null,
         name: null,
@@ -60,22 +66,23 @@ export default {
         bedsPerRoom: null
       },
       pictures: [],
-      editing: false
+      editing: false,
+      dateFrom: null,
+      dateTo: null
     }
   },
   mounted() {
+    this.id=this.$route.params.id;
     axios
-      .get('/api/vacation_houses/3')
+      .get(`/api/vacation_houses/${this.id}`)
       .then(response => (this.vacationHouse = response.data));
     axios
-      .get('/api/vacation_houses/3/pictures/all')
+      .get(`/api/vacation_houses/${this.id}/pictures/all`)
       .then(response => {
         for (let i = 0; i < response.data.length; i++) {
           this.pictures.push(response.data[i]);
         }
       });
-    axios
-      .get('/api/vacation_houses/3/')
   },
   methods: {
     toggleEdit() {
@@ -83,7 +90,7 @@ export default {
     },
     saveEdit(){
       axios
-          .put("/api/vacation_houses/3", this.vacationHouse)
+          .put(`/api/vacation_houses/${this.id}`, this.vacationHouse)
           .then(response => {
             this.user = response.data;
             this.toastMessage();
