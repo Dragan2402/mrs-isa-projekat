@@ -8,10 +8,10 @@
     <div class="nav-right">
       <ul>
         <li>
-          <a href="#">Sing In</a>
+          <button type="button" class="btn btn-warning">Sign in</button>
         </li>
         <li>
-          <a href="#">Register</a>
+          <button type="button" class="btn btn-warning">Register</button>
         </li>        
       </ul>
     </div>
@@ -33,22 +33,17 @@ export default {
 </script>
 
 <style>
-a {
-    text-decoration: none;
-  }
 
 nav {
-  background: #333333;
+  background: darkgrey;
 }
 
 .navbar {
   margin:auto;
-  width: 70%;
+  width: 65%;
   }
 
-.navbar a {
-    color: #e7e7e7;
-  }
+
 
 .navbar ul {
     margin: 0;
@@ -60,23 +55,17 @@ nav {
 
 .navbar .brand {
   width: 70px;
-  margin-left: 24px;
+  margin-left: 15px;
   }
 
-.navbar ul li a {
-    color: #e7e7e7;
-    padding: 0 24px;
-    display: block;
-  }
-
-.navbar ul a:hover,
-.navbar ul a:focus,
-.navbar ul .active {
-    background-color: #272727;
+.navbar button {
+  padding: 5px 25px;
+  margin: 10px;
   }
 
 .navbar .brand:hover {
   cursor: pointer;
+  -webkit-filter: brightness(80%);
 }
 
 

@@ -6,7 +6,7 @@
     <br>
     <div class="entities-div">
       <div>
-        <input class="inputSearch" type="text" placeholder="Filter by name, address..." v-model="filter"/>
+        <input class="input-group-text" type="text" placeholder="Filter by name, address..." v-model="filter"/>
       </div>
       <br>
       <div>
@@ -22,59 +22,53 @@
       </div>
       <br>
       <div v-if="this.displayType==0">
-        <table>
-          <thead>
-          <th>Name</th>
-          <th>Location</th>
-          <th>Price</th>
-          <th></th>
-          </thead>
-          <tbody>
-          <tr v-for="(vacationHouse,index) in this.filteredVacationHouses" @Click="selectEntity(vacationHouse)"
-              v-bind:index="index" :key="vacationHouse.id" v-bind="{selected: selectedEntity.id===vacationHouse.id}">
-            <td>{{ vacationHouse.name }}</td>
-            <td>{{ vacationHouse.address }}</td>
-            <td>{{ vacationHouse.priceList }}</td>
-            <td><label class="jump-link" @click="jumpToPreview(vacationHouse)">EXPLORE</label></td>
-          </tr>
-          </tbody>
-        </table>
+        <div class="list-entities" v-for="(vacationHouse, index) in this.filteredVacationHouses" @Click="selectEntity(vacationHouse)"
+            v-bind:index="index" :key="vacationHouse.id" v-bind="{selected: selectedEntity.id===vacationHouse.id}">
+          <div class="entity-picture"><img src="https://dirstcanoerental.com/images/uploads/20190523//800_66c5cc36bf6ec1257baacaec58d223370b37279b.jpg"/></div>
+          <div class="entity-name"><h3>{{ vacationHouse.name }}</h3>
+            <div class="entity-description">{{ vacationHouse.address }} </div>
+            <div class="entity-description">{{vacationHouse.promoDescription}}</div>
+            <div class="entity-description">{{vacationHouse.behaviourRules}}</div>
+            <div class="entity-description">{{vacationHouse.additionalInfo}}</div>
+          </div>
+          <div class="entity-price">
+            <div><h5>{{ vacationHouse.priceList }}</h5></div>
+            <div><button class="btn btn-warning" @click="jumpToPreview(vacationHouse)">Explore</button></div>
+          </div>
+        </div>
+
       </div>
       <div v-if="this.displayType==1">
-        <table>
-          <thead>
-          <th>Name</th>
-          <th>Location</th>
-          <th>Price</th>
-          </thead>
-          <tbody>
-          <tr v-for="(ship,index) in this.filteredShips" @Click="selectEntity(ship)" v-bind:index="index" :key="ship.id"
-              v-bind="{selected: selectedEntity.id===ship.id}">
-            <td>{{ ship.name }}</td>
-            <td>{{ ship.address }}</td>
-            <td>{{ ship.priceList }}</td>
-            <td><label class="jump-link" @click="jumpToPreview(ship)">EXPLORE</label></td>
-          </tr>
-          </tbody>
-        </table>
+        <div class="list-entities" v-for="(ship,index) in this.filteredShips" @Click="selectEntity(ship)" v-bind:index="index" :key="ship.id"
+            v-bind="{selected: selectedEntity.id===ship.id}">
+        <div class="entity-picture"><img src="http://www.lejournalinternational.info/wp-content/uploads/2018/10/Titanic_II-1320x564.jpg"/></div>
+          <div class="entity-name"><h3>{{ ship.name }}</h3>
+            <div class="entity-description">{{ ship.address }} </div>
+            <div class="entity-description">{{ship.promoDescription}}</div>
+            <div class="entity-description">{{ship.behaviourRules}}</div>
+            <div class="entity-description">{{ship.additionalInfo}}</div>
+          </div>
+          <div class="entity-price">
+            <div><h5>{{ ship.priceList }}</h5></div>
+            <div><button class="btn btn-warning" @click="jumpToPreview(ship)">Explore</button></div>
+          </div>
+        </div>
       </div>
       <div v-if="this.displayType==2">
-        <table>
-          <thead>
-          <th>Name</th>
-          <th>Location</th>
-          <th>Price</th>
-          </thead>
-          <tbody>
-          <tr v-for="(fishingClass,index) in this.filteredFishingClasses" @Click="selectEntity(fishingClass)"
-              v-bind:index="index" :key="fishingClass.id" v-bind="{selected: selectedEntity.id===fishingClass.id}">
-            <td>{{ fishingClass.name }}</td>
-            <td>{{ fishingClass.address }}</td>
-            <td>{{ fishingClass.priceList }}</td>
-            <td><label class="jump-link" @click="jumpToPreview(fishingClass)">EXPLORE</label></td>
-          </tr>
-          </tbody>
-        </table>
+        <div class="list-entities" v-for="(fishingClass,index) in this.filteredFishingClasses" @Click="selectEntity(fishingClass)"
+             v-bind:index="index" :key="fishingClass.id" v-bind="{selected: selectedEntity.id===fishingClass.id}">
+          <div class="entity-picture"><img src="http://www.listribolov.co.rs/images/za_textove/377/bistravodavelika.JPG"/></div>
+          <div class="entity-name"><h3>{{ fishingClass.name }}</h3>
+            <div class="entity-description">{{ fishingClass.address }} </div>
+            <div class="entity-description">{{fishingClass.promoDescription}}</div>
+            <div class="entity-description">{{fishingClass.behaviourRules}}</div>
+            <div class="entity-description">{{fishingClass.additionalInfo}}</div>
+          </div>
+          <div class="entity-price">
+            <div><h5>{{ fishingClass.priceList }}</h5></div>
+            <div><button class="btn btn-warning" @click="jumpToPreview(fishingClass)">Explore</button></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -176,43 +170,62 @@ export default {
   margin: 10px;
 }
 
-.jump-link {
-  color: blue;
 
-}
-
-.jump-link:hover {
-  cursor: pointer;
-  background-color: aquamarine;
+.input-group-text {
+  width: 100%;
+  margin: auto;
 }
 
 button {
   margin: 20px;
 }
 
-.entities-div {
+.list-entities {
+  text-align: center;
+  width: 100%;
+  height: 170px;
+  border: 1px solid darkgrey;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.entity-picture img {
+  object-fit: cover;
+  margin: 10px;
+  border-radius: 5px;
+  width: 200px;
+  height: 150px;
+}
+
+.entity-picture {
+  float:left;
+}
+
+.entity-name {
+  float: left;
+  margin: 10px;
+  text-align: left;
+}
+
+.entity-description {
+  margin-left: 5px;
+  color: #585858;
+}
+
+.entity-price {
+  margin: 40px;
+  float: right;
+}
+
+.main {
   text-align: center;
   margin: auto;
   width: 50%;
   padding: 10px;
-
-}
-
-.entities-div table {
-  margin: auto;
-}
-
-.entities-div table td{
-  width: 250px;
 }
 
 .radio {
   margin: 20px;
-}
-
-.inputSearch {
-  width: 90%;
-  height: 50px;
 }
 
 
