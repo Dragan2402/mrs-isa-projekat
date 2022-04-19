@@ -6,6 +6,7 @@ import com.projekat.projekat_mrs_isa.repository.VacationHouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,5 +32,13 @@ public class VacationHouseService {
 
     public void remove(Long id) {
         vacationHouseRepository.deleteById(id);
+    }
+
+    public List<String> findPicturesByVacationHouseId(Long id) {
+        VacationHouse vacationHouse = vacationHouseRepository.findById(id).orElse(null);
+        if (vacationHouse != null)
+            return vacationHouse.getPictures();
+        else
+            return new ArrayList<>();
     }
 }

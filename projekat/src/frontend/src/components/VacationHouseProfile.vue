@@ -25,6 +25,19 @@
     <button v-if="!this.editing" @click="toggleEdit()" class="edit-button">Edit Info</button>
     <button v-else @click="saveEdit()" class="edit-button">Save</button>
   </div>
+
+<!--  <div v-for="(picture, index) in pictures" :key="index">-->
+<!--    <img v-bind:src="'data:image/jpeg;base64,' + picture" width="640" height="480">-->
+<!--  </div>-->
+
+  <div class="container">
+    <div class="row row-cols-4">
+      <div class="col p-3" v-for="(picture, index) in pictures" :key="index">
+        <img v-bind:src="'data:image/jpeg;base64,' + picture" style="width: 100%; height: auto;">
+      </div>
+    </div>
+  </div>
+
 </template>
 
 <script>
@@ -46,6 +59,7 @@ export default {
         roomsQuantity: null,
         bedsPerRoom: null
       },
+      pictures: [],
       editing: false
     }
   },
@@ -53,6 +67,15 @@ export default {
     axios
       .get('/api/vacation_houses/3')
       .then(response => (this.vacationHouse = response.data));
+    axios
+      .get('/api/vacation_houses/3/pictures/all')
+      .then(response => {
+        for (let i = 0; i < response.data.length; i++) {
+          this.pictures.push(response.data[i]);
+        }
+      });
+    axios
+      .get('/api/vacation_houses/3/')
   },
   methods: {
     toggleEdit() {
@@ -75,34 +98,5 @@ export default {
 </script>
 
 <style scoped>
-
-.page{
-  background-color: beige;
-  display: flex;
-  flex-direction: column;
-  font-family: 'Poppins', sans-serif;
-  align-items: center;
-}
-
-.edit-button{
-  background-color: white;
-  height: 5%;
-  width: 8%;
-  text-align-last: center;
-}
-
-.user-data-div{
-
-  margin: 20px;
-  border: 0.01px solid;
-
-  display: flex;
-  justify-content: center;
-  background-color: white;
-
-  flex-direction: column;
-  align-items: center;
-  padding: 50px;
-}
 
 </style>
