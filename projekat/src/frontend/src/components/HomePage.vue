@@ -9,16 +9,16 @@
         <input class="input-group-text" type="text" placeholder="Filter by name, address..." v-model="filter"/>
       </div>
       <br>
-      <div>
+      <div class="radio-div">
         <input class="radio" type="radio" id="contactChoice1"
                name="choice" value=0 v-model="displayType">
-        <label for="contactChoice1"> Houses</label>
+        <label class="radio-label" for="contactChoice1"> <img class="radio-img" src="../../public/house.png"> Houses</label>
         <input class="radio" type="radio" id="contactChoice2"
                name="choice" value=1 v-model="displayType">
-        <label for="contactChoice2">Ships</label>
+        <label class="radio-label" for="contactChoice2"><img class="radio-img" src="../../public/boat.png"> Boats</label>
         <input class="radio" type="radio" id="contactChoice3"
                name="choice" value=2 v-model="displayType">
-        <label for="contactChoice3">Fishing Classes</label>
+        <label class="radio-label" for="contactChoice3"><img class="radio-img" src="../../public/fishing.png"> Fishing classes</label>
       </div>
       <br>
       <div v-if="this.displayType==0">
@@ -226,7 +226,32 @@ button {
 
 .radio {
   margin: 20px;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
+.radio-img {
+  width: 50px;
+}
+
+.radio-label {
+  padding: 5px;
+  height: 60px;
+}
+
+.radio-div{
+  text-align: left;
+  margin-left: 200px;
+}
+
+.radio-label:hover{
+  cursor: pointer;
+}
+
+[type=radio]:checked + label {
+  outline: 2px solid darkgrey;
+  border-radius: 5px;
+}
 
 </style>
