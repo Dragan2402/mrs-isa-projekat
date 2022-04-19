@@ -3,6 +3,8 @@ import {createApp} from 'vue'
 import {createRouter, createWebHistory} from 'vue-router'
 import ClientProfile from "./components/ClientProfile";
 import Toaster from '@meforma/vue-toaster';
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 import FishingClassProfile from './components/FishingClassProfile';
 import HomePage from "./components/HomePage";
 import VacationHouseProfile from "@/components/VacationHouseProfile";
@@ -21,4 +23,4 @@ const router = new createRouter({
     routes
 })
 
-createApp(App).use(router).use(Toaster, {position: 'top', duration: 2000}).mount('#app')
+createApp(App).use(router).use(Toaster, {position: 'top', duration: 2000}).component('Datepicker', Datepicker).mount('#app')

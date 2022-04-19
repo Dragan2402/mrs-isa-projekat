@@ -74,6 +74,8 @@ public class FishingClass extends RentingEntity{
         this.setPromoDescription(fishingClassDTO.getPromoDescription());
         this.setInstructorBiography(fishingClassDTO.getInstructorBiography());
         this.setBehaviourRules(fishingClassDTO.getBehaviourRules());
+        this.setAvailableFrom(fishingClassDTO.getAvailableFrom());
+        this.setAvailableTo(fishingClassDTO.getAvailableTo());
         this.setPriceList(fishingClassDTO.getPriceList());
         this.setClientLimit(fishingClassDTO.getClientLimit());
         this.setAdditionalInfo(fishingClassDTO.getAdditionalInfo());
