@@ -33,6 +33,11 @@ public class VacationHouseController {
     @Transactional
     public ResponseEntity<List<VacationHouseDTO>> getAllVacationHouses() {
         List<VacationHouseDTO> vacationHouses = vacationHouseService.findAllDTO();
+        for(VacationHouseDTO vac: vacationHouses
+             ) {
+            System.out.println(vac.getName());
+
+        }
         return new ResponseEntity<>(vacationHouses, HttpStatus.OK);
     }
 

@@ -65,10 +65,10 @@ export default {
   },
   mounted() {
     axios
-      .get('/api/vacation_houses/3')
+      .get('/api/vacation_houses/4')
       .then(response => (this.vacationHouse = response.data));
     axios
-      .get('/api/vacation_houses/3/pictures/all')
+      .get('/api/vacation_houses/4/pictures/all')
       .then(response => {
         for (let i = 0; i < response.data.length; i++) {
           this.pictures.push(response.data[i]);

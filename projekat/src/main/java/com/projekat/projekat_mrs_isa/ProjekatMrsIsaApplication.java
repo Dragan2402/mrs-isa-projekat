@@ -151,6 +151,27 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 5
         );
 
+
+        List<String> pics2 = new ArrayList<>();
+        pics2.add("pictures/renting_entities/4/1.jpg");
+        pics2.add("pictures/renting_entities/4/2.jpg");
+        pics2.add("pictures/renting_entities/4/3.jpg");
+        pics2.add("pictures/renting_entities/4/4.jpg");
+        pics2.add("pictures/renting_entities/4/5.jpg");
+        pics2.add("pictures/renting_entities/4/6.jpg");
+        VacationHouse vacationHouseTemp2 = new VacationHouse(
+                "Angel’s Nest",
+                "Beograd",
+                "Uzivajte u full vili" ,
+                pics2,
+                "Sve je dozvoljeno",
+                "80 Eura",
+                "Spa je ukljucen u cenu!!!",
+                "3 Dana ranije",
+                10,
+                2
+        );
+
         Offer offerTemp = new Offer(
                 "Brcko",
                 5,
@@ -163,7 +184,11 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
         vacationHouseTemp.addOffer(offerTemp);
         vacHouseOwnerTemp1.addVacationHouse(vacationHouseTemp);
+        vacHouseOwnerTemp1.addVacationHouse(vacationHouseTemp2);
+
         vacationHouseRep.save(vacationHouseTemp);
+        vacationHouseRep.save(vacationHouseTemp2);
+        System.out.println(vacationHouseTemp2.getId());
         offerRep.save(offerTemp);
 
         //public Reservation(String firstSlot, Long slotQuantity, String place, Integer clientNum, Set<String> additionalServices, Double price) {

@@ -95,7 +95,7 @@ export default {
   }
   ,
   mounted() {
-    axios.get("api/vacation_houses/all").then(response => this.vacationHouses = response.data);
+    axios.get("api/vacation_houses/all").then(response => this.vacationHouses=response.data);
     axios.get("api/fishingClasses/all").then(response => this.fishingClasses = response.data);
     axios.get("api/ships/all").then(response => this.ships = response.data);
 
@@ -135,7 +135,9 @@ export default {
       })
     },
   },
-  methods: {
+  methods: {  
+        
+
     goToUserProfile() {
       this.$router.push('/clientProfile');
     },
@@ -193,8 +195,8 @@ button {
   object-fit: cover;
   margin: 10px;
   border-radius: 5px;
-  width: 200px;
-  height: 150px;
+  width: 100px;
+  height: 80px;
 }
 
 .entity-picture {
