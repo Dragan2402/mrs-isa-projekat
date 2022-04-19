@@ -7,6 +7,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -86,6 +88,10 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
 
         List<String> pics1 = new ArrayList<>();
+        pics1.add("pictures/renting_entities/3/1.jpg");
+        pics1.add("pictures/renting_entities/3/2.jpg");
+        pics1.add("pictures/renting_entities/3/3.jpg");
+        pics1.add("pictures/renting_entities/3/4.jpg");
         Set<Offer> offer1 = new HashSet<>();
         Set<String> nav1 = new HashSet<>();
         Set<String> fisheq1 = new HashSet<>();
@@ -174,5 +180,9 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         clientTemp1.addReservation(reservationTemp);
         reservationRep.save(reservationTemp);
 
+//        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        Path currentRelativePath = Paths.get("");
+        String s = currentRelativePath.toAbsolutePath().toString();
+        System.out.println("Current absolute path is: " + s);
     }
 }
