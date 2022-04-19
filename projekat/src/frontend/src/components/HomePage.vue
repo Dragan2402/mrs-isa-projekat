@@ -187,6 +187,7 @@ button {
   border: 1px solid darkgrey;
   border-radius: 5px;
   overflow: hidden;
+  margin-bottom: 10px;
 }
 
 .entity-picture img {
