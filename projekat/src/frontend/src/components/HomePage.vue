@@ -26,10 +26,8 @@
             v-bind:index="index" :key="vacationHouse.id" v-bind="{selected: selectedEntity.id===vacationHouse.id}">
           <div class="entity-picture"><img src="https://dirstcanoerental.com/images/uploads/20190523//800_66c5cc36bf6ec1257baacaec58d223370b37279b.jpg"/></div>
           <div class="entity-name"><h3>{{ vacationHouse.name }}</h3>
-            <div class="entity-description">{{ vacationHouse.address }} </div>
-            <div class="entity-description">{{vacationHouse.promoDescription}}</div>
-            <div class="entity-description">{{vacationHouse.behaviourRules}}</div>
-            <div class="entity-description">{{vacationHouse.additionalInfo}}</div>
+            <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ vacationHouse.address }} </div>
+            <div class="entity-description">{{ vacationHouse.promoDescription }}</div>
           </div>
           <div class="entity-price">
             <div><h5>{{ vacationHouse.priceList }}</h5></div>
@@ -43,10 +41,8 @@
             v-bind="{selected: selectedEntity.id===ship.id}">
         <div class="entity-picture"><img src="http://www.lejournalinternational.info/wp-content/uploads/2018/10/Titanic_II-1320x564.jpg"/></div>
           <div class="entity-name"><h3>{{ ship.name }}</h3>
-            <div class="entity-description">{{ ship.address }} </div>
+            <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ ship.address }} </div>
             <div class="entity-description">{{ship.promoDescription}}</div>
-            <div class="entity-description">{{ship.behaviourRules}}</div>
-            <div class="entity-description">{{ship.additionalInfo}}</div>
           </div>
           <div class="entity-price">
             <div><h5>{{ ship.priceList }}</h5></div>
@@ -59,10 +55,8 @@
              v-bind:index="index" :key="fishingClass.id" v-bind="{selected: selectedEntity.id===fishingClass.id}">
           <div class="entity-picture"><img src="http://www.listribolov.co.rs/images/za_textove/377/bistravodavelika.JPG"/></div>
           <div class="entity-name"><h3>{{ fishingClass.name }}</h3>
-            <div class="entity-description">{{ fishingClass.address }} </div>
+            <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ fishingClass.address }} </div>
             <div class="entity-description">{{fishingClass.promoDescription}}</div>
-            <div class="entity-description">{{fishingClass.behaviourRules}}</div>
-            <div class="entity-description">{{fishingClass.additionalInfo}}</div>
           </div>
           <div class="entity-price">
             <div><h5>{{ fishingClass.priceList }}</h5></div>
@@ -198,8 +192,8 @@ button {
   object-fit: cover;
   margin: 10px;
   border-radius: 5px;
-  width: 100px;
-  height: 80px;
+  width: 200px;
+  height: 150px;
 }
 
 .entity-picture {
@@ -215,6 +209,13 @@ button {
 .entity-description {
   margin-left: 5px;
   color: #585858;
+  max-width: 280px;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .entity-price {
