@@ -186,6 +186,7 @@ button {
   border-radius: 5px;
   overflow: hidden;
   margin-bottom: 10px;
+  min-width: 800px;
 }
 
 .entity-picture img {
@@ -249,6 +250,7 @@ button {
 .radio-div{
   text-align: left;
   margin-left: 200px;
+  min-width: 800px;
 }
 
 .radio-label:hover{
@@ -256,7 +258,7 @@ button {
 }
 
 [type=radio]:checked + label {
-  outline: 2px solid darkgrey;
+  outline: 1px solid darkgrey;
   border-radius: 5px;
   transform: scale(1.2);
   transition: all 0.1s ease;
