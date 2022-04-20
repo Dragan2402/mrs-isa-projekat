@@ -145,7 +145,10 @@ export default {
       this.$router.push('/fishingClassProfile');
     },
     goToVacationHousesProfile() {
-      this.$router.push('/vacationHouses');
+      this.$router.push({
+        name: "vacationHouses",
+        params: {id: 3}
+      });
     },
     selectEntity(entity) {
 

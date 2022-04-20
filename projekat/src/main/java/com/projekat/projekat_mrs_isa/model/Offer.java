@@ -1,12 +1,13 @@
 package com.projekat.projekat_mrs_isa.model;
 
+import com.projekat.projekat_mrs_isa.dto.OfferDTO;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @SQLDelete(sql = "UPDATE offer SET deleted = true WHERE id = ?")
@@ -24,7 +25,7 @@ public class Offer {
 
     @Column(name = "additional_services")
     @ElementCollection(targetClass=String.class)
-    private Set<String> additionalServices;
+    private List<String> additionalServices;
 
     @Column(name = "price", nullable = false)
     private Double price;
@@ -44,7 +45,18 @@ public class Offer {
 
     public Offer() {}
 
-    public Offer( String place, Integer clientLimit, Set<String> additionalServices, Double price,
+    public Offer(OfferDTO offerDTO, RentingEntity rentingEntity) {
+        this.place = offerDTO.getPlace();
+        this.clientLimit = offerDTO.getClientLimit();
+        this.additionalServices = offerDTO.getAdditionalServices();
+        this.price = offerDTO.getPrice();
+        this.rentingEntity = rentingEntity;
+        this.start = offerDTO.getStart();
+        this.duration = Duration.ofMillis(offerDTO.getDuration());
+        this.deleted = false;
+    }
+
+    public Offer( String place, Integer clientLimit, List<String> additionalServices, Double price,
                   RentingEntity rentingEntity, LocalDateTime start, Duration duration) {
         this.place = place;
         this.clientLimit = clientLimit;
@@ -80,11 +92,11 @@ public class Offer {
         this.clientLimit = clientLimit;
     }
 
-    public Set<String> getAdditionalServices() {
+    public List<String> getAdditionalServices() {
         return additionalServices;
     }
 
-    public void setAdditionalServices(Set<String> additionalServices) {
+    public void setAdditionalServices(List<String> additionalServices) {
         this.additionalServices = additionalServices;
     }
 

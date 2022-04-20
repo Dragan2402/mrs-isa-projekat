@@ -3,17 +3,18 @@ package com.projekat.projekat_mrs_isa.dto;
 import com.projekat.projekat_mrs_isa.model.Offer;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class OfferDTO {
     private Long id;
     private String place;
     private Integer clientLimit;
+    private List<String> additionalServices;
     private Double price;
     private Long rentingEntityId;
     private LocalDateTime start;
-    private Duration duration;
+    private Long duration;
 
     public OfferDTO() {}
 
@@ -21,10 +22,11 @@ public class OfferDTO {
         this.id = offer.getId();
         this.place = offer.getPlace();
         this.clientLimit = offer.getClientLimit();
+        this.additionalServices = offer.getAdditionalServices();
         this.price = offer.getPrice();
         this.rentingEntityId = offer.getRentingEntity().getId();
         this.start = offer.getStart();
-        this.duration = offer.getDuration();
+        this.duration = offer.getDuration().toMillis();
     }
 
     public Long getId() {
@@ -45,6 +47,12 @@ public class OfferDTO {
     public void setClientLimit(Integer clientLimit) {
         this.clientLimit = clientLimit;
     }
+    public List<String> getAdditionalServices() {
+        return additionalServices;
+    }
+    public void setAdditionalServices(List<String> additionalServices) {
+        this.additionalServices = additionalServices;
+    }
     public Double getPrice() {
         return price;
     }
@@ -63,10 +71,10 @@ public class OfferDTO {
     public void setStart(LocalDateTime start) {
         this.start = start;
     }
-    public Duration getDuration() {
+    public Long getDuration() {
         return duration;
     }
-    public void setDuration(Duration duration) {
+    public void setDuration(Long duration) {
         this.duration = duration;
     }
 

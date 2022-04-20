@@ -181,6 +181,8 @@ public abstract class RentingEntity {
         this.availableFrom = rentingEntityDTO.getAvailableFrom();
         this.availableTo = rentingEntityDTO.getAvailableTo();
         this.behaviourRules = rentingEntityDTO.getBehaviourRules();
+        this.availableFrom = rentingEntityDTO.getAvailableFrom();
+        this.availableTo = rentingEntityDTO.getAvailableTo();
         this.additionalInfo = rentingEntityDTO.getAdditionalInfo();
         this.cancellationConditions = rentingEntityDTO.getCancellationConditions();
     }
