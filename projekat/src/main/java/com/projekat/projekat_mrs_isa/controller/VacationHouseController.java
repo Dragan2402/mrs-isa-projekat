@@ -84,8 +84,7 @@ public class VacationHouseController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
-    public ResponseEntity<VacationHouseDTO> updateVacationHouse(@RequestBody VacationHouseDTO vacationHouseDTO)
-    {
+    public ResponseEntity<VacationHouseDTO> updateVacationHouse(@RequestBody VacationHouseDTO vacationHouseDTO) {
         VacationHouse vacationHouse = vacationHouseService.findById(vacationHouseDTO.getId());
         vacationHouse.update(vacationHouseDTO);
         vacationHouse = vacationHouseService.save(vacationHouse);

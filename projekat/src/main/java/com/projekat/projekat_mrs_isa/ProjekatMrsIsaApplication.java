@@ -151,10 +151,13 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 5
         );
 
+        vacationHouseTemp.setAvailableFrom(LocalDateTime.of(2021,1,1, 20, 15));
+        vacationHouseTemp.setAvailableTo(LocalDateTime.of(2021,2,1, 20, 30));
+
         Offer offerTemp = new Offer(
                 "Brcko",
                 5,
-                new HashSet<>(),
+                new ArrayList<>(),
                 500.0,
                 vacationHouseTemp,
                 LocalDateTime.now(),

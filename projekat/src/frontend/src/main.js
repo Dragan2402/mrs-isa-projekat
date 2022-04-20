@@ -9,8 +9,6 @@ import FishingClassProfile from './components/FishingClassProfile';
 import HomePage from "./components/HomePage";
 import VacationHouseProfile from "@/components/VacationHouseProfile";
 import RentingEntityPreview from "@/components/RentingEntityPreview";
-import Datepicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
