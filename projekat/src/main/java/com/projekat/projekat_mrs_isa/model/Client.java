@@ -20,9 +20,9 @@ public class Client extends User {
 
     public Client() {}
 
-    public Client( String email, String password, String firstName, String lastName, String address, String city,
+    public Client( String email, String password, String picture,String firstName, String lastName, String address, String city,
                    String country, String phoneNum) {
-        super( email, password, firstName, lastName, address, city, country, phoneNum);
+        super( email, password, picture,firstName, lastName, address, city, country, phoneNum);
     }
 
     public Set<Reservation> getReservations() {

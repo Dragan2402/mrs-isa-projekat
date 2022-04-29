@@ -19,6 +19,9 @@ public abstract class User {
     @Column(name="password",nullable = false)
     private String password;
 
+    @Column(name="picture",nullable = false)
+    private String picture;
+
     @Column(name="first_name",nullable = false)
     private String firstName;
 
@@ -42,10 +45,11 @@ public abstract class User {
 
     public User() {}
 
-    public User( String email, String password, String firstName, String lastName, String address, String city,
+    public User( String email, String password, String picture, String firstName, String lastName, String address, String city,
                  String country, String phoneNum) {
         this.email = email;
         this.password = password;
+        this.picture = picture;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -125,6 +129,14 @@ public abstract class User {
 
     public void setPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 
     public boolean isDeleted() {

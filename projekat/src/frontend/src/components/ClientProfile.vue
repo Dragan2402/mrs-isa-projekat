@@ -5,6 +5,7 @@
   <body >     
     <div class="page">
       <div v-if="!this.editing" class="user-data-div">
+         <img v-bind:src="'data:image/jpeg;base64,' + picture" style="width: 200px; height: 200px;">
         <h1>{{user.firstName}} {{user.lastName}} </h1>        
         <p>E-mail: {{user.email}}</p>
         <p>Address: {{user.address}}</p>
@@ -22,6 +23,7 @@
         <p>Phone Number: <input type="text" v-model="user.phoneNum" /></p>
         
       </div>
+      {{user.id}}
       <button v-if="!this.editing" @click="toggleEdit()" class="edit-button">Edit Info</button>
       <button v-else @click="saveEdit()" class="edit-button">Save</button>
     </div>
@@ -37,6 +39,7 @@ export default {
   data() {
     return {
       user:{},
+      picture: "",
       editing: false,
 
             }
@@ -45,6 +48,7 @@ export default {
       axios
         .get("/api/clients/loggedClient" )
         .then(response => (this.user = response.data));
+      axios.get(`/api/clients/2/picture`).then(response => this.picture=response.data);
     },
     methods: {
     toggleEdit(){

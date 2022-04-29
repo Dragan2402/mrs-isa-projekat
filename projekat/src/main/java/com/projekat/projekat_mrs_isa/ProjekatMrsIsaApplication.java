@@ -60,29 +60,29 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Admin adminTemp= new Admin("email@gmail.com","gage","Dragan"
+        Admin adminTemp= new Admin("email@gmail.com","gage","pictures/user_pictures/0.png","Dragan"
         ,"Mirkovic","Hopovska 4","Novi Sad","Serbia","+381692402000");
         adminRep.save(adminTemp);
 
 
-        Client clientTemp1= new Client("pero@gmail.com","pero","Pero"
+        Client clientTemp1= new Client("pero@gmail.com","pero","pictures/user_pictures/0.png","Pero"
                 ,"Peric","Jovanova 14","Novi Sad","Serbia","+38165656565");
         clientRep.save(clientTemp1);
 
-        Client clientTemp2= new Client("jovo@gmail.com","jovo","Jovo"
+        Client clientTemp2= new Client("jovo@gmail.com","jovo","pictures/user_pictures/0.png","Jovo"
                 ,"Jovic","Jovanovska 19","Novi Sad","Serbia","+381656565222");
         clientRep.save(clientTemp2);
 
-        VacationHouseOwner vacHouseOwnerTemp1= new VacationHouseOwner("dimpet96@gmail.com","dimpet","Dimitrije"
+        VacationHouseOwner vacHouseOwnerTemp1= new VacationHouseOwner("dimpet96@gmail.com","dimpet","pictures/user_pictures/0.png","Dimitrije"
                 ,"Petrov","Telep Gang","Novi Sad","Serbia","+381650000000");
         vacHouseRep.save(vacHouseOwnerTemp1);
 
-        ShipOwner shipOwnerTemp1=new ShipOwner("krtolinat@gmail.com","tomo","Tomo"
+        ShipOwner shipOwnerTemp1=new ShipOwner("krtolinat@gmail.com","tomo","pictures/user_pictures/0.png","Tomo"
                 ,"Krtolina","Balkan","Subotica","Serbia","+381653232322");
 
         shipOwnerRep.save(shipOwnerTemp1);
 
-        FishingInstructor fishingInstructorTemp=new FishingInstructor("aki96@gmail.com","asi","Andrej","Culjak","Futoska 70","Novi Sad","Serbia","+381611155777");
+        FishingInstructor fishingInstructorTemp=new FishingInstructor("aki96@gmail.com","asi","pictures/user_pictures/0.png","Andrej","Culjak","Futoska 70","Novi Sad","Serbia","+381611155777");
 
         fishingInstructorRep.save(fishingInstructorTemp);
 
