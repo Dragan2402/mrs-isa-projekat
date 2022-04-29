@@ -180,11 +180,33 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 new ArrayList<>(),
                 500.0,
                 vacationHouseTemp,
-                LocalDateTime.now(),
+                LocalDateTime.of(2022,6,24,20,10),
                 Duration.ofHours(4)
         );
 
+        Offer offerTemp2 = new Offer(
+                "Brcko",
+                5,
+                new ArrayList<>(),
+                500.0,
+                vacationHouseTemp,
+                LocalDateTime.of(2022,1,24,20,10),
+                Duration.ofHours(3)
+        );
+
+        Offer offerTemp3 = new Offer(
+                "Brcko Ficibajer",
+                5,
+                new ArrayList<>(),
+                300.0,
+                vacationHouseTemp,
+                LocalDateTime.of(2022,7,24,20,10),
+                Duration.ofHours(20)
+        );
+
+        vacationHouseTemp.addOffer(offerTemp3);
         vacationHouseTemp.addOffer(offerTemp);
+        vacationHouseTemp.addOffer(offerTemp2);
         vacHouseOwnerTemp1.addVacationHouse(vacationHouseTemp);
         vacHouseOwnerTemp1.addVacationHouse(vacationHouseTemp2);
 

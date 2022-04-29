@@ -19,6 +19,25 @@
       <p v-if="this.displayType==2">Instructor Biography: {{rentingEntity.instructorBiography}}</p>
       <p v-if="this.displayType==2">Client Limit: {{rentingEntity.clientLimit}}</p>      
     </div>
+    <div align='right'>
+      
+      <div class="list-entities" v-for="(offer, index) in this.offers" @Click="selectOffer(offer)"
+            v-bind:index="index" :key="offer.id" v-bind="{selected: selectedOffer.id===offer.id}">
+            Place: {{offer.place}}
+            People: {{offer.clientLimit}}
+            Additional Services: <label v-for="service in offer.additionalServices" :key="service">
+              {{service}}
+            </label>
+            Price: {{offer.price}}
+            Starting Date: {{offer.start}}
+            Duration: {{msToTime(offer.duration)}}
+      </div>
+      
+    </div>
+    <div v-if="selected" align='center'>
+      <button @click="makeReservation">Make A Reservation</button>
+      <button @click="hide">Hide</button>
+    </div>
 </template>
 
 <script>
@@ -31,6 +50,9 @@ export default {
       id:0,
       displayType:0,
       rentingEntity: {},
+      selectedOffer: {},
+      selected:false,      
+      offers: [],
       loaded:false,
     }
   },
@@ -41,7 +63,9 @@ export default {
     this.loaded=false;
     if(this.displayType==0 && this.id != undefined){      
       const path="/api/vacation_houses/"+this.id;
+      const pathOffers="/api/vacation_houses/"+this.id+"/offers";
       axios.get(path).then( response => this.rentingEntity=response.data);
+      axios.get(pathOffers).then(response => this.offers=response.data);
       this.loaded=true;
       }
     else if(this.displayType==1 && this.id != undefined){
@@ -54,9 +78,51 @@ export default {
       axios.get(path).then( response => this.rentingEntity=response.data);
       this.loaded=true;
     }
-}}
+},
+methods:{
+  selectOffer(offer) {
+
+      this.selectedOffer = offer;
+      this.selected = true;
+      
+
+    },   
+    msToTime(duration) {
+    var 
+      
+      minutes = Math.floor((duration / (1000 * 60)) % 60),
+      hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+ 
+    
+    if(minutes>0){
+      return hours+"H" + " " + minutes;
+    }else{
+       return hours+"H";
+    }
+  },
+  hide(){
+    this.selectedOffer={};
+    this.selected=false;
+  },
+  makeReservation(){
+      axios.get(`/api/offers/${this.selectedOffer.id}/makeReservation`).then(response => console.log(response.data)).then(this.$toast.success("Reservation made"));
+      
+  }
+}
+}
 </script>
 
 <style scoped>
+
+.list-entities {
+  text-align: center;
+  width: 100%;
+  height: 170px;
+  border: 1px solid darkgrey;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  min-width: 800px;
+}
 
 </style>

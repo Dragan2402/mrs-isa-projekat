@@ -2,22 +2,21 @@ package com.projekat.projekat_mrs_isa.controller;
 
 
 import com.projekat.projekat_mrs_isa.dto.OfferDTO;
+import com.projekat.projekat_mrs_isa.dto.UserDTO;
+import com.projekat.projekat_mrs_isa.model.Client;
 import com.projekat.projekat_mrs_isa.model.Offer;
 import com.projekat.projekat_mrs_isa.model.RentingEntity;
-import com.projekat.projekat_mrs_isa.service.FishingClassService;
-import com.projekat.projekat_mrs_isa.service.OfferService;
-import com.projekat.projekat_mrs_isa.service.ShipService;
-import com.projekat.projekat_mrs_isa.service.VacationHouseService;
+import com.projekat.projekat_mrs_isa.model.Reservation;
+import com.projekat.projekat_mrs_isa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping("api/offers")
@@ -27,6 +26,12 @@ public class OfferController {
 
     @Autowired
     private VacationHouseService vacationHouseService;
+
+    @Autowired
+    private ClientService clientService;
+
+    @Autowired
+    private ReservationService reservationService;
 
     @Autowired
     private ShipService shipService;
@@ -46,4 +51,23 @@ public class OfferController {
         offerService.save(newOffer);
         return new ResponseEntity<>(offerDTO, HttpStatus.OK);
     }
+
+
+    @GetMapping(value = "/{id}/makeReservation",produces = MediaType.APPLICATION_JSON_VALUE)
+    public  ResponseEntity<Boolean> makeReservation(@PathVariable("id") Long offerId){
+        Offer offer = offerService.findById(offerId);
+        if(offer==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Client clientLogged=clientService.findById(2L); //logged user, CHANGE HERE
+        
+        Reservation reservation= new Reservation(offer.getPlace(),offer.getClientLimit(), new HashSet<>(offer.getAdditionalServices()),
+                offer.getPrice(),offer.getRentingEntity(),clientLogged,offer.getStart(),offer.getDuration());
+        reservationService.save(reservation);
+        offer.setDeleted(true);
+        offerService.save(offer);
+        return new ResponseEntity<>(true,HttpStatus.OK);
+    }
+
+
 }

@@ -1,9 +1,11 @@
 package com.projekat.projekat_mrs_isa.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.projekat.projekat_mrs_isa.model.Offer;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OfferDTO {
@@ -13,6 +15,7 @@ public class OfferDTO {
     private List<String> additionalServices;
     private Double price;
     private Long rentingEntityId;
+    @JsonFormat(pattern = ("dd.MM.yyyy HH:mm"))
     private LocalDateTime start;
     private Long duration;
 
