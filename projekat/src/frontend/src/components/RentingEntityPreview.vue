@@ -21,7 +21,7 @@
     </div>
     <div align='right'>
       
-      <div class="list-entities" v-for="(offer, index) in this.offers" @Click="selectOffer(offer)"
+      <div class="list-entities" v-for="(offer, index) in this.offers" @Click="selectOffer(offer,index)"
             v-bind:index="index" :key="offer.id" v-bind="{selected: selectedOffer.id===offer.id}">
             Place: {{offer.place}}
             People: {{offer.clientLimit}}
@@ -51,7 +51,8 @@ export default {
       displayType:0,
       rentingEntity: {},
       selectedOffer: {},
-      selected:false,      
+      selected:false,
+      index:0,      
       offers: [],
       loaded:false,
     }
@@ -80,10 +81,11 @@ export default {
     }
 },
 methods:{
-  selectOffer(offer) {
+  selectOffer(offer,index) {
 
       this.selectedOffer = offer;
       this.selected = true;
+      this.index=index;
       
 
     },   
@@ -107,6 +109,8 @@ methods:{
   makeReservation(){
       axios.get(`/api/offers/${this.selectedOffer.id}/makeReservation`).then(response => console.log(response.data)).then(this.$toast.success("Reservation made"));
       
+      this.selected=false;      
+      this.$router.go(0);
   }
 }
 }
