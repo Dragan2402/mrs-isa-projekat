@@ -65,7 +65,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         adminRep.save(adminTemp);
 
 
-        Client clientTemp1= new Client("pero@gmail.com","pero","pictures/user_pictures/0.png","Pero"
+        Client clientTemp1= new Client("pero@gmail.com","pero","pictures/user_pictures/2.png","Pero"
                 ,"Peric","Jovanova 14","Novi Sad","Serbia","+38165656565");
         clientRep.save(clientTemp1);
 

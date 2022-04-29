@@ -11,6 +11,7 @@ import VacationHouseProfile from "@/components/VacationHouseProfile";
 import RentingEntityPreview from "@/components/RentingEntityPreview";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import PictureInput from 'vue-picture-input'
 
 
 const routes = [
@@ -30,6 +31,6 @@ const router = new createRouter({
 createApp(App)
     .use(router)
     .use(Toaster, {position: 'top', duration: 2000})
-    .component('Datepicker', Datepicker)
+    .component('Datepicker', Datepicker).component('PictureInput',PictureInput)
     .mount('#app')
 

@@ -26,6 +26,7 @@ public class VacationHouseController {
     @Autowired
     private VacationHouseService vacationHouseService;
 
+
     @Autowired
     private ResourceLoader resourceLoader;
 
