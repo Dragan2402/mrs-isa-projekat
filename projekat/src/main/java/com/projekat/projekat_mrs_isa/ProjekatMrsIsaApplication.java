@@ -198,7 +198,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         Reservation reservationTemp = new Reservation(
                 "Brcko",
                 5,
-                new HashSet<>(),
+                new ArrayList<>(),
                 50.0,
                 vacationHouseTemp,
                 clientTemp1,
