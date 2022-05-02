@@ -34,11 +34,6 @@ public class VacationHouseController {
     @Transactional
     public ResponseEntity<List<VacationHouseDTO>> getAllVacationHouses() {
         List<VacationHouseDTO> vacationHouses = vacationHouseService.findAllDTO();
-        for(VacationHouseDTO vac: vacationHouses
-             ) {
-            System.out.println(vac.getName());
-
-        }
         return new ResponseEntity<>(vacationHouses, HttpStatus.OK);
     }
 
@@ -52,7 +47,7 @@ public class VacationHouseController {
         return new ResponseEntity<>(new VacationHouseDTO(vacationHouse), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{vacationHouseId}/pictures/{pictureId}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/{vacationHouseId}/pictures/{pictureId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     public ResponseEntity<String> getPicture(@PathVariable("vacationHouseId") Long vacationHouseId, @PathVariable("pictureId") Long pictureId) {
         Resource r = resourceLoader

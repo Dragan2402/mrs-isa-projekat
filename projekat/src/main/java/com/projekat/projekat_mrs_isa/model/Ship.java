@@ -1,5 +1,6 @@
 package com.projekat.projekat_mrs_isa.model;
 
+import com.projekat.projekat_mrs_isa.dto.ShipDTO;
 import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
@@ -141,5 +142,15 @@ public class Ship extends RentingEntity{
                 ", clientLimit=" + clientLimit +
                 ", fishingEquipment=" + fishingEquipment +
                 "} " + super.toString();
+    }
+
+    public void update(ShipDTO shipDTO) {
+        super.update(shipDTO);
+        this.type = shipDTO.getType();
+        this.length = shipDTO.getLength();
+        this.engineNumber = shipDTO.getEngineNumber();
+        this.enginePower = shipDTO.getEnginePower();
+        this.topSpeed = shipDTO.getTopSpeed();
+        this.clientLimit = shipDTO.getClientLimit();
     }
 }
