@@ -63,8 +63,6 @@ public class VacationHouseController {
             } catch (IOException e) {
                 return "ERROR";
             }
-
-
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -101,7 +99,7 @@ public class VacationHouseController {
         }
 
 
-    @GetMapping(value = "/{vacationHouseId}/pictures/{pictureId}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/{vacationHouseId}/pictures/{pictureId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     public ResponseEntity<String> getPicture(@PathVariable("vacationHouseId") Long vacationHouseId, @PathVariable("pictureId") Long pictureId) {
         Resource r = resourceLoader

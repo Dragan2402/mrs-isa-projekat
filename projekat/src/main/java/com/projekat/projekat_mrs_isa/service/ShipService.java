@@ -1,6 +1,5 @@
 package com.projekat.projekat_mrs_isa.service;
 
-import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
 import com.projekat.projekat_mrs_isa.dto.ShipDTO;
 import com.projekat.projekat_mrs_isa.model.Ship;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
@@ -38,7 +37,6 @@ public class ShipService {
         Ship ship = shipRepository.findById(shipId).orElse(null);
         if (ship != null)
             return ship.getPictures();
-        else
-            return new ArrayList<>();
+        return new ArrayList<>();
     }
 }

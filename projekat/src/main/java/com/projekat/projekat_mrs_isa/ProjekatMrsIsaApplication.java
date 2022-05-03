@@ -122,6 +122,8 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 55,
                 fisheq1
         );
+        shipTemp.setAvailableFrom(LocalDateTime.now());
+        shipTemp.setAvailableTo(LocalDateTime.now().plus(Duration.ofDays(1)));
         shipOwnerTemp1.addShip(shipTemp);
 
         Offer offerTemp5 = new Offer(
@@ -259,7 +261,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         Reservation reservationTemp = new Reservation(
                 "Brcko",
                 5,
-                new HashSet<>(),
+                new ArrayList<>(),
                 50.0,
                 vacationHouseTemp,
                 clientTemp1,

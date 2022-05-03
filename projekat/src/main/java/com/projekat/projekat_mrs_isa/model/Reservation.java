@@ -1,13 +1,14 @@
 package com.projekat.projekat_mrs_isa.model;
 
+import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @SQLDelete(sql = "UPDATE reservation SET deleted = true WHERE id = ?")
@@ -26,7 +27,7 @@ public class Reservation {
 
     @Column(name = "additional_services")
     @ElementCollection(targetClass=String.class)
-    private Set<String> additionalServices = new HashSet<>();
+    private List<String> additionalServices = new ArrayList<>();
 
     @Column(name = "price", nullable = false)
     private Double price;
@@ -39,9 +40,6 @@ public class Reservation {
     @JoinColumn(name="client_id",nullable = false)
     private Client client;
 
-//    @OneToMany(mappedBy = "reservation" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
-//    private Set<Slot> slots = new HashSet<Slot>();
-
     @Column(name = "start", nullable = false)
     private LocalDateTime start;
 
@@ -53,7 +51,31 @@ public class Reservation {
 
     public Reservation() {}
 
-    public Reservation( String place, Integer clientLimit, Set<String> additionalServices, Double price,
+    public Reservation(Offer offer, Client client) {
+        this.place = offer.getPlace();
+        this.clientLimit = offer.getClientLimit();
+        this.additionalServices = offer.getAdditionalServices();
+        this.price = offer.getPrice();
+        this.rentingEntity = offer.getRentingEntity();
+        this.client = client;
+        this.start = offer.getStart();
+        this.duration = offer.getDuration();
+        this.deleted = false;
+    }
+
+    public Reservation(ReservationDTO reservationDTO, RentingEntity rentingEntity, Client client) {
+        this.place = reservationDTO.getPlace();
+        this.clientLimit = reservationDTO.getClientLimit();
+        this.additionalServices = reservationDTO.getAdditionalServices();
+        this.price = reservationDTO.getPrice();
+        this.rentingEntity = rentingEntity;
+        this.client = client;
+        this.start = reservationDTO.getStart();
+        this.duration = Duration.ofMillis(reservationDTO.getDuration());
+        this.deleted = false;
+    }
+
+    public Reservation( String place, Integer clientLimit, List<String> additionalServices, Double price,
                         RentingEntity rentingEntity, Client client, LocalDateTime start, Duration duration) {
 
         this.place = place;
@@ -91,11 +113,11 @@ public class Reservation {
         this.clientLimit = clientLimit;
     }
 
-    public Set<String> getAdditionalServices() {
+    public List<String> getAdditionalServices() {
         return additionalServices;
     }
 
-    public void setAdditionalServices(Set<String> additionalServices) {
+    public void setAdditionalServices(List<String> additionalServices) {
         this.additionalServices = additionalServices;
     }
 

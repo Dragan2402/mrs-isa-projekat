@@ -2,7 +2,8 @@
   <div class="main">
     <button class="btn btn-primary" @click="goToUserProfile()">User Profile</button>
     <button class="btn btn-primary" @click="goToFishingClassProfile()">Fishing Class Profile</button>
-    <button class="btn btn-primary" @click="goToVacationHousesProfile()">Vacation House Profile</button>
+    <button class="btn btn-primary" @click="goToVacationHouseProfile()">Vacation House Profile</button>
+    <button class="btn btn-primary" @click="goToShipProfile()">Ship Profile</button>
     <br>
     <div class="entities-div">
       <div>
@@ -140,10 +141,16 @@ export default {
     goToFishingClassProfile() {
       this.$router.push('/fishingClassProfile');
     },
-    goToVacationHousesProfile() {
+    goToVacationHouseProfile() {
       this.$router.push({
-        name: "vacationHouses",
+        name: "vacationHouseProfile",
         params: {id: 3}
+      });
+    },
+    goToShipProfile() {
+      this.$router.push({
+        name: "shipProfile",
+        params: {id: 1}
       });
     },
     selectEntity(entity) {

@@ -34,8 +34,8 @@ public class VacationHouseService {
         vacationHouseRepository.deleteById(id);
     }
 
-    public List<String> findPicturesByVacationHouseId(Long id) {
-        VacationHouse vacationHouse = vacationHouseRepository.findById(id).orElse(null);
+    public List<String> findPicturesByVacationHouseId(Long shipId) {
+        VacationHouse vacationHouse = vacationHouseRepository.findById(shipId).orElse(null);
         if (vacationHouse != null)
             return vacationHouse.getPictures();
         else

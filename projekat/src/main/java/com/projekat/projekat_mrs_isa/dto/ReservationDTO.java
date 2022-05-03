@@ -3,18 +3,19 @@ package com.projekat.projekat_mrs_isa.dto;
 import com.projekat.projekat_mrs_isa.model.Reservation;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ReservationDTO {
     private Long id;
     private String place;
     private Integer clientLimit;
+    private List<String> additionalServices;
     private Double price;
     private Long rentingEntityId;
     private Long clientId;
     private LocalDateTime start;
-    private Duration duration;
+    private Long duration;
 
     public ReservationDTO() {}
 
@@ -22,11 +23,12 @@ public class ReservationDTO {
         this.id = reservation.getId();
         this.place = reservation.getPlace();
         this.clientLimit = reservation.getClientLimit();
+        this.additionalServices = reservation.getAdditionalServices();
         this.price = reservation.getPrice();
         this.rentingEntityId = reservation.getRentingEntity().getId();
         this.clientId = reservation.getClient().getId();
         this.start = reservation.getStart();
-        this.duration = reservation.getDuration();
+        this.duration = reservation.getDuration().toMillis();
     }
 
     public Long getId() {
@@ -45,12 +47,20 @@ public class ReservationDTO {
         this.place = place;
     }
 
-    public Integer getClientNum() {
+    public Integer getClientLimit() {
         return clientLimit;
     }
 
-    public void setClientNum(Integer clientNum) {
-        this.clientLimit = clientNum;
+    public void setClientLimit(Integer clientLimit) {
+        this.clientLimit = clientLimit;
+    }
+
+    public List<String> getAdditionalServices() {
+        return additionalServices;
+    }
+
+    public void setAdditionalServices(List<String> additionalServices) {
+        this.additionalServices = additionalServices;
     }
 
     public Double getPrice() {
@@ -85,25 +95,11 @@ public class ReservationDTO {
         this.start = start;
     }
 
-    public Duration getDuration() {
+    public Long getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(Long duration) {
         this.duration = duration;
-    }
-
-    @Override
-    public String toString() {
-        return "ReservationDTO{" +
-                "id=" + id +
-                ", place='" + place + '\'' +
-                ", clientLimit=" + clientLimit +
-                ", price=" + price +
-                ", rentingEntityId=" + rentingEntityId +
-                ", clientId=" + clientId +
-                ", start=" + start +
-                ", duration=" + duration +
-                '}';
     }
 }
