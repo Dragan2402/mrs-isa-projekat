@@ -60,7 +60,7 @@ public class OfferController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         Client clientLogged=clientService.findById(2L); //logged user, CHANGE HERE
-        
+
         Reservation reservation= new Reservation(offer.getPlace(),offer.getClientLimit(), new HashSet<>(offer.getAdditionalServices()),
                 offer.getPrice(),offer.getRentingEntity(),clientLogged,offer.getStart(),offer.getDuration());
         reservationService.save(reservation);

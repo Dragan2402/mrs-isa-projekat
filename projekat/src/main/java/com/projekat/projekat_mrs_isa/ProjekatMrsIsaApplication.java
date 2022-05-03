@@ -92,10 +92,10 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         pics1.add("pictures/renting_entities/3/2.jpg");
         pics1.add("pictures/renting_entities/3/3.jpg");
         pics1.add("pictures/renting_entities/3/4.jpg");
-        Set<Offer> offer1 = new HashSet<>();
+
         Set<String> nav1 = new HashSet<>();
         Set<String> fisheq1 = new HashSet<>();
-        Set<String> addService = new HashSet<>();
+
 
         Ship shipTemp = new Ship(
                 "Takanik",
@@ -116,6 +116,19 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 fisheq1
         );
         shipOwnerTemp1.addShip(shipTemp);
+
+        Offer offerTemp5 = new Offer(
+                "Budva",
+                2,
+                new ArrayList<>(),
+                300.0,
+                shipTemp,
+                LocalDateTime.of(2022,7,24,20,10),
+                Duration.ofHours(20)
+        );
+
+        shipTemp.addOffer(offerTemp5);
+
         shipRep.save(shipTemp);
 
         FishingClass fishingClassTemp = new FishingClass(
@@ -136,6 +149,18 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         fishingClassTemp.setAvailableTo(LocalDateTime.of(2021,2,1, 20, 30));
 
         fishingInstructorTemp.addFishingClass(fishingClassTemp);
+
+        Offer offerTemp4 = new Offer(
+                "Jezero",
+                5,
+                new ArrayList<>(),
+                300.0,
+                fishingClassTemp,
+                LocalDateTime.of(2022,7,24,20,10),
+                Duration.ofHours(20)
+        );
+
+        fishingClassTemp.addOffer(offerTemp4);
         fishingClassRep.save(fishingClassTemp);
 
         VacationHouse vacationHouseTemp = new VacationHouse(
@@ -204,11 +229,14 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 Duration.ofHours(20)
         );
 
+
+
         vacationHouseTemp.addOffer(offerTemp3);
         vacationHouseTemp.addOffer(offerTemp);
         vacationHouseTemp.addOffer(offerTemp2);
         vacHouseOwnerTemp1.addVacationHouse(vacationHouseTemp);
         vacHouseOwnerTemp1.addVacationHouse(vacationHouseTemp2);
+
 
         vacationHouseRep.save(vacationHouseTemp);
         vacationHouseRep.save(vacationHouseTemp2);

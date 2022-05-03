@@ -1,7 +1,10 @@
 package com.projekat.projekat_mrs_isa.controller;
 
 import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
+import com.projekat.projekat_mrs_isa.dto.OfferDTO;
 import com.projekat.projekat_mrs_isa.model.FishingClass;
+import com.projekat.projekat_mrs_isa.model.Offer;
+import com.projekat.projekat_mrs_isa.model.Ship;
 import com.projekat.projekat_mrs_isa.service.FishingClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -41,4 +47,30 @@ public class FishingClassController {
             return new ResponseEntity<FishingClassDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<FishingClassDTO>(new FishingClassDTO(updatedFishingClass), HttpStatus.OK);
     }
+
+
+    @GetMapping(value = "/{id}/offers", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
+    public ResponseEntity<List<OfferDTO>> getOffers(@PathVariable("id") Long id) {
+        FishingClass fishingClass = fishingClassService.findById(id);
+        if (fishingClass == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        List<OfferDTO> offers=new ArrayList<>();
+        for(Offer offer : fishingClass.getOffers()) {
+            if (offer.getStart().compareTo(LocalDateTime.now()) > 0) {
+                OfferDTO temp = new OfferDTO(offer);
+                offers.add(temp);
+
+            }else{
+
+                offer.setDeleted(true);
+
+
+            }
+        }
+        return new ResponseEntity<>(offers, HttpStatus.OK);
+    }
+
+
 }
