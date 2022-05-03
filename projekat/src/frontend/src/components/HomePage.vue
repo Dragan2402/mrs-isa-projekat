@@ -23,8 +23,9 @@
       <br>
       <div v-if="this.displayType==0">
         <div class="list-entities" v-for="(vacationHouse, index) in this.filteredVacationHouses" @Click="selectEntity(vacationHouse)"
-            v-bind:index="index" :key="vacationHouse.id" v-bind="{selected: selectedEntity.id===vacationHouse.id}">
-          <div class="entity-picture"><img src="https://dirstcanoerental.com/images/uploads/20190523//800_66c5cc36bf6ec1257baacaec58d223370b37279b.jpg"/></div>
+            v-bind:index="index" :key="vacationHouse.id" v-bind="{selected: selectedEntity.id===vacationHouse.id}">        
+             
+          <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + vacationHouse.img" style="width: 200px; height: 150px;"></div>
           <div class="entity-name"><h3>{{ vacationHouse.name }}</h3>
             <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ vacationHouse.address }} </div>
             <div class="entity-description">{{ vacationHouse.promoDescription }}</div>
@@ -39,7 +40,8 @@
       <div v-if="this.displayType==1">
         <div class="list-entities" v-for="(ship,index) in this.filteredShips" @Click="selectEntity(ship)" v-bind:index="index" :key="ship.id"
             v-bind="{selected: selectedEntity.id===ship.id}">
-        <div class="entity-picture"><img src="http://www.lejournalinternational.info/wp-content/uploads/2018/10/Titanic_II-1320x564.jpg"/></div>
+        
+        <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + ship.img" style="width: 200px; height: 150px;"></div>
           <div class="entity-name"><h3>{{ ship.name }}</h3>
             <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ ship.address }} </div>
             <div class="entity-description">{{ship.promoDescription}}</div>
@@ -53,7 +55,7 @@
       <div v-if="this.displayType==2">
         <div class="list-entities" v-for="(fishingClass,index) in this.filteredFishingClasses" @Click="selectEntity(fishingClass)"
              v-bind:index="index" :key="fishingClass.id" v-bind="{selected: selectedEntity.id===fishingClass.id}">
-          <div class="entity-picture"><img src="http://www.listribolov.co.rs/images/za_textove/377/bistravodavelika.JPG"/></div>
+          <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + fishingClass.img" style="width: 200px; height: 150px;"></div>
           <div class="entity-name"><h3>{{ fishingClass.name }}</h3>
             <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ fishingClass.address }} </div>
             <div class="entity-description">{{fishingClass.promoDescription}}</div>

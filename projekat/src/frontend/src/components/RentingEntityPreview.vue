@@ -1,7 +1,13 @@
 <template>   
   <div v-if="loaded" align='center'>
       <p>Name: {{rentingEntity.name}}</p>
-      <p>Pictures: //to do insert pictures//</p>
+    <div class="container" >
+    <div class="row row-cols-4" >
+      <div class="col p-3" v-for="(picture, index) in pictures" :key="index">
+        <img v-bind:src="'data:image/jpeg;base64,' + picture" style="width: 100%; height: auto;">
+      </div>
+    </div>
+  </div>
       <p>Address: {{rentingEntity.address}}</p>
       <p>Promo Description: {{rentingEntity.promoDescription}}</p>
       <p>Behavior Rules: {{rentingEntity.behaviourRules}}</p>
@@ -50,6 +56,7 @@ export default {
       rentingEntity: {},
       selectedOffer: {},
       selected:false,
+      pictures:[],
       index:0,      
       offers: [],
       loaded:false,
@@ -63,21 +70,39 @@ export default {
     if(this.displayType==0 && this.id != undefined){      
       const path="/api/vacation_houses/"+this.id;
       const pathOffers="/api/vacation_houses/"+this.id+"/offers";
+      const pathPictures="/api/vacation_houses/"+this.id+"/pictures/all";
       axios.get(path).then( response => this.rentingEntity=response.data);
+      axios.get(pathPictures).then(response => {
+          for (let i = 0; i < response.data.length; i++) {
+            this.pictures.push(response.data[i]);
+          }
+        });
       axios.get(pathOffers).then(response => this.offers=response.data);
       this.loaded=true;
       }
     else if(this.displayType==1 && this.id != undefined){
       const path="/api/ships/"+this.id;
       const pathOffers="/api/ships/"+this.id+"/offers";
+      const pathPictures="/api/ships/"+this.id+"/pictures/all";
       axios.get(path).then( response => this.rentingEntity=response.data);
+      axios.get(pathPictures).then(response => {
+          for (let i = 0; i < response.data.length; i++) {
+            this.pictures.push(response.data[i]);
+          }
+        });
       axios.get(pathOffers).then(response => this.offers=response.data);
       this.loaded=true;
     }
     else if(this.id != undefined){
       const path="/api/fishingClasses/"+this.id;
       const pathOffers="/api/fishingClasses/"+this.id+"/offers";
+      const pathPictures="/api/fishingClasses/"+this.id+"/pictures/all";
       axios.get(path).then( response => this.rentingEntity=response.data);
+      axios.get(pathPictures).then(response => {
+          for (let i = 0; i < response.data.length; i++) {
+            this.pictures.push(response.data[i]);
+          }
+        });
       axios.get(pathOffers).then(response => this.offers=response.data);
       this.loaded=true;
     }

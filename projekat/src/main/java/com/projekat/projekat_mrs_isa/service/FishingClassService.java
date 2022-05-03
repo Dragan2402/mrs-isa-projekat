@@ -3,10 +3,12 @@ package com.projekat.projekat_mrs_isa.service;
 import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.FishingClass;
+import com.projekat.projekat_mrs_isa.model.Ship;
 import com.projekat.projekat_mrs_isa.repository.FishingClassRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,5 +34,13 @@ public class FishingClassService {
 
     public void remove(Long id) {
         fishingClassRepository.deleteById(id);
+    }
+
+    public List<String> findPicturesByShipId(Long id) {
+        FishingClass fishingClass = fishingClassRepository.findById(id).orElse(null);
+        if (fishingClass != null)
+            return fishingClass.getPictures();
+        else
+            return new ArrayList<>();
     }
 }

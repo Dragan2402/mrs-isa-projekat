@@ -100,12 +100,15 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         Set<String> nav1 = new HashSet<>();
         Set<String> fisheq1 = new HashSet<>();
 
+        List<String> picsShip=new ArrayList<>();
+        picsShip.add("pictures/renting_entities/1/1.jpg");
+        picsShip.add("pictures/renting_entities/1/2.jpg");
 
         Ship shipTemp = new Ship(
                 "Takanik",
                 "Porto Montenegro",
                 "Skupo je",
-                pics1,
+                picsShip,
                 "Zabranjeno skakanje bombe sa broda",
                 "100 evara",
                 "Zabranjeni kerovi",
@@ -135,11 +138,15 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
         shipRep.save(shipTemp);
 
+        List<String> fishingPics=new ArrayList<>();
+        fishingPics.add("pictures/renting_entities/2/1.jpg");
+        fishingPics.add("pictures/renting_entities/2/2.jpg");
+
         FishingClass fishingClassTemp = new FishingClass(
                 "Pecajmo s Milosem",
                 "Palicko jezero",
                 "Bice interesantno",
-                pics1,
+                fishingPics,
                 "Zabranjeno loviti dinamitom",
                 "150 evara",
                 "Pice obezbedjeno",

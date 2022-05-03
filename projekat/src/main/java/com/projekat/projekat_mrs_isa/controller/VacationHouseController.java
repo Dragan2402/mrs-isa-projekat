@@ -4,6 +4,7 @@ package com.projekat.projekat_mrs_isa.controller;
 import com.projekat.projekat_mrs_isa.dto.OfferDTO;
 import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
 import com.projekat.projekat_mrs_isa.model.Offer;
+import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
 import com.projekat.projekat_mrs_isa.service.OfferService;
 import com.projekat.projekat_mrs_isa.service.VacationHouseService;
@@ -37,13 +38,33 @@ public class VacationHouseController {
     @GetMapping(value = "/all")
     @Transactional
     public ResponseEntity<List<VacationHouseDTO>> getAllVacationHouses() {
-        List<VacationHouseDTO> vacationHouses = vacationHouseService.findAllDTO();
-        for(VacationHouseDTO vac: vacationHouses
-             ) {
-            System.out.println(vac.getName());
-
+        List<VacationHouse> vacationHouses = vacationHouseService.findAll();
+        List<VacationHouseDTO> vacationHouseDTOS=new ArrayList<>();
+        for (VacationHouse vacationHouse : vacationHouses){
+            VacationHouseDTO vacationHouseDTO= new VacationHouseDTO(vacationHouse);
+            vacationHouseDTO.setImg(encodeImage(vacationHouse));
+            vacationHouseDTOS.add(vacationHouseDTO);
         }
-        return new ResponseEntity<>(vacationHouses, HttpStatus.OK);
+        return new ResponseEntity<>(vacationHouseDTOS, HttpStatus.OK);
+    }
+
+    public String encodeImage(RentingEntity rentingEntity){
+        String picturePath="pictures/renting_entities/0.png";
+        if(rentingEntity.getPictures().size()>0){
+            picturePath=rentingEntity.getPictures().get(0);
+        }
+
+            Resource r = resourceLoader.getResource("classpath:" + picturePath);
+            try {
+                File file = r.getFile();
+                byte[] picture = FileUtils.readFileToByteArray(file);
+                return Base64.encodeBase64String(picture);
+
+            } catch (IOException e) {
+                return "ERROR";
+            }
+
+
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

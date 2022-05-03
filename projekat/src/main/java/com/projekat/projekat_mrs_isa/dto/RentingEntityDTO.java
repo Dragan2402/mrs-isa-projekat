@@ -2,13 +2,23 @@ package com.projekat.projekat_mrs_isa.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.projekat.projekat_mrs_isa.model.RentingEntity;
+import org.apache.commons.io.FileUtils;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class RentingEntityDTO {
     private Long id;
     private String name;
+    private String img;
     private String address;
     private String promoDescription;
     @JsonFormat(pattern = ("dd.MM.yyyy HH:mm"))
@@ -95,4 +105,14 @@ public class RentingEntityDTO {
     public void setCancellationConditions(String cancellationConditions) {
         this.cancellationConditions = cancellationConditions;
     }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+
 }

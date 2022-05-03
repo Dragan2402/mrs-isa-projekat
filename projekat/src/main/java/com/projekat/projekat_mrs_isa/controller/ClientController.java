@@ -74,7 +74,6 @@ public class ClientController {
     @Transactional
     public ResponseEntity<String> getPicture() {
         String picturePath= clientService.findById(2L).getPicture();
-
         Resource r = resourceLoader
                 .getResource("classpath:" + picturePath);
 
