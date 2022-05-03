@@ -43,7 +43,7 @@ public abstract class RentingEntity {
     @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Set<Offer> offers = new HashSet<>();
 
-    @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     private Set<Reservation> reservations = new HashSet<>();
 
     @Column(name = "behaviour_rules", nullable = false)

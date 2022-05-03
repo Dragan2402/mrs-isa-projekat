@@ -15,7 +15,7 @@ import java.util.Set;
 @SQLDelete(sql = "UPDATE client SET deleted = true WHERE id = ?")
 public class Client extends User {
 
-    @OneToMany(mappedBy = "client" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client" , fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     private Set<Reservation> reservations = new HashSet<>();
 
     public Client() {}

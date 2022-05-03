@@ -37,6 +37,9 @@ public class OfferController {
     private ShipService shipService;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
     private FishingClassService fishingClassService;
 
     @PostMapping(value = "/new", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -63,11 +66,12 @@ public class OfferController {
 
         Reservation reservation= new Reservation(offer.getPlace(),offer.getClientLimit(), new HashSet<>(offer.getAdditionalServices()),
                 offer.getPrice(),offer.getRentingEntity(),clientLogged,offer.getStart(),offer.getDuration());
+        clientLogged.addReservation(reservation);
+        offer.getRentingEntity().addReservation(reservation);
         reservationService.save(reservation);
         offer.setDeleted(true);
         offerService.save(offer);
+        emailService.confirmReservationMail(clientLogged,reservation);
         return new ResponseEntity<>(true,HttpStatus.OK);
     }
-
-
 }

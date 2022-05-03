@@ -2,6 +2,7 @@ package com.projekat.projekat_mrs_isa;
 
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.repository.*;
+import com.projekat.projekat_mrs_isa.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -49,6 +50,9 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
     @Autowired
     private ReservationRepository reservationRep;
 
+    @Autowired
+    private EmailService emailService;
+
 //    @Autowired
 //    private SlotRepository slotRep;
 
@@ -65,7 +69,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         adminRep.save(adminTemp);
 
 
-        Client clientTemp1= new Client("pero@gmail.com","pero","pictures/user_pictures/2.png","Pero"
+        Client clientTemp1= new Client("peropero@maildrop.cc","pero","pictures/user_pictures/2.png","Pero"
                 ,"Peric","Jovanova 14","Novi Sad","Serbia","+38165656565");
         clientRep.save(clientTemp1);
 
@@ -264,5 +268,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         Path currentRelativePath = Paths.get("");
         String s = currentRelativePath.toAbsolutePath().toString();
         System.out.println("Current absolute path is: " + s);
+
+
     }
 }

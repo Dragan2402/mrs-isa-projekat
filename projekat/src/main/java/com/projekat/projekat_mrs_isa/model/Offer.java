@@ -30,7 +30,7 @@ public class Offer {
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "renting_entity_id",nullable = false)
     private RentingEntity rentingEntity;
 
