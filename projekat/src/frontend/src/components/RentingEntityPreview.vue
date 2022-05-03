@@ -1,13 +1,14 @@
 <template>   
   <div v-if="loaded" align='center'>
       <p>Name: {{rentingEntity.name}}</p>
+      <p>Pictures: //to do insert pictures//</p>
       <p>Address: {{rentingEntity.address}}</p>
       <p>Promo Description: {{rentingEntity.promoDescription}}</p>
       <p>Behavior Rules: {{rentingEntity.behaviourRules}}</p>
       <p>Price: {{rentingEntity.priceList}}</p>
       <p>Additional Info: {{rentingEntity.additionalInfo}}</p>
       <p>Cancellation conditions: {{rentingEntity.cancellationConditions}}</p>
-      <p>Pictures: //to do insert pictures//</p>
+      
       <p v-if="this.displayType==0">Rooms Quantity: {{rentingEntity.roomsQuantity}}</p>
       <p v-if="this.displayType==0">Beds Per Room: {{rentingEntity.bedsPerRoom}}</p>
       <p v-if="this.displayType==1">Type: {{rentingEntity.type}}</p>
@@ -18,6 +19,22 @@
       <p v-if="this.displayType==1">Client Limit: {{rentingEntity.clientLimit}}</p>
       <p v-if="this.displayType==2">Instructor Biography: {{rentingEntity.instructorBiography}}</p>
       <p v-if="this.displayType==2">Client Limit: {{rentingEntity.clientLimit}}</p>      
+    </div>
+    <div align='center'>
+      OFFERS:
+      <ul class="list-group" v-for="(offer, index) in this.offers" @Click="selectOffer(offer,index)"
+            v-bind:index="index" :key="offer.id" v-bind="{selected: selectedOffer.id===offer.id}">
+             <li class="list-group-item "><i class="bi bi-currency-dollar"></i>Place: {{offer.place}} People: {{offer.clientLimit}} <label v-if="offer.additionalServices.length != 0"> Additional Services: <label v-for="service in offer.additionalServices" :key="service">
+              {{service}}
+              </label>
+            </label>
+              Price: {{offer.price}} Starting Date: {{offer.start}} Duration {{msToTime(offer.duration)}}</li>      
+      </ul>    
+      
+    </div>
+    <div v-if="selected" align='center'>
+      <button @click="makeReservation">Make A Reservation</button>
+      <button @click="hide">Hide</button>
     </div>
 </template>
 
@@ -31,6 +48,10 @@ export default {
       id:0,
       displayType:0,
       rentingEntity: {},
+      selectedOffer: {},
+      selected:false,
+      index:0,      
+      offers: [],
       loaded:false,
     }
   },
@@ -41,22 +62,73 @@ export default {
     this.loaded=false;
     if(this.displayType==0 && this.id != undefined){      
       const path="/api/vacation_houses/"+this.id;
+      const pathOffers="/api/vacation_houses/"+this.id+"/offers";
       axios.get(path).then( response => this.rentingEntity=response.data);
+      axios.get(pathOffers).then(response => this.offers=response.data);
       this.loaded=true;
       }
     else if(this.displayType==1 && this.id != undefined){
       const path="/api/ships/"+this.id;
+      const pathOffers="/api/ships/"+this.id+"/offers";
       axios.get(path).then( response => this.rentingEntity=response.data);
+      axios.get(pathOffers).then(response => this.offers=response.data);
       this.loaded=true;
     }
     else if(this.id != undefined){
       const path="/api/fishingClasses/"+this.id;
+      const pathOffers="/api/fishingClasses/"+this.id+"/offers";
       axios.get(path).then( response => this.rentingEntity=response.data);
+      axios.get(pathOffers).then(response => this.offers=response.data);
       this.loaded=true;
     }
-}}
+},
+methods:{
+  selectOffer(offer,index) {
+
+      this.selectedOffer = offer;
+      this.selected = true;
+      this.index=index;
+      
+
+    },   
+    msToTime(duration) {
+    var 
+      
+      minutes = Math.floor((duration / (1000 * 60)) % 60),
+      hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+ 
+    
+    if(minutes>0){
+      return hours+"H" + " " + minutes;
+    }else{
+       return hours+"H";
+    }
+  },
+  hide(){
+    this.selectedOffer={};
+    this.selected=false;
+  },
+  makeReservation(){
+      axios.get(`/api/offers/${this.selectedOffer.id}/makeReservation`).then(response => console.log(response.data)).then(this.$toast.success("Reservation made"));
+      
+      this.selected=false;      
+      this.$router.go(0);
+  }
+}
+}
 </script>
 
 <style scoped>
+
+.list-entities {
+  text-align: center;
+  width: 100%;
+  height: 170px;
+  border: 1px solid darkgrey;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  min-width: 800px;
+}
 
 </style>

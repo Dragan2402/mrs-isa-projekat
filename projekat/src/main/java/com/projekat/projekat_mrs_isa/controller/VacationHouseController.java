@@ -1,8 +1,11 @@
 package com.projekat.projekat_mrs_isa.controller;
 
 
+import com.projekat.projekat_mrs_isa.dto.OfferDTO;
 import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
+import com.projekat.projekat_mrs_isa.model.Offer;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
+import com.projekat.projekat_mrs_isa.service.OfferService;
 import com.projekat.projekat_mrs_isa.service.VacationHouseService;
 import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +29,8 @@ import java.util.List;
 public class VacationHouseController {
     @Autowired
     private VacationHouseService vacationHouseService;
-
-
+    @Autowired
+    private OfferService offerService;
     @Autowired
     private ResourceLoader resourceLoader;
 
@@ -51,6 +55,30 @@ public class VacationHouseController {
         }
         return new ResponseEntity<>(new VacationHouseDTO(vacationHouse), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/{id}/offers", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
+    public ResponseEntity<List<OfferDTO>> getOffers(@PathVariable("id") Long id) {
+        VacationHouse vacationHouse = vacationHouseService.findById(id);
+        if (vacationHouse == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        List<OfferDTO> offers=new ArrayList<>();
+        for(Offer offer : vacationHouse.getOffers()) {
+            if (offer.getStart().compareTo(LocalDateTime.now()) > 0) {
+                OfferDTO temp = new OfferDTO(offer);
+                offers.add(temp);
+
+            }else{
+
+                offer.setDeleted(true);
+
+
+            }
+            }
+        return new ResponseEntity<>(offers, HttpStatus.OK);
+        }
+
 
     @GetMapping(value = "/{vacationHouseId}/pictures/{pictureId}", produces = MediaType.IMAGE_JPEG_VALUE)
     @Transactional

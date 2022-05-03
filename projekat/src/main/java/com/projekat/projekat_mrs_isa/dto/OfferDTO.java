@@ -5,6 +5,7 @@ import com.projekat.projekat_mrs_isa.model.Offer;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OfferDTO {
