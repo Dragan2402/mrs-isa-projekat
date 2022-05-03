@@ -115,6 +115,8 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 55,
                 fisheq1
         );
+        shipTemp.setAvailableFrom(LocalDateTime.now());
+        shipTemp.setAvailableTo(LocalDateTime.now().plus(Duration.ofDays(1)));
         shipOwnerTemp1.addShip(shipTemp);
         shipRep.save(shipTemp);
 

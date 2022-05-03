@@ -12,13 +12,15 @@ import RentingEntityPreview from "@/components/RentingEntityPreview";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import PictureInput from 'vue-picture-input'
+import ShipProfile from "@/components/ShipProfile";
 
 
 const routes = [
     {path: "/", component: HomePage},
     {path: "/clientProfile", component: ClientProfile},
     {path: "/fishingClassProfile", component: FishingClassProfile},
-    {name: "vacationHouses", path: "/vacationHouses", component: VacationHouseProfile},
+    {name: "vacationHouseProfile", path: "/vacationHouseProfile", component: VacationHouseProfile},
+    {name: "shipProfile", path: "/shipProfile", component: ShipProfile},
     {name: "rentingEntityPreview",path:"/rentingEntityPreview/rID:id$dT:displayType", component: RentingEntityPreview}
 ];
 
