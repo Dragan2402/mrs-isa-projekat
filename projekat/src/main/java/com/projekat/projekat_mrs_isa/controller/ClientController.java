@@ -1,9 +1,11 @@
 package com.projekat.projekat_mrs_isa.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.Client;
 import com.projekat.projekat_mrs_isa.model.User;
 import com.projekat.projekat_mrs_isa.service.ClientService;
+import com.projekat.projekat_mrs_isa.service.UserService;
 import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
 import java.nio.file.*;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "api/clients")
@@ -30,6 +33,9 @@ public class ClientController {
 
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ResourceLoader resourceLoader;
@@ -49,9 +55,58 @@ public class ClientController {
         return new ResponseEntity<UserDTO>(clientDTO,HttpStatus.OK);
     }
 
+    @PutMapping(value ="/addClient",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> addUser(@RequestBody Map<String,Object> userMap){
+        ObjectMapper objectMapper=new ObjectMapper();
+        //ublic User( String email, String password, String picture, String firstName, String lastName, String address, String city,
+        //                 String country, String phoneNum)
+        String firstName,lastName,email,password,confirmPassword,address,city,country,phoneNum;
+        if(!userMap.containsKey("firstName") || !userMap.containsKey("lastName") || !userMap.containsKey("email") ||
+                !userMap.containsKey("password") ||!userMap.containsKey("confirmPassword") || !userMap.containsKey("address") || !userMap.containsKey("city") ||
+                !userMap.containsKey("country") ||!userMap.containsKey("phoneNum")){
+            System.out.println("Missing field for user creation !!!");
+            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
+        }
+        firstName = (String) userMap.get("firstName");
+        lastName = (String) userMap.get("lastName");
+        email = (String) userMap.get("email");
+        password = (String) userMap.get("password");
+        confirmPassword = (String) userMap.get("confirmPassword");
+        address = (String) userMap.get("address");
+        city = (String) userMap.get("city");
+        country = (String) userMap.get("country");
+        phoneNum = (String) userMap.get("phoneNum");
+        if(UtilityController.validateName(firstName) && UtilityController.validateName(lastName) && UtilityController.validateEmail(email) && isMailAvailable(email.toLowerCase())
+        && UtilityController.validatePasswords(password,confirmPassword) && address.length()>2 &&
+                city.length()>2 && country.length()>2 && UtilityController.validatePhoneNum(phoneNum)){
+            System.out.println("DATA IS GOOD CREATING USER");
+            Client clientTemp=new Client(email.toLowerCase(),password,"pictures/user_pictures/0.png",firstName,lastName,address,city,country,phoneNum);
+            clientService.save(clientTemp);
+            return new ResponseEntity<>(true,HttpStatus.CREATED);
+        }else {
+            System.out.println("DATA IS BAD");
+            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    public Boolean isMailAvailable(String mail){
+        List<User> users= userService.findAll();
+        for(User user : users){
+            if(user.getEmail().toLowerCase().equals(mail))
+                return false;
+        }
+        return true;
+    }
+
+    @GetMapping(value = "/isMailAvailable/{mail}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> isMailAvailableRequest(@PathVariable("mail") String mail){
+        return new ResponseEntity<>(isMailAvailable(mail),HttpStatus.OK);
+    }
+
     @GetMapping(value = "loggedClient",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> getLoggedClient() throws Exception{
-        UserDTO clientDTO = clientService.findUserDTO(2L);
+        UserDTO clientDTO = clientService.findUserDTO(7L);
         if (clientDTO == null)
             return new ResponseEntity<UserDTO>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<UserDTO>(clientDTO,HttpStatus.OK);
@@ -73,7 +128,7 @@ public class ClientController {
     @GetMapping(value = "loggedClient/picture", produces = MediaType.IMAGE_JPEG_VALUE)
     @Transactional
     public ResponseEntity<String> getPicture() {
-        String picturePath= clientService.findById(2L).getPicture();
+        String picturePath= clientService.findById(7L).getPicture();
         Resource r = resourceLoader
                 .getResource("classpath:" + picturePath);
 

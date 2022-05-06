@@ -5,8 +5,8 @@
         <img class="brand" @click="jumpToHomePage()" src="@/assets/app-logo.png">
       </div>
       <div class="nav-right">
-        <button type="button" class="btn btn-warning">Sign in</button>
-        <button type="button" class="btn btn-warning">Register</button>
+        <button type="button" v-if="signIn" class="btn btn-warning" >Sign in</button>
+        <button type="button"  v-if="signUp" @click="jmpToRegistrationPage()"  class="btn btn-warning">Register</button>
       </div>
     </div>
   </nav>
@@ -16,9 +16,21 @@
 <script>
 export default {
   name: "App",
+  data() {
+    return {
+      signIn: true,
+      signUp: true,
+    }
+  }, 
+
   methods:{
     jumpToHomePage(){
       this.$router.push("/");
+      this.signIn=true;
+      this.signUp=true;
+    },
+    jmpToRegistrationPage(){
+      this.$router.push("/registrationPage")
     }
   }
   

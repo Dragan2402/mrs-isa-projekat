@@ -173,7 +173,6 @@ export default {
 
 
 <style scoped>
-
 .main {
   margin: 10px;
 }
@@ -272,5 +271,6 @@ button {
   transform: scale(1.2);
   transition: all 0.1s ease;
 }
+
 
 </style>

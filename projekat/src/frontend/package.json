@@ -22,10 +22,13 @@
     "stylus-loader": "^3.0.2",
     "vue": "^3.2.13",
     "vue-axios": "^3.4.1",
+    "vue-i18n": "^8.27.1",
     "vue-picture-input": "^2.1.6",
     "vue-router": "^4.0.14",
     "vue-toastr": "^2.1.2",
-    "vue3-tags-input": "^1.0.2"
+    "vue3-country-region-select": "^1.0.0",
+    "vue3-tags-input": "^1.0.2",
+    "vue3-tel-input": "^1.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
