@@ -64,30 +64,35 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Admin adminTemp= new Admin("email@gmail.com","gage","pictures/user_pictures/0.png","Dragan"
+        Admin adminTemp= new Admin("email@maildrop.cc","gage","pictures/user_pictures/0.png","Dragan"
         ,"Mirkovic","Hopovska 4","Novi Sad","Serbia","+381692402000");
+        adminTemp.setVerified(true);
         adminRep.save(adminTemp);
 
 
         Client clientTemp1= new Client("peropero@maildrop.cc","pero","pictures/user_pictures/2.png","Pero"
                 ,"Peric","Jovanova 14","Novi Sad","Serbia","+38165656565");
+        clientTemp1.setVerified(true);
         clientRep.save(clientTemp1);
 
-        Client clientTemp2= new Client("jovo@gmail.com","jovo","pictures/user_pictures/0.png","Jovo"
+        Client clientTemp2= new Client("jovo@maildrop.cc","jovo","pictures/user_pictures/0.png","Jovo"
                 ,"Jovic","Jovanovska 19","Novi Sad","Serbia","+381656565222");
+        clientTemp2.setVerified(true);
         clientRep.save(clientTemp2);
 
-        VacationHouseOwner vacHouseOwnerTemp1= new VacationHouseOwner("dimpet96@gmail.com","dimpet","pictures/user_pictures/0.png","Dimitrije"
+        VacationHouseOwner vacHouseOwnerTemp1= new VacationHouseOwner("dimpet96@maildrop.cc","dimpet","pictures/user_pictures/0.png","Dimitrije"
                 ,"Petrov","Telep Gang","Novi Sad","Serbia","+381650000000");
+        vacHouseOwnerTemp1.setVerified(true);
         vacHouseRep.save(vacHouseOwnerTemp1);
 
-        ShipOwner shipOwnerTemp1=new ShipOwner("krtolinat@gmail.com","tomo","pictures/user_pictures/0.png","Tomo"
+        ShipOwner shipOwnerTemp1=new ShipOwner("krtolinat@maildrop.cc","tomo","pictures/user_pictures/0.png","Tomo"
                 ,"Krtolina","Balkan","Subotica","Serbia","+381653232322");
-
+        shipOwnerTemp1.setVerified(true);
         shipOwnerRep.save(shipOwnerTemp1);
 
-        FishingInstructor fishingInstructorTemp=new FishingInstructor("aki96@gmail.com","asi","pictures/user_pictures/0.png","Andrej","Culjak","Futoska 70","Novi Sad","Serbia","+381611155777");
 
+        FishingInstructor fishingInstructorTemp=new FishingInstructor("aki96@maildrop.cc","asi","pictures/user_pictures/0.png","Andrej","Culjak","Futoska 70","Novi Sad","Serbia","+381611155777");
+        fishingInstructorTemp.setVerified(true);
         fishingInstructorRep.save(fishingInstructorTemp);
 
 

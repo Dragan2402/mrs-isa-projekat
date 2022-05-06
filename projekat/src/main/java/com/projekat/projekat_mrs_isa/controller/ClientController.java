@@ -5,6 +5,7 @@ import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.Client;
 import com.projekat.projekat_mrs_isa.model.User;
 import com.projekat.projekat_mrs_isa.service.ClientService;
+import com.projekat.projekat_mrs_isa.service.EmailService;
 import com.projekat.projekat_mrs_isa.service.UserService;
 import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -40,6 +41,9 @@ public class ClientController {
     @Autowired
     private ResourceLoader resourceLoader;
 
+    @Autowired
+    private EmailService emailService;
+
     @GetMapping(value = "/all")
     public ResponseEntity<List<UserDTO>> getAllClients() {
         List<UserDTO> clients = clientService.findAllDTO();
@@ -57,14 +61,10 @@ public class ClientController {
 
     @PutMapping(value ="/addClient",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> addUser(@RequestBody Map<String,Object> userMap){
-        ObjectMapper objectMapper=new ObjectMapper();
-        //ublic User( String email, String password, String picture, String firstName, String lastName, String address, String city,
-        //                 String country, String phoneNum)
         String firstName,lastName,email,password,confirmPassword,address,city,country,phoneNum;
         if(!userMap.containsKey("firstName") || !userMap.containsKey("lastName") || !userMap.containsKey("email") ||
                 !userMap.containsKey("password") ||!userMap.containsKey("confirmPassword") || !userMap.containsKey("address") || !userMap.containsKey("city") ||
                 !userMap.containsKey("country") ||!userMap.containsKey("phoneNum")){
-            System.out.println("Missing field for user creation !!!");
             return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
         }
         firstName = (String) userMap.get("firstName");
@@ -82,6 +82,7 @@ public class ClientController {
             System.out.println("DATA IS GOOD CREATING USER");
             Client clientTemp=new Client(email.toLowerCase(),password,"pictures/user_pictures/0.png",firstName,lastName,address,city,country,phoneNum);
             clientService.save(clientTemp);
+            emailService.sendVerificationMail(new UserDTO(clientTemp));
             return new ResponseEntity<>(true,HttpStatus.CREATED);
         }else {
             System.out.println("DATA IS BAD");
@@ -106,10 +107,22 @@ public class ClientController {
 
     @GetMapping(value = "loggedClient",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> getLoggedClient() throws Exception{
-        UserDTO clientDTO = clientService.findUserDTO(7L);
+        UserDTO clientDTO = clientService.findUserDTO(2L);
         if (clientDTO == null)
             return new ResponseEntity<UserDTO>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<UserDTO>(clientDTO,HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/verify/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> verifyAccount(@PathVariable("id") Long id){
+        User user=userService.findById(id);
+        if(user == null)
+            return new ResponseEntity<>(false,HttpStatus.NOT_FOUND);
+        user.setVerified(true);
+        User userSaved=userService.save(user);
+        if(userSaved==null)
+            return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(true,HttpStatus.OK);
     }
 
     @PutMapping(value = "loggedClient",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
@@ -128,7 +141,7 @@ public class ClientController {
     @GetMapping(value = "loggedClient/picture", produces = MediaType.IMAGE_JPEG_VALUE)
     @Transactional
     public ResponseEntity<String> getPicture() {
-        String picturePath= clientService.findById(7L).getPicture();
+        String picturePath= clientService.findById(2L).getPicture();
         Resource r = resourceLoader
                 .getResource("classpath:" + picturePath);
 

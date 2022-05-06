@@ -40,6 +40,9 @@ public abstract class User {
     @Column(name="phone_num",nullable = false)
     private String phoneNum;
 
+    @Column(name = "verified", nullable = false)
+    private boolean verified;
+
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
@@ -56,6 +59,7 @@ public abstract class User {
         this.city = city;
         this.country = country;
         this.phoneNum = phoneNum;
+        this.verified=false;
         this.deleted = false;
     }
 
@@ -137,6 +141,14 @@ public abstract class User {
 
     public void setPicture(String picture) {
         this.picture = picture;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
 
     public boolean isDeleted() {
