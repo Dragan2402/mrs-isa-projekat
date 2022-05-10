@@ -98,6 +98,11 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         fishingInstructorTemp.setVerified(true);
         fishingInstructorRep.save(fishingInstructorTemp);
 
+        VacationHouseOwner vacHouseOwnerTemp2= new VacationHouseOwner("bokiboki@maildrop.cc","Boki222","pictures/user_pictures/0.png","Boris"
+                ,"Brejca","Tuzna ulica","Tuzni Grad","Serbia","+381650000111");
+        vacHouseOwnerTemp2.setVerified(true);
+        vacHouseRep.save(vacHouseOwnerTemp2);
+
 
         List<String> pics1 = new ArrayList<>();
         pics1.add("pictures/renting_entities/3/1.jpg");
@@ -222,6 +227,22 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         vacationHouseTemp2.setAvailableFrom(LocalDateTime.of(2022,6,1, 20, 15));
         vacationHouseTemp2.setAvailableTo(LocalDateTime.of(2022,9,1, 20, 30));
 
+        List<String> pics3=new ArrayList<>();
+        pics3.add("pictures/renting_entities/5/1.jpg");
+        pics3.add("pictures/renting_entities/5/2.jpg");
+        pics3.add("pictures/renting_entities/5/3.jpg");
+        pics3.add("pictures/renting_entities/5/4.jpg");
+
+        VacationHouse vacationHouseTemp3= new VacationHouse("Spa Vila Avala","Suplja stena","Spa Vila Avala se nalazi u podnožju istoimene planine u vikend naselju Šuplja stena koje je poznato po čistoći vazduha, " +
+                        "usled uvek prisutne ruže vetrova.",pics3,"NO DRINKING","6000 dinara","Mini bar ne radi","3 dana ranije",2,4);
+
+
+        vacationHouseTemp3.setAvailableFrom(LocalDateTime.of(2022,4,1, 20, 15));
+        vacationHouseTemp3.setAvailableTo(LocalDateTime.of(2022,5,30, 20, 30));
+
+        vacHouseOwnerTemp2.addVacationHouse(vacationHouseTemp3);
+
+        vacationHouseRep.save(vacationHouseTemp3);
         Offer offerTemp = new Offer(
                 "Brcko",
                 5,
@@ -289,6 +310,63 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         reservationRep.save(reservationTemp);
 
 //        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        List<String> pics4=new ArrayList<>();
+        pics4.add("pictures/renting_entities/6/1.jpg");
+        pics4.add("pictures/renting_entities/6/2.jpg");
+        pics4.add("pictures/renting_entities/6/3.jpg");
+
+
+        Ship shipTemp2 = new Ship(
+                "Gondola Cruzing",
+                "Venecija D Italija",
+                "Lakani kruzing",
+                pics4,
+                "Zabranjen ulazak bez 5L ruma",
+                "300 evara",
+                "Zabranjeno driftovanje",
+                "3 dana pred kraj",
+                "Gondola",
+                5,
+                "000000000",
+                120,
+                34,
+                nav1,
+                4,
+                fisheq1
+        );
+        shipTemp2.setAvailableFrom(LocalDateTime.of(2021,1,1, 20, 15));
+        shipTemp2.setAvailableTo(LocalDateTime.of(2021,2,1, 20, 30));
+        shipOwnerTemp1.addShip(shipTemp2);
+        shipRep.save(shipTemp2);
+
+
+        List<String> pics5=new ArrayList<>();
+        pics5.add("pictures/renting_entities/7/1.jpg");
+        pics5.add("pictures/renting_entities/7/2.jpg");
+        pics5.add("pictures/renting_entities/7/3.jpg");
+        pics5.add("pictures/renting_entities/7/4.jpg");
+        pics5.add("pictures/renting_entities/7/5.jpg");
+        pics5.add("pictures/renting_entities/7/6.jpg");
+
+        FishingClass fishingClassTemp2 = new FishingClass(
+                "Fishing with the best",
+                "Lednicko jezero",
+                "Nocno pecanje po danu",
+                pics5,
+                "Zabranjene varalice",
+                "50 eura",
+                "Pice obezbedjeno",
+                "3 dana ranije",
+                "Instruktor brz najbri",
+                10,
+                fisheq1
+        );
+
+        fishingClassTemp2.setAvailableFrom(LocalDateTime.of(2022,7,1, 20, 15));
+        fishingClassTemp2.setAvailableTo(LocalDateTime.of(2022,9,1, 20, 30));
+        fishingInstructorTemp.addFishingClass(fishingClassTemp2);
+        fishingClassRep.save(fishingClassTemp2);
+
         Path currentRelativePath = Paths.get("");
         String s = currentRelativePath.toAbsolutePath().toString();
         System.out.println("Current absolute path is: " + s);
