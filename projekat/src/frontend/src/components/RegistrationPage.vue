@@ -23,7 +23,7 @@
         <input type="text" v-model="city" placeholder="City">
       </div>
       <div>
-        <country-select v-model="country" :usei18n="false" :autocomplete="true" :countryName="true"/>        
+        <country-select v-model="country" :usei18n="false" :autocomplete="true"  :countryName="true"/>        
       </div>
       <div>
         <vue-tel-input v-model="phoneNum" @validate="telValidate"></vue-tel-input>
@@ -119,12 +119,19 @@ export default {
         this.$toast.error("Provide city name");
         return;
       }
+
+      if(this.country == ""){
+        this.$toast.error("Provide country");
+        return;
+      }
+      
       if(this.validNumber===''){
         this.$toast.error("Phone number invalid");
         return;
       }
+
     
-   
+      
       axios.get(`api/clients/isMailAvailable/${this.email}`).then(response => {
         if(response.data==false){
           this.$toast.error("Email already taken");

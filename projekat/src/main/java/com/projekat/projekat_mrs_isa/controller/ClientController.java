@@ -128,14 +128,22 @@ public class ClientController {
     @PutMapping(value = "loggedClient",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> updateLoggedClient(@RequestBody UserDTO userDTO) throws Exception{
 
-        Client clientToUpdate = clientService.findById(2L);
-        clientToUpdate.update(userDTO);
-        Client updatedCLient = clientService.save(clientToUpdate);
+        if(UtilityController.validateName(userDTO.getFirstName()) && UtilityController.validateName(userDTO.getLastName())
+               && userDTO.getAddress().length()>2 &&
+                userDTO.getCity().length()>2 && userDTO.getCountry().length()>2 && UtilityController.validatePhoneNum(userDTO.getPhoneNum())){
+            Client clientToUpdate = clientService.findById(2L);
+            clientToUpdate.update(userDTO);
+            Client updatedCLient = clientService.save(clientToUpdate);
 
 
-        if (updatedCLient == null)
-            return new  ResponseEntity<UserDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
-        return new  ResponseEntity<UserDTO>(new UserDTO(updatedCLient),HttpStatus.OK);
+            
+            if (updatedCLient == null)
+                return new  ResponseEntity<UserDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new  ResponseEntity<UserDTO>(new UserDTO(updatedCLient),HttpStatus.OK);}
+        else{
+            System.out.println("DATA IS BAD");
+            return new ResponseEntity<>(new UserDTO(),HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping(value = "loggedClient/picture", produces = MediaType.IMAGE_JPEG_VALUE)

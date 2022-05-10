@@ -19,7 +19,14 @@
         <label class="radio-label" for="contactChoice2"><img class="radio-img" src="../../public/boat.png"> Boats</label>
         <input class="radio" type="radio" id="contactChoice3"
                name="choice" value=2 v-model="displayType">
-        <label class="radio-label" for="contactChoice3"><img class="radio-img" src="../../public/fishing.png"> Fishing classes</label>
+        <label class="radio-label" for="contactChoice3"><img class="radio-img" src="../../public/fishing.png"> Fishing classes </label>
+        
+        <select v-model="sortType" name="example">
+          <option value=0>Name &dArr;</option>
+          <option value=1>Name &uArr;</option>
+          <option value=2>Price &dArr;</option>
+          <option value=3>Price &uArr;</option>          
+        </select>
       </div>
       <br>
       <div v-if="this.displayType==0">
@@ -85,6 +92,7 @@ export default {
       ships: [],
       selectedEntity: {},
       selectedRows: [],
+      sortType: 0, //represents type of sort, 0 name desc, 1 name asc, 2 price asc, 3 price desc
       filter: "",
       selected: false,
       displayType: 0,  //represents type of renting entity, 0 vac houses, 1 ships , 2 fishing classes
@@ -100,35 +108,22 @@ export default {
   computed: {
     filteredVacationHouses() {
       return this.vacationHouses.filter(row => {
-        const name = row.name.toString().toLowerCase();
-        const address = row.address.toString().toLowerCase();
-        const price = row.priceList.toString().toLowerCase();
-        const searchTerm = this.filter.toLowerCase();
-
-
-        return name.includes(searchTerm) || address.includes(searchTerm) || price.includes(searchTerm);
-      })
+        return this.includes(row);
+      }).sort((a,b)=>{
+        return this.sort(a,b);})
     },
     filteredShips() {
       return this.ships.filter(row => {
-        const name = row.name.toString().toLowerCase();
-        const address = row.address.toString().toLowerCase();
-        const price = row.priceList.toString().toLowerCase();
-        const searchTerm = this.filter.toLowerCase();
-
-
-        return name.includes(searchTerm) || address.includes(searchTerm) || price.includes(searchTerm);
+        return this.includes(row);
+      }).sort((a,b)=>{
+       return this.sort(a,b);
       })
     },
     filteredFishingClasses() {
       return this.fishingClasses.filter(row => {
-        const name = row.name.toString().toLowerCase();
-        const address = row.address.toString().toLowerCase();
-        const price = row.priceList.toString().toLowerCase();
-        const searchTerm = this.filter.toLowerCase();
-
-
-        return name.includes(searchTerm) || address.includes(searchTerm) || price.includes(searchTerm);
+        return this.includes(row);
+      }).sort((a,b)=>{
+       return this.sort(a,b);
       })
     },
   },
@@ -157,6 +152,61 @@ export default {
 
       this.selectedEntity = entity;
       this.selected = true;
+
+    },
+    includes(row){
+        const name = row.name.toString().toLowerCase();
+        const address = row.address.toString().toLowerCase();
+        const price = row.priceList.toString().toLowerCase();
+        const searchTerm = this.filter.toLowerCase();
+
+
+        return name.includes(searchTerm) || address.includes(searchTerm) || price.includes(searchTerm);
+    },
+    sort(a,b){
+        if(this.sortType==0){
+          let fa = a.name.toLowerCase(), fb = b.name.toLowerCase();
+          if (fa < fb) {
+            return -1
+          }
+          if (fa > fb) {
+            return 1
+          }
+          return 0
+        }
+        else if (this.sortType == 1){
+          let fa = a.name.toLowerCase(), fb = b.name.toLowerCase();
+           if (fa > fb) {
+            return -1
+          }
+          if (fa < fb) {
+            return 1
+          }
+          return 0
+        }
+        if(this.sortType==2){
+        let fa =parseInt(a.priceList), fb =parseInt(b.priceList)
+        
+          if (fa > fb) {
+            return -1
+          }
+          if (fa < fb) {
+            return 1
+          }
+          return 0
+        }
+        else if (this.sortType == 3){
+          
+          let fa = parseInt(a.priceList), fb =parseInt(b.priceList);
+          
+           if (fa < fb) {
+            return -1
+          }
+          if (fa > fb) {
+            return 1
+          }
+          return 0
+        }
 
     },
     jumpToPreview(entity) {
