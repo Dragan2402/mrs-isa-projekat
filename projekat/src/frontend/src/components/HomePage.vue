@@ -27,12 +27,17 @@
           <option value=2>Price &dArr;</option>
           <option value=3>Price &uArr;</option>          
         </select>
+        <br>
+        <Datepicker v-model="availabilityInterval" :format="formatRange" range/>
+        <button @click="clearSearch">Clear</button>
+        <br>
       </div>
+
       <br>
       <div v-if="this.displayType==0">
         <div class="list-entities" v-for="(vacationHouse, index) in this.filteredVacationHouses" @Click="selectEntity(vacationHouse)"
             v-bind:index="index" :key="vacationHouse.id" v-bind="{selected: selectedEntity.id===vacationHouse.id}">        
-             
+          
           <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + vacationHouse.img" style="width: 200px; height: 150px;"></div>
           <div class="entity-name"><h3>{{ vacationHouse.name }}</h3>
             <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ vacationHouse.address }} </div>
@@ -92,6 +97,7 @@ export default {
       ships: [],
       selectedEntity: {},
       selectedRows: [],
+      availabilityInterval: [],
       sortType: 0, //represents type of sort, 0 name desc, 1 name asc, 2 price asc, 3 price desc
       filter: "",
       selected: false,
@@ -105,6 +111,7 @@ export default {
     axios.get("api/ships/all").then(response => this.ships = response.data);
 
   },
+  
   computed: {
     filteredVacationHouses() {
       return this.vacationHouses.filter(row => {
@@ -127,14 +134,36 @@ export default {
       })
     },
   },
-  methods: {  
-        
+  methods: {       
 
     goToUserProfile() {
       this.$router.push('/clientProfile');
     },
     goToFishingClassProfile() {
       this.$router.push('/fishingClassProfile');
+    },
+    formatRange(dates){
+      let from = dates[0];
+      let to = dates[1];
+      if(from==null){
+        from=new Date()
+      }
+      const dayFrom = from.getDate();
+      const monthFrom = from.getMonth() + 1;
+      const yearFrom = from.getFullYear();
+      const hourFrom = from.getHours();
+      const minuteFrom = from.getMinutes();
+
+      if(to==null){
+        to=new Date()
+      }
+      const dayTo = to.getDate();
+      const monthTo = to.getMonth() + 1;
+      const yearTo = to.getFullYear();
+      const hourTo = to.getHours();
+      const minuteTo = to.getMinutes();
+
+      return `${dayFrom}.${monthFrom}.${yearFrom} ${hourFrom}:${minuteFrom} - ${dayTo}.${monthTo}.${yearTo} ${hourTo}:${minuteTo}`
     },
     goToVacationHouseProfile() {
       this.$router.push({
@@ -148,20 +177,83 @@ export default {
         params: {id: 1}
       });
     },
+    clearSearch(){
+      this.availabilityInterval=[];
+      this.filter="";
+    },
     selectEntity(entity) {
 
       this.selectedEntity = entity;
       this.selected = true;
 
     },
+    dateFromLocal(dateString){
+      if(dateString==null){
+        return new Date();
+      }
+      
+      const parts=dateString.split(" ");
+      
+      if( parts.length !=2){
+        return new Date();
+      }
+      const dateParts= parts[0].split(".");
+      
+      if( dateParts.length !=3){
+        return new Date();
+      }
+      const hourParts=parts[1].split(":");
+      
+      if( hourParts.length !=2){
+        return new Date();
+      }
+      
+      const day = dateParts[0];
+      const month = dateParts[1];
+      const year = dateParts[2];
+      const hours = hourParts[0];
+      const minutes = hourParts[1];
+      // new Date(year, month, day, hours, minutes, seconds, milliseconds)
+      const date= new Date(year,month-1,day,hours,minutes);
+      return date;
+    },
     includes(row){
         const name = row.name.toString().toLowerCase();
         const address = row.address.toString().toLowerCase();
         const price = row.priceList.toString().toLowerCase();
         const searchTerm = this.filter.toLowerCase();
-
-
-        return name.includes(searchTerm) || address.includes(searchTerm) || price.includes(searchTerm);
+        
+        const availableFrom = this.dateFromLocal(row.availableFrom);        
+        const availableTo= this.dateFromLocal(row.availableTo);
+        let dateInInterval=false;
+        let dateFilterOn=false;
+        if(this.availabilityInterval.length != 0){
+          dateFilterOn=true;
+          let fromFilter = this.availabilityInterval[0]
+          let toFilter= this.availabilityInterval[1]
+          if(fromFilter==null){
+            fromFilter=new Date();
+          }
+          if(toFilter==null){
+            toFilter=new Date()
+          }
+          if(availableFrom<=fromFilter && availableTo>=toFilter){
+            dateInInterval=true;
+            
+          }else{
+            dateInInterval=false;
+            
+          }
+        }
+        
+        if(dateFilterOn && dateInInterval){
+          return (name.includes(searchTerm) || address.includes(searchTerm) || price.includes(searchTerm))
+        }
+        else if(dateFilterOn && !dateInInterval){
+          return false;
+        }
+        return (name.includes(searchTerm) || address.includes(searchTerm) || price.includes(searchTerm))
+        
     },
     sort(a,b){
         if(this.sortType==0){

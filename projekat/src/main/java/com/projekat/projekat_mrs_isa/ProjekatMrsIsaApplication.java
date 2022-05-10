@@ -194,8 +194,8 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 5
         );
 
-        vacationHouseTemp.setAvailableFrom(LocalDateTime.of(2021,1,1, 20, 15));
-        vacationHouseTemp.setAvailableTo(LocalDateTime.of(2021,2,1, 20, 30));
+        vacationHouseTemp.setAvailableFrom(LocalDateTime.of(2022,1,1, 20, 15));
+        vacationHouseTemp.setAvailableTo(LocalDateTime.of(2022,2,1, 20, 30));
 
         List<String> pics2 = new ArrayList<>();
         pics2.add("pictures/renting_entities/4/1.jpg");
@@ -216,6 +216,8 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 10,
                 2
         );
+        vacationHouseTemp2.setAvailableFrom(LocalDateTime.of(2022,6,1, 20, 15));
+        vacationHouseTemp2.setAvailableTo(LocalDateTime.of(2022,9,1, 20, 30));
 
         Offer offerTemp = new Offer(
                 "Brcko",

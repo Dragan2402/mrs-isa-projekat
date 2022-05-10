@@ -136,7 +136,7 @@ public class ClientController {
             Client updatedCLient = clientService.save(clientToUpdate);
 
 
-            
+
             if (updatedCLient == null)
                 return new  ResponseEntity<UserDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
             return new  ResponseEntity<UserDTO>(new UserDTO(updatedCLient),HttpStatus.OK);}
