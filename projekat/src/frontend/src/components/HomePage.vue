@@ -20,17 +20,15 @@
         <input class="radio" type="radio" id="contactChoice3"
                name="choice" value=2 v-model="displayType">
         <label class="radio-label" for="contactChoice3"><img class="radio-img" src="../../public/fishing.png"> Fishing classes </label>
-        
-        <select v-model="sortType" name="example">
-          <option value=0>Name &dArr;</option>
-          <option value=1>Name &uArr;</option>
-          <option value=2>Price &dArr;</option>
-          <option value=3>Price &uArr;</option>          
-        </select>
-        <br>
-        <Datepicker v-model="availabilityInterval" :format="formatRange" range/>
-        <button @click="clearSearch">Clear</button>
-        <br>
+      </div>
+      <div class="datepicker-sort">
+      <Datepicker v-model="availabilityInterval" :format="formatRange" range clearable/>
+      <select class="form-select" v-model="sortType" name="example">
+        <option value=0>Name descending</option>
+        <option value=1>Name ascending</option>
+        <option value=2>Price descending</option>
+        <option value=3>Price ascending</option>
+      </select>
       </div>
 
       <br>
@@ -42,7 +40,7 @@
           <div class="entity-name"><h3>{{ vacationHouse.name }}</h3>
             <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ vacationHouse.address }} </div>
             <div class="entity-description">{{ vacationHouse.promoDescription }}</div>
-            <div class="entity-description"><vue3-star-ratings v-model="vacationHouse.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />({{vacationHouse.reviewsNumber}})</div>
+            <vue3-star-ratings class="star-ratings" v-model="vacationHouse.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />({{vacationHouse.reviewsNumber}})
           </div>
      
           <div class="entity-price">
@@ -61,7 +59,7 @@
           <div class="entity-name"><h3>{{ ship.name }}</h3>
             <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ ship.address }} </div>
             <div class="entity-description">{{ship.promoDescription}}</div>
-            <div class="entity-description"><vue3-star-ratings v-model="ship.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />({{ship.reviewsNumber}})</div>
+            <vue3-star-ratings class="star-ratings" v-model="ship.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />({{ship.reviewsNumber}})
           </div>
           <div class="entity-price">
             <div><h5>{{ ship.priceList }}</h5></div>
@@ -75,8 +73,8 @@
           <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + fishingClass.img" style="width: 200px; height: 150px;"></div>
           <div class="entity-name"><h3>{{ fishingClass.name }}</h3>
           <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ fishingClass.address }} </div>
-            <!-- <div class="entity-description">{{fishingClass.promoDescription}}</div> -->
-             <div class="entity-description">({{fishingClass.reviewsNumber}})<vue3-star-ratings v-model="fishingClass.rating" starSize="15"  :showControl=false :disableClick=true :step=0 /></div>
+          <div class="entity-description">{{fishingClass.promoDescription}}</div>
+          <vue3-star-ratings class="star-ratings" v-model="fishingClass.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />({{fishingClass.reviewsNumber}})
           </div>
           <div class="entity-price">
             <div><h5>{{ fishingClass.priceList }}</h5></div>
@@ -102,7 +100,7 @@ export default {
       ships: [],
       selectedEntity: {},
       selectedRows: [],
-      availabilityInterval: [],
+      availabilityInterval: null,
       sortType: 0, //represents type of sort, 0 name desc, 1 name asc, 2 price asc, 3 price desc
       filter: "",
       selected: false,
@@ -182,10 +180,6 @@ export default {
         params: {id: 1}
       });
     },
-    clearSearch(){
-      this.availabilityInterval=[];
-      this.filter="";
-    },
     selectEntity(entity) {
 
       this.selectedEntity = entity;
@@ -233,7 +227,7 @@ export default {
         const availableTo= this.dateFromLocal(row.availableTo);
         let dateInInterval=false;
         let dateFilterOn=false;
-        if(this.availabilityInterval.length != 0){
+        if(this.availabilityInterval != null){
           dateFilterOn=true;
           let fromFilter = this.availabilityInterval[0]
           let toFilter= this.availabilityInterval[1]
@@ -321,6 +315,7 @@ export default {
 
 
 <style scoped>
+
 .main {
   margin: 10px;
 }
@@ -343,6 +338,22 @@ button {
   overflow: hidden;
   margin-bottom: 10px;
   min-width: 800px;
+}
+
+.datepicker-sort {
+  margin: 30px;
+  display: inline-flex;
+}
+
+.datepicker-sort select {
+  margin-left: 30px;
+  width: 200px;
+}
+
+div.star-ratings {
+  padding: 0;
+  margin: 0 5px;
+  float: left;
 }
 
 .entity-picture img {

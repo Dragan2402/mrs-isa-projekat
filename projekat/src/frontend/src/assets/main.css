@@ -3,3 +3,20 @@
     color: aqua;
 }
 
+.page{
+    text-align: center;
+    margin: auto;
+    padding: 50px;
+    width: 50%;
+}
+
+.user-data-div{
+    border-radius: 20px;
+    background-color: lightgray;
+    padding: 50px;
+}
+
+.user-data-div div{
+    margin: auto;
+    max-width: 50%;
+}

@@ -17,50 +17,91 @@
       <p>Available from: {{ ship.availableFrom }}</p>
       <p>Available to: {{ ship.availableTo }}</p>
 
-      <button @click="toggleEdit()" class="edit-button">Edit Info</button>
-      <button @click="toggleCreatingOffer()" class="edit-button">Create Offer</button>
-
-      <div class="container">
-        <div class="row row-cols-4">
-          <div class="col p-3" v-for="(picture, index) in pictures" :key="index">
-            <img v-bind:src="'data:image/jpeg;base64,' + picture" v-bind:alt="index" style="width: 100%; height: auto;">
-          </div>
-        </div>
-      </div>
-
+      <button class="btn btn-primary" style="margin-right: 20px" @click="toggleEdit()" >Edit Info</button>
+      <button class="btn btn-primary" @click="toggleCreatingOffer()" >Create Offer</button>
     </div>
 
     <div v-if="editing" class="user-data-div">
-      <p>Name: <input type="text" v-model="ship.name"></p>
-      <p>Address: <input type="text" v-model="ship.address"></p>
-      <p>Description: <input type="text" v-model="ship.promoDescription"></p>
-      <p>Behavior rules: <input type="text" v-model="ship.behaviourRules"></p>
-      <p>Price list: <input type="text" v-model="ship.priceList"></p>
-      <p>Additional info: <input type="text" v-model="ship.additionalInfo"></p>
-      <p>Cancellation conditions: <input type="text" v-model="ship.cancellationConditions"></p>
-      <p>Type: <input type="text" v-model="ship.type"></p>
-      <p>Length: <input type="text" v-model="ship.length"></p>
-      <p>Engine number: <input type="text" v-model="ship.engineNumber"></p>
-      <p>Engine power: <input type="text" v-model="ship.enginePower"></p>
-      <p>Top speed: <input type="text" v-model="ship.topSpeed"></p>
-      <p>Client limit: <input type="text" v-model="ship.clientLimit"></p>
-
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="name">Name:</span>
+        <input v-model="ship.name" type="text" class="form-control" aria-label="Username" aria-describedby="name">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="address">Address:</span>
+        <input v-model="ship.address" type="text" class="form-control" aria-label="Username" aria-describedby="address">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="promoDescription">Description:</span>
+        <input v-model="ship.promoDescription" type="text" class="form-control" aria-label="Username" aria-describedby="promoDescription">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="behaviourRules">Behaviour Rules:</span>
+        <input v-model="ship.behaviourRules" type="text" class="form-control" aria-label="Username" aria-describedby="behaviourRules">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="priceList">Price list:</span>
+        <input v-model="ship.priceList" type="text" class="form-control" aria-label="Username" aria-describedby="priceList">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="clientLimit">Client limit: </span>
+        <input v-model="ship.clientLimit" type="text" class="form-control" aria-label="Username" aria-describedby="clientLimit">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="additionalInfo">Additional info:</span>
+        <input v-model="ship.additionalInfo" type="text" class="form-control" aria-label="Username" aria-describedby="additionalInfo">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="cancellationConditions">Cancellation conditions:</span>
+        <input v-model="ship.cancellationConditions" type="text" class="form-control" aria-label="Username" aria-describedby="cancellationConditions">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="type">Type:</span>
+        <input v-model="ship.type" type="text" class="form-control" aria-label="Username" aria-describedby="type">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="length">Length:</span>
+        <input v-model="ship.length" type="text" class="form-control" aria-label="Username" aria-describedby="length">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="engineNumber">Engine number:</span>
+        <input v-model="ship.engineNumber" type="text" class="form-control" aria-label="Username" aria-describedby="engineNumber">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="enginePower">Engine power:</span>
+        <input v-model="ship.enginePower" type="text" class="form-control" aria-label="Username" aria-describedby="enginePower">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="topSpeed">Top speed:</span>
+        <input v-model="ship.topSpeed" type="text" class="form-control" aria-label="Username" aria-describedby="topSpeed">
+      </div>
       <Datepicker v-model="availabilityInterval" :format="formatRange" range/>
-      <button @click="saveEdit()" class="edit-button">Save</button>
-      <button @click="cancel()" class="edit-button">Cancel</button>
+      <br>
+      <button @click="saveEdit()" style="margin-right: 20px;" class="btn btn-primary">Save</button>
+      <button @click="cancel()" class="btn btn-primary">Cancel</button>
     </div>
 
     <div v-if="creatingOffer" class="user-data-div">
-      <p>Client limit: <input type="text" v-model="offer.clientLimit"></p>
-      <p>Price: <input type="text" v-model="offer.price"></p>
-
-      <p>Additional services: <vue3-tags-input :tags="offer.additionalServices"
-                                               @on-tags-changed="updateTags"
-                                               width="200px" /></p>
-
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="clientLimitOffer">Client limit:</span>
+        <input v-model="offer.clientLimit" type="text" class="form-control" aria-label="Username" aria-describedby="clientLimitOffer">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="priceOffer">Price:</span>
+        <input v-model="offer.price" type="text" class="form-control" aria-label="Username" aria-describedby="priceOffer">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="additionalServicesOffer">Additional Services:</span>
+        <vue3-tags-input :tags="offer.additionalServices" @on-tags-changed="updateTags" class="form-control" aria-label="Username" aria-describedby="additionalServicesOffer"/>
+      </div>
       <Datepicker v-model="offerInterval" :format="formatRange" range/>
-      <button @click="createOffer()" class="edit-button">Save</button>
-      <button @click="cancel()" class="edit-button">Cancel</button>
+      <br>
+      <button @click="createOffer()" style="margin-right: 20px;"  class="btn btn-primary">Save</button>
+      <button @click="cancel()" class="btn btn-primary">Cancel</button>
+    </div>
+      <div class="row row-cols-4">
+        <div class="col p-3" style="margin: auto" v-for="(picture, index) in pictures" :key="index">
+          <img v-bind:src="'data:image/jpeg;base64,' + picture" v-bind:alt="index">
+        </div>
     </div>
 
   </div>
@@ -255,5 +296,11 @@ export default {
 </script>
 
 <style scoped>
+
+img {
+  object-fit: cover;
+  width: 300px;
+  height: 200px;
+}
 
 </style>

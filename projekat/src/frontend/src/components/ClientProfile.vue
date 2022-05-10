@@ -6,6 +6,7 @@
     <div class="page">
       <div v-if="!this.editing" class="user-data-div">
         <img v-bind:src="'data:image/jpeg;base64,' + picture" style="width: 300px; height: 200px;">
+        <br><br>
         <h1>{{user.firstName}} {{user.lastName}} </h1>        
         <p>E-mail: {{user.email}}</p>
         <p>Address: {{user.address}}</p>
@@ -13,38 +14,42 @@
         <p>Country: {{user.country}}</p>
         <p>Phone Number: {{user.phoneNum}} </p>
       </div>
-      <div v-else class="user-data-div">  
+      <div v-else class="user-data-div">
         <img v-bind:src="'data:image/jpeg;base64,' + picture" style="width: 300px; height: 200px;">     
-        <br> 
-        <input  type="file" @change="onFileSelected" accept="image/png, image/jpeg" >
-      
-        <button @click="onUpload">Upload</button>
-        <br> 
-        <p>First Name: <input type="text" v-model="user.firstName" /></p>
-        <p>Last Name: <input type="text" v-model="user.lastName" /></p>
-        <p>E-mail: {{user.email}}</p>
-        <p>Address: <input type="text" v-model="user.address" /></p>
-        <p>City: <input type="text" v-model="user.city" /></p>        
-        <div >
-          <country-select v-model="user.country" :usei18n="false" :autocomplete="true" :countryName="true"/>        
+        <br><br>
+        <input type="file" @change="onFileSelected" accept="image/png, image/jpeg" >
+        <button class="btn btn-secondary" @click="onUpload">Upload</button>
+        <br><br>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="firstName">First Name:</span>
+          <input v-model="user.firstName" type="text" class="form-control" aria-label="Username" aria-describedby="firstName">
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="lastName">Last Name:</span>
+          <input v-model="user.lastName" type="text" class="form-control" aria-label="Username" aria-describedby="lastName">
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="address">Address: </span>
+          <input v-model="user.address" type="text" class="form-control" aria-label="Username" aria-describedby="address">
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="city">City:</span>
+          <input v-model="user.city" type="text" class="form-control" aria-label="Username" aria-describedby="city">
         </div>
         <div>
-          <vue-tel-input v-model="phoneNum" @validate="telValidate"></vue-tel-input>
+          <country-select class="form-select" v-model="user.country" :usei18n="false" :autocomplete="true" :countryName="true"/>
         </div>
-        
-        
+        <br>
+        <vue-tel-input v-model="phoneNum" @validate="telValidate"></vue-tel-input>
       </div>
-
-      
-      
-        
-      <button v-if="!this.editing" @click="toggleEdit()" class="edit-button">Edit Info</button>
+      <br>
+      <button v-if="!this.editing" @click="toggleEdit()" class="btn btn-primary">Edit Info</button>
       <div v-else >
-        <button @click="saveEdit()">Save</button><br>
-        <button @click="cancelEdit()">Cancel</button>
+        <button style="margin-right: 20px" class="btn btn-primary" @click="saveEdit()">Save</button>
+        <button class="btn btn-primary" @click="cancelEdit()">Cancel</button>
       </div>
     </div>
-    
+
   </body>
 </template>
 
@@ -171,33 +176,6 @@ export default {
 
 <style scoped>
 
-.page{
-  background-color: beige;
-  display: flex;
-  flex-direction: column;
-  font-family: 'Poppins', sans-serif;
-  align-items: center;
-}
 
-.edit-button{
-  background-color: white;
-  height: 5%;
-  width: 8%;
-  text-align-last: center;
-}
-
-.user-data-div{
-  
-  margin: 20px;
-  border: 0.01px solid;
- 
-  display: flex;
-  justify-content: center;
-  background-color: white;  
-  
-  flex-direction: column;
-  align-items: center;
-  padding: 50px;
-}
 
 </style>

@@ -1,20 +1,15 @@
 <template>   
   <div v-if="loaded" align='center'>
-      <p>Name: {{rentingEntity.name}}</p>
-    <div class="container" >
-    <div class="row row-cols-4" >
-      <div class="col p-3" v-for="(picture, index) in pictures" :key="index">
-        <img v-bind:src="'data:image/jpeg;base64,' + picture" style="width: 100%; height: auto;">
-      </div>
-    </div>
-  </div>
+    <br>
+      <h1>{{rentingEntity.name}}</h1>
+    <div class="user-data-div" style="width: 50%">
       <p>Address: {{rentingEntity.address}}</p>
       <p>Promo Description: {{rentingEntity.promoDescription}}</p>
       <p>Behavior Rules: {{rentingEntity.behaviourRules}}</p>
       <p>Price: {{rentingEntity.priceList}}</p>
       <p>Additional Info: {{rentingEntity.additionalInfo}}</p>
       <p>Cancellation conditions: {{rentingEntity.cancellationConditions}}</p>
-      
+
       <p v-if="this.displayType==0">Rooms Quantity: {{rentingEntity.roomsQuantity}}</p>
       <p v-if="this.displayType==0">Beds Per Room: {{rentingEntity.bedsPerRoom}}</p>
       <p v-if="this.displayType==1">Type: {{rentingEntity.type}}</p>
@@ -24,23 +19,32 @@
       <p v-if="this.displayType==1">Top Speed: {{rentingEntity.topSpeed}}</p>
       <p v-if="this.displayType==1">Client Limit: {{rentingEntity.clientLimit}}</p>
       <p v-if="this.displayType==2">Instructor Biography: {{rentingEntity.instructorBiography}}</p>
-      <p v-if="this.displayType==2">Client Limit: {{rentingEntity.clientLimit}}</p>      
-    </div>
-    <div align='center'>
-      OFFERS:
-      <ul class="list-group" v-for="(offer, index) in this.offers" @Click="selectOffer(offer,index)"
+      <p v-if="this.displayType==2">Client Limit: {{rentingEntity.clientLimit}}</p>
+      <div align='center'>
+        <ul class="list-group" v-for="(offer, index) in this.offers" @Click="selectOffer(offer,index)"
             v-bind:index="index" :key="offer.id" v-bind="{selected: selectedOffer.id===offer.id}">
-             <li class="list-group-item "><i class="bi bi-currency-dollar"></i>Place: {{offer.place}} People: {{offer.clientLimit}} <label v-if="offer.additionalServices.length != 0"> Additional Services: <label v-for="service in offer.additionalServices" :key="service">
-              {{service}}
-              </label>
-            </label>
-              Price: {{offer.price}} Starting Date: {{offer.start}} Duration {{msToTime(offer.duration)}}</li>      
-      </ul>    
-      
+          <br>
+          <li class="list-group-item "><i class="bi bi-currency-dollar"></i>Place: {{offer.place}} People: {{offer.clientLimit}} <label v-if="offer.additionalServices.length != 0"> Additional Services: <label v-for="service in offer.additionalServices" :key="service">
+            {{service}}
+          </label>
+          </label>
+            Price: {{offer.price}} Starting Date: {{offer.start}} Duration {{msToTime(offer.duration)}}</li>
+        </ul>
+
+      </div>
+      <div v-if="selected" align='center'>
+        <br>
+        <button class="btn btn-primary" style="margin-right: 20px;" @click="makeReservation">Make A Reservation</button>
+        <button class="btn btn-primary" @click="hide">Hide</button>
+      </div>
     </div>
-    <div v-if="selected" align='center'>
-      <button @click="makeReservation">Make A Reservation</button>
-      <button @click="hide">Hide</button>
+    <div class="container" >
+      <div class="row row-cols-4" >
+        <div class="col p-3" v-for="(picture, index) in pictures" :key="index">
+          <img v-bind:src="'data:image/jpeg;base64,' + picture">
+        </div>
+      </div>
+    </div>
     </div>
 </template>
 
@@ -154,6 +158,12 @@ methods:{
   overflow: hidden;
   margin-bottom: 10px;
   min-width: 800px;
+}
+
+img {
+  object-fit: cover;
+  width: 300px;
+  height: 200px;
 }
 
 </style>

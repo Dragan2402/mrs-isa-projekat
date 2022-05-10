@@ -13,33 +13,75 @@
       <p>Available from: {{ vacationHouse.availableFrom }}</p>
       <p>Available to: {{ vacationHouse.availableTo }}</p>
 
-      <button @click="toggleEdit()" class="edit-button">Edit Info</button>
-      <button @click="toggleCreatingOffer()" class="edit-button">Create Offer</button>
+      <button @click="toggleEdit()" style="margin-right: 20px;" class="btn btn-primary">Edit Info</button>
+      <button @click="toggleCreatingOffer()" class="btn btn-primary">Create Offer</button>
     </div>
 
     <div v-if="editing" class="user-data-div">
-      <p>Name: <input type="text" v-model="vacationHouse.name"></p>
-      <p>Address: <input type="text" v-model="vacationHouse.address"></p>
-      <p>Description: <input type="text" v-model="vacationHouse.promoDescription"></p>
-      <p>Behavior rules: <input type="text" v-model="vacationHouse.behaviourRules"></p>
-      <p>Price list: <input type="text" v-model="vacationHouse.priceList"></p>
-      <p>Additional info: <input type="text" v-model="vacationHouse.additionalInfo"></p>
-      <p>Cancellation conditions: <input type="text" v-model="vacationHouse.cancellationConditions"></p>
-      <p>Rooms: <input type="text" v-model="vacationHouse.roomsQuantity"></p>
-      <p>Beds per room: <input type="text" v-model="vacationHouse.bedsPerRoom"></p>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="name">Name:</span>
+        <input v-model="vacationHouse.name" type="text" class="form-control" aria-label="Username" aria-describedby="name">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="address">Address:</span>
+        <input v-model="vacationHouse.address" type="text" class="form-control" aria-label="Username" aria-describedby="address">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="promoDescription">Description:</span>
+        <input v-model="vacationHouse.promoDescription" type="text" class="form-control" aria-label="Username" aria-describedby="promoDescription">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="behaviourRules">Behaviour Rules:</span>
+        <input v-model="vacationHouse.behaviourRules" type="text" class="form-control" aria-label="Username" aria-describedby="behaviourRules">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="priceList">Price list:</span>
+        <input v-model="vacationHouse.priceList" type="text" class="form-control" aria-label="Username" aria-describedby="priceList">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="clientLimit">Client limit: </span>
+        <input v-model="vacationHouse.clientLimit" type="text" class="form-control" aria-label="Username" aria-describedby="clientLimit">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="additionalInfo">Additional info:</span>
+        <input v-model="vacationHouse.additionalInfo" type="text" class="form-control" aria-label="Username" aria-describedby="additionalInfo">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="cancellationConditions">Cancellation conditions:</span>
+        <input v-model="vacationHouse.cancellationConditions" type="text" class="form-control" aria-label="Username" aria-describedby="cancellationConditions">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="roomsQuantity">Rooms: </span>
+        <input v-model="vacationHouse.roomsQuantity" type="text" class="form-control" aria-label="Username" aria-describedby="roomsQuantity">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="bedsPerRoom">Beds per room:</span>
+        <input v-model="vacationHouse.bedsPerRoom" type="text" class="form-control" aria-label="Username" aria-describedby="bedsPerRoom">
+      </div>
 
       <Datepicker v-model="availabilityInterval" :format="formatRange" range/>
-      <button @click="saveEdit()" class="edit-button">Save</button>
-      <button @click="cancel()" class="edit-button">Cancel</button>
+      <br>
+      <button @click="saveEdit()" style="margin-right: 20px;" class="btn btn-primary">Save</button>
+      <button @click="cancel()" class="btn btn-primary">Cancel</button>
     </div>
     <div v-if="creatingOffer" class="user-data-div">
-      <p>Place: <input type="text" v-model="offer.place"></p>
-      <p>Client limit: <input type="text" v-model="offer.clientLimit"></p>
-      <p>Price: <input type="text" v-model="offer.price"></p>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="placeOffer">Place:</span>
+        <input v-model="offer.place" type="text" class="form-control" aria-label="Username" aria-describedby="placeOffer">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="clientLimitOffer">Client limit:</span>
+        <input v-model="offer.clientLimit" type="text" class="form-control" aria-label="Username" aria-describedby="clientLimitOffer">
+      </div>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="priceOffer">Price:</span>
+        <input v-model="offer.price" type="text" class="form-control" aria-label="Username" aria-describedby="priceOffer">
+      </div>
 
       <Datepicker v-model="offerInterval" :format="formatRange" range/>
-      <button @click="createOffer()" class="edit-button">Save</button>
-      <button @click="cancel()" class="edit-button">Cancel</button>
+      <br>
+      <button @click="createOffer()" style="margin-right: 20px;" class="btn btn-primary">Save</button>
+      <button @click="cancel()" class="btn btn-primary">Cancel</button>
     </div>
   </div>
 
