@@ -46,6 +46,9 @@ public abstract class RentingEntity {
     @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     private Set<Reservation> reservations = new HashSet<>();
 
+    @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    private Set<Review> reviews = new HashSet<>();
+
     @Column(name = "behaviour_rules", nullable = false)
     private String behaviourRules;
 
@@ -57,6 +60,12 @@ public abstract class RentingEntity {
 
     @Column(name = "cancellation_conditions", nullable = false)
     private String cancellationConditions;
+
+    @Column(name="rating",nullable = false)
+    private Double rating;
+
+    @Column(name = "reviews_number",nullable = false)
+    private Integer reviewsNumber;
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
@@ -73,6 +82,8 @@ public abstract class RentingEntity {
         this.priceList = priceList;
         this.additionalInfo = additionalInfo;
         this.cancellationConditions = cancellationConditions;
+        this.rating=0.0;
+        this.reviewsNumber=0;
         this.deleted = false;
     }
 
@@ -126,9 +137,11 @@ public abstract class RentingEntity {
     }
     public void addOffer(Offer offer) {
         offers.add(offer);
+        offer.setRentingEntity(this);
     }
     public void removeOffer(Offer offer) {
         offers.remove(offer);
+        offer.setRentingEntity(null);
     }
     public Set<Reservation> getReservations() {
         return reservations;
@@ -138,9 +151,23 @@ public abstract class RentingEntity {
     }
     public void addReservation(Reservation reservation) {
         reservations.add(reservation);
+        reservation.setRentingEntity(this);
     }
     public void removeReservation(Reservation reservation) {
         reservations.remove(reservation);
+        reservation.setRentingEntity(null);
+    }
+    public void addReview(Review review){
+        reviews.add(review);
+        double ratingSum= this.rating*this.reviewsNumber;
+        this.reviewsNumber++;
+        this.rating=(ratingSum+review.getRating()) / this.reviewsNumber;
+        review.setRentingEntity(this);
+    }
+
+    public void removeReview(Review review){
+        reviews.remove(review);
+        review.setRentingEntity(null);
     }
     public String getBehaviourRules() {
         return behaviourRules;
@@ -166,12 +193,31 @@ public abstract class RentingEntity {
     public void setCancellationConditions(String cancellationConditions) {
         this.cancellationConditions = cancellationConditions;
     }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+
+    public Integer getReviewsNumber() {
+        return reviewsNumber;
+    }
+
+    public void setReviewsNumber(Integer reviewsNumber) {
+        this.reviewsNumber = reviewsNumber;
+    }
+
     public boolean isDeleted() {
         return deleted;
     }
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+
+
 
     public void update(RentingEntityDTO rentingEntityDTO)
     {

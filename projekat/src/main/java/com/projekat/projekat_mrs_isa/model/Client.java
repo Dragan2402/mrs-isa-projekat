@@ -18,6 +18,9 @@ public class Client extends User {
     @OneToMany(mappedBy = "client" , fetch = FetchType.EAGER , cascade = CascadeType.ALL)
     private Set<Reservation> reservations = new HashSet<>();
 
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Review> reviews= new HashSet<>();
+
     public Client() {}
 
     public Client( String email, String password, String picture,String firstName, String lastName, String address, String city,
@@ -41,6 +44,16 @@ public class Client extends User {
     public void removeReservation(Reservation reservation){
         reservations.remove(reservation);
         reservation.setClient(null);
+    }
+
+    public void addReview(Review review){
+        reviews.add(review);
+        review.setClient(this);
+    }
+
+    public void removeReview(Review review){
+        reviews.remove(review);
+        review.setClient(null);
     }
 
     public void update(UserDTO userDTO) {

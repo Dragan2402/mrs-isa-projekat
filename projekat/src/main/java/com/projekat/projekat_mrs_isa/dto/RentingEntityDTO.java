@@ -27,6 +27,8 @@ public class RentingEntityDTO {
     private LocalDateTime availableTo;
     private String behaviourRules;
     private String priceList;
+    private Double rating;
+    private Integer reviewsNumber;
     private String additionalInfo;
     private String cancellationConditions;
 
@@ -43,6 +45,8 @@ public class RentingEntityDTO {
         priceList = rentingEntity.getPriceList();
         additionalInfo = rentingEntity.getAdditionalInfo();
         cancellationConditions = rentingEntity.getCancellationConditions();
+        rating=rentingEntity.getRating();
+        reviewsNumber=rentingEntity.getReviewsNumber();
     }
 
     public Long getId() {
@@ -105,14 +109,22 @@ public class RentingEntityDTO {
     public void setCancellationConditions(String cancellationConditions) {
         this.cancellationConditions = cancellationConditions;
     }
-
     public String getImg() {
         return img;
     }
-
     public void setImg(String img) {
         this.img = img;
     }
-
-
+    public Double getRating() {
+        return rating;
+    }
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+    public Integer getReviewsNumber() {
+        return reviewsNumber;
+    }
+    public void setReviewsNumber(Integer reviewsNumber) {
+        this.reviewsNumber = reviewsNumber;
+    }
 }

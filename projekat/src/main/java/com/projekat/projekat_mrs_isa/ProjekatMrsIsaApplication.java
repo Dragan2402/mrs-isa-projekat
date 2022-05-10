@@ -51,6 +51,9 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
     private ReservationRepository reservationRep;
 
     @Autowired
+    private ReviewRepository reviewRepository;
+
+    @Autowired
     private EmailService emailService;
 
 //    @Autowired
@@ -260,10 +263,15 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
         vacationHouseRep.save(vacationHouseTemp);
         vacationHouseRep.save(vacationHouseTemp2);
-        System.out.println(vacationHouseTemp2.getId());
-        offerRep.save(offerTemp);
+        Review reviewTemp1=new Review(vacationHouseTemp2,clientTemp1,4.6);
+        Review reviewTemp2=new Review(vacationHouseTemp2,clientTemp1,5.0,"Sve u fullu, ispostovano");
+        Review reviewTemp3=new Review(vacationHouseTemp2,clientTemp1,4.8);
+        vacationHouseTemp2.addReview(reviewTemp1);
+        vacationHouseTemp2.addReview(reviewTemp2);
+        vacationHouseTemp2.addReview(reviewTemp3);
+        vacationHouseRep.save(vacationHouseTemp2);
 
-        //public Reservation(String firstSlot, Long slotQuantity, String place, Integer clientNum, Set<String> additionalServices, Double price) {
+        offerRep.save(offerTemp);
 
         Reservation reservationTemp = new Reservation(
                 "Brcko",

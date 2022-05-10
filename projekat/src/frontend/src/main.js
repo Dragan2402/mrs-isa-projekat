@@ -16,6 +16,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import PictureInput from 'vue-picture-input'
 import ShipProfile from "@/components/ShipProfile";
 import vueCountryRegionSelect from 'vue3-country-region-select'
+import vue3StarRatings from "vue3-star-ratings";
 import VueTelInput from 'vue3-tel-input'
 import 'vue3-tel-input/dist/vue3-tel-input.css'
 import './assets/main.css'; //main css
@@ -41,6 +42,6 @@ const router = new createRouter({
 createApp(App)
     .use(router)
     .use(Toaster, {position: 'top', duration: 2000}).use(vueCountryRegionSelect).use(VueTelInput)
-    .component('Datepicker', Datepicker).component('PictureInput',PictureInput)
+    .component('Datepicker', Datepicker).component('PictureInput',PictureInput).component("vue3-star-ratings", vue3StarRatings)
     .mount('#app')
 

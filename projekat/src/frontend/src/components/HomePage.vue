@@ -37,15 +37,18 @@
       <div v-if="this.displayType==0">
         <div class="list-entities" v-for="(vacationHouse, index) in this.filteredVacationHouses" @Click="selectEntity(vacationHouse)"
             v-bind:index="index" :key="vacationHouse.id" v-bind="{selected: selectedEntity.id===vacationHouse.id}">        
-          
+         
           <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + vacationHouse.img" style="width: 200px; height: 150px;"></div>
           <div class="entity-name"><h3>{{ vacationHouse.name }}</h3>
             <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ vacationHouse.address }} </div>
             <div class="entity-description">{{ vacationHouse.promoDescription }}</div>
+            <div class="entity-description"><vue3-star-ratings v-model="vacationHouse.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />({{vacationHouse.reviewsNumber}})</div>
           </div>
+     
           <div class="entity-price">
-            <div><h5>{{ vacationHouse.priceList }}</h5></div>
-            <div><button class="btn btn-warning" @click="jumpToPreview(vacationHouse)">Explore</button></div>
+            <div><h5>{{ vacationHouse.priceList }}</h5></div>            
+            <div><button class="btn btn-warning" @click="jumpToPreview(vacationHouse)">Explore</button>
+            <vue3-star-ratings v-model="vacationHouse.rating" starSize="15"  :showControl=false :disableClick=true :step=0 /></div>
           </div>
         </div>
 
@@ -58,6 +61,7 @@
           <div class="entity-name"><h3>{{ ship.name }}</h3>
             <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ ship.address }} </div>
             <div class="entity-description">{{ship.promoDescription}}</div>
+            <div class="entity-description"><vue3-star-ratings v-model="ship.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />({{ship.reviewsNumber}})</div>
           </div>
           <div class="entity-price">
             <div><h5>{{ ship.priceList }}</h5></div>
@@ -70,8 +74,9 @@
              v-bind:index="index" :key="fishingClass.id" v-bind="{selected: selectedEntity.id===fishingClass.id}">
           <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + fishingClass.img" style="width: 200px; height: 150px;"></div>
           <div class="entity-name"><h3>{{ fishingClass.name }}</h3>
-            <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ fishingClass.address }} </div>
-            <div class="entity-description">{{fishingClass.promoDescription}}</div>
+          <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ fishingClass.address }} </div>
+            <!-- <div class="entity-description">{{fishingClass.promoDescription}}</div> -->
+             <div class="entity-description">({{fishingClass.reviewsNumber}})<vue3-star-ratings v-model="fishingClass.rating" starSize="15"  :showControl=false :disableClick=true :step=0 /></div>
           </div>
           <div class="entity-price">
             <div><h5>{{ fishingClass.priceList }}</h5></div>
@@ -218,6 +223,7 @@ export default {
       return date;
     },
     includes(row){
+        
         const name = row.name.toString().toLowerCase();
         const address = row.address.toString().toLowerCase();
         const price = row.priceList.toString().toLowerCase();
@@ -373,6 +379,7 @@ button {
   margin: 40px;
   float: right;
 }
+
 
 .main {
   text-align: center;
