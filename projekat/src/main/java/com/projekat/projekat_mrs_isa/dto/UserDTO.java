@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 public class UserDTO {
     private Long id;
     private String email;
-
+    private String username;
     private String firstName;
     private String lastName;
     private String address;
@@ -16,10 +16,10 @@ public class UserDTO {
 
     public UserDTO(){}
 
-    public UserDTO(Long id, String email, String firstName,String lastName, String address, String city, String country, String phoneNum) {
+    public UserDTO(Long id,String username, String email, String firstName,String lastName, String address, String city, String country, String phoneNum) {
         this.id = id;
         this.email = email;
-
+        this.username= username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -31,7 +31,7 @@ public class UserDTO {
     public UserDTO(@NotNull User user) {
         id = user.getId();
         email = user.getEmail();
-
+        username = user.getUsername();
         firstName = user.getFirstName();
         lastName = user.getLastName();
         address = user.getAddress();
@@ -46,6 +46,14 @@ public class UserDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {

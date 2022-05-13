@@ -1,6 +1,6 @@
 package com.projekat.projekat_mrs_isa.service;
 
-import com.projekat.projekat_mrs_isa.model.ShipOwner;
+
 import com.projekat.projekat_mrs_isa.model.VacationHouseOwner;
 import com.projekat.projekat_mrs_isa.repository.VacationHouseOwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -24,7 +24,7 @@ public class Offer {
     private Integer clientLimit;
 
     @Column(name = "additional_services")
-    @ElementCollection(targetClass=String.class,fetch = FetchType.EAGER )
+    @ElementCollection(targetClass=String.class,fetch = FetchType.LAZY )
     private List<String> additionalServices;
 
     @Column(name = "price", nullable = false)

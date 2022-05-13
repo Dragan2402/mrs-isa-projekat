@@ -80,7 +80,7 @@ public class ClientController {
         && UtilityController.validatePasswords(password,confirmPassword) && address.length()>2 &&
                 city.length()>2 && country.length()>2 && UtilityController.validatePhoneNum(phoneNum)){
             System.out.println("DATA IS GOOD CREATING USER");
-            Client clientTemp=new Client(email.toLowerCase(),password,"pictures/user_pictures/0.png",firstName,lastName,address,city,country,phoneNum);
+            Client clientTemp=new Client(email.toLowerCase(),"TODO",password,"pictures/user_pictures/0.png",firstName,lastName,address,city,country,phoneNum);
             clientService.save(clientTemp);
             emailService.sendVerificationMail(new UserDTO(clientTemp));
             return new ResponseEntity<>(true,HttpStatus.CREATED);

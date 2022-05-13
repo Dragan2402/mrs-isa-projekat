@@ -1,5 +1,6 @@
 package com.projekat.projekat_mrs_isa;
 
+import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.repository.*;
 import com.projekat.projekat_mrs_isa.service.EmailService;
@@ -56,8 +57,11 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
     @Autowired
     private EmailService emailService;
 
-//    @Autowired
-//    private SlotRepository slotRep;
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private PasswordEncoderComponent passwordEncoderComponent;
 
 
 
@@ -67,40 +71,67 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Admin adminTemp= new Admin("email@maildrop.cc","gage","pictures/user_pictures/0.png","Dragan"
+
+        Role roleAdmin=new Role("ROLE_ADMIN");
+        Role roleClient= new Role("ROLE_CLIENT");
+        Role roleShipOwner= new Role("ROLE_SHIP_OWNER");
+        Role roleVhOwner= new Role("ROLE_VH_OWNER");
+        Role roleFcInstructor= new Role("ROLE_FC_INSTRUCTOR");
+
+        roleRepository.save(roleAdmin);
+        roleRepository.save(roleClient);
+        roleRepository.save(roleShipOwner);
+        roleRepository.save(roleVhOwner);
+        roleRepository.save(roleFcInstructor);
+
+        List<Role> rolesAdmin = roleRepository.findByName("ROLE_ADMIN");
+        List<Role> rolesClient = roleRepository.findByName("ROLE_CLIENT");
+        List<Role> rolesShipOwner = roleRepository.findByName("ROLE_SHIP_OWNER");
+        List<Role> rolesVHOwner = roleRepository.findByName("ROLE_VH_OWNER");
+        List<Role> rolesFCInstructor = roleRepository.findByName("ROLE_FC_INSTRUCTOR");
+
+
+        Admin adminTemp= new Admin("email@maildrop.cc","gageMadjija",passwordEncoderComponent.encode("Gage123"),"pictures/user_pictures/0.png","Dragan"
         ,"Mirkovic","Hopovska 4","Novi Sad","Serbia","+381692402000");
         adminTemp.setVerified(true);
+        adminTemp.setRoles(rolesAdmin);
         adminRep.save(adminTemp);
 
 
-        Client clientTemp1= new Client("peropero@maildrop.cc","pero","pictures/user_pictures/2.png","Pero"
+        Client clientTemp1= new Client("peropero@maildrop.cc","peroPero",passwordEncoderComponent.encode("Pero123"),"pictures/user_pictures/2.png","Pero"
                 ,"Peric","Jovanova 14","Novi Sad","Serbia","+38165656565");
         clientTemp1.setVerified(true);
+        clientTemp1.setRoles(rolesClient);
         clientRep.save(clientTemp1);
 
-        Client clientTemp2= new Client("jovo@maildrop.cc","jovo","pictures/user_pictures/0.png","Jovo"
+        Client clientTemp2= new Client("jovo@maildrop.cc","jovo",passwordEncoderComponent.encode("Jovo123"),"pictures/user_pictures/0.png","Jovo"
                 ,"Jovic","Jovanovska 19","Novi Sad","Serbia","+381656565222");
         clientTemp2.setVerified(true);
+        clientTemp2.setRoles(rolesClient);
         clientRep.save(clientTemp2);
 
-        VacationHouseOwner vacHouseOwnerTemp1= new VacationHouseOwner("dimpet96@maildrop.cc","dimpet","pictures/user_pictures/0.png","Dimitrije"
+        VacationHouseOwner vacHouseOwnerTemp1= new VacationHouseOwner("dimpet96@maildrop.cc","dimitrije",passwordEncoderComponent.encode("Dimpet123"),"pictures/user_pictures/0.png","Dimitrije"
                 ,"Petrov","Telep Gang","Novi Sad","Serbia","+381650000000");
         vacHouseOwnerTemp1.setVerified(true);
+        vacHouseOwnerTemp1.setRoles(rolesVHOwner);
         vacHouseRep.save(vacHouseOwnerTemp1);
 
-        ShipOwner shipOwnerTemp1=new ShipOwner("krtolinat@maildrop.cc","tomo","pictures/user_pictures/0.png","Tomo"
+        ShipOwner shipOwnerTemp1=new ShipOwner("krtolinat@maildrop.cc","tkrtolina",passwordEncoderComponent.encode("Tomo123"),"pictures/user_pictures/0.png","Tomo"
                 ,"Krtolina","Balkan","Subotica","Serbia","+381653232322");
         shipOwnerTemp1.setVerified(true);
+        shipOwnerTemp1.setRoles(rolesShipOwner);
         shipOwnerRep.save(shipOwnerTemp1);
 
 
-        FishingInstructor fishingInstructorTemp=new FishingInstructor("aki96@maildrop.cc","asi","pictures/user_pictures/0.png","Andrej","Culjak","Futoska 70","Novi Sad","Serbia","+381611155777");
+        FishingInstructor fishingInstructorTemp=new FishingInstructor("aki96@maildrop.cc","AkiKavasaki",passwordEncoderComponent.encode("Asiasi123"),"pictures/user_pictures/0.png","Andrej","Culjak","Futoska 70","Novi Sad","Serbia","+381611155777");
         fishingInstructorTemp.setVerified(true);
+        fishingInstructorTemp.setRoles(rolesFCInstructor);
         fishingInstructorRep.save(fishingInstructorTemp);
 
-        VacationHouseOwner vacHouseOwnerTemp2= new VacationHouseOwner("bokiboki@maildrop.cc","Boki222","pictures/user_pictures/0.png","Boris"
+        VacationHouseOwner vacHouseOwnerTemp2= new VacationHouseOwner("bokiboki@maildrop.cc","Boris",passwordEncoderComponent.encode("Boki222"),"pictures/user_pictures/0.png","Boris"
                 ,"Brejca","Tuzna ulica","Tuzni Grad","Serbia","+381650000111");
         vacHouseOwnerTemp2.setVerified(true);
+        vacHouseOwnerTemp2.setRoles(rolesVHOwner);
         vacHouseRep.save(vacHouseOwnerTemp2);
 
 

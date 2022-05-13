@@ -19,9 +19,9 @@ public class ShipOwner extends User {
 
     public ShipOwner() {}
 
-    public ShipOwner(String email, String password,String picture ,String firstName, String lastName, String address, String city,
+    public ShipOwner(String email,String username, String password,String picture ,String firstName, String lastName, String address, String city,
                      String country, String phoneNum) {
-        super(email, password, picture,firstName, lastName, address, city, country, phoneNum);
+        super(email, username,password, picture,firstName, lastName, address, city, country, phoneNum);
     }
 
     public Set<Ship> getShips() {
