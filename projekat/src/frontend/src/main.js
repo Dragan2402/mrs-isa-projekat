@@ -7,6 +7,7 @@ import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import FishingClassProfile from './components/FishingClassProfile';
 import HomePage from "./components/HomePage";
+import LoginPage from "./components/LoginPage"
 import RegistrationPage from "./components/RegistrationPage";
 import VerificationPage from "./components/VerificationPage";
 import VacationHouseProfile from "@/components/VacationHouseProfile";
@@ -25,6 +26,7 @@ import './assets/main.css'; //main css
 const routes = [
     {path: "/", component: HomePage},
     {path: "/registrationPage", component:RegistrationPage},
+    {path: "/loginPage",component:LoginPage},
     {path: "/clientProfile", component: ClientProfile},
     {path: "/fishingClassProfile", component: FishingClassProfile},
     {name: "vacationHouseProfile", path: "/vacationHouseProfile", component: VacationHouseProfile},

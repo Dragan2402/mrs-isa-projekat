@@ -85,6 +85,7 @@ public abstract class User implements UserDetails {
         this.country = country;
         this.phoneNum = phoneNum;
         this.verified=false;
+        this.enabled=true;
         this.deleted = false;
     }
 

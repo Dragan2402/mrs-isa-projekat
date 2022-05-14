@@ -4,25 +4,45 @@
       <div class="nav-left">
         <img class="brand" @click="jumpToHomePage()" src="@/assets/app-logo.png">
       </div>
-      <div class="nav-right">
-        <button type="button" v-if="signIn" class="btn btn-warning" >Sign in</button>
+      <div class="nav-right" v-if="this.signedIn==false">
+        <button type="button" v-if="signIn" @click="jmpToLoginPage()" class="btn btn-warning" >Sign in</button>
         <button type="button"  v-if="signUp" @click="jmpToRegistrationPage()"  class="btn btn-warning">Register</button>
       </div>
+      <div class="nav-right" v-else>
+        {{loggedUser.username}}
+        <button type="button"  @click="logout()" class="btn btn-warning" >Logout</button>
+      </div>
     </div>
+    
   </nav>
   <router-view></router-view>
 </template>
 
 <script>
+import axios from "axios"
 export default {
   name: "App",
   data() {
     return {
       signIn: true,
       signUp: true,
+      signedIn: false,
+      loggedUser: {},
+      accessToken: null,
     }
   }, 
-
+  mounted(){    
+     if(localStorage.getItem("jwt")!=null){
+        this.signIn=true;
+        this.signUp=true;
+        this.signedIn=false;
+      }else{
+        this.signIn=false;
+        this.signUp=false;
+        this.signedIn=true;        
+        axios.get("/api/users/loggedUser").then(response => {console.log(response.data);this.loggedUser=response.data});
+      }
+  },   
   methods:{
     jumpToHomePage(){
       this.$router.push("/");
@@ -31,6 +51,15 @@ export default {
     },
     jmpToRegistrationPage(){
       this.$router.push("/registrationPage")
+    },
+    jmpToLoginPage(){
+      this.$router.push("/loginPage")
+    },
+    logout(){
+      this.accessToken=null;
+      localStorage.setItem("jwt",null);          
+      window.location.href = 'http://localhost:3000/';
+     
     }
   }
   

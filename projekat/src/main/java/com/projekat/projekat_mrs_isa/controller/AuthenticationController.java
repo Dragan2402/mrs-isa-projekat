@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "api/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationController {
     @Autowired
     private TokenUtils tokenUtils;

@@ -1,7 +1,9 @@
 package com.projekat.projekat_mrs_isa.service;
 
 
+import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.User;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -13,4 +15,5 @@ public interface UserService extends UserDetailsService {
     public User save(User user);
     public UserDetails loadUserByUsername(String username);
 
+    User findByUsername(String name);
 }

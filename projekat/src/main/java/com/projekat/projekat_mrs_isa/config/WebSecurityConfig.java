@@ -57,7 +57,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
-                .authorizeRequests().antMatchers("/api/**").permitAll()
+                .authorizeRequests().antMatchers("/api/clients/**").permitAll()
+                                    .antMatchers("/api/fishingClasses/**").permitAll()
+                                    .antMatchers("/api/fishingInstructors/**").permitAll()
+                                    .antMatchers("/api/offers/**").permitAll()
+                                    .antMatchers("/api/reservations/**").permitAll()
+                                    .antMatchers("/api/ships/**").permitAll()
+                                    .antMatchers("/api/shipOwners/**").permitAll()
+                                    .antMatchers("/api/vacation_houses/**").permitAll()
+                                    .antMatchers("/api/vacationHouseOwners/**").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
                 .addFilterBefore(new TokenAuthenticationFilter(tokenUtils,userService), BasicAuthenticationFilter.class);
@@ -66,7 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web)throws Exception{
-        web.ignoring().antMatchers(HttpMethod.POST,"/auth/login");
+        web.ignoring().antMatchers(HttpMethod.POST,"/api/auth/login");
         web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "favicon.ico", "/**/*.html",
                 "/**/*.css", "/**/*.js");
     }

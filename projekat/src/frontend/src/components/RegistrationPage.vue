@@ -33,6 +33,7 @@
         <button>SIGN UP</button>
       </div>
     </form>  
+
   </div>
   
 </template>
@@ -46,7 +47,7 @@ import axios from "axios"
 
 export default {
   name: "RegistrationPage",
-
+  
 
   data() {
     return{
@@ -67,6 +68,7 @@ export default {
   },
   mounted(){
     this.$root.signUp=false;
+    
   },
   methods:{
     signUp() {
@@ -166,7 +168,8 @@ export default {
       var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;      
       return re.test(email);
 
-    }   
+    },
+  
     }}
 </script>
 
