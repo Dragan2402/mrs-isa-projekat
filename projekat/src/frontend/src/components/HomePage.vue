@@ -1,52 +1,59 @@
 <template>
-  <div class="main">
-    <button class="btn btn-primary" @click="goToUserProfile()">User Profile</button>
+    <!--<button class="btn btn-primary" @click="goToUserProfile()">User Profile</button>
     <button class="btn btn-primary" @click="goToFishingClassProfile()">Fishing Class Profile</button>
     <button class="btn btn-primary" @click="goToVacationHouseProfile()">Vacation House Profile</button>
     <button class="btn btn-primary" @click="goToShipProfile()">Ship Profile</button>
-    <br>
-    <div class="entities-div">
+    -->
+  <div class="main-container">
+    <div class="left-bar">
+      <h5 style="color: white; font-weight: bold">Search</h5>
+      <div class="left-bar-text">Destination name:</div>
       <div>
         <input class="input-group-text" type="text" placeholder="Filter by name, address..." v-model="filter"/>
       </div>
+      <div class="left-bar-text">Date:</div>
+      <Datepicker v-model="availabilityInterval" :format="formatRange" range clearable/>
+      <div class="left-bar-text">Sort by:</div>
+      <div class="sort">
+        <select class="form-select" v-model="sortType" name="example">
+          <option value=0>Name descending</option>
+          <option value=1>Name ascending</option>
+          <option value=2>Price descending</option>
+          <option value=3>Price ascending</option>
+        </select>
+      </div>
       <br>
       <div class="radio-div">
-        <input class="radio" type="radio" id="contactChoice1"
-               name="choice" value=0 v-model="displayType">
-        <label class="radio-label" for="contactChoice1"> <img class="radio-img" src="../../public/house.png"> Houses</label>
-        <input class="radio" type="radio" id="contactChoice2"
-               name="choice" value=1 v-model="displayType">
-        <label class="radio-label" for="contactChoice2"><img class="radio-img" src="../../public/boat.png"> Boats</label>
-        <input class="radio" type="radio" id="contactChoice3"
-               name="choice" value=2 v-model="displayType">
-        <label class="radio-label" for="contactChoice3"><img class="radio-img" src="../../public/fishing.png"> Fishing classes </label>
+        <div>
+          <input class="radio" type="radio" id="contactChoice1" name="choice" value=0 v-model="displayType">
+          <label class="custom-btn button-outline" for="contactChoice1">Houses</label>
+        </div>
+        <div>
+          <input class="radio" type="radio" id="contactChoice2" name="choice" value=1 v-model="displayType">
+          <label class="custom-btn button-outline" for="contactChoice2">Boats</label>
+        </div>
+        <div>
+          <input class="radio" type="radio" id="contactChoice3" name="choice" value=2 v-model="displayType">
+          <label style="margin: 0;" class="custom-btn button-outline" for="contactChoice3">Fishing classes </label>
+        </div>
       </div>
-      <div class="datepicker-sort">
-      <Datepicker v-model="availabilityInterval" :format="formatRange" range clearable/>
-      <select class="form-select" v-model="sortType" name="example">
-        <option value=0>Name descending</option>
-        <option value=1>Name ascending</option>
-        <option value=2>Price descending</option>
-        <option value=3>Price ascending</option>
-      </select>
-      </div>
-
-      <br>
+    </div>
+    <div class="entities-div">
       <div v-if="this.displayType==0">
         <div class="list-entities" v-for="(vacationHouse, index) in this.filteredVacationHouses" @Click="selectEntity(vacationHouse)"
-            v-bind:index="index" :key="vacationHouse.id" v-bind="{selected: selectedEntity.id===vacationHouse.id}">        
-         
+            v-bind:index="index" :key="vacationHouse.id" v-bind="{selected: selectedEntity.id===vacationHouse.id}">
           <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + vacationHouse.img" style="width: 200px; height: 150px;"></div>
-          <div class="entity-name"><h3>{{ vacationHouse.name }}</h3>
+          <div class="entity-name"><h4 style="font-weight: bold;">{{ vacationHouse.name }}</h4>
             <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ vacationHouse.address }} </div>
             <div class="entity-description">{{ vacationHouse.promoDescription }}</div>
-            <vue3-star-ratings class="star-ratings" v-model="vacationHouse.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />({{vacationHouse.reviewsNumber}})
+            <vue3-star-ratings class="star-ratings" v-model="vacationHouse.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />
+            <span style="color: #585858;">({{vacationHouse.reviewsNumber}})</span>
           </div>
-     
           <div class="entity-price">
-            <div><h5>{{ vacationHouse.priceList }}</h5></div>            
-            <div><button class="btn btn-warning" @click="jumpToPreview(vacationHouse)">Explore</button>
-            <vue3-star-ratings v-model="vacationHouse.rating" starSize="15"  :showControl=false :disableClick=true :step=0 /></div>
+            <div><h5 style="font-weight: bold">{{ vacationHouse.priceList }}</h5></div>
+            <div>
+              <button class="custom-btn button-primary" @click="jumpToPreview(vacationHouse)">Explore</button>
+            </div>
           </div>
         </div>
 
@@ -59,11 +66,12 @@
           <div class="entity-name"><h3>{{ ship.name }}</h3>
             <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ ship.address }} </div>
             <div class="entity-description">{{ship.promoDescription}}</div>
-            <vue3-star-ratings class="star-ratings" v-model="ship.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />({{ship.reviewsNumber}})
+            <vue3-star-ratings class="star-ratings" v-model="ship.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />
+            <span style="color: #585858;">({{ship.reviewsNumber}})</span>
           </div>
           <div class="entity-price">
-            <div><h5>{{ ship.priceList }}</h5></div>
-            <div><button class="btn btn-warning" @click="jumpToPreview(ship)">Explore</button></div>
+            <div><h5 style="font-weight: bold">{{ ship.priceList }}</h5></div>
+            <div><button class="custom-btn button-primary" @click="jumpToPreview(ship)">Explore</button></div>
           </div>
         </div>
       </div>
@@ -74,11 +82,12 @@
           <div class="entity-name"><h3>{{ fishingClass.name }}</h3>
           <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ fishingClass.address }} </div>
           <div class="entity-description">{{fishingClass.promoDescription}}</div>
-          <vue3-star-ratings class="star-ratings" v-model="fishingClass.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />({{fishingClass.reviewsNumber}})
+          <vue3-star-ratings class="star-ratings" v-model="fishingClass.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />
+            <span style="color: #585858;">({{fishingClass.reviewsNumber}})</span>
           </div>
           <div class="entity-price">
-            <div><h5>{{ fishingClass.priceList }}</h5></div>
-            <div><button class="btn btn-warning" @click="jumpToPreview(fishingClass)">Explore</button></div>
+            <div><h5 style="font-weight: bold">{{ fishingClass.priceList }}</h5></div>
+            <div><button class="custom-btn button-primary" @click="jumpToPreview(fishingClass)">Explore</button></div>
           </div>
         </div>
       </div>
@@ -316,17 +325,9 @@ export default {
 
 <style scoped>
 
-.main {
-  margin: 10px;
-}
-
 .input-group-text {
   width: 100%;
   margin: auto;
-}
-
-button {
-  margin: 20px;
 }
 
 .list-entities {
@@ -340,9 +341,27 @@ button {
   min-width: 800px;
 }
 
-.datepicker-sort {
-  margin: 30px;
-  display: inline-flex;
+.entities-div {
+  margin-left: 26%;
+}
+
+.main-container {
+  width: 60%;
+  margin: 20px auto auto;
+}
+
+.left-bar {
+  margin-top: 0px;
+  padding: 10px;
+  border-radius: 5px;
+  float: left;
+  width: 24%;
+  background-color: #00587a;
+}
+
+.left-bar-text{
+  margin-top: 10px;
+  color: white;
 }
 
 .datepicker-sort select {
@@ -387,50 +406,25 @@ div.star-ratings {
 }
 
 .entity-price {
-  margin: 40px;
   float: right;
-}
-
-
-.main {
-  text-align: center;
-  margin: auto;
-  width: 50%;
-  padding: 10px;
+  margin: 50px 30px 0 0;
+  min-width: 150px;
 }
 
 .radio {
-  margin: 20px;
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-.radio-img {
-  width: 50px;
-}
-
-.radio-label {
-  padding: 5px;
-  height: 60px;
-}
-
-.radio-div{
-  text-align: left;
-  margin-left: 200px;
-  min-width: 800px;
-}
-
-.radio-label:hover{
+.button-outline {
   cursor: pointer;
+  width: 100%;
+  margin-bottom: 25px;
 }
 
 [type=radio]:checked + label {
-  outline: 1px solid darkgrey;
-  border-radius: 5px;
-  transform: scale(1.2);
-  transition: all 0.1s ease;
+  background-color: #004661;
 }
-
 
 </style>
