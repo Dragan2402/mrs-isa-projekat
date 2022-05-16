@@ -41,6 +41,7 @@ export default {
 
 nav {
   background: #00587a;
+  min-height: 54px;
 }
 
 .brand {

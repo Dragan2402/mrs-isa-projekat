@@ -42,8 +42,8 @@
       <div v-if="this.displayType==0">
         <div class="list-entities" v-for="(vacationHouse, index) in this.filteredVacationHouses" @Click="selectEntity(vacationHouse)"
             v-bind:index="index" :key="vacationHouse.id" v-bind="{selected: selectedEntity.id===vacationHouse.id}">
-          <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + vacationHouse.img" style="width: 200px; height: 150px;"></div>
-          <div class="entity-name"><h4 style="font-weight: bold;">{{ vacationHouse.name }}</h4>
+          <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + vacationHouse.img" @click="jumpToPreview(vacationHouse)" style="width: 200px; height: 150px; cursor: pointer"></div>
+          <div class="entity-name"><h4 @click="jumpToPreview(vacationHouse)" style="font-weight: bold; cursor: pointer">{{ vacationHouse.name }}</h4>
             <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ vacationHouse.address }} </div>
             <div class="entity-description">{{ vacationHouse.promoDescription }}</div>
             <vue3-star-ratings class="star-ratings" v-model="vacationHouse.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />
@@ -62,8 +62,8 @@
         <div class="list-entities" v-for="(ship,index) in this.filteredShips" @Click="selectEntity(ship)" v-bind:index="index" :key="ship.id"
             v-bind="{selected: selectedEntity.id===ship.id}">
         
-        <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + ship.img" style="width: 200px; height: 150px;"></div>
-          <div class="entity-name"><h3>{{ ship.name }}</h3>
+        <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + ship.img" @click="jumpToPreview(ship)" style="width: 200px; height: 150px; cursor: pointer"></div>
+          <div class="entity-name"><h4 @click="jumpToPreview(ship)" style="cursor: pointer; font-weight: bold">{{ ship.name }}</h4>
             <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ ship.address }} </div>
             <div class="entity-description">{{ship.promoDescription}}</div>
             <vue3-star-ratings class="star-ratings" v-model="ship.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />
@@ -78,8 +78,8 @@
       <div v-if="this.displayType==2">
         <div class="list-entities" v-for="(fishingClass,index) in this.filteredFishingClasses" @Click="selectEntity(fishingClass)"
              v-bind:index="index" :key="fishingClass.id" v-bind="{selected: selectedEntity.id===fishingClass.id}">
-          <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + fishingClass.img" style="width: 200px; height: 150px;"></div>
-          <div class="entity-name"><h3>{{ fishingClass.name }}</h3>
+          <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + fishingClass.img" @click="jumpToPreview(fishingClass)" style="width: 200px; height: 150px; cursor: pointer"></div>
+          <div class="entity-name"><h4 @click="jumpToPreview(fishingClass)" style="cursor: pointer; font-weight: bold">{{ fishingClass.name }}</h4>
           <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ fishingClass.address }} </div>
           <div class="entity-description">{{fishingClass.promoDescription}}</div>
           <vue3-star-ratings class="star-ratings" v-model="fishingClass.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />
