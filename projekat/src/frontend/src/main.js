@@ -12,6 +12,7 @@ import RegistrationPage from "./components/RegistrationPage";
 import VerificationPage from "./components/VerificationPage";
 import VacationHouseProfile from "@/components/VacationHouseProfile";
 import RentingEntityPreview from "@/components/RentingEntityPreview";
+import ReservationHistory from "@/components/ReservationHistory";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import PictureInput from 'vue-picture-input'
@@ -28,6 +29,7 @@ const routes = [
     {path: "/registrationPage", component:RegistrationPage},
     {path: "/loginPage",component:LoginPage},
     {path: "/clientProfile", component: ClientProfile},
+    {path: "/reservationHistory",component:ReservationHistory},
     {path: "/fishingClassProfile", component: FishingClassProfile},
     {name: "vacationHouseProfile", path: "/vacationHouseProfile", component: VacationHouseProfile},
     {name: "shipProfile", path: "/shipProfile", component: ShipProfile},

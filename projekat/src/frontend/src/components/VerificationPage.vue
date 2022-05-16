@@ -17,18 +17,18 @@ export default {
   name: "VerificationPage",
    data(){
     return {
-      id:0,
+   
       customId:0,
       verified:false,
-      user:{}
+      
 
     }
    },
   mounted() {
     this.customId=this.$route.params.customId;
-    this.id=(this.customId-105)/41;
-    axios.get(`/api/clients/${this.id}`).then(response => this.user=response.data);
-    axios.get(`/api/clients/verify/${this.id}`).then(response => {
+   
+    
+    axios.get(`/api/auth/verify/${this.customId}`).then(response => {
       if(response.data==true){
         this.verified=true;
         this.$toast.success("Account successfully verified");    

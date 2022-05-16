@@ -257,6 +257,7 @@ public abstract class User implements UserDetails {
                 ", country='" + country + '\'' +
                 ", phoneNum='" + phoneNum + '\'' +
                 ", deleted=" + deleted +
+                ", is verified"+verified+
                 '}';
     }
 

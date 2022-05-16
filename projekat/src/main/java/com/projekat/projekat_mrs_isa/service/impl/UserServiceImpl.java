@@ -16,6 +16,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
 
+
+
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
@@ -39,6 +41,29 @@ public class UserServiceImpl implements UserService {
         } else {
             return user;
         }
+    }
+
+    @Override
+    public Boolean isUsernameAvailable(String username) {
+
+        List<User> users= userRepository.findAll();
+        for(User user : users){
+                if(user.getUsername().equals(username)){
+                    return false;
+                }
+        }
+        return true;
+
+    }
+
+    @Override
+    public Boolean isMailAvailable(String mail) {
+        List<User> users= userRepository.findAll();
+        for(User user : users){
+            if(user.getEmail().toLowerCase().equals(mail))
+                return false;
+        }
+        return true;
     }
 
     @Override

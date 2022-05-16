@@ -10,10 +10,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
-    public List<User> findAll();
-    public User findById(long id);
-    public User save(User user);
-    public UserDetails loadUserByUsername(String username);
-
+    List<User> findAll();
+    User findById(long id);
+    User save(User user);
+    UserDetails loadUserByUsername(String username);
+    Boolean isUsernameAvailable(String username);
+    Boolean isMailAvailable(String mail);
     User findByUsername(String name);
 }

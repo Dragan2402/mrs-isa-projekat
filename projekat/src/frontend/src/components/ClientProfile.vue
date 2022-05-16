@@ -75,9 +75,29 @@ export default {
     },
      mounted() {
       axios
-        .get("/api/clients/loggedClient" )
-        .then(response => (this.user = response.data));
-      axios.get("/api/clients/loggedClient/picture").then(response => (this.picture=response.data))      
+        .get("/api/clients/loggedClient",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} } )
+        .then(response => (this.user = response.data)).catch((errorP) => {
+        
+        if(errorP.response.status===401){
+          //this.$toast.error("Not Logged In");
+          this.$root.accessToken=null;
+          localStorage.setItem("jwt",null);
+          
+          this.$router.push("/loginPage");
+        }
+       
+      });
+      axios.get("/api/clients/loggedClient/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.picture=response.data)).catch((errorP) => {
+        
+        if(errorP.response.status===401){
+          //this.$toast.error("Not Logged In");
+          this.$root.accessToken=null;
+          localStorage.setItem("jwt",null);
+          
+          this.$router.push("/loginPage");
+        }
+       
+      });     
     },
     methods: {    
     toggleEdit(){
@@ -127,7 +147,7 @@ export default {
           
       this.user.phoneNum=this.validNumber;
       
-      axios.put("/api/clients/loggedClient",this.user).then(response => this.user=response.data ).then(this.toastMessage());
+      axios.post("/api/clients/loggedClient",this.user,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => this.user=response.data ).then(this.toastMessage());
       this.editing=false;
     },
     telValidate(phoneNum) {
@@ -161,7 +181,7 @@ export default {
       }else{
       const fd=new FormData();
       fd.append('image',this.selectedFile,this.selectedFile.name);
-      axios.post("/api/clients/loggedClient/picture",fd,{
+      axios.post("/api/clients/loggedClient/picture",fd,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} },{
         onUploadProgress: uploadEvent => {
           console.log("Upload Progress: "+ Math.round(uploadEvent.loaded/uploadEvent.total * 100) + '%');
         }

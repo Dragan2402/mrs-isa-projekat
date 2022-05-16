@@ -332,7 +332,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 50.0,
                 vacationHouseTemp,
                 clientTemp1,
-                LocalDateTime.now(),
+                LocalDateTime.of(2022,1,24,20,10),
                 Duration.ofDays(3)
         );
 

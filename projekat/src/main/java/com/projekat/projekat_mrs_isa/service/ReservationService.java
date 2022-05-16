@@ -6,14 +6,11 @@ import com.projekat.projekat_mrs_isa.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
-public class ReservationService {
-    @Autowired
-    private ReservationRepository reservationRepository;
 
-    public Reservation findById(Long id) {
-        return reservationRepository.findById(id).orElse(null);
-    }
+public interface ReservationService {
 
-    public Reservation save(Reservation reservation) { return reservationRepository.save(reservation); }
+
+    Reservation findById(Long id);
+
+    Reservation save(Reservation reservation);
 }

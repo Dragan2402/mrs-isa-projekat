@@ -1,5 +1,10 @@
 package com.projekat.projekat_mrs_isa.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.Map;
+
 public class UtilityController {
 
     public static boolean validateName(String name){
@@ -46,5 +51,11 @@ public class UtilityController {
             return false;
         }
         return true;
+    }
+
+    public static boolean containsAll(Map<String, Object> userMap) {
+        return userMap.containsKey("firstName") && userMap.containsKey("lastName") && userMap.containsKey("email") && userMap.containsKey("username") &&
+                userMap.containsKey("password") && userMap.containsKey("confirmPassword") && userMap.containsKey("address") && userMap.containsKey("city") &&
+                userMap.containsKey("country") && userMap.containsKey("phoneNum");
     }
 }

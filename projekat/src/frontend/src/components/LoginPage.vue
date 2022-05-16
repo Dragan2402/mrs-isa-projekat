@@ -11,7 +11,6 @@
       <button @click="login">Login</button>
     </div>
 
-    <button @click="logout">logout</button>
   </div>
 </template>
 
@@ -60,10 +59,12 @@ export default {
       axios.post("/api/auth/login",body,loginHeaders).then(response =>{        
         this.$root.accessToken=response.data.accessToken;
         this.$root.signedIn=true;
+       
         localStorage.setItem("jwt",response.data.accessToken);
         this.$toast.success("Login successfull");   
  
-        axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {console.log(response.data);this.$root.loggedUser=response.data});
+        axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {this.$root.loggedUser=response.data});
+        axios.get("/api/clients/loggedClient/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.$root.loggedPicture=response.data));
         this.$router.push("/");  
       
       }).catch((error) => {

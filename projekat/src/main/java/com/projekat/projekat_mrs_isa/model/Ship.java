@@ -131,6 +131,11 @@ public class Ship extends RentingEntity{
     }
 
     @Override
+    public String getREType() {
+        return "SH";
+    }
+
+    @Override
     public String toString() {
         return "Ship{" +
                 "type='" + type + '\'' +

@@ -1,6 +1,10 @@
 package com.projekat.projekat_mrs_isa.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.projekat.projekat_mrs_isa.model.FishingClass;
 import com.projekat.projekat_mrs_isa.model.Reservation;
+import com.projekat.projekat_mrs_isa.model.Ship;
+import com.projekat.projekat_mrs_isa.model.VacationHouse;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
@@ -13,7 +17,10 @@ public class ReservationDTO {
     private List<String> additionalServices;
     private Double price;
     private Long rentingEntityId;
+    private String rentingEntityName;
+    private String rentingEntityOwmer;
     private Long clientId;
+    @JsonFormat(pattern = ("dd.MM.yyyy HH:mm"))
     private LocalDateTime start;
     private Long duration;
 
@@ -26,10 +33,13 @@ public class ReservationDTO {
         this.additionalServices = reservation.getAdditionalServices();
         this.price = reservation.getPrice();
         this.rentingEntityId = reservation.getRentingEntity().getId();
+        this.rentingEntityName=reservation.getRentingEntity().getName();
         this.clientId = reservation.getClient().getId();
         this.start = reservation.getStart();
         this.duration = reservation.getDuration().toMillis();
     }
+
+
 
     public Long getId() {
         return id;
@@ -101,5 +111,21 @@ public class ReservationDTO {
 
     public void setDuration(Long duration) {
         this.duration = duration;
+    }
+
+    public String getRentingEntityName() {
+        return rentingEntityName;
+    }
+
+    public String getRentingEntityOwmer() {
+        return rentingEntityOwmer;
+    }
+
+    public void setRentingEntityOwmer(String rentingEntityOwmer) {
+        this.rentingEntityOwmer = rentingEntityOwmer;
+    }
+
+    public void setRentingEntityName(String rentingEntityName) {
+        this.rentingEntityName = rentingEntityName;
     }
 }

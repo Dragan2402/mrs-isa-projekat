@@ -22,6 +22,8 @@ public class VacationHouse extends RentingEntity{
 
     public VacationHouse() {}
 
+
+
     public VacationHouse(String name, String address, String promoDescription, List<String> pictures,
                          String behaviourRules, String priceList, String additionalInfo, String cancellationConditions,
                          Integer roomsQuantity, Integer bedsPerRoom) {
@@ -52,6 +54,10 @@ public class VacationHouse extends RentingEntity{
 
     public void setVacationHouseOwner(VacationHouseOwner vacationHouseOwner) {
         this.vacationHouseOwner = vacationHouseOwner;
+    }
+    @Override
+    public String getREType() {
+        return "VH";
     }
 
     @Override

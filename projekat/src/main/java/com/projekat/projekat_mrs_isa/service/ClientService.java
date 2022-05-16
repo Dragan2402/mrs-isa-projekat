@@ -2,6 +2,7 @@ package com.projekat.projekat_mrs_isa.service;
 
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.Client;
+import com.projekat.projekat_mrs_isa.model.User;
 import com.projekat.projekat_mrs_isa.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,28 +11,29 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class ClientService {
-    @Autowired
-    private ClientRepository clientRepository;
 
-    public Client findById(long id) { return clientRepository.findById(id).orElse(null) ;}
-
-    public List<UserDTO> findAllDTO() { return clientRepository.findAllDTO(); }
-
-    public UserDTO findUserDTO(Long id) { return  clientRepository.findUserDTO(id) ; }
-
-    public List<Client> findAll() { return clientRepository.findAll(); }
-
-    public Page<Client> findAll(Pageable page) { return clientRepository.findAll(page);}
-
-    public Client save(Client client) { return clientRepository.save(client); }
-
-    public void flush() {  clientRepository.flush(); }
-
-    public void remove(long id) {  clientRepository.deleteById(id);}
-
-    public Client findByEmail(String email) { return  clientRepository.findByEmail(email); }
+public interface ClientService {
 
 
+    Client findById(long id);
+
+    List<UserDTO> findAllDTO();
+
+    UserDTO findUserDTO(Long id) ;
+
+    List<Client> findAll();
+
+    Page<Client> findAll(Pageable page);
+
+    Client save(Client client);
+
+    void flush();
+
+    void remove(long id) ;
+
+    Client findByEmail(String email);
+
+    Client findByUsername(String name);
+
+    Client addClient(String email, String username, String password, String picture, String firstName, String lastName, String address, String city, String country, String phoneNum);
 }

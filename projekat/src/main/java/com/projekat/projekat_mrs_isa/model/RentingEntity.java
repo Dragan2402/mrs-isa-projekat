@@ -217,7 +217,7 @@ public abstract class RentingEntity {
         this.deleted = deleted;
     }
 
-
+    abstract public String getREType();
 
     public void update(RentingEntityDTO rentingEntityDTO)
     {

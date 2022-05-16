@@ -11,6 +11,9 @@
         <input type="text" v-model="email" placeholder="Email" @blur="validateEmail">
       </div>
       <div>
+        <input type="text" v-model="username" placeholder="Username">
+      </div>
+      <div>
         <input type="password" v-model="password" placeholder="Password">
       </div>
       <div>
@@ -54,6 +57,7 @@ export default {
       
       firstName: '',
       lastName: '',
+      username: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -100,6 +104,18 @@ export default {
       this.email.toLowerCase();
 
       var passwordRegex=/^[0-9A-Za-z]+$/;
+
+      
+
+
+      if(this.username.length<3 || this.username.length > 20){
+        this.$toast.error("Username must be between 3-20 characters");
+        return;
+      }
+      if(!passwordRegex.test(this.username)){
+        this.$toast.error("Username must only contain letters and numbers");
+        return;
+      }
       
       if(this.password.length<5 || this.password.length > 20){
         this.$toast.error("Password must be between 5-20 characters");
@@ -140,16 +156,28 @@ export default {
           return;
         }
         else{
-          const user={'firstName':this.firstName,'lastName':this.lastName,'email':this.email,'password':this.password,"confirmPassword":this.confirmPassword,
-          'address':this.address,'city':this.city,'country':this.country,'phoneNum':this.validNumber};
-          axios.put("/api/clients/addClient",user).then(response => {
+ 
+          axios.get(`api/clients/isUsernameAvailable/${this.username}`).then(response => {
+     
             if(response.data==false){
-              this.$toast.error("Registartion failed");
+              this.$toast.error("Username already taken");
+              return;
             }else{
-              this.$toast.success("Registartion successfull");
-              this.$router.push("/");
+                const user={'firstName':this.firstName,'lastName':this.lastName,'username':this.username,'email':this.email,'password':this.password,"confirmPassword":this.confirmPassword,
+                'address':this.address,'city':this.city,'country':this.country,'phoneNum':this.validNumber};
+                axios.post("/api/auth/addClient",user).then(response => {
+                if(response.data==false){
+                  this.$toast.error("Registartion failed");
+                }else{
+                  this.$toast.success("Registartion successfull");
+                  this.$root.signUp=true;
+                  this.$router.push("/");
+                }
+              });
+
             }
-          });
+          
+          })         
           
         }
         });

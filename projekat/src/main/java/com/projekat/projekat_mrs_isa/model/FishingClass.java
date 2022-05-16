@@ -27,6 +27,11 @@ public class FishingClass extends RentingEntity{
 
     public FishingClass() {}
 
+    @Override
+    public String getREType() {
+        return "FC";
+    }
+
     public FishingClass(String name, String address, String promoDescription, List<String> pictures,
                         String behaviourRules, String priceList, String additionalInfo, String cancellationConditions,
                         String instructorBiography, Integer clientLimit, Set<String> fishingEquipment) {

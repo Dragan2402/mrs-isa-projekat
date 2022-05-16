@@ -9,6 +9,7 @@
         <button type="button"  v-if="signUp" @click="jmpToRegistrationPage()"  class="btn btn-warning">Register</button>
       </div>
       <div class="nav-right" v-else>
+        <img v-bind:src="'data:image/jpeg;base64,' + loggedPicture" style="width: 50px; height: 40px;">
         {{loggedUser.username}}
         <button type="button"  @click="logout()" class="btn btn-warning" >Logout</button>
       </div>
@@ -28,6 +29,7 @@ export default {
       signUp: true,
       signedIn: false,
       loggedUser: {},
+      loggedPicture:null,
       accessToken: null,
     }
   }, 
@@ -40,7 +42,8 @@ export default {
         this.signIn=false;
         this.signUp=false;
         this.signedIn=true;        
-        axios.get("/api/users/loggedUser").then(response => {console.log(response.data);this.loggedUser=response.data});
+        axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {this.loggedUser=response.data});
+        axios.get("/api/clients/loggedClient/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.loggedPicture=response.data));
       }
   },   
   methods:{

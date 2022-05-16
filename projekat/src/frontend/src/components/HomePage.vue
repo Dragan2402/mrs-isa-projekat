@@ -1,6 +1,7 @@
 <template>
   <div class="main">
     <button class="btn btn-primary" @click="goToUserProfile()">User Profile</button>
+    <button class="btn btn-primary" @click="goToReservationHistory()">Reservation History</button>
     <button class="btn btn-primary" @click="goToFishingClassProfile()">Fishing Class Profile</button>
     <button class="btn btn-primary" @click="goToVacationHouseProfile()">Vacation House Profile</button>
     <button class="btn btn-primary" @click="goToShipProfile()">Ship Profile</button>
@@ -138,7 +139,9 @@ export default {
     },
   },
   methods: {       
-
+    goToReservationHistory(){
+      this.$router.push('/reservationHistory');
+    },
     goToUserProfile() {
       this.$router.push('/clientProfile');
     },

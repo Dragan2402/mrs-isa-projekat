@@ -1,12 +1,10 @@
 package com.projekat.projekat_mrs_isa.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
-import com.projekat.projekat_mrs_isa.model.Client;
-import com.projekat.projekat_mrs_isa.model.User;
-import com.projekat.projekat_mrs_isa.service.ClientService;
-import com.projekat.projekat_mrs_isa.service.EmailService;
-import com.projekat.projekat_mrs_isa.service.UserService;
+import com.projekat.projekat_mrs_isa.model.*;
+import com.projekat.projekat_mrs_isa.service.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,11 +21,14 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
+import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
 import java.nio.file.*;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "api/clients")
@@ -39,12 +41,25 @@ public class ClientController {
     private UserService userService;
 
     @Autowired
+    private ReservationService reservationService;
+
+    @Autowired
     private ResourceLoader resourceLoader;
+
+    @Autowired
+    private VacationHouseService vacationHouseService;
+
+    @Autowired
+    private ShipService shipService;
+
+    @Autowired
+    private FishingClassService fishingClassService;
 
     @Autowired
     private EmailService emailService;
 
     @GetMapping(value = "/all")
+    @PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     public ResponseEntity<List<UserDTO>> getAllClients() {
         List<UserDTO> clients = clientService.findAllDTO();
 
@@ -52,6 +67,7 @@ public class ClientController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     public ResponseEntity<UserDTO> getClientDTOById(@PathVariable("id") Long id) {
         UserDTO clientDTO = clientService.findUserDTO(id);
         if (clientDTO == null)
@@ -59,79 +75,53 @@ public class ClientController {
         return new ResponseEntity<UserDTO>(clientDTO,HttpStatus.OK);
     }
 
-    @PutMapping(value ="/addClient",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> addUser(@RequestBody Map<String,Object> userMap){
-        String firstName,lastName,email,password,confirmPassword,address,city,country,phoneNum;
-        if(!userMap.containsKey("firstName") || !userMap.containsKey("lastName") || !userMap.containsKey("email") ||
-                !userMap.containsKey("password") ||!userMap.containsKey("confirmPassword") || !userMap.containsKey("address") || !userMap.containsKey("city") ||
-                !userMap.containsKey("country") ||!userMap.containsKey("phoneNum")){
-            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
-        }
-        firstName = (String) userMap.get("firstName");
-        lastName = (String) userMap.get("lastName");
-        email = (String) userMap.get("email");
-        password = (String) userMap.get("password");
-        confirmPassword = (String) userMap.get("confirmPassword");
-        address = (String) userMap.get("address");
-        city = (String) userMap.get("city");
-        country = (String) userMap.get("country");
-        phoneNum = (String) userMap.get("phoneNum");
-        if(UtilityController.validateName(firstName) && UtilityController.validateName(lastName) && UtilityController.validateEmail(email) && isMailAvailable(email.toLowerCase())
-        && UtilityController.validatePasswords(password,confirmPassword) && address.length()>2 &&
-                city.length()>2 && country.length()>2 && UtilityController.validatePhoneNum(phoneNum)){
-            System.out.println("DATA IS GOOD CREATING USER");
-            Client clientTemp=new Client(email.toLowerCase(),"TODO",password,"pictures/user_pictures/0.png",firstName,lastName,address,city,country,phoneNum);
-            clientService.save(clientTemp);
-            emailService.sendVerificationMail(new UserDTO(clientTemp));
-            return new ResponseEntity<>(true,HttpStatus.CREATED);
-        }else {
-            System.out.println("DATA IS BAD");
-            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
-        }
-
-    }
-
-    public Boolean isMailAvailable(String mail){
-        List<User> users= userService.findAll();
-        for(User user : users){
-            if(user.getEmail().toLowerCase().equals(mail))
-                return false;
-        }
-        return true;
-    }
 
     @GetMapping(value = "/isMailAvailable/{mail}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> isMailAvailableRequest(@PathVariable("mail") String mail){
-        return new ResponseEntity<>(isMailAvailable(mail),HttpStatus.OK);
+        return new ResponseEntity<>(userService.isMailAvailable(mail),HttpStatus.OK);
     }
 
-    @GetMapping(value = "loggedClient",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> getLoggedClient() throws Exception{
-        UserDTO clientDTO = clientService.findUserDTO(2L);
+    @GetMapping(value = "/isUsernameAvailable/{username}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> isUsernameAvailableRequest(@PathVariable("username") String username){
+        return new ResponseEntity<>(userService.isUsernameAvailable(username),HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/loggedClient",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<UserDTO> getLoggedClient(Principal clientP) throws Exception{
+        UserDTO clientDTO = new UserDTO(clientService.findByUsername(clientP.getName()));
         if (clientDTO == null)
             return new ResponseEntity<UserDTO>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<UserDTO>(clientDTO,HttpStatus.OK);
     }
-
-    @GetMapping(value = "/verify/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> verifyAccount(@PathVariable("id") Long id){
-        User user=userService.findById(id);
-        if(user == null)
-            return new ResponseEntity<>(false,HttpStatus.NOT_FOUND);
-        user.setVerified(true);
-        User userSaved=userService.save(user);
-        if(userSaved==null)
-            return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
-        return new ResponseEntity<>(true,HttpStatus.OK);
+    @GetMapping(value = "/loggedClient/reservationHistory",produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<List<ReservationDTO>> getLoggedClientReservationHistory(Principal clientP) throws Exception{
+        Client client = clientService.findByUsername(clientP.getName());
+        if (client == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        List<ReservationDTO> reservationsDtos= new ArrayList<>();
+        for(Reservation reservation : client.getReservations()){
+            if(reservation.getStart().plus(reservation.getDuration()).compareTo(LocalDateTime.now())<0){
+                ReservationDTO reservationDTO=new ReservationDTO(reservation);
+                reservationDTO.setRentingEntityOwmer(getRentingEntityOwner(reservation.getRentingEntity()));
+                reservationsDtos.add(reservationDTO);
+                System.out.println(reservation);
+            }
+        }
+        return new ResponseEntity<>(reservationsDtos,HttpStatus.OK);
     }
 
-    @PutMapping(value = "loggedClient",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> updateLoggedClient(@RequestBody UserDTO userDTO) throws Exception{
+
+    @PostMapping(value = "/loggedClient",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<UserDTO> updateLoggedClient(Principal clientP,@RequestBody UserDTO userDTO) throws Exception{
 
         if(UtilityController.validateName(userDTO.getFirstName()) && UtilityController.validateName(userDTO.getLastName())
                && userDTO.getAddress().length()>2 &&
                 userDTO.getCity().length()>2 && userDTO.getCountry().length()>2 && UtilityController.validatePhoneNum(userDTO.getPhoneNum())){
-            Client clientToUpdate = clientService.findById(2L);
+            Client clientToUpdate = clientService.findByUsername(clientP.getName());
             clientToUpdate.update(userDTO);
             Client updatedCLient = clientService.save(clientToUpdate);
 
@@ -146,10 +136,12 @@ public class ClientController {
         }
     }
 
-    @GetMapping(value = "loggedClient/picture", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/loggedClient/picture", produces = MediaType.IMAGE_JPEG_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
     @Transactional
-    public ResponseEntity<String> getPicture() {
-        String picturePath= clientService.findById(2L).getPicture();
+    public ResponseEntity<String> getPicture(Principal userP) {
+
+        String picturePath= clientService.findByUsername(userP.getName()).getPicture();
         Resource r = resourceLoader
                 .getResource("classpath:" + picturePath);
 
@@ -163,18 +155,20 @@ public class ClientController {
         }
     }
 
-    @PostMapping(value = "loggedClient/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE )
+    @PostMapping(value = "/loggedClient/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE )
+    @PreAuthorize("hasRole('CLIENT')")
     @Transactional
-    public ResponseEntity<String> createNewObjectWithImage(@RequestPart("image") MultipartFile image) throws IOException {
-        String pictureName="pictures/user_pictures/2.png";
-        Client clientToUpdate = clientService.findById(2L);
+    public ResponseEntity<String> updateLoggedClientPicture(Principal clientP,@RequestPart("image") MultipartFile image) throws IOException {
+
+        Client clientToUpdate = clientService.findByUsername(clientP.getName());
+        String pictureName="pictures/user_pictures/"+clientToUpdate.getId().toString()+".png";
         clientToUpdate.setPicture(pictureName);
         Client updatedClient=clientService.save(clientToUpdate);
-        String picturePath=updatedClient.getPicture();
+
         boolean resp=saveFile("src/main/resources/",pictureName,image);
         boolean resp2=saveFile("target/classes/",pictureName,image);
         if (resp && resp2){
-            return getPicture();
+            return getPicture(clientP);
         }else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -200,6 +194,20 @@ public class ClientController {
             throw new IOException("Could not save image file: " + fileName, ioe);
 
         }
+    }
+
+    private String getRentingEntityOwner(RentingEntity rentingEntity){
+
+
+            if(rentingEntity.getREType().equals("VH")){
+                return vacationHouseService.findById(rentingEntity.getId()).getVacationHouseOwner().getUsername();
+            }else if(rentingEntity.getREType().equals("FC")){
+                return fishingClassService.findById(rentingEntity.getId()).getFishingInstructor().getUsername();
+            }
+            else{
+                return shipService.findById(rentingEntity.getId()).getShipOwner().getUsername();
+            }
+
     }
 
 }
