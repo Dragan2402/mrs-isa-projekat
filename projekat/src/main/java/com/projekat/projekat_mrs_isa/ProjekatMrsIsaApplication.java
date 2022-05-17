@@ -170,10 +170,12 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         shipTemp.setAvailableTo(LocalDateTime.now().plus(Duration.ofDays(1)));
         shipOwnerTemp1.addShip(shipTemp);
 
+        List<String> services=new ArrayList<>();
+        services.add("None");
         Offer offerTemp5 = new Offer(
                 "Budva",
                 2,
-                new ArrayList<>(),
+                services,
                 300.0,
                 shipTemp,
                 LocalDateTime.of(2022,7,24,20,10),
@@ -210,7 +212,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         Offer offerTemp4 = new Offer(
                 "Jezero",
                 5,
-                new ArrayList<>(),
+                services,
                 300.0,
                 fishingClassTemp,
                 LocalDateTime.of(2022,7,24,20,10),
@@ -277,7 +279,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         Offer offerTemp = new Offer(
                 "Brcko",
                 5,
-                new ArrayList<>(),
+                services,
                 500.0,
                 vacationHouseTemp,
                 LocalDateTime.of(2022,6,24,20,10),
@@ -287,7 +289,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         Offer offerTemp2 = new Offer(
                 "Brcko",
                 5,
-                new ArrayList<>(),
+                services,
                 500.0,
                 vacationHouseTemp,
                 LocalDateTime.of(2022,1,24,20,10),
@@ -297,7 +299,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         Offer offerTemp3 = new Offer(
                 "Brcko Ficibajer",
                 5,
-                new ArrayList<>(),
+                services,
                 300.0,
                 vacationHouseTemp,
                 LocalDateTime.of(2022,7,24,20,10),
@@ -328,7 +330,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         Reservation reservationTemp = new Reservation(
                 "Brcko",
                 5,
-                new ArrayList<>(),
+                services,
                 50.0,
                 vacationHouseTemp,
                 clientTemp1,

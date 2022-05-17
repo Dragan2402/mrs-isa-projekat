@@ -37,7 +37,7 @@ public class VacationHouseController {
     private ResourceLoader resourceLoader;
 
     @GetMapping(value = "/all")
-    @PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
+    //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     @Transactional
     public ResponseEntity<List<VacationHouseDTO>> getAllVacationHouses() {
         List<VacationHouse> vacationHouses = vacationHouseService.findAll();
@@ -68,7 +68,7 @@ public class VacationHouseController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
+    //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     @Transactional
     public ResponseEntity<VacationHouseDTO> getVacationHouse(@PathVariable("id") Long id) {
         VacationHouse vacationHouse = vacationHouseService.findById(id);
@@ -79,7 +79,7 @@ public class VacationHouseController {
     }
 
     @GetMapping(value = "/{id}/offers", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
+    //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     @Transactional
     public ResponseEntity<List<OfferDTO>> getOffers(@PathVariable("id") Long id) {
         VacationHouse vacationHouse = vacationHouseService.findById(id);
@@ -90,13 +90,11 @@ public class VacationHouseController {
         for(Offer offer : vacationHouse.getOffers()) {
             if (offer.getStart().compareTo(LocalDateTime.now()) > 0) {
                 OfferDTO temp = new OfferDTO(offer);
+
                 offers.add(temp);
 
             }else{
-
                 offer.setDeleted(true);
-
-
             }
             }
         return new ResponseEntity<>(offers, HttpStatus.OK);
@@ -104,7 +102,7 @@ public class VacationHouseController {
 
 
     @GetMapping(value = "/{vacationHouseId}/pictures/{pictureId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
+   //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     @Transactional
     public ResponseEntity<String> getPicture(@PathVariable("vacationHouseId") Long vacationHouseId, @PathVariable("pictureId") Long pictureId) {
         Resource r = resourceLoader
@@ -120,7 +118,7 @@ public class VacationHouseController {
     }
 
     @GetMapping(value = "/{vacationHouseId}/pictures/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
+    //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     @Transactional
     public ResponseEntity<List<String>> getAllPictures(@PathVariable("vacationHouseId") Long vacationHouseId) {
         List<String> picturePaths = vacationHouseService.findPicturesByVacationHouseId(vacationHouseId);
@@ -141,8 +139,8 @@ public class VacationHouseController {
         return new ResponseEntity<>(encodedPictures, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
+    @PostMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('VH_OWNER')")
     @Transactional
     public ResponseEntity<VacationHouseDTO> updateVacationHouse(@RequestBody VacationHouseDTO vacationHouseDTO) {
         VacationHouse vacationHouse = vacationHouseService.findById(vacationHouseDTO.getId());

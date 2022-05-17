@@ -9,6 +9,7 @@ import com.projekat.projekat_mrs_isa.model.User;
 import com.projekat.projekat_mrs_isa.service.ClientService;
 import com.projekat.projekat_mrs_isa.service.EmailService;
 import com.projekat.projekat_mrs_isa.service.UserService;
+import com.projekat.projekat_mrs_isa.service.UtilityService;
 import com.projekat.projekat_mrs_isa.util.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,9 @@ public class AuthenticationController {
     private EmailService emailService;
 
     @Autowired
+    private UtilityService utilityService;
+
+    @Autowired
     private UserService userService;
 
     @PostMapping("/login")
@@ -66,7 +70,7 @@ public class AuthenticationController {
     @PostMapping(value ="/addClient",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> addUser(@RequestBody Map<String,Object> userMap){
         String firstName,lastName,email,password,confirmPassword,address,city,country,phoneNum,username;
-        if(!UtilityController.containsAll(userMap))
+        if(!utilityService.containsAll(userMap))
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
 
         firstName = (String) userMap.get("firstName");
@@ -79,9 +83,9 @@ public class AuthenticationController {
         city = (String) userMap.get("city");
         country = (String) userMap.get("country");
         phoneNum = (String) userMap.get("phoneNum");
-        if(UtilityController.validateName(firstName) && UtilityController.validateName(lastName)&& userService.isUsernameAvailable(username) && UtilityController.validateEmail(email) && userService.isUsernameAvailable(email.toLowerCase())
-                && UtilityController.validatePasswords(password,confirmPassword) && address.length()>2 &&
-                city.length()>2 && country.length()>2 && UtilityController.validatePhoneNum(phoneNum)){
+        if(utilityService.validateName(firstName) && utilityService.validateName(lastName)&& userService.isUsernameAvailable(username) && utilityService.validateEmail(email) && userService.isUsernameAvailable(email.toLowerCase())
+                && utilityService.validatePasswords(password,confirmPassword) && address.length()>2 &&
+                city.length()>2 && country.length()>2 && utilityService.validatePhoneNum(phoneNum)){
             Client clientTemp=clientService.addClient(email.toLowerCase(),username,password,"pictures/user_pictures/0.png",firstName,lastName,address,city,country,phoneNum);
             emailService.sendVerificationMail(new UserDTO(clientTemp));
             return new ResponseEntity<>(true,HttpStatus.CREATED);
@@ -103,6 +107,16 @@ public class AuthenticationController {
         if(userSaved==null)
             return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(true,HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/isMailAvailable/{mail}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> isMailAvailableRequest(@PathVariable("mail") String mail){
+        return new ResponseEntity<>(userService.isMailAvailable(mail),HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/isUsernameAvailable/{username}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> isUsernameAvailableRequest(@PathVariable("username") String username){
+        return new ResponseEntity<>(userService.isUsernameAvailable(username),HttpStatus.OK);
     }
 
     // Endpoint za registraciju novog korisnika

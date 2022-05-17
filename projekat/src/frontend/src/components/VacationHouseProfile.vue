@@ -202,9 +202,9 @@ export default {
     function saveEdit(){
       vacationHouse.value.availableFrom = dateTimeToString(availabilityInterval.value.start);
       vacationHouse.value.availableTo = dateTimeToString(availabilityInterval.value.end);
-
+      console.log(localStorage.getItem("jwt"));
       axios
-          .put(`/api/vacation_houses/${id.value}`, vacationHouse.value, {headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
+          .post(`/api/vacation_houses/${id.value}`, vacationHouse.value, { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             vacationHouse.value = response.data;
             toast.success("Info updated");

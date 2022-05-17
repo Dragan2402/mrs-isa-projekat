@@ -43,7 +43,7 @@ export default {
         this.signUp=false;
         this.signedIn=true;        
         axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {this.loggedUser=response.data});
-        axios.get("/api/clients/loggedClient/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.loggedPicture=response.data));
+        axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.loggedPicture=response.data));
       }
   },   
   methods:{

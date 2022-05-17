@@ -24,13 +24,13 @@ public class Offer {
     private Integer clientLimit;
 
     @Column(name = "additional_services")
-    @ElementCollection(targetClass=String.class,fetch = FetchType.LAZY )
+    @ElementCollection(targetClass=String.class,fetch = FetchType.EAGER )
     private List<String> additionalServices;
 
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "renting_entity_id",nullable = false)
     private RentingEntity rentingEntity;
 

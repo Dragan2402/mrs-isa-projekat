@@ -64,7 +64,7 @@ export default {
         this.$toast.success("Login successfull");   
  
         axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {this.$root.loggedUser=response.data});
-        axios.get("/api/clients/loggedClient/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.$root.loggedPicture=response.data));
+        axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.$root.loggedPicture=response.data));
         this.$router.push("/");  
       
       }).catch((error) => {

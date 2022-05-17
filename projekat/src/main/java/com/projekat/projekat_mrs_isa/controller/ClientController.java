@@ -1,25 +1,18 @@
 package com.projekat.projekat_mrs_isa.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.service.*;
-import org.apache.commons.io.FileUtils;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -27,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
 import java.nio.file.*;
-import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping(value = "api/clients")
@@ -44,9 +35,6 @@ public class ClientController {
     private ReservationService reservationService;
 
     @Autowired
-    private ResourceLoader resourceLoader;
-
-    @Autowired
     private VacationHouseService vacationHouseService;
 
     @Autowired
@@ -54,6 +42,9 @@ public class ClientController {
 
     @Autowired
     private FishingClassService fishingClassService;
+
+    @Autowired
+    private UtilityService utilityService;
 
     @Autowired
     private EmailService emailService;
@@ -76,15 +67,7 @@ public class ClientController {
     }
 
 
-    @GetMapping(value = "/isMailAvailable/{mail}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> isMailAvailableRequest(@PathVariable("mail") String mail){
-        return new ResponseEntity<>(userService.isMailAvailable(mail),HttpStatus.OK);
-    }
 
-    @GetMapping(value = "/isUsernameAvailable/{username}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> isUsernameAvailableRequest(@PathVariable("username") String username){
-        return new ResponseEntity<>(userService.isUsernameAvailable(username),HttpStatus.OK);
-    }
 
     @GetMapping(value = "/loggedClient",produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('CLIENT')")
@@ -118,9 +101,9 @@ public class ClientController {
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<UserDTO> updateLoggedClient(Principal clientP,@RequestBody UserDTO userDTO) throws Exception{
 
-        if(UtilityController.validateName(userDTO.getFirstName()) && UtilityController.validateName(userDTO.getLastName())
+        if(utilityService.validateName(userDTO.getFirstName()) && utilityService.validateName(userDTO.getLastName())
                && userDTO.getAddress().length()>2 &&
-                userDTO.getCity().length()>2 && userDTO.getCountry().length()>2 && UtilityController.validatePhoneNum(userDTO.getPhoneNum())){
+                userDTO.getCity().length()>2 && userDTO.getCountry().length()>2 && utilityService.validatePhoneNum(userDTO.getPhoneNum())){
             Client clientToUpdate = clientService.findByUsername(clientP.getName());
             clientToUpdate.update(userDTO);
             Client updatedCLient = clientService.save(clientToUpdate);
@@ -136,24 +119,7 @@ public class ClientController {
         }
     }
 
-    @GetMapping(value = "/loggedClient/picture", produces = MediaType.IMAGE_JPEG_VALUE)
-    @PreAuthorize("hasRole('CLIENT')")
-    @Transactional
-    public ResponseEntity<String> getPicture(Principal userP) {
 
-        String picturePath= clientService.findByUsername(userP.getName()).getPicture();
-        Resource r = resourceLoader
-                .getResource("classpath:" + picturePath);
-
-        try {
-            File file = r.getFile();
-            byte[] picture = FileUtils.readFileToByteArray(file);
-            String encodedPicture = Base64.encodeBase64String(picture);
-            return new ResponseEntity<>(encodedPicture, HttpStatus.OK);
-        } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 
     @PostMapping(value = "/loggedClient/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE )
     @PreAuthorize("hasRole('CLIENT')")
@@ -168,7 +134,7 @@ public class ClientController {
         boolean resp=saveFile("src/main/resources/",pictureName,image);
         boolean resp2=saveFile("target/classes/",pictureName,image);
         if (resp && resp2){
-            return getPicture(clientP);
+            return new ResponseEntity<>(utilityService.getPictureEncoded(updatedClient.getPicture()),HttpStatus.OK);
         }else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

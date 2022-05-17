@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                                     .antMatchers("/api/reservations/**").permitAll()
                                     .antMatchers("/api/ships/**").permitAll()
                                     .antMatchers("/api/shipOwners/**").permitAll()
-//                                    .antMatchers("/api/vacation_houses/**").permitAll()
+                                   // .antMatchers("/api/vacation_houses/all").permitAll()
                                     .antMatchers("/api/vacationHouseOwners/**").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
@@ -74,9 +74,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web)throws Exception{
         web.ignoring().antMatchers(HttpMethod.POST,"/api/auth/login");
-        web.ignoring().antMatchers(HttpMethod.GET,"/api/clients/isMailAvailable/**");
-        web.ignoring().antMatchers(HttpMethod.GET,"/api/clients/isUsernameAvailable/**");
+        web.ignoring().antMatchers(HttpMethod.GET,"/api/auth/isMailAvailable/**");
+        web.ignoring().antMatchers(HttpMethod.GET,"/api/auth/isUsernameAvailable/**");
         web.ignoring().antMatchers(HttpMethod.GET,"/api/auth/verify/*");
+        web.ignoring().antMatchers(HttpMethod.GET,"/api/vacation_houses/**");
 
         web.ignoring().antMatchers(HttpMethod.POST,"/api/auth/addClient");
         web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "favicon.ico", "/**/*.html",
