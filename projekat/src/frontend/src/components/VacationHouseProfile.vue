@@ -10,8 +10,14 @@
       <p>Cancellation conditions: {{vacationHouse.cancellationConditions}}</p>
       <p>Rooms: {{vacationHouse.roomsQuantity}}</p>
       <p>Beds per room: {{vacationHouse.bedsPerRoom}}</p>
-      <p>Available from: {{ vacationHouse.availableFrom }}</p>
-      <p>Available to: {{ vacationHouse.availableTo }}</p>
+<!--      <p>Available from: {{ vacationHouse.availableFrom }}</p>-->
+<!--      <p>Available to: {{ vacationHouse.availableTo }}</p>-->
+
+      <div v-if="vacationHouse.availableFrom != null && vacationHouse.availableFrom != null">
+        <label class="mb-3" for="calendar">Available dates</label><br>
+        <v-calendar id="calendar" class="mb-3" :from-date="fromDate" :attributes="calendarAttributes"
+                    :min-date="calendarAttributes[0].dates.start" :max-date="calendarAttributes[0].dates.end" /><br>
+      </div>
 
       <button @click="toggleEdit()" style="margin-right: 20px;" class="btn btn-primary">Edit Info</button>
       <button @click="toggleCreatingOffer()" class="btn btn-primary">Create Offer</button>
@@ -39,10 +45,6 @@
         <input v-model="vacationHouse.priceList" type="text" class="form-control" aria-label="Username" aria-describedby="priceList">
       </div>
       <div class="input-group mb-3">
-        <span class="input-group-text" id="clientLimit">Client limit: </span>
-        <input v-model="vacationHouse.clientLimit" type="text" class="form-control" aria-label="Username" aria-describedby="clientLimit">
-      </div>
-      <div class="input-group mb-3">
         <span class="input-group-text" id="additionalInfo">Additional info:</span>
         <input v-model="vacationHouse.additionalInfo" type="text" class="form-control" aria-label="Username" aria-describedby="additionalInfo">
       </div>
@@ -51,7 +53,7 @@
         <input v-model="vacationHouse.cancellationConditions" type="text" class="form-control" aria-label="Username" aria-describedby="cancellationConditions">
       </div>
       <div class="input-group mb-3">
-        <span class="input-group-text" id="roomsQuantity">Rooms: </span>
+        <span class="input-group-text" id="roomsQuantity">Rooms:</span>
         <input v-model="vacationHouse.roomsQuantity" type="text" class="form-control" aria-label="Username" aria-describedby="roomsQuantity">
       </div>
       <div class="input-group mb-3">
@@ -61,7 +63,7 @@
 
 <!--      <Datepicker v-model="availabilityInterval" :format="formatRange" range/>-->
 
-      <v-date-picker v-model="availabilityInterval" mode="dateTime" is-range ></v-date-picker>
+      <v-date-picker v-model="availabilityInterval" :min-date="new Date()" mode="dateTime" is-range ></v-date-picker>
       <br>
       <button @click="saveEdit()" style="margin-right: 20px;" class="btn btn-primary">Save</button>
       <button @click="cancel()" class="btn btn-primary">Cancel</button>
@@ -94,8 +96,6 @@
       </div>
     </div>
   </div>
-
-  <v-calendar :from-date="fromDate" :attributes="calendarAttributes" />
 
 </template>
 
@@ -200,17 +200,30 @@ export default {
     }
 
     function saveEdit(){
-      vacationHouse.value.availableFrom = dateTimeToString(availabilityInterval.value.start);
-      vacationHouse.value.availableTo = dateTimeToString(availabilityInterval.value.end);
-      console.log(localStorage.getItem("jwt"));
-      axios
-          .post(`/api/vacation_houses/${id.value}`, vacationHouse.value, { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
-          .then(response => {
-            vacationHouse.value = response.data;
-            toast.success("Info updated");
-          });
+      if(availabilityInterval.value.start != undefined && availabilityInterval.value.end != undefined) {
+        vacationHouse.value.availableFrom = dateTimeToString(availabilityInterval.value.start);
+        vacationHouse.value.availableTo = dateTimeToString(availabilityInterval.value.end);
+        calendarAttributes.value[0].dates.start = availabilityInterval.value.start;
+        calendarAttributes.value[0].dates.end = availabilityInterval.value.end;
 
-      editing.value = false;
+        axios
+            .put(`/api/vacation_houses/${id.value}`, vacationHouse.value, { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
+            .then(response => {
+              vacationHouse.value = response.data;
+              toast.success("Info updated");
+            })
+            .catch(error => {
+              if (error.response.status === 401) {
+                toast.error("Error: Unauthorized access");
+              } else if (error.response.status === 400) {
+                toast.error("Error: Invalid data");
+              }
+            });
+
+        editing.value = false;
+      } else {
+        toast.error("Error: Invalid dates")
+      }
     }
 
     function createOffer() {
