@@ -61,7 +61,6 @@
       <div v-if="this.displayType==1">
         <div class="list-entities" v-for="(ship,index) in this.filteredShips" @Click="selectEntity(ship)" v-bind:index="index" :key="ship.id"
             v-bind="{selected: selectedEntity.id===ship.id}">
-        
         <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + ship.img" @click="jumpToPreview(ship)" style="width: 200px; height: 150px; cursor: pointer"></div>
           <div class="entity-name"><h4 @click="jumpToPreview(ship)" style="cursor: pointer; font-weight: bold">{{ ship.name }}</h4>
             <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ ship.address }} </div>
@@ -351,7 +350,7 @@ export default {
 }
 
 .left-bar {
-  margin-top: 0px;
+  margin-top: 0;
   padding: 10px;
   border-radius: 5px;
   float: left;
@@ -371,7 +370,7 @@ export default {
 
 div.star-ratings {
   padding: 0;
-  margin: 0 5px;
+  margin: 0;
   float: left;
 }
 
@@ -394,7 +393,6 @@ div.star-ratings {
 }
 
 .entity-description {
-  margin-left: 5px;
   color: #585858;
   max-width: 280px;
   text-overflow: ellipsis;
