@@ -7,9 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -51,6 +49,12 @@ public abstract class User implements UserDetails {
     @Column(name="phone_num",nullable = false)
     private String phoneNum;
 
+    @Column(name="rating",nullable = false)
+    private Double rating;
+
+    @Column(name = "reviews_number",nullable = false)
+    private Integer reviewsNumber;
+
     @Column(name = "verified", nullable = false)
     private boolean verified;
 
@@ -65,6 +69,9 @@ public abstract class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
+
+    @OneToMany(mappedBy = "rentingOwner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Review> reviews= new HashSet<>();
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
@@ -83,6 +90,8 @@ public abstract class User implements UserDetails {
         this.address = address;
         this.city = city;
         this.country = country;
+        this.rating=0.0;
+        this.reviewsNumber=0;
         this.phoneNum = phoneNum;
         this.verified=false;
         this.enabled=true;
@@ -189,6 +198,19 @@ public abstract class User implements UserDetails {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public void addReview(Review review){
+        reviews.add(review);
+        double ratingSum= this.rating*this.reviewsNumber;
+        this.reviewsNumber++;
+        this.rating=(ratingSum+review.getRating()) / this.reviewsNumber;
+        review.setRentingOwner(this);
+    }
+
+    public void removeReview(Review review){
+        reviews.remove(review);
+        review.setRentingOwner(null);
     }
 
     public List<Role> getRoles() {

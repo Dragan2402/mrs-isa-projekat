@@ -12,5 +12,6 @@ public interface UtilityService {
     boolean containsAll(Map<String, Object> userMap);
 
     String getPictureEncoded(String picturePath);
+
     boolean validateName(String name);
 }

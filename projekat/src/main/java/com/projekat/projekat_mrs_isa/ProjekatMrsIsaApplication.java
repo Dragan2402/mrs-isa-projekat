@@ -320,9 +320,18 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         Review reviewTemp1=new Review(vacationHouseTemp2,clientTemp1,4.6);
         Review reviewTemp2=new Review(vacationHouseTemp2,clientTemp1,5.0,"Sve u fullu, ispostovano");
         Review reviewTemp3=new Review(vacationHouseTemp2,clientTemp1,4.8);
+        Review reviewTemp4=new Review(vacHouseOwnerTemp1,clientTemp1,5.0,"NAJJACI");
+        clientTemp1.addReview(reviewTemp4);
+        vacHouseOwnerTemp1.addReview(reviewTemp4);
+        vacHouseRep.save(vacHouseOwnerTemp1);
+
+
         vacationHouseTemp2.addReview(reviewTemp1);
         vacationHouseTemp2.addReview(reviewTemp2);
         vacationHouseTemp2.addReview(reviewTemp3);
+        clientTemp1.addReview(reviewTemp1);
+        clientTemp1.addReview(reviewTemp2);
+        clientTemp1.addReview(reviewTemp3);
         vacationHouseRep.save(vacationHouseTemp2);
 
         offerRep.save(offerTemp);
@@ -338,10 +347,24 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 Duration.ofDays(3)
         );
 
+        Reservation reservationTemp2 = new Reservation(
+                "Brcko Fic",
+                5,
+                services,
+                50.0,
+                vacationHouseTemp,
+                clientTemp1,
+                LocalDateTime.of(2022,9,24,20,10),
+                Duration.ofDays(3)
+        );
+
         vacationHouseTemp.addReservation(reservationTemp);
         clientTemp1.addReservation(reservationTemp);
         reservationRep.save(reservationTemp);
 
+        vacationHouseTemp.addReservation(reservationTemp2);
+        clientTemp1.addReservation(reservationTemp2);
+        reservationRep.save(reservationTemp2);
 //        System.out.println("Working Directory = " + System.getProperty("user.dir"));
         List<String> pics4=new ArrayList<>();
         pics4.add("pictures/renting_entities/6/1.jpg");

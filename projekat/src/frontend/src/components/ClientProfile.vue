@@ -87,7 +87,7 @@ export default {
         }
        
       });
-      axios.get("/api/clients/loggedClient/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.picture=response.data)).catch((errorP) => {
+      axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.picture=response.data)).catch((errorP) => {
         
         if(errorP.response.status===401){
           //this.$toast.error("Not Logged In");

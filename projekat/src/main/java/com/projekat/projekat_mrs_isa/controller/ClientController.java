@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.controller;
 
 import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
+import com.projekat.projekat_mrs_isa.dto.ReviewDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.service.*;
@@ -22,6 +23,7 @@ import java.io.*;
 import java.nio.file.*;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "api/clients")
 public class ClientController {
 
@@ -33,6 +35,9 @@ public class ClientController {
 
     @Autowired
     private ReservationService reservationService;
+
+    @Autowired
+    private RentingEntityService rentingEntityService;
 
     @Autowired
     private VacationHouseService vacationHouseService;
@@ -49,6 +54,9 @@ public class ClientController {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private ReviewService reviewService;
+
     @GetMapping(value = "/all")
     @PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     public ResponseEntity<List<UserDTO>> getAllClients() {
@@ -63,84 +71,151 @@ public class ClientController {
         UserDTO clientDTO = clientService.findUserDTO(id);
         if (clientDTO == null)
             return new ResponseEntity<UserDTO>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<UserDTO>(clientDTO,HttpStatus.OK);
+        return new ResponseEntity<UserDTO>(clientDTO, HttpStatus.OK);
     }
 
 
-
-
-    @GetMapping(value = "/loggedClient",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/addReviewRE", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<UserDTO> getLoggedClient(Principal clientP) throws Exception{
+    @Transactional
+    public ResponseEntity<Boolean> addReviewRE(Principal clientP, @RequestBody ReviewDTO reviewDTO) {
+        RentingEntity rentingEntity = rentingEntityService.findById(reviewDTO.getRentingEntityId());
+        if (rentingEntity == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        Client client = clientService.findByUsername(clientP.getName());
+        if (client == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        Review review = new Review(rentingEntity, client, reviewDTO.getRating(), reviewDTO.getComment());
+        rentingEntity.addReview(review);
+        client.addReview(review);
+        Review saved = reviewService.save(review);
+        if (saved == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/addReviewRO", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public ResponseEntity<Boolean> addReviewRO(Principal clientP, @RequestBody ReviewDTO reviewDTO) {
+        System.out.println(reviewDTO.getComment());
+        User user = userService.findById(reviewDTO.getRentingOwnerId());
+        if (user == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        Client client = clientService.findByUsername(clientP.getName());
+        if (client == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        Review review = new Review(user, client, reviewDTO.getRating(), reviewDTO.getComment());
+        user.addReview(review);
+        client.addReview(review);
+        Review saved = reviewService.save(review);
+        if (saved == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+
+    @GetMapping(value = "/loggedClient", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<UserDTO> getLoggedClient(Principal clientP) throws Exception {
         UserDTO clientDTO = new UserDTO(clientService.findByUsername(clientP.getName()));
         if (clientDTO == null)
             return new ResponseEntity<UserDTO>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<UserDTO>(clientDTO,HttpStatus.OK);
+        return new ResponseEntity<UserDTO>(clientDTO, HttpStatus.OK);
     }
-    @GetMapping(value = "/loggedClient/reservationHistory",produces = MediaType.APPLICATION_JSON_VALUE)
+
+
+    @GetMapping(value = "/loggedClient/reservationHistory", produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<List<ReservationDTO>> getLoggedClientReservationHistory(Principal clientP) throws Exception{
+    public ResponseEntity<List<ReservationDTO>> getLoggedClientReservationHistory(Principal clientP) throws Exception {
         Client client = clientService.findByUsername(clientP.getName());
         if (client == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        List<ReservationDTO> reservationsDtos= new ArrayList<>();
-        for(Reservation reservation : client.getReservations()){
-            if(reservation.getStart().plus(reservation.getDuration()).compareTo(LocalDateTime.now())<0){
-                ReservationDTO reservationDTO=new ReservationDTO(reservation);
-                reservationDTO.setRentingEntityOwmer(getRentingEntityOwner(reservation.getRentingEntity()));
+        List<ReservationDTO> reservationsDtos = new ArrayList<>();
+        for (Reservation reservation : client.getReservations()) {
+            if (reservation.getStart().plus(reservation.getDuration()).compareTo(LocalDateTime.now()) < 0) {
+                ReservationDTO reservationDTO = new ReservationDTO(reservation);
+                reservationDTO.setRentingEntityOwnerId(getRentingEntityOwnerId(reservation.getRentingEntity()));
+                reservationDTO.setRentingEntityOwner(getRentingEntityOwner(reservation.getRentingEntity()));
+                String picturePath = "pictures/renting_entities/0.png";
+                if (reservation.getRentingEntity().getPictures().size() > 0) {
+                    picturePath = reservation.getRentingEntity().getPictures().get(0);
+                }
+                reservationDTO.setImg(utilityService.getPictureEncoded(picturePath));
                 reservationsDtos.add(reservationDTO);
-                System.out.println(reservation);
             }
         }
-        return new ResponseEntity<>(reservationsDtos,HttpStatus.OK);
+        return new ResponseEntity<>(reservationsDtos, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/loggedClient/reservations", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<List<ReservationDTO>> getLoggedClientReservations(Principal clientP) throws Exception {
+        Client client = clientService.findByUsername(clientP.getName());
+        if (client == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        List<ReservationDTO> reservationsDtos = new ArrayList<>();
+        for (Reservation reservation : client.getReservations()) {
+            if (reservation.getStart().plus(reservation.getDuration()).compareTo(LocalDateTime.now()) >= 0) {
+                ReservationDTO reservationDTO = new ReservationDTO(reservation);
+                reservationDTO.setRentingEntityOwnerId(getRentingEntityOwnerId(reservation.getRentingEntity()));
+                reservationDTO.setRentingEntityOwner(getRentingEntityOwner(reservation.getRentingEntity()));
+                String picturePath = "pictures/renting_entities/0.png";
+                if (reservation.getRentingEntity().getPictures().size() > 0) {
+                    picturePath = reservation.getRentingEntity().getPictures().get(0);
+                }
+                reservationDTO.setImg(utilityService.getPictureEncoded(picturePath));
+                reservationsDtos.add(reservationDTO);
+            }
+        }
+        return new ResponseEntity<>(reservationsDtos, HttpStatus.OK);
     }
 
 
-    @PostMapping(value = "/loggedClient",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/loggedClient", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<UserDTO> updateLoggedClient(Principal clientP,@RequestBody UserDTO userDTO) throws Exception{
+    public ResponseEntity<UserDTO> updateLoggedClient(Principal clientP, @RequestBody UserDTO userDTO) throws Exception {
 
-        if(utilityService.validateName(userDTO.getFirstName()) && utilityService.validateName(userDTO.getLastName())
-               && userDTO.getAddress().length()>2 &&
-                userDTO.getCity().length()>2 && userDTO.getCountry().length()>2 && utilityService.validatePhoneNum(userDTO.getPhoneNum())){
+        if (utilityService.validateName(userDTO.getFirstName()) && utilityService.validateName(userDTO.getLastName())
+                && userDTO.getAddress().length() > 2 &&
+                userDTO.getCity().length() > 2 && userDTO.getCountry().length() > 2 && utilityService.validatePhoneNum(userDTO.getPhoneNum())) {
             Client clientToUpdate = clientService.findByUsername(clientP.getName());
             clientToUpdate.update(userDTO);
             Client updatedCLient = clientService.save(clientToUpdate);
 
 
-
             if (updatedCLient == null)
-                return new  ResponseEntity<UserDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
-            return new  ResponseEntity<UserDTO>(new UserDTO(updatedCLient),HttpStatus.OK);}
-        else{
+                return new ResponseEntity<UserDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<UserDTO>(new UserDTO(updatedCLient), HttpStatus.OK);
+        } else {
             System.out.println("DATA IS BAD");
-            return new ResponseEntity<>(new UserDTO(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new UserDTO(), HttpStatus.BAD_REQUEST);
         }
     }
 
 
-
-    @PostMapping(value = "/loggedClient/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE )
+    @PostMapping(value = "/loggedClient/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('CLIENT')")
     @Transactional
-    public ResponseEntity<String> updateLoggedClientPicture(Principal clientP,@RequestPart("image") MultipartFile image) throws IOException {
+    public ResponseEntity<String> updateLoggedClientPicture(Principal clientP, @RequestPart("image") MultipartFile image) throws IOException {
 
         Client clientToUpdate = clientService.findByUsername(clientP.getName());
-        String pictureName="pictures/user_pictures/"+clientToUpdate.getId().toString()+".png";
+        String pictureName = "pictures/user_pictures/" + clientToUpdate.getId().toString() + ".png";
         clientToUpdate.setPicture(pictureName);
-        Client updatedClient=clientService.save(clientToUpdate);
+        Client updatedClient = clientService.save(clientToUpdate);
 
-        boolean resp=saveFile("src/main/resources/",pictureName,image);
-        boolean resp2=saveFile("target/classes/",pictureName,image);
-        if (resp && resp2){
-            return new ResponseEntity<>(utilityService.getPictureEncoded(updatedClient.getPicture()),HttpStatus.OK);
-        }else {
+        boolean resp = saveFile("src/main/resources/", pictureName, image);
+        boolean resp2 = saveFile("target/classes/", pictureName, image);
+        if (resp && resp2) {
+            return new ResponseEntity<>(utilityService.getPictureEncoded(updatedClient.getPicture()), HttpStatus.OK);
+        } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    public boolean saveFile(String uploadDir, String fileName,MultipartFile multipartFile) throws IOException {
+    public boolean saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
         Path uploadPath = Paths.get(uploadDir);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
@@ -150,8 +225,7 @@ public class ClientController {
             Path filePath = uploadPath.resolve(fileName);
             try {
                 Files.delete(filePath);
-            }
-            catch (Exception ignored){
+            } catch (Exception ignored) {
 
             }
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
@@ -162,17 +236,29 @@ public class ClientController {
         }
     }
 
-    private String getRentingEntityOwner(RentingEntity rentingEntity){
+    private String getRentingEntityOwner(RentingEntity rentingEntity) {
 
 
-            if(rentingEntity.getREType().equals("VH")){
-                return vacationHouseService.findById(rentingEntity.getId()).getVacationHouseOwner().getUsername();
-            }else if(rentingEntity.getREType().equals("FC")){
-                return fishingClassService.findById(rentingEntity.getId()).getFishingInstructor().getUsername();
-            }
-            else{
-                return shipService.findById(rentingEntity.getId()).getShipOwner().getUsername();
-            }
+        if (rentingEntity.getREType().equals("VH")) {
+            return vacationHouseService.findById(rentingEntity.getId()).getVacationHouseOwner().getUsername();
+        } else if (rentingEntity.getREType().equals("FC")) {
+            return fishingClassService.findById(rentingEntity.getId()).getFishingInstructor().getUsername();
+        } else {
+            return shipService.findById(rentingEntity.getId()).getShipOwner().getUsername();
+        }
+
+    }
+
+    private Long getRentingEntityOwnerId(RentingEntity rentingEntity) {
+
+
+        if (rentingEntity.getREType().equals("VH")) {
+            return vacationHouseService.findById(rentingEntity.getId()).getVacationHouseOwner().getId();
+        } else if (rentingEntity.getREType().equals("FC")) {
+            return fishingClassService.findById(rentingEntity.getId()).getFishingInstructor().getId();
+        } else {
+            return shipService.findById(rentingEntity.getId()).getShipOwner().getId();
+        }
 
     }
 

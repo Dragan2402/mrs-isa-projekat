@@ -15,6 +15,10 @@
     background-color: lightgray;
     padding: 50px;
 }
+.input-group-text {
+    width: 100%;
+    margin: auto;
+  }
 
 /*.user-data-div div{*/
 /*    margin: auto;*/

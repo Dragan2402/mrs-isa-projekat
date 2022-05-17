@@ -7,6 +7,7 @@ import com.projekat.projekat_mrs_isa.model.Offer;
 import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
 import com.projekat.projekat_mrs_isa.service.OfferService;
+import com.projekat.projekat_mrs_isa.service.UtilityService;
 import com.projekat.projekat_mrs_isa.service.VacationHouseService;
 import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -34,6 +35,8 @@ public class VacationHouseController {
     @Autowired
     private OfferService offerService;
     @Autowired
+    private UtilityService utilityService;
+    @Autowired
     private ResourceLoader resourceLoader;
 
     @GetMapping(value = "/all")
@@ -44,27 +47,14 @@ public class VacationHouseController {
         List<VacationHouseDTO> vacationHouseDTOS=new ArrayList<>();
         for (VacationHouse vacationHouse : vacationHouses){
             VacationHouseDTO vacationHouseDTO= new VacationHouseDTO(vacationHouse);
-            vacationHouseDTO.setImg(encodeImage(vacationHouse));
+            String picturePath="pictures/renting_entities/0.png";
+            if(vacationHouse.getPictures().size()>0){
+                picturePath=vacationHouse.getPictures().get(0);
+            }
+            vacationHouseDTO.setImg(utilityService.getPictureEncoded(picturePath));
             vacationHouseDTOS.add(vacationHouseDTO);
         }
         return new ResponseEntity<>(vacationHouseDTOS, HttpStatus.OK);
-    }
-
-    public String encodeImage(RentingEntity rentingEntity){
-        String picturePath="pictures/renting_entities/0.png";
-        if(rentingEntity.getPictures().size()>0){
-            picturePath=rentingEntity.getPictures().get(0);
-        }
-
-            Resource r = resourceLoader.getResource("classpath:" + picturePath);
-            try {
-                File file = r.getFile();
-                byte[] picture = FileUtils.readFileToByteArray(file);
-                return Base64.encodeBase64String(picture);
-
-            } catch (IOException e) {
-                return "ERROR";
-            }
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -26,7 +26,7 @@ public class Reservation {
     private Integer clientLimit;
 
     @Column(name = "additional_services")
-    @ElementCollection(targetClass=String.class)
+    @ElementCollection(targetClass=String.class,fetch = FetchType.EAGER)
     private List<String> additionalServices = new ArrayList<>();
 
     @Column(name = "price", nullable = false)

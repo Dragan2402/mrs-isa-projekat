@@ -1,10 +1,7 @@
 package com.projekat.projekat_mrs_isa.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.projekat.projekat_mrs_isa.model.FishingClass;
 import com.projekat.projekat_mrs_isa.model.Reservation;
-import com.projekat.projekat_mrs_isa.model.Ship;
-import com.projekat.projekat_mrs_isa.model.VacationHouse;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
@@ -13,12 +10,14 @@ import java.util.List;
 public class ReservationDTO {
     private Long id;
     private String place;
+    private String img;
     private Integer clientLimit;
     private List<String> additionalServices;
     private Double price;
     private Long rentingEntityId;
     private String rentingEntityName;
-    private String rentingEntityOwmer;
+    private Long rentingEntityOwnerId;
+    private String rentingEntityOwner;
     private Long clientId;
     @JsonFormat(pattern = ("dd.MM.yyyy HH:mm"))
     private LocalDateTime start;
@@ -117,15 +116,31 @@ public class ReservationDTO {
         return rentingEntityName;
     }
 
-    public String getRentingEntityOwmer() {
-        return rentingEntityOwmer;
+    public String getRentingEntityOwner() {
+        return rentingEntityOwner;
     }
 
-    public void setRentingEntityOwmer(String rentingEntityOwmer) {
-        this.rentingEntityOwmer = rentingEntityOwmer;
+    public void setRentingEntityOwner(String rentingEntityOwner) {
+        this.rentingEntityOwner = rentingEntityOwner;
     }
 
     public void setRentingEntityName(String rentingEntityName) {
         this.rentingEntityName = rentingEntityName;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public Long getRentingEntityOwnerId() {
+        return rentingEntityOwnerId;
+    }
+
+    public void setRentingEntityOwnerId(Long rentingEntityOwnerId) {
+        this.rentingEntityOwnerId = rentingEntityOwnerId;
     }
 }

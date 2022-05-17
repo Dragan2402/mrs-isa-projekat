@@ -60,6 +60,7 @@ export default {
       rentingEntity: {},
       selectedOffer: {},
       selected:false,
+      filter: "",
       pictures:[],
       index:0,      
       offers: [],

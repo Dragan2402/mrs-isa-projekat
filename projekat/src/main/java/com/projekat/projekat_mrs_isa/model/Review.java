@@ -14,8 +14,12 @@ public class Review {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "renting_entity_id",nullable = false)
+    @JoinColumn(name = "renting_entity_id")
     private RentingEntity rentingEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "renting_owner_id")
+    private User rentingOwner;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name= "client_id",nullable = false)
@@ -34,6 +38,7 @@ public class Review {
 
     public Review(RentingEntity rentingEntity,Client client,Double rating){
         this.rentingEntity=rentingEntity;
+        this.rentingOwner=null;
         this.client=client;
         this.rating=rating;
         this.comment="";
@@ -42,12 +47,21 @@ public class Review {
 
     public Review(RentingEntity rentingEntity,Client client,Double rating,String comment){
         this.rentingEntity=rentingEntity;
+        this.rentingOwner=null;
         this.client=client;
         this.rating=rating;
         this.comment=comment;
         this.deleted=false;
     }
 
+    public Review(User rentingEntityOwner,Client client,Double rating,String comment){
+        this.rentingOwner=rentingEntityOwner;
+        this.rentingEntity=null;
+        this.client=client;
+        this.rating=rating;
+        this.comment=comment;
+        this.deleted=false;
+    }
 
     public Long getId() {
         return id;
@@ -63,6 +77,14 @@ public class Review {
 
     public void setRentingEntity(RentingEntity rentingEntity) {
         this.rentingEntity = rentingEntity;
+    }
+
+    public User getRentingOwner() {
+        return rentingOwner;
+    }
+
+    public void setRentingOwner(User rentingOwner) {
+        this.rentingOwner = rentingOwner;
     }
 
     public Client getClient() {
