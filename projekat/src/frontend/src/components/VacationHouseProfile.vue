@@ -59,7 +59,9 @@
         <input v-model="vacationHouse.bedsPerRoom" type="text" class="form-control" aria-label="Username" aria-describedby="bedsPerRoom">
       </div>
 
-      <Datepicker v-model="availabilityInterval" :format="formatRange" range/>
+<!--      <Datepicker v-model="availabilityInterval" :format="formatRange" range/>-->
+
+      <v-date-picker v-model="availabilityInterval" mode="dateTime" is-range ></v-date-picker>
       <br>
       <button @click="saveEdit()" style="margin-right: 20px;" class="btn btn-primary">Save</button>
       <button @click="cancel()" class="btn btn-primary">Cancel</button>
@@ -93,13 +95,14 @@
     </div>
   </div>
 
+  <v-calendar :from-date="fromDate" :attributes="calendarAttributes" />
+
 </template>
 
 <script>
 import axios from "axios";
 import { useRoute } from 'vue-router';
 import {getCurrentInstance, onMounted, ref} from 'vue';
-import moment from "moment";
 
 export default {
   name: "VacationHouseProfile",
@@ -135,25 +138,130 @@ export default {
     let pictures = ref([]);
     let editing = ref(false);
     let creatingOffer = ref(false);
-    let availabilityInterval = ref();
+    let availabilityInterval = ref({
+      start: undefined,
+      end: undefined
+    });
     let offerInterval = ref();
+
+    let calendarAttributes = ref([
+      {
+        key: 'available',
+        highlight: {
+          start: { fillMode: 'outline' },
+          base: { fillMode: 'light' },
+          end: { fillMode: 'outline' }
+        },
+        dates: {
+          start: undefined,
+          end: undefined
+        }
+      }
+    ]);
+    let fromDate = ref();
 
     onMounted(() => {
       if (route.params.id !== undefined) {
         id.value = route.params.id;
       }
       axios
-        .get(`/api/vacation_houses/${id.value}`)
-        .then(response => (vacationHouse.value = response.data));
+        .get(`/api/vacation_houses/${id.value}`, {headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
+        .then(response => {
+          vacationHouse.value = response.data;
+          let from = stringToDateTime(vacationHouse.value.availableFrom);
+          let to = stringToDateTime(vacationHouse.value.availableTo);
+          availabilityInterval.value.start = from;
+          availabilityInterval.value.end = to;
+          calendarAttributes.value[0].dates.start = from;
+          calendarAttributes.value[0].dates.end = to;
+          fromDate.value = availabilityInterval.value.start;
+        });
 
       axios
-        .get(`/api/vacation_houses/${id.value}/pictures/all`)
+        .get(`/api/vacation_houses/${id.value}/pictures/all`, {headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
         .then(response => {
           for (let i = 0; i < response.data.length; i++) {
             pictures.value.push(response.data[i]);
           }
         });
     });
+
+    function toggleEdit() {
+      editing.value = true;
+    }
+
+    function toggleCreatingOffer() {
+      creatingOffer.value = true;
+    }
+
+    function cancel() {
+      editing.value = false;
+      creatingOffer.value = false;
+    }
+
+    function saveEdit(){
+      vacationHouse.value.availableFrom = dateTimeToString(availabilityInterval.value.start);
+      vacationHouse.value.availableTo = dateTimeToString(availabilityInterval.value.end);
+
+      axios
+          .put(`/api/vacation_houses/${id.value}`, vacationHouse.value, {headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
+          .then(response => {
+            vacationHouse.value = response.data;
+            toast.success("Info updated");
+          });
+
+      editing.value = false;
+    }
+
+    function createOffer() {
+      offer.value.start = dateTimeToString(offerInterval.value[0]);
+      offer.value.duration = offerInterval.value[1] - offerInterval.value[0];
+      offer.value.rentingEntityId = id.value;
+
+      axios
+          .post("/api/offers/new", offer.value, {headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
+          .then(response => {
+            offer.value = response.data;
+            toast.success("Info updated");
+          });
+
+      creatingOffer.value = false;
+    }
+
+    function stringToDateTime(s) {
+      let tokens = s.split(" ");
+      let date = tokens[0];
+      let time = tokens[1];
+
+      tokens = date.split(".");
+      let day = parseInt(tokens[0]);
+      let month = parseInt(tokens[1]) - 1;
+      let year = parseInt(tokens[2]);
+
+      tokens = time.split(":");
+      let hour = parseInt(tokens[0]);
+      let minute = parseInt(tokens[1]);
+
+      return new Date(year, month, day, hour, minute);
+    }
+
+    function dateTimeToString(dt) {
+      let day = ("0" + dt.getDate()).slice(-2);
+      let month = ("0" + (dt.getMonth() + 1)).slice(-2);
+      let year = dt.getFullYear();
+      let hour = ("0" + dt.getHours()).slice(-2);
+      let minute = ("0" + dt.getMinutes()).slice(-2);
+      return `${day}.${month}.${year} ${hour}:${minute}`;
+    }
+
+    // function parseDate(date) {
+    //   const day = ("0" + date.getDate()).slice(-2);
+    //   const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    //   const year = date.getFullYear();
+    //   const hours = ("0" + date.getHours()).slice(-2);
+    //   const minutes = ("0" + date.getMinutes()).slice(-2);
+    //   return `${day}.${month}.${year} ${hours}:${minutes}`;
+    // }
 
     const formatRange = (dates) => {
       let from = dates[0];
@@ -174,64 +282,6 @@ export default {
       return `${dayFrom}.${monthFrom}.${yearFrom} ${hourFrom}:${minuteFrom} - ${dayTo}.${monthTo}.${yearTo} ${hourTo}:${minuteTo}`
     }
 
-    function toggleEdit() {
-      editing.value = true;
-      let from = moment(vacationHouse.value.availableFrom, "dd.MM.yyyy HH:mm")
-      let to = moment(vacationHouse.value.availableTo, "dd.MM.yyyy HH:mm")
-      availabilityInterval.value = [from, to];
-    }
-
-    function toggleCreatingOffer() {
-      creatingOffer.value = true;
-    }
-
-    function parseDate(date) {
-      const day = ("0" + date.getDate()).slice(-2);
-      const month = ("0" + (date.getMonth() + 1)).slice(-2);
-      const year = date.getFullYear();
-      const hours = ("0" + date.getHours()).slice(-2);
-      const minutes = ("0" + date.getMinutes()).slice(-2);
-      return `${day}.${month}.${year} ${hours}:${minutes}`;
-    }
-
-    function toastMessage() {
-      toast.success("Info updated");
-    }
-
-    function saveEdit(){
-      vacationHouse.value.availableFrom = parseDate(availabilityInterval.value[0]);
-      vacationHouse.value.availableTo = parseDate(availabilityInterval.value[1]);
-
-      axios
-          .put(`/api/vacation_houses/${id.value}`, vacationHouse.value)
-          .then(response => {
-            vacationHouse.value = response.data;
-            toastMessage();
-          });
-
-      editing.value = false;
-    }
-
-    function createOffer() {
-      offer.value.start = parseDate(offerInterval.value[0]);
-      offer.value.duration = offerInterval.value[1] - offerInterval.value[0];
-      offer.value.rentingEntityId = id.value;
-
-      axios
-          .post("/api/offers/new", offer.value)
-          .then(response => {
-            offer.value = response.data;
-            toastMessage();
-          });
-
-      creatingOffer.value = false;
-    }
-
-    function cancel() {
-      editing.value = false;
-      creatingOffer.value = false;
-    }
-
     return {
       id,
       vacationHouse,
@@ -241,11 +291,14 @@ export default {
       creatingOffer,
       availabilityInterval,
       offerInterval,
+      calendarAttributes,
+      fromDate,
       formatRange,
       toggleEdit,
       toggleCreatingOffer,
-      parseDate,
-      toastMessage,
+      // parseDate,
+      stringToDateTime,
+      dateTimeToString,
       saveEdit,
       createOffer,
       cancel

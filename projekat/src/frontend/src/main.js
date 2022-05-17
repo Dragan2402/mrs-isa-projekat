@@ -22,6 +22,8 @@ import vue3StarRatings from "vue3-star-ratings";
 import VueTelInput from 'vue3-tel-input'
 import 'vue3-tel-input/dist/vue3-tel-input.css'
 import './assets/main.css'; //main css
+import 'v-calendar/dist/style.css';
+import VCalendar from 'v-calendar';
 
 
 const routes = [
@@ -45,7 +47,7 @@ const router = new createRouter({
 
 createApp(App)
     .use(router)
-    .use(Toaster, {position: 'top', duration: 2000}).use(vueCountryRegionSelect).use(VueTelInput)
+    .use(Toaster, {position: 'top', duration: 2000}).use(vueCountryRegionSelect).use(VueTelInput).use(VCalendar, {})
     .component('Datepicker', Datepicker).component('PictureInput',PictureInput).component("vue3-star-ratings", vue3StarRatings)
     .mount('#app')
 

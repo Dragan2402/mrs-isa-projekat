@@ -234,7 +234,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         );
 
         vacationHouseTemp.setAvailableFrom(LocalDateTime.of(2022,1,1, 20, 15));
-        vacationHouseTemp.setAvailableTo(LocalDateTime.of(2022,2,1, 20, 30));
+        vacationHouseTemp.setAvailableTo(LocalDateTime.of(2022,6,1, 20, 30));
 
         List<String> pics2 = new ArrayList<>();
         pics2.add("pictures/renting_entities/4/1.jpg");
@@ -256,7 +256,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 2
         );
         vacationHouseTemp2.setAvailableFrom(LocalDateTime.of(2022,6,1, 20, 15));
-        vacationHouseTemp2.setAvailableTo(LocalDateTime.of(2022,9,1, 20, 30));
+        vacationHouseTemp2.setAvailableTo(LocalDateTime.of(2022,10,1, 20, 30));
 
         List<String> pics3=new ArrayList<>();
         pics3.add("pictures/renting_entities/5/1.jpg");
@@ -269,7 +269,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
 
         vacationHouseTemp3.setAvailableFrom(LocalDateTime.of(2022,4,1, 20, 15));
-        vacationHouseTemp3.setAvailableTo(LocalDateTime.of(2022,5,30, 20, 30));
+        vacationHouseTemp3.setAvailableTo(LocalDateTime.of(2022,8,30, 20, 30));
 
         vacHouseOwnerTemp2.addVacationHouse(vacationHouseTemp3);
 
