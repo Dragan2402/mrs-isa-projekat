@@ -103,15 +103,15 @@
         <div class="modal-body">
           <div class="form-floating mb-3">
             <input v-model="offer.place" type="text" class="form-control" id="floatPlace" placeholder="Place">
-            <label for="floatCancellationConditions">Place</label>
+            <label for="floatPlace">Place</label>
           </div>
           <div class="form-floating mb-3">
             <input v-model="offer.clientLimit" type="text" class="form-control" id="floatClientLimit" placeholder="Client limit">
-            <label for="floatRoomsQuantity">Rooms quantity</label>
+            <label for="floatClientLimit">Client limit</label>
           </div>
           <div class="form-floating mb-3">
             <input v-model="offer.price" type="text" class="form-control" id="floatPrice" placeholder="Price">
-            <label for="floatBedsPerRoom">Price</label>
+            <label for="floatPrice">Price</label>
           </div>
           <Datepicker v-model="offerInterval" :format="formatRange" range/>
         </div>
