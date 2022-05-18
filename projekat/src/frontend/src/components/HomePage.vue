@@ -337,7 +337,6 @@ export default {
   border-radius: 5px;
   overflow: hidden;
   margin-bottom: 10px;
-  min-width: 800px;
 }
 
 .entities-div {
@@ -345,6 +344,7 @@ export default {
 }
 
 .main-container {
+  min-width: 1000px;
   width: 60%;
   margin: 20px auto auto;
 }

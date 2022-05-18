@@ -169,6 +169,10 @@ methods:{
 
 .carousel-inner {
   border-radius: 5px;
+}
+
+.w-100 {
+  object-fit: cover;
   height: 500px;
 }
 
@@ -180,7 +184,8 @@ div.star-ratings {
 
 .main-container {
   width: 60%;
-  margin:auto;
+  margin: auto auto 20% auto;
+  min-width: 860px;
 }
 
 .main-heading {
@@ -220,21 +225,15 @@ div.star-ratings {
   border-radius: 5px;
 }
 
-.main-offer-container {
-  margin-bottom: 30%;
-}
-
 .inner-offer-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-gap: 10px;
 }
 
 .offer {
   border: 1px solid darkgrey;
-  margin: 5px;
   border-radius: 5px;
-  flex: 0 0 49%;
 }
 
 .offer-description {

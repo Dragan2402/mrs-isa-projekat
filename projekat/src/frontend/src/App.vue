@@ -60,6 +60,7 @@ nav {
   margin: auto;
   width: 60%;
   padding-bottom: 0;
+  min-width: 500px;
   }
 
 .navbar-top button {

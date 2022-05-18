@@ -337,6 +337,10 @@ export default {
 
 .carousel-inner {
   border-radius: 5px;
+}
+
+.w-100 {
+  object-fit: cover;
   height: 500px;
 }
 
@@ -348,7 +352,8 @@ div.star-ratings {
 
 .main-container {
   width: 60%;
-  margin:auto;
+  margin: auto auto 20% auto;
+  min-width: 860px;
 }
 
 .main-heading {
