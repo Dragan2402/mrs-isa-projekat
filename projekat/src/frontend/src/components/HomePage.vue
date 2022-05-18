@@ -1,9 +1,4 @@
 <template>
-    <!--<button class="btn btn-primary" @click="goToUserProfile()">User Profile</button>
-    <button class="btn btn-primary" @click="goToFishingClassProfile()">Fishing Class Profile</button>
-    <button class="btn btn-primary" @click="goToVacationHouseProfile()">Vacation House Profile</button>
-    <button class="btn btn-primary" @click="goToShipProfile()">Ship Profile</button>
-    -->
   <div class="main-container">
     <div class="left-bar">
       <h5 style="color: white; font-weight: bold">Search</h5>
@@ -90,6 +85,11 @@
           </div>
         </div>
       </div>
+      <br><br><br><br><br><br>
+      <button class="btn btn-primary" @click="goToUserProfile()">User Profile</button>
+      <button class="btn btn-primary" @click="goToFishingClassProfile()">Fishing Class Profile</button>
+      <button class="btn btn-primary" @click="goToVacationHouseProfile()">Vacation House Profile</button>
+      <button class="btn btn-primary" @click="goToShipProfile()">Ship Profile</button>
     </div>
   </div>
 </template>

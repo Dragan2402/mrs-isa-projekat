@@ -1,8 +1,8 @@
 <template>   
-  <div style="width: 60%; margin:auto;" class="main-container" v-if="loaded">
-    <h3 style="font-weight: bold; margin: 10px 0 0 0">{{rentingEntity.name}}</h3>
-    <vue3-star-ratings style="margin-right: 5px" class="star-ratings" v-model="rentingEntity.rating" starSize="22"  :showControl=false :disableClick=true :step=0 />
-    <h5 style="margin-top: 3px">({{rentingEntity.reviewsNumber}})</h5>
+  <div class="main-container" v-if="loaded">
+    <h3 class="main-heading">{{rentingEntity.name}}</h3>
+    <vue3-star-ratings class="star-ratings" v-model="rentingEntity.rating" starSize="22"  :showControl=false :disableClick=true :step=0 />
+    <h5 class="star-heading">({{rentingEntity.reviewsNumber}})</h5>
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
@@ -21,46 +21,46 @@
         <span class="visually-hidden">Next</span>
       </button>
     </div>
-    <div style="display:flex; margin-top: 10px">
-      <div style="float:left; width: 65%; overflow: hidden; margin-top: 10px">
-        <div><i class="bi bi-geo-alt-fill"></i> {{rentingEntity.address}}</div>
-        <div><i class="bi bi-info-circle-fill"></i> {{rentingEntity.promoDescription}}</div>
-        <div><i class="bi bi-exclamation-diamond-fill"></i> {{rentingEntity.behaviourRules}}</div>
-        <div><i class="bi bi-cash"></i> {{rentingEntity.priceList}} per day</div>
+    <div class="main-description">
+      <div class="inner-description">
+        <div><b>Address: </b> {{rentingEntity.address}}</div>
+        <div><b>Description: </b> {{rentingEntity.promoDescription}}</div>
+        <div><b>Behaviour rules: </b> {{rentingEntity.behaviourRules}}</div>
+        <div><b>Price: </b> {{rentingEntity.priceList}} per day</div>
         <div><b>Additional info: </b>{{rentingEntity.additionalInfo}}</div>
         <div><b>Cancellation conditions: </b>{{rentingEntity.cancellationConditions}}</div>
         <div v-if="this.displayType==0"><b>Capacity: </b>{{rentingEntity.roomsQuantity}} rooms, {{rentingEntity.bedsPerRoom}} beds per room</div>
-        <div v-if="this.displayType==1">Type: {{rentingEntity.type}}</div>
-        <div v-if="this.displayType==1">Length: {{rentingEntity.length}}</div>
-        <div v-if="this.displayType==1">Engine Number: {{rentingEntity.engineNumber}}</div>
-        <div v-if="this.displayType==1">Engine Power: {{rentingEntity.enginePower}}</div>
-        <div v-if="this.displayType==1">Top Speed: {{rentingEntity.topSpeed}}</div>
-        <div v-if="this.displayType==1">Client Limit: {{rentingEntity.clientLimit}}</div>
+        <div v-if="this.displayType==1"><b>Type: </b>{{rentingEntity.type}}</div>
+        <div v-if="this.displayType==1"><b>Length: </b>{{rentingEntity.length}}</div>
+        <div v-if="this.displayType==1"><b>Engine Number: </b>{{rentingEntity.engineNumber}}</div>
+        <div v-if="this.displayType==1"><b>Engine Power: </b>{{rentingEntity.enginePower}}</div>
+        <div v-if="this.displayType==1"><b>Top Speed: </b>{{rentingEntity.topSpeed}}</div>
+        <div v-if="this.displayType==1"><b>Client Limit: </b>{{rentingEntity.clientLimit}}</div>
         <div v-if="this.displayType==2"><b>Instructor biography: </b>{{rentingEntity.instructorBiography}}</div>
         <div v-if="this.displayType==2"><b>Client limit: </b>{{rentingEntity.clientLimit}}</div>
       </div>
-      <div style="float: right; width: 35%; overflow: hidden">
-        <iframe style="width: 400px; height: 250px; border-radius: 5px" v-bind:src="'https://maps.google.com/maps?q=' + rentingEntity.address + '&t=&z=13&ie=UTF8&iwloc=&output=embed'"></iframe>
+      <div class="google-map-container">
+        <iframe class="google-map" v-bind:src="'https://maps.google.com/maps?q=' + rentingEntity.address + '&t=&z=13&ie=UTF8&iwloc=&output=embed'"></iframe>
       </div>
     </div>
     <hr>
-    <div style="margin-bottom: 30%">
+    <div class="main-offer-container">
       <h4 v-if="this.offers.length !== 0">Offers:</h4>
-      <div style="display: flex; flex-direction: row; flex-wrap: wrap">
-        <div style="border: 1px solid darkgrey; margin: 5px; border-radius: 5px; flex: 0 0 49%" v-for="(offer, index) in this.offers" @Click="selectOffer(offer, index)"
+      <div class="inner-offer-container">
+        <div class="offer" v-for="(offer, index) in this.offers" @Click="selectOffer(offer, index)"
              v-bind:index="index" :key="offer.id" v-bind="{selected: selectedOffer.id===offer.id}">
-          <div style="margin: 5px; display: flex">
-            <div style="float: left; width: 60%">
-              <div><i class="bi bi-geo-alt-fill"></i> {{offer.place}}</div>
-              <div><i class="bi bi-cash"></i> {{offer.price}}</div>
+          <div class="offer-description">
+            <div class="offer-left">
+              <div><b>Address: </b> {{offer.place}}</div>
+              <div><b>Price: </b> {{offer.price}}</div>
               <div><b>Client limit: </b>{{offer.clientLimit}}</div>
               <div><b>Starting at: </b>{{offer.start}}</div>
               <div><b>Duration: </b>{{msToTime(offer.duration)}}</div>
               <div v-if="offer.additionalServices.length != 0"> <b>Additional Services:</b>
-                <div style="margin-left: 10px" v-for="service in offer.additionalServices" :key="service"> {{service}}</div>
+                <div class="additional-service" v-for="service in offer.additionalServices" :key="service"> {{service}}</div>
               </div>
             </div>
-            <div style="float: right; width: 40%; align-items: center; display: flex; overflow: hidden">
+            <div class="offer-right">
               <button class="custom-btn button-primary" @click="makeReservation(offer, index)">Make a reservation</button>
             </div>
           </div>
@@ -176,6 +176,87 @@ div.star-ratings {
   padding: 0;
   margin: 0;
   float: left;
+}
+
+.main-container {
+  width: 60%;
+  margin:auto;
+}
+
+.main-heading {
+  font-weight: bold;
+  margin: 10px 0 0 0;
+}
+
+.star-ratings {
+  margin-right: 5px;
+}
+
+.star-heading {
+  margin-top: 3px;
+}
+
+.main-description {
+  display:flex;
+  margin-top: 17px;
+}
+
+.inner-description {
+  margin-right: 50px;
+  float:left;
+  width: 65%;
+  overflow: hidden;
+}
+
+.google-map-container {
+  display: flex;
+  float: right;
+  width: 35%;
+  overflow: hidden;
+}
+
+.google-map {
+  width: 400px;
+  border-radius: 5px;
+}
+
+.main-offer-container {
+  margin-bottom: 30%;
+}
+
+.inner-offer-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.offer {
+  border: 1px solid darkgrey;
+  margin: 5px;
+  border-radius: 5px;
+  flex: 0 0 49%;
+}
+
+.offer-description {
+  margin: 5px;
+  display: flex;
+}
+
+.offer-left {
+  float: left;
+  width: 60%;
+}
+
+.additional-service {
+  margin-left: 10px;
+}
+
+.offer-right {
+  float: right;
+  width: 40%;
+  align-items: center;
+  display: flex;
+  overflow: hidden;
 }
 
 </style>
