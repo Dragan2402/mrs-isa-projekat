@@ -174,7 +174,7 @@ public class ClientController {
     }
 
 
-    @PostMapping(value = "/loggedClient", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/loggedClient", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<UserDTO> updateLoggedClient(Principal clientP, @RequestBody UserDTO userDTO) throws Exception {
 
@@ -196,7 +196,8 @@ public class ClientController {
     }
 
 
-    @PostMapping(value = "/loggedClient/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+
+    @PutMapping(value = "/loggedClient/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE )
     @PreAuthorize("hasRole('CLIENT')")
     @Transactional
     public ResponseEntity<String> updateLoggedClientPicture(Principal clientP, @RequestPart("image") MultipartFile image) throws IOException {

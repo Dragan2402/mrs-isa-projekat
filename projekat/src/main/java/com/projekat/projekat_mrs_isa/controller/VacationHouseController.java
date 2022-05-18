@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "api/vacation_houses")
 public class VacationHouseController {
     @Autowired
@@ -129,10 +130,14 @@ public class VacationHouseController {
         return new ResponseEntity<>(encodedPictures, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('VH_OWNER')")
     @Transactional
     public ResponseEntity<VacationHouseDTO> updateVacationHouse(@RequestBody VacationHouseDTO vacationHouseDTO) {
+        LocalDateTime availableFrom = vacationHouseDTO.getAvailableFrom();
+        LocalDateTime availableTo = vacationHouseDTO.getAvailableTo();
+        if(availableFrom.isAfter(availableTo) || availableFrom.isBefore(LocalDateTime.now()))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         VacationHouse vacationHouse = vacationHouseService.findById(vacationHouseDTO.getId());
         vacationHouse.update(vacationHouseDTO);
         vacationHouse = vacationHouseService.save(vacationHouse);

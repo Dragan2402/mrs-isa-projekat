@@ -270,8 +270,8 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                         "usled uvek prisutne ruže vetrova.",pics3,"NO DRINKING","6000 dinara","Mini bar ne radi","3 dana ranije",2,4);
 
 
-        vacationHouseTemp3.setAvailableFrom(LocalDateTime.of(2022,4,1, 20, 15));
-        vacationHouseTemp3.setAvailableTo(LocalDateTime.of(2022,8,30, 20, 30));
+//        vacationHouseTemp3.setAvailableFrom(LocalDateTime.of(2022,4,1, 20, 15));
+//        vacationHouseTemp3.setAvailableTo(LocalDateTime.of(2022,8,30, 20, 30));
 
         vacHouseOwnerTemp2.addVacationHouse(vacationHouseTemp3);
 
