@@ -1,5 +1,6 @@
 package com.projekat.projekat_mrs_isa.controller;
 
+import com.projekat.projekat_mrs_isa.dto.ComplaintDTO;
 import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
 import com.projekat.projekat_mrs_isa.dto.ReviewDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
@@ -55,6 +56,9 @@ public class ClientController {
     private EmailService emailService;
 
     @Autowired
+    private ComplaintService complaintService;
+
+    @Autowired
     private ReviewService reviewService;
 
     @GetMapping(value = "/all")
@@ -90,6 +94,44 @@ public class ClientController {
         client.addReview(review);
         Review saved = reviewService.save(review);
         if (saved == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/addComplaintRE", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public ResponseEntity<Boolean> addComplaintRE(Principal clientP, @RequestBody ComplaintDTO complaintDTO) {
+        RentingEntity rentingEntity = rentingEntityService.findById(complaintDTO.getRentingEntityId());
+        if (rentingEntity == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        Client client = clientService.findByUsername(clientP.getName());
+        if (client == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        Complaint complaint=new Complaint(client,rentingEntity,complaintDTO.getText());
+        rentingEntity.addComplaint(complaint);
+        client.sendComplaint(complaint);
+        Complaint complaintSaved = complaintService.save(complaint);
+        if (complaintSaved == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/addComplaintRO", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public ResponseEntity<Boolean> addComplaintRO(Principal clientP, @RequestBody ComplaintDTO complaintDTO) {
+        User respodent = userService.findById(complaintDTO.getRespodentId());
+        if (respodent == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        Client client = clientService.findByUsername(clientP.getName());
+        if (client == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        Complaint complaint=new Complaint(client,respodent,complaintDTO.getText());
+        respodent.recieveComplaint(complaint);
+        client.sendComplaint(complaint);
+        Complaint complaintSaved = complaintService.save(complaint);
+        if (complaintSaved == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }

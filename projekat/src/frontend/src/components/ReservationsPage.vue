@@ -66,6 +66,14 @@
           <textarea v-model="commentRatingRO" rows="4" cols="50" placeholder="Comment..."/>
           <button @click="rateRO()">Rate owner</button>
         </div>
+        <div>
+          <textarea v-model="commentReportRE" rows="4" cols="50" placeholder="Comment renting entity..."/>
+          <button @click="reportRE()">Submit Report</button>
+        </div>
+        <div>
+          <textarea v-model="commentReportRO" rows="4" cols="50" placeholder="Comment report owner..."/>
+          <button @click="reportRO()">Submit Report</button>
+        </div>
     </div>
 
   </div>
@@ -94,6 +102,8 @@ export default {
       sortTypeH: 0,
       indexH:0,
       indexR:0,
+      commentReportRE:"",
+      commentReportRO:"",
     }
   },
   mounted() {
@@ -226,6 +236,27 @@ export default {
     axios.post("/api/clients/addReviewRE",review,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Review Added");}else{
       this.$toast.error("Error");
     }})
+  },
+  reportRE(){
+    if(this.commentReportRE.length<5){
+        this.$toast.error("Provide a comment");
+        return;
+      }
+ 
+    const complaint={"id":0,"complainantId":0,"rentingEntityId":this.selectedReservationHistory.rentingEntityId,"respodentId":0,"text":this.commentReportRE};
+    axios.post("/api/clients/addComplaintRE",complaint,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Complaint Sent");}else{
+          this.$toast.error("Error");
+        }})
+  },
+  reportRO(){
+    if(this.commentReportRO.length<5){
+        this.$toast.error("Provide a comment");
+        return;
+      }
+    const complaint={"id":0,"complainantId":0,"rentingEntityId":0,"respodentId":this.selectedReservationHistory.rentingEntityOwnerId,"text":this.commentReportRO};
+    axios.post("/api/clients/addComplaintRO",complaint,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Complaint Sent");}else{
+          this.$toast.error("Error");
+        }})
   },
   includesH(row){
         

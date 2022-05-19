@@ -49,6 +49,9 @@ public abstract class RentingEntity {
     @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Set<Review> reviews = new HashSet<>();
 
+    @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    private Set<Complaint> complaints = new HashSet<>();
+
     @Column(name = "behaviour_rules", nullable = false)
     private String behaviourRules;
 
@@ -168,6 +171,16 @@ public abstract class RentingEntity {
     public void removeReview(Review review){
         reviews.remove(review);
         review.setRentingEntity(null);
+    }
+
+    public void addComplaint(Complaint complaint){
+        complaints.add(complaint);
+        complaint.setRentingEntity(this);
+    }
+
+    public void removeComplaint(Complaint complaint){
+        complaints.remove(complaint);
+        complaint.setRentingEntity(null);
     }
     public String getBehaviourRules() {
         return behaviourRules;

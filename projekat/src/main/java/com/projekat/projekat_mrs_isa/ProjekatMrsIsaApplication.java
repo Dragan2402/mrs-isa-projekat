@@ -3,6 +3,7 @@ package com.projekat.projekat_mrs_isa;
 import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.repository.*;
+import com.projekat.projekat_mrs_isa.service.ComplaintService;
 import com.projekat.projekat_mrs_isa.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -59,6 +60,9 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
     @Autowired
     private PasswordEncoderComponent passwordEncoderComponent;
+
+    @Autowired
+    private ComplaintService complaintService;
 
 
 
@@ -344,6 +348,22 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         clientTemp1.addReview(reviewTemp2);
         clientTemp1.addReview(reviewTemp3);
         vacationHouseRep.save(vacationHouseTemp2);
+
+
+        Complaint complaintTemp1=new Complaint(clientTemp1,vacationHouseTemp,"UZASAN SMRAD UBIO ME");
+        Complaint complaintTemp2=new Complaint(clientTemp1,vacHouseOwnerTemp1,"NULA OD COVJEKA UZAS");
+        Complaint complaintTemp3=new Complaint(vacHouseOwnerTemp1,clientTemp1,"Nije ispostovan dogovor");
+        clientTemp1.sendComplaint(complaintTemp1);
+        vacationHouseTemp.addComplaint(complaintTemp1);
+        clientTemp1.sendComplaint(complaintTemp2);
+        vacHouseOwnerTemp1.recieveComplaint(complaintTemp2);
+        vacHouseOwnerTemp1.sendComplaint(complaintTemp3);
+        clientTemp1.recieveComplaint(complaintTemp3);
+
+        complaintService.save(complaintTemp1);
+        complaintService.save(complaintTemp2);
+        complaintService.save(complaintTemp3);
+
 
         offerRep.save(offerTemp);
 

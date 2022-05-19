@@ -76,6 +76,12 @@ public abstract class User implements UserDetails {
     @OneToMany(mappedBy = "submitter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Request> requests= new HashSet<>();
 
+    @OneToMany(mappedBy = "complainant", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Complaint> complaintsSent= new HashSet<>();
+
+    @OneToMany(mappedBy = "respondent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Complaint> complaintsRecieved= new HashSet<>();
+
     @Column(name = "penalties", nullable = false)
     private Integer penalties;
 
@@ -228,6 +234,26 @@ public abstract class User implements UserDetails {
     public void removeRequest(Request request){
         requests.remove(request);
         request.setSubmitter(null);
+    }
+
+    public void sendComplaint(Complaint complaint){
+        complaintsSent.add(complaint);
+        complaint.setComplainant(this);
+    }
+
+    public void removeSentComplaint(Complaint complaint){
+        complaintsSent.remove(complaint);
+        complaint.setComplainant(null);
+    }
+
+    public void recieveComplaint(Complaint complaint){
+        complaintsRecieved.add(complaint);
+        complaint.setRespondent(this);
+    }
+
+    public void removeRecievedComplaint(Complaint complaint){
+        complaintsRecieved.remove(complaint);
+        complaint.setRespondent(null);
     }
 
     public Integer getPenalties() {
