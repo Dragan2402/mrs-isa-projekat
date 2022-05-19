@@ -48,6 +48,13 @@
         <button style="margin-right: 20px" class="btn btn-primary" @click="saveEdit()">Save</button>
         <button class="btn btn-primary" @click="cancelEdit()">Cancel</button>
       </div>
+      <button  class="btn btn-primary" @click="toggleDelete()">Delete My Account</button>
+      <div v-if="deleting">
+        MODAL FOR CREATING REQUEST<br>
+        <textarea v-model="text" rows="4" cols="50" placeholder="Reason..."/>
+        <button style="margin-right: 20px" class="btn btn-primary" @click="sendDeleteRequest()">Submit</button>
+        <button class="btn btn-primary" @click="cancelDelete()">Cancel</button>
+      </div>
     </div>
 
   </body>
@@ -69,7 +76,9 @@ export default {
       picture: null,
       editing: false,
       validNumber: '',
-      phoneNum: null
+      phoneNum: null,
+      deleting: false,
+      text: ""
 
             }
     },
@@ -105,6 +114,23 @@ export default {
     
           this.editing=true; 
       },
+    toggleDelete(){
+      this.deleting=true;
+    },
+    sendDeleteRequest(){
+      if(this.text.length<5){
+        this.$toast.error("Provide a reason");
+        return;
+      }
+      const request={"id":0,'submitterId':this.user.id,'submitterUsername':this.user.username,'text':this.text,'type':0};
+      console.log(request);
+      axios.post("/api/users/submitRequest",request,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Request Sent");}else{
+          this.$toast.error("Error");
+      }})
+    },
+    cancelDelete(){
+      this.deleting=false;
+    },
     saveEdit(){
       var regExp = /^[A-Za-z]+$/;
       

@@ -34,16 +34,19 @@ export default {
     }
   }, 
   mounted(){    
-     if(localStorage.getItem("jwt")!=null){
+     if(localStorage.getItem("jwt")!="null"){
+        // this.signIn=true;
+        // this.signUp=true;
+        // this.signedIn=false;
+        this.signIn=false;
+        this.signUp=false;
+        this.signedIn=true;      
+        axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {this.loggedUser=response.data});
+        axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.loggedPicture=response.data));
+      }else{
         this.signIn=true;
         this.signUp=true;
         this.signedIn=false;
-      }else{
-        this.signIn=false;
-        this.signUp=false;
-        this.signedIn=true;        
-        axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {this.loggedUser=response.data});
-        axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.loggedPicture=response.data));
       }
   },   
   methods:{

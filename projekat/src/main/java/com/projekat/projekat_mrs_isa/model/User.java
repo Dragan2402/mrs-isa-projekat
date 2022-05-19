@@ -73,6 +73,9 @@ public abstract class User implements UserDetails {
     @OneToMany(mappedBy = "rentingOwner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Review> reviews= new HashSet<>();
 
+    @OneToMany(mappedBy = "submitter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Request> requests= new HashSet<>();
+
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
@@ -211,6 +214,16 @@ public abstract class User implements UserDetails {
     public void removeReview(Review review){
         reviews.remove(review);
         review.setRentingOwner(null);
+    }
+
+    public void addRequest(Request request){
+        requests.add(request);
+        request.setSubmitter(this);
+    }
+
+    public void removeRequest(Request request){
+        requests.remove(request);
+        request.setSubmitter(null);
     }
 
     public List<Role> getRoles() {

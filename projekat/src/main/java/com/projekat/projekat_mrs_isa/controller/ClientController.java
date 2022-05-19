@@ -98,7 +98,7 @@ public class ClientController {
     @PreAuthorize("hasRole('CLIENT')")
     @Transactional
     public ResponseEntity<Boolean> addReviewRO(Principal clientP, @RequestBody ReviewDTO reviewDTO) {
-        System.out.println(reviewDTO.getComment());
+
         User user = userService.findById(reviewDTO.getRentingOwnerId());
         if (user == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

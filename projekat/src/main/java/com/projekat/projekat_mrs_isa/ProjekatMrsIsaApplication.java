@@ -4,6 +4,7 @@ import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.repository.*;
 import com.projekat.projekat_mrs_isa.service.EmailService;
+import com.projekat.projekat_mrs_isa.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -53,6 +54,9 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
     @Autowired
     private ReviewRepository reviewRepository;
+
+    @Autowired
+    private RequestService requestService;
 
     @Autowired
     private EmailService emailService;
@@ -423,9 +427,20 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         fishingInstructorTemp.addFishingClass(fishingClassTemp2);
         fishingClassRep.save(fishingClassTemp2);
 
+
+        Request requestTemp=new Request(clientTemp1,"Text",RequestType.DELETE_ACCOUNT);
+        Request requestTemp2=new Request(vacHouseOwnerTemp1,"Test test",RequestType.BECOME_VH_OWNER);
+        Request requestTemp3=new Request(shipOwnerTemp1,"",RequestType.DELETE_ACCOUNT);
+        requestService.save(requestTemp);
+        requestService.save(requestTemp2);
+        requestService.save(requestTemp3);
+
+
         Path currentRelativePath = Paths.get("");
         String s = currentRelativePath.toAbsolutePath().toString();
         System.out.println("Current absolute path is: " + s);
+
+
 
 
     }
