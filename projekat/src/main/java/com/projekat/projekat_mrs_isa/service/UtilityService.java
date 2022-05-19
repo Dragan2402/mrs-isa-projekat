@@ -1,5 +1,8 @@
 package com.projekat.projekat_mrs_isa.service;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.Map;
 
 public interface UtilityService {
@@ -14,4 +17,6 @@ public interface UtilityService {
     String getPictureEncoded(String picturePath);
 
     boolean validateName(String name);
+
+    boolean saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException;
 }

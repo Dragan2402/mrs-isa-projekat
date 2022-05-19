@@ -13,6 +13,7 @@
         <p>City: {{user.city}}</p>
         <p>Country: {{user.country}}</p>
         <p>Phone Number: {{user.phoneNum}} </p>
+        <p>Penalties: {{user.penalties}}</p>
       </div>
       <div v-else class="user-data-div">
         <img v-bind:src="'data:image/jpeg;base64,' + picture" style="width: 300px; height: 200px;">     

@@ -76,6 +76,9 @@ public abstract class User implements UserDetails {
     @OneToMany(mappedBy = "submitter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Request> requests= new HashSet<>();
 
+    @Column(name = "penalties", nullable = false)
+    private Integer penalties;
+
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
@@ -95,6 +98,7 @@ public abstract class User implements UserDetails {
         this.country = country;
         this.rating=0.0;
         this.reviewsNumber=0;
+        this.penalties=0;
         this.phoneNum = phoneNum;
         this.verified=false;
         this.enabled=true;
@@ -224,6 +228,20 @@ public abstract class User implements UserDetails {
     public void removeRequest(Request request){
         requests.remove(request);
         request.setSubmitter(null);
+    }
+
+    public Integer getPenalties() {
+        return penalties;
+    }
+
+    public void setPenalties(Integer penalties) {
+        this.penalties = penalties;
+    }
+
+    public void addPenalty(){
+        if(this.penalties<3){
+            this.penalties++;
+        }
     }
 
     public List<Role> getRoles() {

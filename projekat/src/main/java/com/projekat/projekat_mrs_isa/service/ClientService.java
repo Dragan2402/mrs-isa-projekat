@@ -36,4 +36,6 @@ public interface ClientService {
     Client findByUsername(String name);
 
     Client addClient(String email, String username, String password, String picture, String firstName, String lastName, String address, String city, String country, String phoneNum);
+
+    void resetPenalties();
 }

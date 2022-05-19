@@ -1,5 +1,6 @@
 package com.projekat.projekat_mrs_isa.dto;
 
+import com.projekat.projekat_mrs_isa.model.Client;
 import com.projekat.projekat_mrs_isa.model.User;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,19 +14,22 @@ public class UserDTO {
     private String city;
     private String country;
     private String phoneNum;
+    private Integer penalties;
 
-    public UserDTO(){}
+    public UserDTO() {
+    }
 
-    public UserDTO(Long id,String username, String email, String firstName,String lastName, String address, String city, String country, String phoneNum) {
+    public UserDTO(Long id, String username, String email, String firstName, String lastName, String address, String city, String country, String phoneNum) {
         this.id = id;
         this.email = email;
-        this.username= username;
+        this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.city = city;
         this.country = country;
         this.phoneNum = phoneNum;
+        this.penalties = 0;
     }
 
     public UserDTO(@NotNull User user) {
@@ -38,7 +42,9 @@ public class UserDTO {
         city = user.getCity();
         country = user.getCountry();
         phoneNum = user.getPhoneNum();
+        penalties = user.getPenalties();
     }
+
 
     public Long getId() {
         return id;
@@ -112,5 +118,11 @@ public class UserDTO {
         this.phoneNum = phoneNum;
     }
 
+    public Integer getPenalties() {
+        return penalties;
+    }
 
+    public void setPenalties(Integer penalties) {
+        this.penalties = penalties;
+    }
 }

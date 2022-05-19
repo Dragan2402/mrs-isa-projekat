@@ -8,9 +8,15 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Map;
 
 @Service
@@ -21,13 +27,11 @@ public class UtilityServiceImpl implements UtilityService {
     @Override
     public boolean validateName(String name) {
         if (name.length() < 2 || name.length() > 20) {
-            System.out.println("Validating name: " + name + " failed. Name not 2-20 char long");
             return false;
         }
         char[] chars = name.toCharArray();
         for (char c : chars) {
             if (!Character.isLetter(c)) {
-                System.out.println("Validating name: " + name + " failed. Char " + c + " not a letter");
                 return false;
             }
         }
@@ -37,23 +41,21 @@ public class UtilityServiceImpl implements UtilityService {
     @Override
     public boolean validateEmail(String email) {
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-        if (!email.matches(regex))
-            System.out.println("Validating email: " + email + " failed. Email not matching the regex");
         return email.matches(regex);
     }
 
     @Override
     public boolean validatePasswords(String password, String confirmPassword) {
         if (password.length() < 5 || password.length() > 20) {
-            System.out.println("Validating password failed. Password not 5-20 char long");
+
             return false;
         }
         if (!password.matches("^[0-9A-Za-z]+$")) {
-            System.out.println("Validating password failed. Password does not match the regex");
+
             return false;
         }
         if (!password.equals(confirmPassword)) {
-            System.out.println("Validating password failed. Passwords do not match");
+
             return false;
         }
         return true;
@@ -62,7 +64,7 @@ public class UtilityServiceImpl implements UtilityService {
     @Override
     public boolean validatePhoneNum(String phoneNum) {
         if (!phoneNum.matches("^\\+(?:[0-9] ?){6,14}[0-9]$")) {
-            System.out.println("Validating phone number failed. Phone number " + phoneNum + "does not match the regex");
+
             return false;
         }
         return true;
@@ -89,4 +91,27 @@ public class UtilityServiceImpl implements UtilityService {
             return null;
         }
     }
+
+    @Override
+    public boolean saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
+        Path uploadPath = Paths.get(uploadDir);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+            Path filePath = uploadPath.resolve(fileName);
+            try {
+                Files.delete(filePath);
+            } catch (Exception ignored) {
+
+            }
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            return true;
+        } catch (IOException ioe) {
+            throw new IOException("Could not save image file: " + fileName, ioe);
+
+        }
+    }
+
 }

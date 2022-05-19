@@ -56,6 +56,14 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public void resetPenalties() {
+        for(Client client : clientRepository.findAll()){
+            client.setPenalties(0);
+            clientRepository.save(client);
+        }
+    }
+
+    @Override
     public Client findByUsername(String name) {
         return clientRepository.findByUsername(name);
 

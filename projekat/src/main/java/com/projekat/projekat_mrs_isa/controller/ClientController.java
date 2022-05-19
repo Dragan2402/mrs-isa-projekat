@@ -118,10 +118,11 @@ public class ClientController {
     @GetMapping(value = "/loggedClient", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<UserDTO> getLoggedClient(Principal clientP) throws Exception {
-        UserDTO clientDTO = new UserDTO(clientService.findByUsername(clientP.getName()));
-        if (clientDTO == null)
-            return new ResponseEntity<UserDTO>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<UserDTO>(clientDTO, HttpStatus.OK);
+        Client logged=clientService.findByUsername(clientP.getName());
+        if(logged==null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        UserDTO clientDTO = new UserDTO(logged);
+        return new ResponseEntity<>(clientDTO, HttpStatus.OK);
     }
 
 
@@ -207,33 +208,12 @@ public class ClientController {
         clientToUpdate.setPicture(pictureName);
         Client updatedClient = clientService.save(clientToUpdate);
 
-        boolean resp = saveFile("src/main/resources/", pictureName, image);
-        boolean resp2 = saveFile("target/classes/", pictureName, image);
+        boolean resp = utilityService.saveFile("src/main/resources/", pictureName, image);
+        boolean resp2 = utilityService.saveFile("target/classes/", pictureName, image);
         if (resp && resp2) {
             return new ResponseEntity<>(utilityService.getPictureEncoded(updatedClient.getPicture()), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    public boolean saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
-        Path uploadPath = Paths.get(uploadDir);
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-
-        try (InputStream inputStream = multipartFile.getInputStream()) {
-            Path filePath = uploadPath.resolve(fileName);
-            try {
-                Files.delete(filePath);
-            } catch (Exception ignored) {
-
-            }
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-            return true;
-        } catch (IOException ioe) {
-            throw new IOException("Could not save image file: " + fileName, ioe);
-
         }
     }
 

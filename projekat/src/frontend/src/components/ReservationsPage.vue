@@ -28,7 +28,7 @@
 
     <div v-if="selectedR">
 
-      
+      {{selectedReservation}}
       CANCEL TODO
     </div>
     
@@ -76,7 +76,7 @@
 import axios from "axios"
 
 export default {
-  name: "ReservationHistory",
+  name: "ReservationsPage",
    data() {
     return {
       reservationsHistory:[],
@@ -155,7 +155,7 @@ export default {
     }, 
     rateRO(){
        const review={"id":0,'rentingEntityId':this.selectedReservationHistory.rentingEntityId,'rentingOwnerId':this.selectedReservationHistory.rentingEntityOwnerId,'clientId':0,'rating':this.ratingRO,'comment':this.commentRatingRO};
-    axios.post("/api/clients/addReviewRO",review,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Review Added");}else{
+      axios.post("/api/clients/addReviewRO",review,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Review Added");}else{
       this.$toast.error("Error");
     }})
 

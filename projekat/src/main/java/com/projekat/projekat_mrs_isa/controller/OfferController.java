@@ -11,12 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.ArrayList;
 
 @RestController
+@CrossOrigin
 @RequestMapping("api/offers")
 public class OfferController {
     @Autowired
@@ -35,6 +38,7 @@ public class OfferController {
     private EmailService emailService;
 
     @PostMapping(value = "/new", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     @Transactional
     public ResponseEntity<OfferDTO> createOffer(@RequestBody OfferDTO offerDTO) {
         Long rentingEntityId = offerDTO.getRentingEntityId();
@@ -47,13 +51,19 @@ public class OfferController {
 
 
     @GetMapping(value = "/{id}/makeReservation",produces = MediaType.APPLICATION_JSON_VALUE)
-    public  ResponseEntity<Boolean> makeReservation(@PathVariable("id") Long offerId){
+    @PreAuthorize("hasRole('CLIENT')")
+    public  ResponseEntity<Boolean> makeReservation(Principal principal,@PathVariable("id") Long offerId){
         Offer offer = offerService.findById(offerId);
         if(offer==null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Client clientLogged=clientService.findById(2L); //logged user, CHANGE HERE
-
+        Client clientLogged=clientService.findByUsername(principal.getName());
+        if(clientLogged==null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(clientLogged.getPenalties()==3){
+            return new ResponseEntity<>(false,HttpStatus.OK);
+        }
+        System.out.println(clientLogged.getPenalties());
         Reservation reservation= new Reservation(offer.getPlace(),offer.getClientLimit(), new ArrayList<>(offer.getAdditionalServices()),
                 offer.getPrice(),offer.getRentingEntity(),clientLogged,offer.getStart(),offer.getDuration());
         clientLogged.addReservation(reservation);

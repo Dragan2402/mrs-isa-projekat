@@ -60,7 +60,6 @@ export default {
       rentingEntity: {},
       selectedOffer: {},
       selected:false,
-      filter: "",
       pictures:[],
       index:0,      
       offers: [],
@@ -139,7 +138,18 @@ methods:{
     this.selected=false;
   },
   makeReservation(){
-      axios.get(`/api/offers/${this.selectedOffer.id}/makeReservation`).then(response => console.log(response.data)).then(this.$toast.success("Reservation made"));
+   
+     if(this.$root.loggedUser.penalties==3){
+       this.$toast.error("You can not make a reservation. You have 3 penalties. Wait for next month.");
+       return;
+     }
+      axios.get(`/api/offers/${this.selectedOffer.id}/makeReservation`,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {
+        if(response.data==true){
+          this.$toast.success("Reservation made")
+        }else{
+          this.$toast.error("You can not make a reservation. You have 3 penalties. Wait for next month.");
+        }
+      });
       
       this.selected=false;      
       this.$router.go(0);

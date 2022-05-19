@@ -53,13 +53,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
     private ReservationRepository reservationRep;
 
     @Autowired
-    private ReviewRepository reviewRepository;
-
-    @Autowired
     private RequestService requestService;
-
-    @Autowired
-    private EmailService emailService;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -106,6 +100,10 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 ,"Peric","Jovanova 14","Novi Sad","Serbia","+38165656565");
         clientTemp1.setVerified(true);
         clientTemp1.setRoles(rolesClient);
+        clientTemp1.addPenalty();
+        clientTemp1.addPenalty();
+        clientTemp1.addPenalty();
+        clientTemp1.addPenalty();
         clientRep.save(clientTemp1);
 
         Client clientTemp2= new Client("jovo@maildrop.cc","jovo",passwordEncoderComponent.encode("Jovo123"),"pictures/user_pictures/0.png","Jovo"
