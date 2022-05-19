@@ -2,11 +2,11 @@
   <nav class="navbar" >
     <div class="navbar-top">
       <div class="nav-left">
-        <img class="brand" @click="jumpToHomePage()" src="@/assets/app-logo.png">
+        <h4 class="brand" @click="jumpToHomePage()">Renting Buddy</h4>
       </div>
       <div class="nav-right" v-if="this.signedIn==false">
-        <button type="button" v-if="signIn" @click="jmpToLoginPage()" class="btn btn-warning" >Sign in</button>
-        <button type="button"  v-if="signUp" @click="jmpToRegistrationPage()"  class="btn btn-warning">Register</button>
+        <button type="button" v-if="signIn" @click="jmpToLoginPage()" class="custom-btn button-outline">Sign in</button>
+        <button type="button"  v-if="signUp" @click="jmpToRegistrationPage()"  style="margin-right: 0" class="custom-btn button-outline">Register</button>
       </div>
       <div class="nav-right" v-else>
         <img v-bind:src="'data:image/jpeg;base64,' + loggedPicture" style="width: 50px; height: 40px;">
@@ -75,7 +75,15 @@ export default {
 <style>
 
 nav {
-  background: #585858;
+  background: #00587a;
+  min-height: 54px;
+}
+
+.brand {
+  color: #ffffff;
+  margin-top: auto;
+  margin-bottom: 0;
+  font-weight: bold;
 }
 
 .navbar-top {
@@ -86,22 +94,16 @@ nav {
   justify-content: space-between;
   margin: auto;
   width: 60%;
-  padding-bottom: 5px;
-  }
-
-.brand {
-  width: 60px;
-  margin-left: 10px;
+  padding-bottom: 0;
+  min-width: 500px;
   }
 
 .navbar-top button {
-  margin-top:3px;
   margin-inline: 10px;
   }
 
-.navbar-top .brand:hover {
+.brand:hover {
   cursor: pointer;
-  -webkit-filter: brightness(80%);
 }
 
 </style>

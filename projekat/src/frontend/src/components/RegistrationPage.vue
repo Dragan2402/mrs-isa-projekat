@@ -72,7 +72,7 @@ export default {
   },
   mounted(){
     this.$root.signUp=false;
-    
+    this.$root.signIn=false;
   },
   methods:{
     signUp() {

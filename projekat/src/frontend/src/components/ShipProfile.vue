@@ -1,109 +1,147 @@
 <template>
-  <div class="page">
-    <div v-if="!editing && !creatingOffer" class="user-data-div">
-      <h1>{{ship.name}}</h1>
-      <p>Address: {{ship.address}}</p>
-      <p>Description: {{ship.promoDescription}}</p>
-      <p>Behavior rules: {{ship.behaviourRules}}</p>
-      <p>Price list: {{ship.priceList}}</p>
-      <p>Additional info: {{ship.additionalInfo}}</p>
-      <p>Cancellation conditions: {{ship.cancellationConditions}}</p>
-      <p>Type: {{ship.type}}</p>
-      <p>Length: {{ship.length}}</p>
-      <p>Engine number: {{ship.engineNumber}}</p>
-      <p>Engine power: {{ship.enginePower}}</p>
-      <p>Top speed: {{ship.topSpeed}}</p>
-      <p>Client limit: {{ship.clientLimit}}</p>
-      <p>Available from: {{ ship.availableFrom }}</p>
-      <p>Available to: {{ ship.availableTo }}</p>
-
-      <button class="btn btn-primary" style="margin-right: 20px" @click="toggleEdit()" >Edit Info</button>
-      <button class="btn btn-primary" @click="toggleCreatingOffer()" >Create Offer</button>
-    </div>
-
-    <div v-if="editing" class="user-data-div">
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="name">Name:</span>
-        <input v-model="ship.name" type="text" class="form-control" aria-label="Username" aria-describedby="name">
+  <div class="main-container">
+    <div style="display: flex">
+      <div style="float: left; width: 70%">
+        <h3 class="main-heading">{{ship.name}}</h3>
+        <vue3-star-ratings class="star-ratings" v-model="ship.rating" starSize="22"  :showControl=false :disableClick=true :step=0 />
+        <h5 class="star-heading">({{ship.reviewsNumber}})</h5>
       </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="address">Address:</span>
-        <input v-model="ship.address" type="text" class="form-control" aria-label="Username" aria-describedby="address">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="promoDescription">Description:</span>
-        <input v-model="ship.promoDescription" type="text" class="form-control" aria-label="Username" aria-describedby="promoDescription">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="behaviourRules">Behaviour Rules:</span>
-        <input v-model="ship.behaviourRules" type="text" class="form-control" aria-label="Username" aria-describedby="behaviourRules">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="priceList">Price list:</span>
-        <input v-model="ship.priceList" type="text" class="form-control" aria-label="Username" aria-describedby="priceList">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="clientLimit">Client limit: </span>
-        <input v-model="ship.clientLimit" type="text" class="form-control" aria-label="Username" aria-describedby="clientLimit">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="additionalInfo">Additional info:</span>
-        <input v-model="ship.additionalInfo" type="text" class="form-control" aria-label="Username" aria-describedby="additionalInfo">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="cancellationConditions">Cancellation conditions:</span>
-        <input v-model="ship.cancellationConditions" type="text" class="form-control" aria-label="Username" aria-describedby="cancellationConditions">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="type">Type:</span>
-        <input v-model="ship.type" type="text" class="form-control" aria-label="Username" aria-describedby="type">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="length">Length:</span>
-        <input v-model="ship.length" type="text" class="form-control" aria-label="Username" aria-describedby="length">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="engineNumber">Engine number:</span>
-        <input v-model="ship.engineNumber" type="text" class="form-control" aria-label="Username" aria-describedby="engineNumber">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="enginePower">Engine power:</span>
-        <input v-model="ship.enginePower" type="text" class="form-control" aria-label="Username" aria-describedby="enginePower">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="topSpeed">Top speed:</span>
-        <input v-model="ship.topSpeed" type="text" class="form-control" aria-label="Username" aria-describedby="topSpeed">
-      </div>
-      <Datepicker v-model="availabilityInterval" :format="formatRange" range/>
-      <br>
-      <button @click="saveEdit()" style="margin-right: 20px;" class="btn btn-primary">Save</button>
-      <button @click="cancel()" class="btn btn-primary">Cancel</button>
-    </div>
-
-    <div v-if="creatingOffer" class="user-data-div">
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="clientLimitOffer">Client limit:</span>
-        <input v-model="offer.clientLimit" type="text" class="form-control" aria-label="Username" aria-describedby="clientLimitOffer">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="priceOffer">Price:</span>
-        <input v-model="offer.price" type="text" class="form-control" aria-label="Username" aria-describedby="priceOffer">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="additionalServicesOffer">Additional Services:</span>
-        <vue3-tags-input :tags="offer.additionalServices" @on-tags-changed="updateTags" class="form-control" aria-label="Username" aria-describedby="additionalServicesOffer"/>
-      </div>
-      <Datepicker v-model="offerInterval" :format="formatRange" range/>
-      <br>
-      <button @click="createOffer()" style="margin-right: 20px;"  class="btn btn-primary">Save</button>
-      <button @click="cancel()" class="btn btn-primary">Cancel</button>
-    </div>
-      <div class="row row-cols-4">
-        <div class="col p-3" style="margin: auto" v-for="(picture, index) in pictures" :key="index">
-          <img v-bind:src="'data:image/jpeg;base64,' + picture" v-bind:alt="index">
+      <div style="width: 30%; margin-top: 20px">
+        <div style="float: right; display: flex; overflow: hidden;">
+          <button style="margin-right: 20px" type="button" @click="toggleEdit()" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#modal">Edit info</button>
+          <button type="button" @click="toggleCreatingOffer()" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#modalOffer">Create offer</button>
         </div>
+      </div>
     </div>
-
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img class="d-block w-100" alt="Active picture" v-bind:src="'data:image/jpeg;base64,' + pictures.at(0)">
+        </div>
+        <div class="carousel-item" v-for="(picture, index) in pictures.slice(1)" :key="index">
+          <img class="d-block w-100" alt="Item picture" v-bind:src="'data:image/jpeg;base64,' + picture">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+    <div class="main-description">
+      <div class="inner-description">
+        <div><b>Address: </b> {{ship.address}}</div>
+        <div><b>Description: </b> {{ship.promoDescription}}</div>
+        <div><b>Behaviour rules: </b> {{ship.behaviourRules}}</div>
+        <div><b>Price: </b> {{ship.priceList}} per day</div>
+        <div><b>Additional info: </b>{{ship.additionalInfo}}</div>
+        <div><b>Cancellation conditions: </b>{{ship.cancellationConditions}}</div>
+        <div><b>Type: </b>{{ship.type}}</div>
+        <div><b>Length: </b>{{ship.length}}</div>
+        <div><b>Engine Number: </b>{{ship.engineNumber}}</div>
+        <div><b>Engine Power: </b>{{ship.enginePower}}</div>
+        <div><b>Top Speed: </b>{{ship.topSpeed}}</div>
+        <div><b>Client Limit: </b>{{ship.clientLimit}}</div>
+        <div><b>Availability:</b> From {{ship.availableFrom}} to {{ship.availableTo}}</div>
+      </div>
+      <div class="google-map-container">
+        <iframe class="google-map" v-bind:src="'https://maps.google.com/maps?q=' + ship.address + '&t=&z=13&ie=UTF8&iwloc=&output=embed'"></iframe>
+      </div>
+    </div>
+    <hr>
+  </div>
+  <div class="modal fade" id="modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="form-floating mb-3">
+            <input v-model="ship.name" type="text" class="form-control" id="floatName" placeholder="Title">
+            <label for="floatName">Title</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="ship.address" type="text" class="form-control" id="floatAddress" placeholder="Address">
+            <label for="floatAddress">Address</label>
+          </div>
+          <div class="form-floating mb-3">
+            <textarea style="height: 100px" v-model="ship.promoDescription" type="text" class="form-control" id="floatPromoDescription" placeholder="Description"></textarea>
+            <label for="floatPromoDescription">Description</label>
+          </div>
+          <div class="form-floating mb-3">
+            <textarea style="height: 100px" v-model="ship.behaviourRules" type="text" class="form-control" id="floatBehaviourRules" placeholder="Behaviour rules"></textarea>
+            <label for="floatBehaviourRules">Behaviour rules</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="ship.priceList" type="text" class="form-control" id="floatPriceList" placeholder="Price">
+            <label for="floatPriceList">Price</label>
+          </div>
+          <div class="form-floating mb-3">
+            <textarea style="height: 100px" v-model="ship.additionalInfo" type="text" class="form-control" id="floatAdditionalInfo" placeholder="Additional info"></textarea>
+            <label for="floatAdditionalInfo">Additional info</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="ship.cancellationConditions" type="text" class="form-control" id="floatCancellationConditions" placeholder="Cancellation conditions">
+            <label for="floatCancellationConditions">Cancellation conditions</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="ship.type" type="text" class="form-control" id="floatType" placeholder="Type">
+            <label for="floatType">Type</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="ship.length" type="text" class="form-control" id="flotLength" placeholder="Length">
+            <label for="flotLength">Type</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="ship.engineNumber" type="text" class="form-control" id="floatEngineNumber" placeholder="Engine number">
+            <label for="floatEngineNumber">Engine number</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="ship.enginePower" type="text" class="form-control" id="floatEnginePower" placeholder="Engine power">
+            <label for="floatEnginePower">Engine power</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="ship.topSpeed" type="text" class="form-control" id="floatTopSpeed" placeholder="Top speed">
+            <label for="floatTopSpeed">Top speed</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="ship.clientLimit" type="text" class="form-control" id="floatClientLimit" placeholder="Client limit">
+            <label for="floatClientLimit">Client limit</label>
+          </div>
+          <Datepicker v-model="availabilityInterval" :format="formatRange" range/>
+        </div>
+        <div class="modal-footer">
+          <button type="button" @click="cancel()" class="custom-btn button-primary" data-bs-dismiss="modal">Close</button>
+          <button type="button" @click="saveEdit()" class="custom-btn button-primary" data-bs-dismiss="modal">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="modalOffer" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="form-floating mb-3">
+            <input v-model="offer.clientLimit" type="text" class="form-control" id="floatClientLimitOffer" placeholder="Client limit">
+            <label for="floatClientLimitOffer">Client limit</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="offer.price" type="text" class="form-control" id="floatPrice" placeholder="Price">
+            <label for="floatPrice">Price</label>
+          </div>
+          <div class="mb-3">
+            Additional Services:
+            <vue3-tags-input style="height: 100px" :tags="offer.additionalServices" @on-tags-changed="updateTags" class="form-control" aria-label="Username" aria-describedby="additionalServicesOffer"/>
+          </div>
+          <Datepicker v-model="offerInterval" :format="formatRange" range/>
+        </div>
+        <div class="modal-footer">
+          <button type="button" @click="cancel()" class="custom-btn button-primary" data-bs-dismiss="modal">Close</button>
+          <button type="button" @click="createOffer()" class="custom-btn button-primary" data-bs-dismiss="modal">Save changes</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -297,10 +335,62 @@ export default {
 
 <style scoped>
 
-img {
+.carousel-inner {
+  border-radius: 5px;
+}
+
+.w-100 {
   object-fit: cover;
-  width: 300px;
-  height: 200px;
+  height: 500px;
+}
+
+div.star-ratings {
+  padding: 0;
+  margin: 0;
+  float: left;
+}
+
+.main-container {
+  width: 60%;
+  margin: auto auto 20% auto;
+  min-width: 860px;
+}
+
+.main-heading {
+  font-weight: bold;
+  margin: 10px 0 0 0;
+}
+
+.star-ratings {
+  margin-right: 5px;
+}
+
+.star-heading {
+  margin-top: 3px;
+}
+
+.main-description {
+  display:flex;
+  margin-top: 17px;
+}
+
+.inner-description {
+  margin-right: 50px;
+  float:left;
+  width: 65%;
+  overflow: hidden;
+}
+
+.google-map-container {
+  display: flex;
+  float: right;
+  width: 35%;
+  overflow: hidden;
+}
+
+.google-map {
+  width: 400px;
+  border-radius: 5px;
 }
 
 </style>

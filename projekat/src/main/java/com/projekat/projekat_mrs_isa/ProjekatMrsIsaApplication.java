@@ -308,11 +308,21 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 Duration.ofHours(20)
         );
 
+        Offer offerTemp6 = new Offer(
+                "Brcko Ficibajer",
+                5,
+                new ArrayList<>(),
+                300.0,
+                vacationHouseTemp,
+                LocalDateTime.of(2022,7,24,20,10),
+                Duration.ofHours(20)
+        );
 
 
         vacationHouseTemp.addOffer(offerTemp3);
         vacationHouseTemp.addOffer(offerTemp);
         vacationHouseTemp.addOffer(offerTemp2);
+        vacationHouseTemp.addOffer(offerTemp6);
         vacHouseOwnerTemp1.addVacationHouse(vacationHouseTemp);
         vacHouseOwnerTemp1.addVacationHouse(vacationHouseTemp2);
 

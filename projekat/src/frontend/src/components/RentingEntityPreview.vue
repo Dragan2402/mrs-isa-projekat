@@ -1,47 +1,69 @@
 <template>   
-  <div v-if="loaded" align='center'>
-    <br>
-      <h1>{{rentingEntity.name}}</h1>
-    <div class="user-data-div" style="width: 50%">
-      <p>Address: {{rentingEntity.address}}</p>
-      <p>Promo Description: {{rentingEntity.promoDescription}}</p>
-      <p>Behavior Rules: {{rentingEntity.behaviourRules}}</p>
-      <p>Price: {{rentingEntity.priceList}}</p>
-      <p>Additional Info: {{rentingEntity.additionalInfo}}</p>
-      <p>Cancellation conditions: {{rentingEntity.cancellationConditions}}</p>
-
-      <p v-if="this.displayType==0">Rooms Quantity: {{rentingEntity.roomsQuantity}}</p>
-      <p v-if="this.displayType==0">Beds Per Room: {{rentingEntity.bedsPerRoom}}</p>
-      <p v-if="this.displayType==1">Type: {{rentingEntity.type}}</p>
-      <p v-if="this.displayType==1">Length: {{rentingEntity.length}}</p>
-      <p v-if="this.displayType==1">Engine Number: {{rentingEntity.engineNumber}}</p>
-      <p v-if="this.displayType==1">Engine Power: {{rentingEntity.enginePower}}</p>
-      <p v-if="this.displayType==1">Top Speed: {{rentingEntity.topSpeed}}</p>
-      <p v-if="this.displayType==1">Client Limit: {{rentingEntity.clientLimit}}</p>
-      <p v-if="this.displayType==2">Instructor Biography: {{rentingEntity.instructorBiography}}</p>
-      <p v-if="this.displayType==2">Client Limit: {{rentingEntity.clientLimit}}</p>
-      <div align='center'>
-        <ul class="list-group" v-for="(offer, index) in this.offers" @Click="selectOffer(offer,index)"
-            v-bind:index="index" :key="offer.id" v-bind="{selected: selectedOffer.id===offer.id}">
-          <br>
-          <li class="list-group-item "><i class="bi bi-currency-dollar"></i>Place: {{offer.place}} People: {{offer.clientLimit}} <label v-if="offer.additionalServices.length != 0"> Additional Services: <label v-for="service in offer.additionalServices" :key="service">
-            {{service}}
-          </label>
-          </label>
-            Price: {{offer.price}} Starting Date: {{offer.start}} Duration {{msToTime(offer.duration)}}</li>
-        </ul>
-
+  <div class="main-container" v-if="loaded">
+    <h3 class="main-heading">{{rentingEntity.name}}</h3>
+    <vue3-star-ratings class="star-ratings" v-model="rentingEntity.rating" starSize="22"  :showControl=false :disableClick=true :step=0 />
+    <h5 class="star-heading">({{rentingEntity.reviewsNumber}})</h5>
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img class="d-block w-100" alt="Active picture" v-bind:src="'data:image/jpeg;base64,' + pictures.at(0)">
+        </div>
+        <div class="carousel-item" v-for="(picture, index) in pictures.slice(1)" :key="index">
+          <img class="d-block w-100" alt="Item picture" v-bind:src="'data:image/jpeg;base64,' + picture">
+        </div>
       </div>
-      <div v-if="selected" align='center'>
-        <br>
-        <button class="btn btn-primary" style="margin-right: 20px;" @click="makeReservation">Make A Reservation</button>
-        <button class="btn btn-primary" @click="hide">Hide</button>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+    <div class="main-description">
+      <div class="inner-description">
+        <div><b>Address: </b> {{rentingEntity.address}}</div>
+        <div><b>Description: </b> {{rentingEntity.promoDescription}}</div>
+        <div><b>Behaviour rules: </b> {{rentingEntity.behaviourRules}}</div>
+        <div><b>Price: </b> {{rentingEntity.priceList}} per day</div>
+        <div><b>Additional info: </b>{{rentingEntity.additionalInfo}}</div>
+        <div><b>Cancellation conditions: </b>{{rentingEntity.cancellationConditions}}</div>
+        <div v-if="this.displayType==0"><b>Capacity: </b>{{rentingEntity.roomsQuantity}} rooms, {{rentingEntity.bedsPerRoom}} beds per room</div>
+        <div v-if="this.displayType==1"><b>Type: </b>{{rentingEntity.type}}</div>
+        <div v-if="this.displayType==1"><b>Length: </b>{{rentingEntity.length}}</div>
+        <div v-if="this.displayType==1"><b>Engine Number: </b>{{rentingEntity.engineNumber}}</div>
+        <div v-if="this.displayType==1"><b>Engine Power: </b>{{rentingEntity.enginePower}}</div>
+        <div v-if="this.displayType==1"><b>Top Speed: </b>{{rentingEntity.topSpeed}}</div>
+        <div v-if="this.displayType==1"><b>Client Limit: </b>{{rentingEntity.clientLimit}}</div>
+        <div v-if="this.displayType==2"><b>Instructor biography: </b>{{rentingEntity.instructorBiography}}</div>
+        <div v-if="this.displayType==2"><b>Client limit: </b>{{rentingEntity.clientLimit}}</div>
+      </div>
+      <div class="google-map-container">
+        <iframe class="google-map" v-bind:src="'https://maps.google.com/maps?q=' + rentingEntity.address + '&t=&z=13&ie=UTF8&iwloc=&output=embed'"></iframe>
       </div>
     </div>
-    <div class="container" >
-      <div class="row row-cols-4" >
-        <div class="col p-3" v-for="(picture, index) in pictures" :key="index">
-          <img v-bind:src="'data:image/jpeg;base64,' + picture">
+    <hr>
+    <div class="main-offer-container">
+      <h4 v-if="this.offers.length !== 0">Offers:</h4>
+      <div class="inner-offer-container">
+        <div class="offer" v-for="(offer, index) in this.offers" @Click="selectOffer(offer, index)"
+             v-bind:index="index" :key="offer.id" v-bind="{selected: selectedOffer.id===offer.id}">
+          <div class="offer-description">
+            <div class="offer-left">
+              <div><b>Address: </b> {{offer.place}}</div>
+              <div><b>Price: </b> {{offer.price}}</div>
+              <div><b>Client limit: </b>{{offer.clientLimit}}</div>
+              <div><b>Starting at: </b>{{offer.start}}</div>
+              <div><b>Duration: </b>{{msToTime(offer.duration)}}</div>
+              <div v-if="offer.additionalServices.length != 0"> <b>Additional Services:</b>
+                <div class="additional-service" v-for="service in offer.additionalServices" :key="service"> {{service}}</div>
+              </div>
+            </div>
+            <div class="offer-right">
+              <button class="custom-btn button-primary" @click="makeReservation(offer, index)">Make a reservation</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -63,7 +85,7 @@ export default {
       pictures:[],
       index:0,      
       offers: [],
-      loaded:false,
+      loaded:false
     }
   },
   mounted(){
@@ -119,7 +141,7 @@ methods:{
       this.index=index;
       
 
-    },   
+    },
     msToTime(duration) {
     var 
       
@@ -160,21 +182,95 @@ methods:{
 
 <style scoped>
 
-.list-entities {
-  text-align: center;
-  width: 100%;
-  height: 170px;
-  border: 1px solid darkgrey;
+.carousel-inner {
   border-radius: 5px;
-  overflow: hidden;
-  margin-bottom: 10px;
-  min-width: 800px;
 }
 
-img {
+.w-100 {
   object-fit: cover;
-  width: 300px;
-  height: 200px;
+  height: 500px;
+}
+
+div.star-ratings {
+  padding: 0;
+  margin: 0;
+  float: left;
+}
+
+.main-container {
+  width: 60%;
+  margin: auto auto 20% auto;
+  min-width: 860px;
+}
+
+.main-heading {
+  font-weight: bold;
+  margin: 10px 0 0 0;
+}
+
+.star-ratings {
+  margin-right: 5px;
+}
+
+.star-heading {
+  margin-top: 3px;
+}
+
+.main-description {
+  display:flex;
+  margin-top: 17px;
+}
+
+.inner-description {
+  margin-right: 50px;
+  float:left;
+  width: 65%;
+  overflow: hidden;
+}
+
+.google-map-container {
+  display: flex;
+  float: right;
+  width: 35%;
+  overflow: hidden;
+}
+
+.google-map {
+  width: 400px;
+  border-radius: 5px;
+}
+
+.inner-offer-container {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-gap: 10px;
+}
+
+.offer {
+  border: 1px solid darkgrey;
+  border-radius: 5px;
+}
+
+.offer-description {
+  margin: 5px;
+  display: flex;
+}
+
+.offer-left {
+  float: left;
+  width: 60%;
+}
+
+.additional-service {
+  margin-left: 10px;
+}
+
+.offer-right {
+  float: right;
+  width: 40%;
+  align-items: center;
+  display: flex;
+  overflow: hidden;
 }
 
 </style>

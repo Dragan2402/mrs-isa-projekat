@@ -1,102 +1,134 @@
 <template>
-  <div class="page">
-    <div v-if="!editing && !creatingOffer" class="user-data-div">
-      <h1>{{vacationHouse.name}} </h1>
-      <p>Address: {{vacationHouse.address}}</p>
-      <p>Description: {{vacationHouse.promoDescription}}</p>
-      <p>Behavior rules: {{vacationHouse.behaviourRules}}</p>
-      <p>Price list: {{vacationHouse.priceList}}</p>
-      <p>Additional info: {{vacationHouse.additionalInfo}}</p>
-      <p>Cancellation conditions: {{vacationHouse.cancellationConditions}}</p>
-      <p>Rooms: {{vacationHouse.roomsQuantity}}</p>
-      <p>Beds per room: {{vacationHouse.bedsPerRoom}}</p>
-<!--      <p>Available from: {{ vacationHouse.availableFrom }}</p>-->
-<!--      <p>Available to: {{ vacationHouse.availableTo }}</p>-->
-
-      <div v-if="vacationHouse.availableFrom != null && vacationHouse.availableFrom != null">
-        <label class="mb-3" for="calendar">Available dates</label><br>
-        <v-calendar id="calendar" class="mb-3" :from-date="fromDate" :attributes="calendarAttributes"
+  <div class="main-container">
+    <div style="display: flex">
+      <div style="float: left; width: 70%">
+        <h3 class="main-heading">{{vacationHouse.name}}</h3>
+        <vue3-star-ratings class="star-ratings" v-model="vacationHouse.rating" starSize="22"  :showControl=false :disableClick=true :step=0 />
+        <h5 class="star-heading">({{vacationHouse.reviewsNumber}})</h5>
+      </div>
+      <div style="width: 30%; margin-top: 20px">
+        <div style="float: right; display: flex; overflow: hidden;">
+          <button style="margin-right: 20px" type="button" @click="toggleEdit()" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#modal">Edit info</button>
+          <button type="button" @click="toggleCreatingOffer()" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#modalOffer">Create offer</button>
+        </div>
+      </div>
+    </div>
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img class="d-block w-100" alt="Active picture" v-bind:src="'data:image/jpeg;base64,' + pictures.at(0)">
+        </div>
+        <div class="carousel-item" v-for="(picture, index) in pictures.slice(1)" :key="index">
+          <img class="d-block w-100" alt="Item picture" v-bind:src="'data:image/jpeg;base64,' + picture">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+    <div class="main-description">
+      <div class="inner-description">
+        <div><b>Address: </b> {{vacationHouse.address}}</div>
+        <div><b>Description: </b> {{vacationHouse.promoDescription}}</div>
+        <div><b>Behaviour rules: </b> {{vacationHouse.behaviourRules}}</div>
+        <div><b>Price: </b> {{vacationHouse.priceList}} per day</div>
+        <div><b>Additional info: </b>{{vacationHouse.additionalInfo}}</div>
+        <div><b>Cancellation conditions: </b>{{vacationHouse.cancellationConditions}}</div>
+        <div><b>Capacity: </b>{{vacationHouse.roomsQuantity}} rooms, {{vacationHouse.bedsPerRoom}} beds per room</div>
+        <div><b>Availability:</b> From {{vacationHouse.availableFrom}} to {{vacationHouse.availableTo}}</div>
+        <div v-if="vacationHouse.availableFrom != null && vacationHouse.availableFrom != null">
+            <label class="mb-3" for="calendar">Available dates</label><br>
+            <v-calendar id="calendar" class="mb-3" :from-date="fromDate" :attributes="calendarAttributes"
                     :min-date="calendarAttributes[0].dates.start" :max-date="calendarAttributes[0].dates.end" /><br>
+        </div>
       </div>
-
-      <button @click="toggleEdit()" style="margin-right: 20px;" class="btn btn-primary">Edit Info</button>
-      <button @click="toggleCreatingOffer()" class="btn btn-primary">Create Offer</button>
+      <div class="google-map-container">
+        <iframe class="google-map" v-bind:src="'https://maps.google.com/maps?q=' + vacationHouse.address + '&t=&z=13&ie=UTF8&iwloc=&output=embed'"></iframe>
+      </div>
     </div>
-
-    <div v-if="editing" class="user-data-div">
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="name">Name:</span>
-        <input v-model="vacationHouse.name" type="text" class="form-control" aria-label="Username" aria-describedby="name">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="address">Address:</span>
-        <input v-model="vacationHouse.address" type="text" class="form-control" aria-label="Username" aria-describedby="address">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="promoDescription">Description:</span>
-        <input v-model="vacationHouse.promoDescription" type="text" class="form-control" aria-label="Username" aria-describedby="promoDescription">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="behaviourRules">Behaviour Rules:</span>
-        <input v-model="vacationHouse.behaviourRules" type="text" class="form-control" aria-label="Username" aria-describedby="behaviourRules">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="priceList">Price list:</span>
-        <input v-model="vacationHouse.priceList" type="text" class="form-control" aria-label="Username" aria-describedby="priceList">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="additionalInfo">Additional info:</span>
-        <input v-model="vacationHouse.additionalInfo" type="text" class="form-control" aria-label="Username" aria-describedby="additionalInfo">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="cancellationConditions">Cancellation conditions:</span>
-        <input v-model="vacationHouse.cancellationConditions" type="text" class="form-control" aria-label="Username" aria-describedby="cancellationConditions">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="roomsQuantity">Rooms:</span>
-        <input v-model="vacationHouse.roomsQuantity" type="text" class="form-control" aria-label="Username" aria-describedby="roomsQuantity">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="bedsPerRoom">Beds per room:</span>
-        <input v-model="vacationHouse.bedsPerRoom" type="text" class="form-control" aria-label="Username" aria-describedby="bedsPerRoom">
-      </div>
-
-<!--      <Datepicker v-model="availabilityInterval" :format="formatRange" range/>-->
-
-      <v-date-picker v-model="availabilityInterval" :min-date="new Date()" mode="dateTime" is-range ></v-date-picker>
-      <br>
-      <button @click="saveEdit()" style="margin-right: 20px;" class="btn btn-primary">Save</button>
-      <button @click="cancel()" class="btn btn-primary">Cancel</button>
-    </div>
-    <div v-if="creatingOffer" class="user-data-div">
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="placeOffer">Place:</span>
-        <input v-model="offer.place" type="text" class="form-control" aria-label="Username" aria-describedby="placeOffer">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="clientLimitOffer">Client limit:</span>
-        <input v-model="offer.clientLimit" type="text" class="form-control" aria-label="Username" aria-describedby="clientLimitOffer">
-      </div>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="priceOffer">Price:</span>
-        <input v-model="offer.price" type="text" class="form-control" aria-label="Username" aria-describedby="priceOffer">
-      </div>
-
-      <Datepicker v-model="offerInterval" :format="formatRange" range/>
-      <br>
-      <button @click="createOffer()" style="margin-right: 20px;" class="btn btn-primary">Save</button>
-      <button @click="cancel()" class="btn btn-primary">Cancel</button>
-    </div>
+    <hr>
   </div>
+  <div class="modal fade" id="modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="form-floating mb-3">
+            <input v-model="vacationHouse.name" type="text" class="form-control" id="floatName" placeholder="Title">
+            <label for="floatName">Title</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="vacationHouse.address" type="text" class="form-control" id="floatAddress" placeholder="Address">
+            <label for="floatAddress">Address</label>
+          </div>
+          <div class="form-floating mb-3">
+            <textarea style="height: 100px" v-model="vacationHouse.promoDescription" type="text" class="form-control" id="floatPromoDescription" placeholder="Description"></textarea>
+            <label for="floatPromoDescription">Description</label>
+          </div>
+          <div class="form-floating mb-3">
+            <textarea style="height: 100px" v-model="vacationHouse.behaviourRules" type="text" class="form-control" id="floatBehaviourRules" placeholder="Behaviour rules"></textarea>
+            <label for="floatBehaviourRules">Behaviour rules</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="vacationHouse.priceList" type="text" class="form-control" id="floatPriceList" placeholder="Price">
+            <label for="floatPriceList">Price</label>
+          </div>
+          <div class="form-floating mb-3">
+            <textarea style="height: 100px" v-model="vacationHouse.additionalInfo" type="text" class="form-control" id="floatAdditionalInfo" placeholder="Additional info"></textarea>
+            <label for="floatAdditionalInfo">Additional info</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="vacationHouse.cancellationConditions" type="text" class="form-control" id="floatCancellationConditions" placeholder="Cancellation conditions">
+            <label for="floatCancellationConditions">Cancellation conditions</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="vacationHouse.roomsQuantity" type="text" class="form-control" id="floatRoomsQuantity" placeholder="Rooms quantity">
+            <label for="floatRoomsQuantity">Rooms quantity</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="vacationHouse.bedsPerRoom" type="text" class="form-control" id="floatBedsPerRoom" placeholder="Beds per room">
+            <label for="floatBedsPerRoom">Beds per room</label>
+          </div>
+          <!--      <Datepicker v-model="availabilityInterval" :format="formatRange" range/>-->
 
-  <div class="container">
-    <div class="row row-cols-4">
-      <div class="col p-3" v-for="(picture, index) in pictures" :key="index">
-        <img v-bind:src="'data:image/jpeg;base64,' + picture" style="width: 100%; height: auto;">
+          <v-date-picker v-model="availabilityInterval" :min-date="new Date()" mode="dateTime" is-range ></v-date-picker>
+        </div>
+        <div class="modal-footer">
+          <button type="button" @click="cancel()" class="custom-btn button-primary" data-bs-dismiss="modal">Close</button>
+          <button type="button" @click="saveEdit()" class="custom-btn button-primary" data-bs-dismiss="modal">Save changes</button>
+        </div>
       </div>
     </div>
   </div>
-
+  <div class="modal fade" id="modalOffer" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="form-floating mb-3">
+            <input v-model="offer.place" type="text" class="form-control" id="floatPlace" placeholder="Place">
+            <label for="floatPlace">Place</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="offer.clientLimit" type="text" class="form-control" id="floatClientLimit" placeholder="Client limit">
+            <label for="floatClientLimit">Client limit</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="offer.price" type="text" class="form-control" id="floatPrice" placeholder="Price">
+            <label for="floatPrice">Price</label>
+          </div>
+          <Datepicker v-model="offerInterval" :format="formatRange" range/>
+        </div>
+        <div class="modal-footer">
+          <button type="button" @click="cancel()" class="custom-btn button-primary" data-bs-dismiss="modal">Close</button>
+          <button type="button" @click="createOffer()" class="custom-btn button-primary" data-bs-dismiss="modal">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -112,18 +144,18 @@ export default {
 
     let id = ref('3');
     let vacationHouse = ref({
-        id: null,
-        name: null,
-        address: null,
-        promoDescription: null,
-        availableFrom: null,
-        availableTo: null,
-        behaviourRules: null,
-        priceList: null,
-        additionalInfo: null,
-        cancellationConditions: null,
-        roomsQuantity: null,
-        bedsPerRoom: null
+      id: null,
+      name: null,
+      address: null,
+      promoDescription: null,
+      availableFrom: null,
+      availableTo: null,
+      behaviourRules: null,
+      priceList: null,
+      additionalInfo: null,
+      cancellationConditions: null,
+      roomsQuantity: null,
+      bedsPerRoom: null
     });
     let offer = ref({
       id: null,
@@ -322,5 +354,63 @@ export default {
 </script>
 
 <style scoped>
+
+.carousel-inner {
+  border-radius: 5px;
+}
+
+.w-100 {
+  object-fit: cover;
+  height: 500px;
+}
+
+div.star-ratings {
+  padding: 0;
+  margin: 0;
+  float: left;
+}
+
+.main-container {
+  width: 60%;
+  margin: auto auto 20% auto;
+  min-width: 860px;
+}
+
+.main-heading {
+  font-weight: bold;
+  margin: 10px 0 0 0;
+}
+
+.star-ratings {
+  margin-right: 5px;
+}
+
+.star-heading {
+  margin-top: 3px;
+}
+
+.main-description {
+  display:flex;
+  margin-top: 17px;
+}
+
+.inner-description {
+  margin-right: 50px;
+  float:left;
+  width: 65%;
+  overflow: hidden;
+}
+
+.google-map-container {
+  display: flex;
+  float: right;
+  width: 35%;
+  overflow: hidden;
+}
+
+.google-map {
+  width: 400px;
+  border-radius: 5px;
+}
 
 </style>
