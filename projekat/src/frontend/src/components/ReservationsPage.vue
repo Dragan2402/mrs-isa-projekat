@@ -125,24 +125,72 @@ export default {
       return this.reservationsHistory.filter(row => {
         return this.includesH(row);
       }).sort((a,b)=>{
-        return this.sortH(a,b);})
+        return this.sort(a,b,this.sortTypeH);})
     },
     filteredReservations(){
        return this.reservations.filter(row => {
         return this.includesH(row);
       }).sort((a,b)=>{
-        return this.sortR(a,b);})
+        return this.sort(a,b,this.sortTypeR);})
     }},
   methods:{
     selectReservationHistory(reservation,index) {
       this.selectedReservationHistory = reservation;
       this.selectedHistory = true;    
       this.indexH=index;
-    },  
+    }, 
+    dateFromLocal(dateString){
+      if(dateString==null){
+        return new Date();
+      }
+      
+      const parts=dateString.split(" ");
+      
+      if( parts.length !=2){
+        return new Date();
+      }
+      const dateParts= parts[0].split(".");
+      
+      if( dateParts.length !=3){
+        return new Date();
+      }
+      const hourParts=parts[1].split(":");
+      
+      if( hourParts.length !=2){
+        return new Date();
+      }
+      
+      const day = dateParts[0];
+      const month = dateParts[1];
+      const year = dateParts[2];
+      const hours = hourParts[0];
+      const minutes = hourParts[1];
+      // new Date(year, month, day, hours, minutes, seconds, milliseconds)
+      const date= new Date(year,month-1,day,hours,minutes);
+      return date;
+    }, 
     cancelReservation(){
-      console.log("CANCEL");
+      
+      const date=this.dateFromLocal(this.selectedReservation.start);
+      let dateCheck=new Date();
+      
+      dateCheck.setDate(dateCheck.getDate() + 3);
+
+      if(date < dateCheck){
+        this.$toast.error("You can not cancel the reservation within the 3 days");
+      }else{
+        axios.put("/api/clients/cancelReservation",this.selectedReservation,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {
+          if(response.data == true){
+            this.$toast.success("You have successfully canceled the reservation");
+            this.reservations.splice(this.indexR,1);
+          }else{
+            this.$toast.error("You can not cancel the reservation within the 3 days");
+          }
+        })
+        
+      }
     },
-    selectReservation(reservation,index) {
+  selectReservation(reservation,index) {
 
       this.selectedReservation = reservation;
       this.selectedR = true;
@@ -188,8 +236,8 @@ export default {
         return (name.includes(searchTerm) || rentingEntityName.includes(searchTerm) || price.includes(searchTerm))
         
     },
-    sort(a,b){
-        if(this.sortTypeH==0){
+    sort(a,b,sortType){
+        if(sortType==0){
           let fa = a.place.toLowerCase(), fb = b.place.toLowerCase();
           if (fa < fb) {
             return -1
@@ -199,7 +247,7 @@ export default {
           }
           return 0
         }
-        else if (this.sortTypeH == 1){
+        else if (sortType== 1){
           let fa = a.place.toLowerCase(), fb = b.place.toLowerCase();
            if (fa > fb) {
             return -1
@@ -209,7 +257,7 @@ export default {
           }
           return 0
         }
-        if(this.sortTypeH==2){
+        if(sortType==2){
         let fa =parseInt(a.price), fb =parseInt(b.price)
         
           if (fa > fb) {
@@ -220,7 +268,7 @@ export default {
           }
           return 0
         }
-        else if (this.sortTypeH == 3){
+        else if (sortType == 3){
           
           let fa = parseInt(a.price), fb =parseInt(b.price);
           

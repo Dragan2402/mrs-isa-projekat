@@ -13,4 +13,6 @@ public interface ReservationService {
     Reservation findById(Long id);
 
     Reservation save(Reservation reservation);
+
+    Boolean cancelReservation(Long id);
 }
