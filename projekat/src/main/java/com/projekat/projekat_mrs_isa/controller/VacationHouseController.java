@@ -4,7 +4,6 @@ package com.projekat.projekat_mrs_isa.controller;
 import com.projekat.projekat_mrs_isa.dto.OfferDTO;
 import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
 import com.projekat.projekat_mrs_isa.model.Offer;
-import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
 import com.projekat.projekat_mrs_isa.service.OfferService;
 import com.projekat.projekat_mrs_isa.service.UtilityService;
@@ -136,8 +135,8 @@ public class VacationHouseController {
     public ResponseEntity<VacationHouseDTO> updateVacationHouse(@RequestBody VacationHouseDTO vacationHouseDTO) {
         LocalDateTime availableFrom = vacationHouseDTO.getAvailableFrom();
         LocalDateTime availableTo = vacationHouseDTO.getAvailableTo();
-        if(availableFrom.isAfter(availableTo) || availableFrom.isBefore(LocalDateTime.now()))
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        if(availableFrom.isAfter(availableTo) || availableFrom.isBefore(LocalDateTime.now()))
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         VacationHouse vacationHouse = vacationHouseService.findById(vacationHouseDTO.getId());
         vacationHouse.update(vacationHouseDTO);
         vacationHouse = vacationHouseService.save(vacationHouse);

@@ -40,7 +40,7 @@
         <div><b>Additional info: </b>{{vacationHouse.additionalInfo}}</div>
         <div><b>Cancellation conditions: </b>{{vacationHouse.cancellationConditions}}</div>
         <div><b>Capacity: </b>{{vacationHouse.roomsQuantity}} rooms, {{vacationHouse.bedsPerRoom}} beds per room</div>
-        <div><b>Availability:</b> From {{vacationHouse.availableFrom}} to {{vacationHouse.availableTo}}</div>
+<!--        <div><b>Availability:</b> From {{vacationHouse.availableFrom}} to {{vacationHouse.availableTo}}</div>-->
         <div v-if="vacationHouse.availableFrom != null && vacationHouse.availableFrom != null">
             <label class="mb-3" for="calendar">Available dates</label><br>
             <v-calendar id="calendar" class="mb-3" :from-date="fromDate" :attributes="calendarAttributes"
@@ -95,7 +95,7 @@
           </div>
           <!--      <Datepicker v-model="availabilityInterval" :format="formatRange" range/>-->
 
-          <v-date-picker v-model="availabilityInterval" :min-date="new Date()" mode="dateTime" is-range ></v-date-picker>
+          <v-date-picker v-model="availabilityInterval" :min-date="new Date()" :from-date="fromDate" mode="dateTime" is-range ></v-date-picker>
         </div>
         <div class="modal-footer">
           <button type="button" @click="cancel()" class="custom-btn button-primary" data-bs-dismiss="modal">Close</button>
