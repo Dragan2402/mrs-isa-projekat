@@ -28,8 +28,7 @@
 
     <div v-if="selectedR">
 
-      {{selectedReservation}}
-      CANCEL TODO
+      <button @click="cancelReservation()">Cancel Reservation</button>
     </div>
     
     <div>
@@ -136,14 +135,13 @@ export default {
     }},
   methods:{
     selectReservationHistory(reservation,index) {
-
       this.selectedReservationHistory = reservation;
-      this.selectedHistory = true;
-      
+      this.selectedHistory = true;    
       this.indexH=index;
-      
-
     },  
+    cancelReservation(){
+      console.log("CANCEL");
+    },
     selectReservation(reservation,index) {
 
       this.selectedReservation = reservation;
