@@ -118,8 +118,8 @@ public class ClientController {
     @GetMapping(value = "/loggedClient", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<UserDTO> getLoggedClient(Principal clientP) throws Exception {
-        Client logged=clientService.findByUsername(clientP.getName());
-        if(logged==null)
+        Client logged = clientService.findByUsername(clientP.getName());
+        if (logged == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         UserDTO clientDTO = new UserDTO(logged);
         return new ResponseEntity<>(clientDTO, HttpStatus.OK);
@@ -174,8 +174,18 @@ public class ClientController {
         return new ResponseEntity<>(reservationsDtos, HttpStatus.OK);
     }
 
+    @PutMapping(value = "/cancelReservation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public ResponseEntity<Boolean> cancelReservation(Principal clientP, @RequestBody ReservationDTO reservationDTO) {
+        Client client = clientService.findByUsername(clientP.getName());
+        if (client == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(reservationService.cancelReservation(reservationDTO.getId()), HttpStatus.OK);
+    }
 
-    @PutMapping(value = "/loggedClient", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+
+    @PutMapping(value = "/loggedClient", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<UserDTO> updateLoggedClient(Principal clientP, @RequestBody UserDTO userDTO) throws Exception {
 
@@ -197,8 +207,7 @@ public class ClientController {
     }
 
 
-
-    @PutMapping(value = "/loggedClient/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE )
+    @PutMapping(value = "/loggedClient/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('CLIENT')")
     @Transactional
     public ResponseEntity<String> updateLoggedClientPicture(Principal clientP, @RequestPart("image") MultipartFile image) throws IOException {

@@ -63,7 +63,6 @@ public class OfferController {
         if(clientLogged.getPenalties()==3){
             return new ResponseEntity<>(false,HttpStatus.OK);
         }
-        System.out.println(clientLogged.getPenalties());
         Reservation reservation= new Reservation(offer.getPlace(),offer.getClientLimit(), new ArrayList<>(offer.getAdditionalServices()),
                 offer.getPrice(),offer.getRentingEntity(),clientLogged,offer.getStart(),offer.getDuration());
         clientLogged.addReservation(reservation);

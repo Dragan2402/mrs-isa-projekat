@@ -369,6 +369,21 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 Duration.ofDays(3)
         );
 
+        Reservation reservationTemp3 = new Reservation(
+                "Brcko Fic basta",
+                5,
+                services,
+                50.0,
+                vacationHouseTemp,
+                clientTemp1,
+                LocalDateTime.of(2022,5,20,20,10),
+                Duration.ofDays(3)
+        );
+
+        vacationHouseTemp.addReservation(reservationTemp3);
+        clientTemp1.addReservation(reservationTemp3);
+        reservationRep.save(reservationTemp3);
+
         vacationHouseTemp.addReservation(reservationTemp);
         clientTemp1.addReservation(reservationTemp);
         reservationRep.save(reservationTemp);
