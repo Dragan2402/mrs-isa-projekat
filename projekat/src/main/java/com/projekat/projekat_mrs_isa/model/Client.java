@@ -18,6 +18,9 @@ public class Client extends User {
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Review> reviews = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "subscribed", joinColumns = @JoinColumn(name = "client_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "renting_entity_id", referencedColumnName = "id"))
+    private Set<RentingEntity> subscriptions = new HashSet<RentingEntity>();
 
     public Client() {
     }
@@ -51,10 +54,29 @@ public class Client extends User {
         review.setClient(this);
     }
 
+    public void removeSubscription(RentingEntity rentingEntity) {
+        subscriptions.remove(rentingEntity);
+        rentingEntity.removeSubscription(this);
+    }
+
+    public void addSubscription(RentingEntity rentingEntity) {
+        subscriptions.add(rentingEntity);
+        rentingEntity.addSubscription(this);
+    }
+
     public void removeReview(Review review) {
         reviews.remove(review);
         review.setClient(null);
     }
+
+    public Set<RentingEntity> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(Set<RentingEntity> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
+
 
 
     public void update(UserDTO userDTO) {

@@ -61,7 +61,7 @@
               </div>
             </div>
             <div class="offer-right">
-              <button class="custom-btn button-primary" @click="makeReservation(offer, index)">Make a reservation</button>
+              <button class="custom-btn button-primary" @click="makeReservation(offer)">Make a reservation</button>
             </div>
           </div>
         </div>
@@ -155,26 +155,24 @@ methods:{
        return hours+"H";
     }
   },
-  hide(){
-    this.selectedOffer={};
-    this.selected=false;
-  },
-  makeReservation(){
+
+  makeReservation(offer){
    
      if(this.$root.loggedUser.penalties==3){
        this.$toast.error("You can not make a reservation. You have 3 penalties. Wait for next month.");
        return;
      }
-      axios.get(`/api/offers/${this.selectedOffer.id}/makeReservation`,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {
+      axios.post(`/api/offers/makeQuickReservation`,offer,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {
         if(response.data==true){
-          this.$toast.success("Reservation made")
+          this.$toast.success("Reservation made");
+           this.selected=false;      
+           this.$router.go(0);
         }else{
           this.$toast.error("You can not make a reservation. You have 3 penalties. Wait for next month.");
         }
       });
       
-      this.selected=false;      
-      this.$router.go(0);
+     
   }
 }
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 @SpringBootApplication
+@EnableAsync
 public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
     @Autowired
@@ -330,6 +332,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         vacHouseOwnerTemp1.addVacationHouse(vacationHouseTemp2);
 
 
+
         vacationHouseRep.save(vacationHouseTemp);
         vacationHouseRep.save(vacationHouseTemp2);
         Review reviewTemp1=new Review(vacationHouseTemp2,clientTemp1,4.6);
@@ -476,6 +479,11 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         requestService.save(requestTemp);
         requestService.save(requestTemp2);
         requestService.save(requestTemp3);
+
+        clientTemp1.addSubscription(vacationHouseTemp);
+        clientTemp1.addSubscription(vacationHouseTemp2);
+        clientRep.save(clientTemp1);
+
 
 
         Path currentRelativePath = Paths.get("");

@@ -31,6 +31,9 @@ public abstract class RentingEntity {
     @ElementCollection(targetClass=String.class)
     private List<String> pictures;
 
+    @ManyToMany(mappedBy = "subscriptions")
+    private Set<Client> subscribers = new HashSet<Client>();
+
 //    @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
 //    private Set<Slot> slots = new HashSet<Slot>();
 
@@ -182,6 +185,31 @@ public abstract class RentingEntity {
         complaints.remove(complaint);
         complaint.setRentingEntity(null);
     }
+
+    public void removeSubscription(Client client) {
+        subscribers.remove(client);
+    }
+
+    public void addSubscription(Client client) {
+       subscribers.add(client);
+    }
+
+    public Set<Client> getSubscribers() {
+        return subscribers;
+    }
+
+    public void setSubscribers(Set<Client> subscribers) {
+        this.subscribers = subscribers;
+    }
+
+    public Set<Complaint> getComplaints() {
+        return complaints;
+    }
+
+    public void setComplaints(Set<Complaint> complaints) {
+        this.complaints = complaints;
+    }
+
     public String getBehaviourRules() {
         return behaviourRules;
     }

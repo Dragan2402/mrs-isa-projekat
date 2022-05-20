@@ -50,10 +50,11 @@ public class OfferController {
     }
 
 
-    @GetMapping(value = "/{id}/makeReservation",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/makeQuickReservation",produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
     @PreAuthorize("hasRole('CLIENT')")
-    public  ResponseEntity<Boolean> makeReservation(Principal principal,@PathVariable("id") Long offerId){
-        Offer offer = offerService.findById(offerId);
+    public  ResponseEntity<Boolean> makeReservation(Principal principal,@RequestBody OfferDTO offerDTO){
+        Offer offer = offerService.findById(offerDTO.getId());
         if(offer==null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
