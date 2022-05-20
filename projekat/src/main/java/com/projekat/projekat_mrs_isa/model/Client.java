@@ -28,6 +28,7 @@ public class Client extends User {
     public Client(String email, String username, String password, String picture, String firstName, String lastName, String address, String city,
                   String country, String phoneNum) {
         super(email, username, password, picture, firstName, lastName, address, city, country, phoneNum);
+        super.setType(AccountType.CLIENT);
 
     }
 
@@ -56,12 +57,14 @@ public class Client extends User {
 
     public void removeSubscription(RentingEntity rentingEntity) {
         subscriptions.remove(rentingEntity);
-        rentingEntity.removeSubscription(this);
     }
 
     public void addSubscription(RentingEntity rentingEntity) {
         subscriptions.add(rentingEntity);
-        rentingEntity.addSubscription(this);
+    }
+
+    public Boolean isSubscribed(RentingEntity rentingEntity){
+        return subscriptions.contains(rentingEntity);
     }
 
     public void removeReview(Review review) {

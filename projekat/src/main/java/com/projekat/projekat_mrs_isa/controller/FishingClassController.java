@@ -93,14 +93,9 @@ public class FishingClassController {
         for(Offer offer : fishingClass.getOffers()) {
             if (offer.getStart().compareTo(LocalDateTime.now()) > 0) {
                 OfferDTO temp = new OfferDTO(offer);
-                offers.add(temp);
-
-            }else{
-
+                offers.add(temp);}
+            else
                 offer.setDeleted(true);
-
-
-            }
         }
         return new ResponseEntity<>(offers, HttpStatus.OK);
     }

@@ -13,5 +13,6 @@ public class Admin extends User{
     public Admin(String email,String username, String password,String picture, String firstName, String lastName, String address, String city,
                  String country, String phoneNum) {
         super(email, username,password,picture, firstName, lastName, address, city, country, phoneNum);
+        super.setType(AccountType.ADMIN);
     }
 }

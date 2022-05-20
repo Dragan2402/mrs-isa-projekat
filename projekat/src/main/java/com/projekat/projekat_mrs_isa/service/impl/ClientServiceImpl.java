@@ -1,19 +1,22 @@
 package com.projekat.projekat_mrs_isa.service.impl;
 
 import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
+import com.projekat.projekat_mrs_isa.dto.SubscriptionDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.Client;
+import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.Role;
-import com.projekat.projekat_mrs_isa.model.User;
 import com.projekat.projekat_mrs_isa.repository.ClientRepository;
 import com.projekat.projekat_mrs_isa.repository.RoleRepository;
 import com.projekat.projekat_mrs_isa.service.ClientService;
+import com.projekat.projekat_mrs_isa.service.RentingEntityService;
+import com.projekat.projekat_mrs_isa.service.UtilityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 @Service
 
@@ -25,7 +28,13 @@ public class ClientServiceImpl implements ClientService {
     private PasswordEncoderComponent passwordEncoderComponent;
 
     @Autowired
+    private RentingEntityService rentingEntityService;
+
+    @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private UtilityService utilityService;
 
     @Override
     public Client findById(long id) { return clientRepository.findById(id).orElse(null) ;}
@@ -61,6 +70,50 @@ public class ClientServiceImpl implements ClientService {
             client.setPenalties(0);
             clientRepository.save(client);
         }
+    }
+
+    @Override
+    public Boolean subscribe(Client client, Long reId) {
+        RentingEntity rentingEntity = rentingEntityService.findById(reId);
+        if (rentingEntity == null)
+            return false;
+        rentingEntity.addSubscription(client);
+        save(client);
+        return true;
+
+    }
+
+    @Override
+    public Boolean unSubscribe(Client client, Long id) {
+        RentingEntity rentingEntity = rentingEntityService.findById(id);
+        if (rentingEntity == null)
+            return false;
+        rentingEntity.removeSubscription(client);
+        save(client);
+        return true;
+    }
+
+    @Override
+    public Boolean isSubscribed(Client client, Long id) {
+        RentingEntity rentingEntity = rentingEntityService.findById(id);
+        if (rentingEntity == null)
+            return false;
+        return client.isSubscribed(rentingEntity);
+    }
+
+    @Override
+    public List<SubscriptionDTO> getSubscriptions(Client client) {
+        List<SubscriptionDTO> subscriptions=new ArrayList<>();
+        for(RentingEntity rentingEntity : client.getSubscriptions()){
+            SubscriptionDTO subscriptionDTO=new SubscriptionDTO(rentingEntity);
+            String picturePath="pictures/renting_entities/0.png";
+            if(rentingEntity.getPictures().size()>0){
+                picturePath=rentingEntity.getPictures().get(0);
+            }
+            subscriptionDTO.setImg(utilityService.getPictureEncoded(picturePath));
+            subscriptions.add(subscriptionDTO);
+        }
+        return subscriptions;
     }
 
     @Override

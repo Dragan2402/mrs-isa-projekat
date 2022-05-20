@@ -1,5 +1,6 @@
 package com.projekat.projekat_mrs_isa.dto;
 
+import com.projekat.projekat_mrs_isa.model.AccountType;
 import com.projekat.projekat_mrs_isa.model.Client;
 import com.projekat.projekat_mrs_isa.model.User;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +16,7 @@ public class UserDTO {
     private String country;
     private String phoneNum;
     private Integer penalties;
+    private AccountType accountType;
 
     public UserDTO() {
     }
@@ -43,6 +45,7 @@ public class UserDTO {
         country = user.getCountry();
         phoneNum = user.getPhoneNum();
         penalties = user.getPenalties();
+        accountType=user.getType();
     }
 
 
@@ -124,5 +127,13 @@ public class UserDTO {
 
     public void setPenalties(Integer penalties) {
         this.penalties = penalties;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
     }
 }

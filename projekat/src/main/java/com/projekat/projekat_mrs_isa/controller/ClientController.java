@@ -1,9 +1,6 @@
 package com.projekat.projekat_mrs_isa.controller;
 
-import com.projekat.projekat_mrs_isa.dto.ComplaintDTO;
-import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
-import com.projekat.projekat_mrs_isa.dto.ReviewDTO;
-import com.projekat.projekat_mrs_isa.dto.UserDTO;
+import com.projekat.projekat_mrs_isa.dto.*;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -224,6 +221,57 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(reservationService.cancelReservation(reservationDTO.getId()), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/subscribe", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public ResponseEntity<Boolean> subscribe(Principal clientP, @RequestBody RentingEntityDTO rentingEntityDTO) {
+        Client client = clientService.findByUsername(clientP.getName());
+        if (client == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(clientService.subscribe(client,rentingEntityDTO.getId()), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/unSubscribe", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public ResponseEntity<Boolean> unSubscribe(Principal clientP, @RequestBody RentingEntityDTO rentingEntityDTO) {
+        Client client = clientService.findByUsername(clientP.getName());
+        if (client == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(clientService.unSubscribe(client,rentingEntityDTO.getId()), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/unSubscribeDTO", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public ResponseEntity<Boolean> unSubscribe(Principal clientP, @RequestBody SubscriptionDTO subscriptionDTO) {
+        Client client = clientService.findByUsername(clientP.getName());
+        if (client == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(clientService.unSubscribe(client,subscriptionDTO.getId()), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/isSubscribed/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public ResponseEntity<Boolean> isSubscribed(Principal clientP,@PathVariable("id") Long id) {
+        Client client = clientService.findByUsername(clientP.getName());
+        if (client == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(clientService.isSubscribed(client,id), HttpStatus.OK);
+    }
+
+
+    @GetMapping(value = "/subscriptions", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public ResponseEntity<List<SubscriptionDTO>> isSubscribed(Principal clientP) {
+        Client client = clientService.findByUsername(clientP.getName());
+        if (client == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(clientService.getSubscriptions(client),HttpStatus.OK);
     }
 
 

@@ -55,6 +55,9 @@ public abstract class User implements UserDetails {
     @Column(name = "reviews_number",nullable = false)
     private Integer reviewsNumber;
 
+    @Column(name = "type",nullable = false)
+    private AccountType type;
+
     @Column(name = "verified", nullable = false)
     private boolean verified;
 
@@ -269,6 +272,14 @@ public abstract class User implements UserDetails {
         if(this.penalties<3){
             this.penalties++;
         }
+    }
+
+    public AccountType getType() {
+        return type;
+    }
+
+    public void setType(AccountType type) {
+        this.type = type;
     }
 
     public List<Role> getRoles() {

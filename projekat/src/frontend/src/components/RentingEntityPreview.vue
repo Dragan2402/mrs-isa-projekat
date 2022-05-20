@@ -38,6 +38,8 @@
         <div v-if="this.displayType==1"><b>Client Limit: </b>{{rentingEntity.clientLimit}}</div>
         <div v-if="this.displayType==2"><b>Instructor biography: </b>{{rentingEntity.instructorBiography}}</div>
         <div v-if="this.displayType==2"><b>Client limit: </b>{{rentingEntity.clientLimit}}</div>
+        <div v-if="!isSubscribed"><button @click="subscribe()">Subscribe</button></div>
+        <div v-else @click="unSubscribe()"><button>Unsubscribe</button></div>
       </div>
       <div class="google-map-container">
         <iframe class="google-map" v-bind:src="'https://maps.google.com/maps?q=' + rentingEntity.address + '&t=&z=13&ie=UTF8&iwloc=&output=embed'"></iframe>
@@ -47,8 +49,8 @@
     <div class="main-offer-container">
       <h4 v-if="this.offers.length !== 0">Offers:</h4>
       <div class="inner-offer-container">
-        <div class="offer" v-for="(offer, index) in this.offers" @Click="selectOffer(offer, index)"
-             v-bind:index="index" :key="offer.id" v-bind="{selected: selectedOffer.id===offer.id}">
+        <div class="offer" v-for="(offer, index) in this.offers" 
+             v-bind:index="index" :key="offer.id">
           <div class="offer-description">
             <div class="offer-left">
               <div><b>Address: </b> {{offer.place}}</div>
@@ -61,7 +63,7 @@
               </div>
             </div>
             <div class="offer-right">
-              <button class="custom-btn button-primary" @click="makeReservation(offer)">Make a reservation</button>
+              <button class="custom-btn button-primary" @click="makeReservation(offer,index)">Make a reservation</button>
             </div>
           </div>
         </div>
@@ -83,6 +85,7 @@ export default {
       selectedOffer: {},
       selected:false,
       pictures:[],
+      isSubscribed:false,
       index:0,      
       offers: [],
       loaded:false
@@ -132,16 +135,19 @@ export default {
       axios.get(pathOffers).then(response => this.offers=response.data);
       this.loaded=true;
     }
+    if(localStorage.getItem("jwt")!="null"){
+      if(this.$root.loggedUser.accountType=="CLIENT"){
+   
+        const path="/api/clients/isSubscribed/"+this.id;
+        axios.get(path,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} } ).then(response =>{
+          this.isSubscribed=response.data;
+    
+        });
+      }
+    }
+    
 },
 methods:{
-  selectOffer(offer,index) {
-
-      this.selectedOffer = offer;
-      this.selected = true;
-      this.index=index;
-      
-
-    },
     msToTime(duration) {
     var 
       
@@ -155,18 +161,63 @@ methods:{
        return hours+"H";
     }
   },
+  subscribe(){
+    if(localStorage.getItem("jwt")=="null"){
+      this.$router.push("/loginPage");
+      return;
+    }
+    if(this.$root.loggedUser.accountType!="CLIENT"){
+      this.$toast.error("Only available for clients");
+      return;
+    }
+    axios.put(`/api/clients/subscribe`,this.rentingEntity,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response =>{
+      if(response.data==true){
+        this.$toast.success("Subscribed");
+        this.isSubscribed=true;
+      }else{
+        this.$toast.error("Error");
+        this.isSubscribed=false;
+      }
+    });
+  },
+  unSubscribe(){
+    if(localStorage.getItem("jwt")=="null"){
+      this.$router.push("/loginPage");
+      return;
+    }
+    if(this.$root.loggedUser.accountType!="CLIENT"){
+      this.$toast.error("Only available for clients");
+      return;
+    }
+    axios.put(`/api/clients/unSubscribe`,this.rentingEntity,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response =>{
+      if(response.data==true){
+        this.$toast.success("Unsubscribed");
+        this.isSubscribed=false;
+      }else{
+        this.$toast.error("Error");
+        this.isSubscribed=true;
+      }
+    });
+  },
 
-  makeReservation(offer){
-   
+  makeReservation(offer,index){
+
+    if(localStorage.getItem("jwt")=="null"){
+      this.$router.push("/loginPage");
+      return;
+    }
+    if(this.$root.loggedUser.accountType!="CLIENT"){
+      this.$toast.error("Only available for clients");
+      return;
+    }
      if(this.$root.loggedUser.penalties==3){
        this.$toast.error("You can not make a reservation. You have 3 penalties. Wait for next month.");
        return;
      }
       axios.post(`/api/offers/makeQuickReservation`,offer,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {
         if(response.data==true){
-          this.$toast.success("Reservation made");
-           this.selected=false;      
-           this.$router.go(0);
+           this.$toast.success("Reservation made");    
+           this.offers.splice(index,1);
         }else{
           this.$toast.error("You can not make a reservation. You have 3 penalties. Wait for next month.");
         }

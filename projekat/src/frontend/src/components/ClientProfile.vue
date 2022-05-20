@@ -56,6 +56,19 @@
         <button style="margin-right: 20px" class="btn btn-primary" @click="sendDeleteRequest()">Submit</button>
         <button class="btn btn-primary" @click="cancelDelete()">Cancel</button>
       </div>
+      <button  class="btn btn-primary" @click="toggleSubscriptions()">My Subscriptions</button>
+      <div v-if="showSubscriptions">
+        <div  v-for="(subscription, index) in this.subscriptions" 
+             v-bind:index="index" :key="subscription.id">
+             
+             <img v-bind:src="'data:image/jpeg;base64,' + subscription.img" style="width: 140px; height: 80px;">
+             {{subscription.name}}
+             <button @click="unsubscribe(subscription,index)">Unsubscribe</button>
+        </div>
+ 
+        <button class="btn btn-primary" @click="hideSubscriptions()">Hide</button>
+      </div>
+
     </div>
 
   </body>
@@ -79,7 +92,9 @@ export default {
       validNumber: '',
       phoneNum: null,
       deleting: false,
-      text: ""
+      subscriptions:[],
+      text: "",
+      showSubscriptions:false,
 
             }
     },
@@ -107,7 +122,19 @@ export default {
           this.$router.push("/loginPage");
         }
        
-      });     
+      });  
+      axios.get("/api/clients/subscriptions",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.subscriptions=response.data)).catch((errorP) => {
+        
+        if(errorP.response.status===401){
+          //this.$toast.error("Not Logged In");
+          this.$root.accessToken=null;
+          localStorage.setItem("jwt",null);
+          
+          this.$router.push("/loginPage");
+        }
+       
+      });  
+   
     },
     methods: {    
     toggleEdit(){
@@ -131,6 +158,22 @@ export default {
     },
     cancelDelete(){
       this.deleting=false;
+    },
+    toggleSubscriptions(){
+      this.showSubscriptions=true;
+    },
+    unsubscribe(subscription,index){
+      axios.put(`/api/clients/unSubscribeDTO`,subscription,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response =>{
+        if(response.data==true){
+          this.$toast.success("Unsubscribed");
+          this.subscriptions.splice(index,1);
+        }else{
+          this.$toast.error("Error");
+        }
+      });
+    },
+    hideSubscriptions(){
+      this.showSubscriptions=false;
     },
     saveEdit(){
       var regExp = /^[A-Za-z]+$/;

@@ -1,13 +1,10 @@
 package com.projekat.projekat_mrs_isa.service;
 
+import com.projekat.projekat_mrs_isa.dto.SubscriptionDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.Client;
-import com.projekat.projekat_mrs_isa.model.User;
-import com.projekat.projekat_mrs_isa.repository.ClientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -38,4 +35,12 @@ public interface ClientService {
     Client addClient(String email, String username, String password, String picture, String firstName, String lastName, String address, String city, String country, String phoneNum);
 
     void resetPenalties();
+
+    Boolean subscribe(Client client,Long reId);
+
+    Boolean unSubscribe(Client client, Long id);
+
+    Boolean isSubscribed(Client client, Long id);
+
+    List<SubscriptionDTO> getSubscriptions(Client client);
 }

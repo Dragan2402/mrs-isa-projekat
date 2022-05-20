@@ -31,6 +31,7 @@ public class RentingEntityDTO {
     private Integer reviewsNumber;
     private String additionalInfo;
     private String cancellationConditions;
+    private Boolean isSubscribed;
 
     public RentingEntityDTO() {}
 
@@ -47,6 +48,7 @@ public class RentingEntityDTO {
         cancellationConditions = rentingEntity.getCancellationConditions();
         rating=rentingEntity.getRating();
         reviewsNumber=rentingEntity.getReviewsNumber();
+        isSubscribed=false;
     }
 
     public Long getId() {
@@ -109,6 +111,15 @@ public class RentingEntityDTO {
     public void setCancellationConditions(String cancellationConditions) {
         this.cancellationConditions = cancellationConditions;
     }
+
+    public Boolean getSubscribed() {
+        return isSubscribed;
+    }
+
+    public void setSubscribed(Boolean subscribed) {
+        isSubscribed = subscribed;
+    }
+
     public String getImg() {
         return img;
     }

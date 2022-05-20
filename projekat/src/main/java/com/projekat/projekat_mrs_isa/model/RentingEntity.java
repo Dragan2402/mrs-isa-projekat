@@ -188,10 +188,12 @@ public abstract class RentingEntity {
 
     public void removeSubscription(Client client) {
         subscribers.remove(client);
+        client.removeSubscription(this);
     }
 
     public void addSubscription(Client client) {
        subscribers.add(client);
+       client.addSubscription(this);
     }
 
     public Set<Client> getSubscribers() {
