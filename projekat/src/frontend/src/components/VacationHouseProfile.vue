@@ -8,8 +8,8 @@
       </div>
       <div style="width: 30%; margin-top: 20px">
         <div style="float: right; display: flex; overflow: hidden;">
-          <button style="margin-right: 20px" type="button" @click="toggleEdit()" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#modal">Edit info</button>
-          <button type="button" @click="toggleCreatingOffer()" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#modalOffer">Create offer</button>
+          <button style="margin-right: 20px" @click="showModal()" type="button" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#modal">Edit info</button>
+          <button type="button" @click="showModal()" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#modalOffer">Create offer</button>
         </div>
       </div>
     </div>
@@ -40,8 +40,7 @@
         <div><b>Additional info: </b>{{vacationHouse.additionalInfo}}</div>
         <div><b>Cancellation conditions: </b>{{vacationHouse.cancellationConditions}}</div>
         <div><b>Capacity: </b>{{vacationHouse.roomsQuantity}} rooms, {{vacationHouse.bedsPerRoom}} beds per room</div>
-<!--        <div><b>Availability:</b> From {{vacationHouse.availableFrom}} to {{vacationHouse.availableTo}}</div>-->
-        <div v-if="vacationHouse.availableFrom != null && vacationHouse.availableFrom != null">
+        <div v-if="vacationHouse.availableFrom != null && vacationHouse.availableFrom != null" v >
             <label class="mb-3" for="calendar">Available dates</label><br>
             <v-calendar id="calendar" class="mb-3" :from-date="fromDate" :attributes="calendarAttributes"
                     :min-date="calendarAttributes[0].dates.start" :max-date="calendarAttributes[0].dates.end" /><br>
@@ -93,12 +92,11 @@
             <input v-model="vacationHouse.bedsPerRoom" type="text" class="form-control" id="floatBedsPerRoom" placeholder="Beds per room">
             <label for="floatBedsPerRoom">Beds per room</label>
           </div>
-          <!--      <Datepicker v-model="availabilityInterval" :format="formatRange" range/>-->
 
-          <v-date-picker v-model="availabilityInterval" :min-date="new Date()" :from-date="fromDate" mode="dateTime" is-range ></v-date-picker>
+          <v-date-picker v-if="modalShown" v-model="availabilityInterval" :min-date="new Date()" :from-date="fromDate" mode="dateTime" is-range is-expanded is24hr ></v-date-picker>
         </div>
         <div class="modal-footer">
-          <button type="button" @click="cancel()" class="custom-btn button-primary" data-bs-dismiss="modal">Close</button>
+          <button type="button" @click="hideModal()" class="custom-btn button-primary" data-bs-dismiss="modal">Close</button>
           <button type="button" @click="saveEdit()" class="custom-btn button-primary" data-bs-dismiss="modal">Save changes</button>
         </div>
       </div>
@@ -123,7 +121,7 @@
           <Datepicker v-model="offerInterval" :format="formatRange" range/>
         </div>
         <div class="modal-footer">
-          <button type="button" @click="cancel()" class="custom-btn button-primary" data-bs-dismiss="modal">Close</button>
+          <button type="button" @click="hideModal()" class="custom-btn button-primary" data-bs-dismiss="modal">Close</button>
           <button type="button" @click="createOffer()" class="custom-btn button-primary" data-bs-dismiss="modal">Save changes</button>
         </div>
       </div>
@@ -168,8 +166,7 @@ export default {
       duration: null
     });
     let pictures = ref([]);
-    let editing = ref(false);
-    let creatingOffer = ref(false);
+    let modalShown = ref(false);
     let availabilityInterval = ref({
       start: undefined,
       end: undefined
@@ -218,17 +215,12 @@ export default {
         });
     });
 
-    function toggleEdit() {
-      editing.value = true;
+    function showModal() {
+      modalShown.value = true;
     }
 
-    function toggleCreatingOffer() {
-      creatingOffer.value = true;
-    }
-
-    function cancel() {
-      editing.value = false;
-      creatingOffer.value = false;
+    function hideModal() {
+      modalShown.value = false;
     }
 
     function saveEdit(){
@@ -251,11 +243,10 @@ export default {
                 toast.error("Error: Invalid data");
               }
             });
-
-        editing.value = false;
       } else {
         toast.error("Error: Invalid dates")
       }
+      modalShown.value = false;
     }
 
     function createOffer() {
@@ -270,7 +261,7 @@ export default {
             toast.success("Info updated");
           });
 
-      creatingOffer.value = false;
+      modalShown.value = false;
     }
 
     function stringToDateTime(s) {
@@ -299,15 +290,6 @@ export default {
       return `${day}.${month}.${year} ${hour}:${minute}`;
     }
 
-    // function parseDate(date) {
-    //   const day = ("0" + date.getDate()).slice(-2);
-    //   const month = ("0" + (date.getMonth() + 1)).slice(-2);
-    //   const year = date.getFullYear();
-    //   const hours = ("0" + date.getHours()).slice(-2);
-    //   const minutes = ("0" + date.getMinutes()).slice(-2);
-    //   return `${day}.${month}.${year} ${hours}:${minutes}`;
-    // }
-
     const formatRange = (dates) => {
       let from = dates[0];
       let to = dates[1];
@@ -332,21 +314,18 @@ export default {
       vacationHouse,
       offer,
       pictures,
-      editing,
-      creatingOffer,
+      modalShown,
       availabilityInterval,
       offerInterval,
       calendarAttributes,
       fromDate,
       formatRange,
-      toggleEdit,
-      toggleCreatingOffer,
-      // parseDate,
+      showModal,
+      hideModal,
       stringToDateTime,
       dateTimeToString,
       saveEdit,
-      createOffer,
-      cancel
+      createOffer
     }
   }
 }
