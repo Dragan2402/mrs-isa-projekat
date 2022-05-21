@@ -80,9 +80,7 @@ public class VacationHouseController {
         for(Offer offer : vacationHouse.getOffers()) {
             if (offer.getStart().compareTo(LocalDateTime.now()) > 0) {
                 OfferDTO temp = new OfferDTO(offer);
-
                 offers.add(temp);
-
             }else{
                 offer.setDeleted(true);
             }

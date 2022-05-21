@@ -263,6 +263,16 @@ public class ClientController {
         return new ResponseEntity<>(clientService.isSubscribed(client,id), HttpStatus.OK);
     }
 
+    @GetMapping(value = "/rentingEntityAvailability/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public ResponseEntity<List<TakenPeriodDTO>> rentingEntityAvailability(Principal clientP,@PathVariable("id") Long id) {
+        Client client = clientService.findByUsername(clientP.getName());
+        if (client == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(clientService.rentingEntityAvailability(client,id), HttpStatus.OK);
+    }
+
 
     @GetMapping(value = "/subscriptions", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('CLIENT')")

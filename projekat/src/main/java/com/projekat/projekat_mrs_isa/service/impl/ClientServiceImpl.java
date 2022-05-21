@@ -2,10 +2,9 @@ package com.projekat.projekat_mrs_isa.service.impl;
 
 import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
 import com.projekat.projekat_mrs_isa.dto.SubscriptionDTO;
+import com.projekat.projekat_mrs_isa.dto.TakenPeriodDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
-import com.projekat.projekat_mrs_isa.model.Client;
-import com.projekat.projekat_mrs_isa.model.RentingEntity;
-import com.projekat.projekat_mrs_isa.model.Role;
+import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.repository.ClientRepository;
 import com.projekat.projekat_mrs_isa.repository.RoleRepository;
 import com.projekat.projekat_mrs_isa.service.ClientService;
@@ -114,6 +113,23 @@ public class ClientServiceImpl implements ClientService {
             subscriptions.add(subscriptionDTO);
         }
         return subscriptions;
+    }
+
+    @Override
+    public List<TakenPeriodDTO> rentingEntityAvailability(Client client, Long id) {
+        RentingEntity rentingEntity = rentingEntityService.findById(id);
+        if (rentingEntity == null)
+            return null;
+        List<TakenPeriodDTO> takenPeriod = new ArrayList<>();
+        for(Reservation reservation : rentingEntity.getReservations()){
+            TakenPeriodDTO takenPeriodDTO=new TakenPeriodDTO(reservation.getStart(),reservation.getStart().plus(reservation.getDuration()),"Reservation");
+            takenPeriod.add(takenPeriodDTO);
+        }
+        for(Offer offer : rentingEntity.getOffers()){
+            TakenPeriodDTO takenPeriodDTO=new TakenPeriodDTO(offer.getStart(),offer.getStart().plus(offer.getDuration()),"Offer");
+            takenPeriod.add(takenPeriodDTO);
+        }
+        return takenPeriod;
     }
 
     @Override

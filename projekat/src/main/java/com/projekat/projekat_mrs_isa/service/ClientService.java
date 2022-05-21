@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.service;
 
 import com.projekat.projekat_mrs_isa.dto.SubscriptionDTO;
+import com.projekat.projekat_mrs_isa.dto.TakenPeriodDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.Client;
 import org.springframework.data.domain.Page;
@@ -43,4 +44,6 @@ public interface ClientService {
     Boolean isSubscribed(Client client, Long id);
 
     List<SubscriptionDTO> getSubscriptions(Client client);
+
+    List<TakenPeriodDTO> rentingEntityAvailability(Client client, Long id);
 }
