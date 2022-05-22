@@ -69,27 +69,27 @@ public class AuthenticationController {
 
     @PostMapping(value ="/addClient",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> addUser(@RequestBody Map<String,Object> userMap){
-        String firstName,lastName,email,password,confirmPassword,address,city,country,phoneNum,username;
-        if(!utilityService.containsAll(userMap))
+        if(!utilityService.validateUserData(userMap))
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
 
-        firstName = (String) userMap.get("firstName");
-        lastName = (String) userMap.get("lastName");
-        email = (String) userMap.get("email");
-        username = (String) userMap.get("username");
-        password = (String) userMap.get("password");
-        confirmPassword = (String) userMap.get("confirmPassword");
-        address = (String) userMap.get("address");
-        city = (String) userMap.get("city");
-        country = (String) userMap.get("country");
-        phoneNum = (String) userMap.get("phoneNum");
-        if(utilityService.validateName(firstName) && utilityService.validateName(lastName)&& userService.isUsernameAvailable(username) && utilityService.validateEmail(email) && userService.isUsernameAvailable(email.toLowerCase())
-                && utilityService.validatePasswords(password,confirmPassword) && address.length()>2 &&
-                city.length()>2 && country.length()>2 && utilityService.validatePhoneNum(phoneNum)){
-            Client clientTemp=clientService.addClient(email.toLowerCase(),username,password,"pictures/user_pictures/0.png",firstName,lastName,address,city,country,phoneNum);
+        String username = (String) userMap.get("username");
+        String email = (String) userMap.get("email");
+        if(userService.isUsernameAvailable(username) && userService.isUsernameAvailable(email.toLowerCase())) {
+            Client clientTemp = clientService.addClient(
+                    email.toLowerCase(),
+                    username,
+                    (String) userMap.get("password"),
+                    "pictures/user_pictures/0.png",
+                    (String) userMap.get("firstName"),
+                    (String) userMap.get("lastName"),
+                    (String) userMap.get("address"),
+                    (String) userMap.get("city"),
+                    (String) userMap.get("country"),
+                    (String) userMap.get("phoneNum")
+            );
             emailService.sendVerificationMail(new UserDTO(clientTemp));
             return new ResponseEntity<>(true,HttpStatus.CREATED);
-        }else {
+        } else {
             System.out.println("DATA IS BAD");
             return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
         }

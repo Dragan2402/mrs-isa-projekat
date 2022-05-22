@@ -93,6 +93,47 @@ public class UtilityServiceImpl implements UtilityService {
     }
 
     @Override
+    public boolean validateUserData(Map<String,Object> userMap) {
+        if (!containsAll(userMap))
+            return false;
+
+        String firstName = (String) userMap.get("firstName");
+        if (!validateName(firstName))
+            return false;
+
+        String lastName = (String) userMap.get("lastName");
+        if (!validateName(lastName))
+            return false;
+
+        String email = (String) userMap.get("email");
+        if (!validateEmail(email))
+            return false;
+
+        String password = (String) userMap.get("password");
+        String confirmPassword = (String) userMap.get("confirmPassword");
+        if (!validatePasswords(password, confirmPassword))
+            return false;
+
+        String address = (String) userMap.get("address");
+        if (address.length() <= 2)
+            return false;
+
+        String city = (String) userMap.get("city");
+        if (city.length() <= 2)
+            return false;
+
+        String country = (String) userMap.get("country");
+        if (country.length() <= 2)
+            return false;
+
+        String phoneNum = (String) userMap.get("phoneNum");
+        if (!validatePhoneNum(phoneNum))
+            return false;
+
+        return true;
+    }
+
+    @Override
     public boolean saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
         Path uploadPath = Paths.get(uploadDir);
         if (!Files.exists(uploadPath)) {

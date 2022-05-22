@@ -1,51 +1,76 @@
 <template>
   <div align='center'>
-    <form  @submit.prevent="signUp">
-      <div>
-        <input type="text" v-model="firstName" placeholder="First Name">
+    <div class="registration-div mt-3 mb-3">
+      <div class="radio-div">
+        <div>
+          <input class="radio" type="radio" id="addClient" name="choice" value="addClient" v-model="role" checked>
+          <label class="custom-btn button-outline input-group-width mb-2 mt-5" for="addClient">Client</label>
+        </div>
+        <div>
+          <input class="radio" type="radio" id="addVacationHouseOwner" name="choice" value="addVacationHouseOwner" v-model="role">
+          <label class="custom-btn button-outline input-group-width mb-2" for="addVacationHouseOwner">Vacation House Owner</label>
+        </div>
+        <div>
+          <input class="radio" type="radio" id="addShipOwner" name="choice" value="addShipOwner" v-model="role">
+          <label class="custom-btn button-outline input-group-width mb-2" for="addShipOwner">Ship Owner</label>
+        </div>
+        <div>
+          <input class="radio" type="radio" id="addFishingInstructor" name="choice" value="addFishingInstructor" v-model="role">
+          <label class="custom-btn button-outline input-group-width mb-4" for="addFishingInstructor">Fishing Instructor</label>
+        </div>
       </div>
-      <div>
-        <input type="text" v-model="lastName" placeholder="Last Name">
-      </div>
-      <div>
-        <input type="text" v-model="email" placeholder="Email" @blur="validateEmail">
-      </div>
-      <div>
-        <input type="text" v-model="username" placeholder="Username">
-      </div>
-      <div>
-        <input type="password" v-model="password" placeholder="Password">
-      </div>
-      <div>
-        <input type="password" v-model="confirmPassword" placeholder="Confirm Password">
-      </div>
-      <div>
-        <input type="text" v-model="address" placeholder="Address">
-      </div>
-      <div>
-        <input type="text" v-model="city" placeholder="City">
-      </div>
-      <div>
-        <country-select v-model="country" :usei18n="false" :autocomplete="true"  :countryName="true"/>        
-      </div>
-      <div>
-        <vue-tel-input v-model="phoneNum" @validate="telValidate"></vue-tel-input>
-      </div>
-      <div>
-        <select v-model="role" class="form-select" aria-label="Role selection">
-          <option selected disabled value="" >Select role</option>
-          <option value="addClient">Client</option>
-          <option value="addVacationHouseOwner">Vacation House Owner</option>
-          <option value="addShipOwner">Ship Owner</option>
-          <option value="addFishingInstructor">Fishing Instructor</option>
-        </select>
-      </div>
+      <form class="w-100"  @submit.prevent="signUp">
+        <div class="form-floating input-group-width mb-2">
+          <input id="firstNameInput" class="form-control" type="text" v-model="firstName">
+          <label for="firstNameInput">First Name</label>
+        </div>
+        <div class="form-floating input-group-width mb-2">
+          <input id="lastNameInput" class="form-control" type="text" v-model="lastName">
+          <label for="lastNameInput">Last Name</label>
+        </div>
+        <div class="form-floating input-group-width mb-2">
+          <input id="emailInput" class="form-control" type="text" v-model="email" @blur="validateEmail">
+          <label for="emailInput">E-mail</label>
+        </div>
+        <div class="form-floating input-group-width mb-2">
+          <input id="usernameInput" class="form-control" type="text" v-model="username">
+          <label for="usernameInput">Username</label>
+        </div>
+        <div class="form-floating input-group-width mb-2">
+          <input id="passwordInput" class="form-control" type="password" v-model="password">
+          <label for="passwordInput">Password</label>
+        </div>
+        <div class="form-floating input-group-width mb-2">
+          <input id="confirmPasswordInput" class="form-control" type="password" v-model="confirmPassword">
+          <label for="confirmPasswordInput">Confirm Password</label>
+        </div>
+        <div class="form-floating input-group-width mb-2">
+          <input id="addressInput" class="form-control" type="text" v-model="address">
+          <label for="addressInput">Address</label>
+        </div>
+        <div class="form-floating input-group-width mb-2">
+          <input id="cityInput" class="form-control" type="text" v-model="city">
+          <label for="cityInput">City</label>
+        </div>
+        <div class="form-floating input-group-width mb-2">
+          <country-select id="countryInput" class="form-control" v-model="country" :usei18n="false" :autocomplete="true"  :countryName="true"/>
+          <label for="countryInput">Country</label>
+        </div>
+        <div class="form-floating input-group-width mb-2">
+          <vue-tel-input id="phoneNumInput" class="form-control" v-model="phoneNum" @validate="telValidate"></vue-tel-input>
+          <label for="phoneNumInput">Phone Number</label>
+        </div>
+        <div v-if="role!=='addClient'" class="form-floating input-group-width">
+          <textarea id="reasonInput" class="form-control" v-model="reason"></textarea>
+          <label for="reasonInput">Reason for Registration</label>
+        </div>
 
-      <div>
-        <button>SIGN UP</button>
-      </div>
-    </form>  
+        <div>
+          <button class="custom-btn button-outline input-group-width mb-4 mt-5">Sign up</button>
+        </div>
+      </form>
 
+    </div>
   </div>
   
 </template>
@@ -75,8 +100,9 @@ export default {
       country: '',
       validNumber: '',
       phoneNum: null,
+      reason: '',
 
-      role: ''
+      role: 'addClient'
     }
 
   },
@@ -159,7 +185,10 @@ export default {
         return;
       }
 
-    
+      if(this.role !== 'addClient' && this.reason === '') {
+        this.$toast.error("Provide a reason for registering");
+        return;
+      }
       
       axios.get(`api/auth/isMailAvailable/${this.email}`).then(response => {
         if(response.data==false){
@@ -177,20 +206,19 @@ export default {
                 const user={'firstName':this.firstName,'lastName':this.lastName,'username':this.username,'email':this.email,'password':this.password,"confirmPassword":this.confirmPassword,
                 'address':this.address,'city':this.city,'country':this.country,'phoneNum':this.validNumber};
 
-                if (this.role !== "") {
-                  axios.post(`/api/auth/${this.role}`, user).then(response => {
-                    if(response.data==false){
-                      this.$toast.error("Registration failed");
-                    }else{
-                      this.$toast.success("Registration successful");
-                      this.$root.signUp=true;
-                      this.$router.push("/");
-                    }
-                  });
-                } else {
-                  this.$toast.error("Registration failed: No role selected");
+                if (this.role !== "addClient") {
+                  user.reason = this.reason;
                 }
 
+                axios.post(`/api/auth/${this.role}`, user).then(response => {
+                  if(response.data==false){
+                    this.$toast.error("Registration failed");
+                  }else{
+                    this.$toast.success("Registration successful");
+                    this.$root.signUp=true;
+                    this.$router.push("/");
+                  }
+                });
 
             }
           
@@ -223,4 +251,29 @@ form {
   width:400px;
   margin:20px auto;
 }
+
+.radio {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.registration-div {
+  margin-top: 0;
+  padding: 10px;
+  border-radius: 5px;
+  width: 45%;
+  background-color: #00587a;
+  align-content: center;
+}
+
+.input-group-width {
+  width: 70%;
+  margin: auto;
+}
+
+[type=radio]:checked + label {
+  background-color: #004661;
+}
+
 </style>
