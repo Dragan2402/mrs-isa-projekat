@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.service;
 
 
+import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
 import com.projekat.projekat_mrs_isa.model.Role;
 import com.projekat.projekat_mrs_isa.model.VacationHouseOwner;
 import com.projekat.projekat_mrs_isa.repository.RoleRepository;
@@ -18,6 +19,9 @@ public class VacationHouseOwnerService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private PasswordEncoderComponent passwordEncoderComponent;
 
     public VacationHouseOwner findById(Long id) {
         return vacationHouseOwnerRepository.findById(id).orElse(null);
@@ -39,7 +43,7 @@ public class VacationHouseOwnerService {
         VacationHouseOwner vho = new VacationHouseOwner(
                 (String) userMap.get("email"),
                 (String) userMap.get("username"),
-                (String) userMap.get("password"),
+                passwordEncoderComponent.encode((String) userMap.get("password")),
                 "pictures/user_pictures/0.png",
                 (String) userMap.get("firstName"),
                 (String) userMap.get("lastName"),

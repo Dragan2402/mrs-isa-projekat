@@ -21,35 +21,35 @@
       </div>
       <form class="w-100"  @submit.prevent="signUp">
         <div class="form-floating input-group-width mb-2">
-          <input id="firstNameInput" class="form-control" type="text" v-model="firstName">
+          <input id="firstNameInput" class="form-control" type="text" v-model="firstName" placeholder="First Name">
           <label for="firstNameInput">First Name</label>
         </div>
         <div class="form-floating input-group-width mb-2">
-          <input id="lastNameInput" class="form-control" type="text" v-model="lastName">
+          <input id="lastNameInput" class="form-control" type="text" v-model="lastName" placeholder="Last Name">
           <label for="lastNameInput">Last Name</label>
         </div>
         <div class="form-floating input-group-width mb-2">
-          <input id="emailInput" class="form-control" type="text" v-model="email" @blur="validateEmail">
+          <input id="emailInput" class="form-control" type="text" v-model="email" @blur="validateEmail" placeholder="E-mail">
           <label for="emailInput">E-mail</label>
         </div>
         <div class="form-floating input-group-width mb-2">
-          <input id="usernameInput" class="form-control" type="text" v-model="username">
+          <input id="usernameInput" class="form-control" type="text" v-model="username" placeholder="Username">
           <label for="usernameInput">Username</label>
         </div>
         <div class="form-floating input-group-width mb-2">
-          <input id="passwordInput" class="form-control" type="password" v-model="password">
+          <input id="passwordInput" class="form-control" type="password" v-model="password" placeholder="Password">
           <label for="passwordInput">Password</label>
         </div>
         <div class="form-floating input-group-width mb-2">
-          <input id="confirmPasswordInput" class="form-control" type="password" v-model="confirmPassword">
+          <input id="confirmPasswordInput" class="form-control" type="password" v-model="confirmPassword" placeholder="Confirm Password">
           <label for="confirmPasswordInput">Confirm Password</label>
         </div>
         <div class="form-floating input-group-width mb-2">
-          <input id="addressInput" class="form-control" type="text" v-model="address">
+          <input id="addressInput" class="form-control" type="text" v-model="address" placeholder="Address">
           <label for="addressInput">Address</label>
         </div>
         <div class="form-floating input-group-width mb-2">
-          <input id="cityInput" class="form-control" type="text" v-model="city">
+          <input id="cityInput" class="form-control" type="text" v-model="city" placeholder="City">
           <label for="cityInput">City</label>
         </div>
         <div class="form-floating input-group-width mb-2">

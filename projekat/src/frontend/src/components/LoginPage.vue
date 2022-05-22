@@ -68,7 +68,10 @@ export default {
         this.$router.push("/");  
       
       }).catch((error) => {
-        this.$toast.error("Invalid Credentials");
+        if(error.response.status === 404)
+          this.$toast.error("Account awaiting verification");
+        else
+          this.$toast.error("Invalid Credentials");
         this.$root.signedIn=false;
         this.$root.accessToken=null;
         localStorage.setItem("jwt",null);
