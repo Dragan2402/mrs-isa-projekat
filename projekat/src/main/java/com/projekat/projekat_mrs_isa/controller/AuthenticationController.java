@@ -36,6 +36,9 @@ public class AuthenticationController {
     private VacationHouseOwnerService vacationHouseOwnerService;
 
     @Autowired
+    private ShipOwnerService shipOwnerService;
+
+    @Autowired
     private EmailService emailService;
 
     @Autowired
@@ -115,6 +118,23 @@ public class AuthenticationController {
 
         VacationHouseOwner vho = vacationHouseOwnerService.addVacationHouseOwner(userMap);
         Request registrationRequest = new Request(vho, registrationReason, RequestType.BECOME_VH_OWNER);
+        requestService.save(registrationRequest);
+        return new ResponseEntity<>(true,HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/addShipOwner", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> addShipOwner(@RequestBody Map<String, Object> userMap){
+        if(!utilityService.validateOwnerData(userMap))
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+
+        if(!(userService.isUsernameAvailable((String) userMap.get("username"))
+                && userService.isUsernameAvailable(((String) userMap.get("email")).toLowerCase()))) {
+            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
+        }
+
+        ShipOwner so = shipOwnerService.addShipOwner(userMap);
+        String registrationReason = (String) userMap.get("registrationReason");
+        Request registrationRequest = new Request(so, registrationReason, RequestType.BECOME_SH_OWNER);
         requestService.save(registrationRequest);
         return new ResponseEntity<>(true,HttpStatus.CREATED);
     }

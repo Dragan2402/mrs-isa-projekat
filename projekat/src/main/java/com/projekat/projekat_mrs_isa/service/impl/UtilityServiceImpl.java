@@ -127,10 +127,19 @@ public class UtilityServiceImpl implements UtilityService {
             return false;
 
         String phoneNum = (String) userMap.get("phoneNum");
-        if (!validatePhoneNum(phoneNum))
+        return validatePhoneNum(phoneNum);
+    }
+
+    @Override
+    public boolean validateOwnerData(Map<String,Object> ownerMap) {
+        if (!validateUserData(ownerMap))
             return false;
 
-        return true;
+        if (!ownerMap.containsKey("registrationReason"))
+            return false;
+
+        String registrationReason = (String) ownerMap.get("registrationReason");
+        return !registrationReason.equals("");
     }
 
     @Override

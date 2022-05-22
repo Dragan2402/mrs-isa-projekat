@@ -20,5 +20,7 @@ public interface UtilityService {
 
     boolean validateUserData(Map<String,Object> userMap);
 
+    boolean validateOwnerData(Map<String,Object> ownerMap);
+
     boolean saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException;
 }
