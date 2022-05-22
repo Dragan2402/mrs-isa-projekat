@@ -31,6 +31,15 @@
       <div>
         <vue-tel-input v-model="phoneNum" @validate="telValidate"></vue-tel-input>
       </div>
+      <div>
+        <select v-model="role" class="form-select" aria-label="Role selection">
+          <option selected disabled value="" >Select role</option>
+          <option value="addClient">Client</option>
+          <option value="addVacationHouseOwner">Vacation House Owner</option>
+          <option value="addShipOwner">Ship Owner</option>
+          <option value="addFishingInstructor">Fishing Instructor</option>
+        </select>
+      </div>
 
       <div>
         <button>SIGN UP</button>
@@ -65,8 +74,9 @@ export default {
       city: '',
       country: '',
       validNumber: '',
-      phoneNum: null
-            
+      phoneNum: null,
+
+      role: ''
     }
 
   },
@@ -76,6 +86,7 @@ export default {
   },
   methods:{
     signUp() {
+      console.log(this.role)
       var regExp = /^[A-Za-z]+$/;
       
       if (this.firstName.length < 2 || this.firstName.length > 20) {
@@ -150,14 +161,14 @@ export default {
 
     
       
-      axios.get(`api/clients/isMailAvailable/${this.email}`).then(response => {
+      axios.get(`api/auth/isMailAvailable/${this.email}`).then(response => {
         if(response.data==false){
           this.$toast.error("Email already taken");
           return;
         }
         else{
  
-          axios.get(`api/clients/isUsernameAvailable/${this.username}`).then(response => {
+          axios.get(`api/auth/isUsernameAvailable/${this.username}`).then(response => {
      
             if(response.data==false){
               this.$toast.error("Username already taken");
@@ -165,15 +176,21 @@ export default {
             }else{
                 const user={'firstName':this.firstName,'lastName':this.lastName,'username':this.username,'email':this.email,'password':this.password,"confirmPassword":this.confirmPassword,
                 'address':this.address,'city':this.city,'country':this.country,'phoneNum':this.validNumber};
-                axios.post("/api/auth/addClient",user).then(response => {
-                if(response.data==false){
-                  this.$toast.error("Registartion failed");
-                }else{
-                  this.$toast.success("Registartion successfull");
-                  this.$root.signUp=true;
-                  this.$router.push("/");
+
+                if (this.role !== "") {
+                  axios.post(`/api/auth/${this.role}`, user).then(response => {
+                    if(response.data==false){
+                      this.$toast.error("Registration failed");
+                    }else{
+                      this.$toast.success("Registration successful");
+                      this.$root.signUp=true;
+                      this.$router.push("/");
+                    }
+                  });
+                } else {
+                  this.$toast.error("Registration failed: No role selected");
                 }
-              });
+
 
             }
           
