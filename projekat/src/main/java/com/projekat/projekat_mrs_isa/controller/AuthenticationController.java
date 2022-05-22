@@ -4,12 +4,8 @@ package com.projekat.projekat_mrs_isa.controller;
 import com.projekat.projekat_mrs_isa.dto.JwtAuthenticationRequestDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.dto.UserTokenStateDTO;
-import com.projekat.projekat_mrs_isa.model.Client;
-import com.projekat.projekat_mrs_isa.model.User;
-import com.projekat.projekat_mrs_isa.service.ClientService;
-import com.projekat.projekat_mrs_isa.service.EmailService;
-import com.projekat.projekat_mrs_isa.service.UserService;
-import com.projekat.projekat_mrs_isa.service.UtilityService;
+import com.projekat.projekat_mrs_isa.model.*;
+import com.projekat.projekat_mrs_isa.service.*;
 import com.projekat.projekat_mrs_isa.util.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,6 +33,9 @@ public class AuthenticationController {
     private ClientService clientService;
 
     @Autowired
+    private VacationHouseOwnerService vacationHouseOwnerService;
+
+    @Autowired
     private EmailService emailService;
 
     @Autowired
@@ -44,6 +43,9 @@ public class AuthenticationController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RequestService requestService;
 
     @PostMapping("/login")
     public ResponseEntity<UserTokenStateDTO> createAuthenticationToken(
@@ -94,6 +96,27 @@ public class AuthenticationController {
             return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
         }
 
+    }
+
+    @PostMapping(value ="/addVacationHouseOwner",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> addVacationHouseOwner(@RequestBody Map<String,Object> userMap){
+        if(!utilityService.validateUserData(userMap) ||
+                !userMap.containsKey("registrationReason"))
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+
+        String registrationReason = (String) userMap.get("registrationReason");
+        if(registrationReason.equals(""))
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+
+        if(!(userService.isUsernameAvailable((String) userMap.get("username"))
+                && userService.isUsernameAvailable(((String) userMap.get("email")).toLowerCase()))) {
+            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
+        }
+
+        VacationHouseOwner vho = vacationHouseOwnerService.addVacationHouseOwner(userMap);
+        Request registrationRequest = new Request(vho, registrationReason, RequestType.BECOME_VH_OWNER);
+        requestService.save(registrationRequest);
+        return new ResponseEntity<>(true,HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/verify/{id}",produces = MediaType.APPLICATION_JSON_VALUE)

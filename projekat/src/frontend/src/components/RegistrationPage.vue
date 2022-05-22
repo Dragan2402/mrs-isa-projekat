@@ -61,7 +61,7 @@
           <label for="phoneNumInput">Phone Number</label>
         </div>
         <div v-if="role!=='addClient'" class="form-floating input-group-width">
-          <textarea id="reasonInput" class="form-control" v-model="reason"></textarea>
+          <textarea id="reasonInput" class="form-control" v-model="registrationReason"></textarea>
           <label for="reasonInput">Reason for Registration</label>
         </div>
 
@@ -100,7 +100,7 @@ export default {
       country: '',
       validNumber: '',
       phoneNum: null,
-      reason: '',
+      registrationReason: '',
 
       role: 'addClient'
     }
@@ -185,7 +185,7 @@ export default {
         return;
       }
 
-      if(this.role !== 'addClient' && this.reason === '') {
+      if(this.role !== 'addClient' && this.registrationReason === '') {
         this.$toast.error("Provide a reason for registering");
         return;
       }
@@ -207,7 +207,7 @@ export default {
                 'address':this.address,'city':this.city,'country':this.country,'phoneNum':this.validNumber};
 
                 if (this.role !== "addClient") {
-                  user.reason = this.reason;
+                  user.registrationReason = this.registrationReason;
                 }
 
                 axios.post(`/api/auth/${this.role}`, user).then(response => {
