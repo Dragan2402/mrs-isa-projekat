@@ -98,7 +98,6 @@ public class AuthenticationController {
             emailService.sendVerificationMail(new UserDTO(clientTemp));
             return new ResponseEntity<>(true,HttpStatus.CREATED);
         } else {
-            System.out.println("DATA IS BAD");
             return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
         }
 

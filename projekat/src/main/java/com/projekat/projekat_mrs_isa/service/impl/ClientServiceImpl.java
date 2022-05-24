@@ -1,10 +1,7 @@
 package com.projekat.projekat_mrs_isa.service.impl;
 
 import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
-import com.projekat.projekat_mrs_isa.dto.ReservationRequestDTO;
-import com.projekat.projekat_mrs_isa.dto.SubscriptionDTO;
-import com.projekat.projekat_mrs_isa.dto.TakenPeriodDTO;
-import com.projekat.projekat_mrs_isa.dto.UserDTO;
+import com.projekat.projekat_mrs_isa.dto.*;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.repository.ClientRepository;
 import com.projekat.projekat_mrs_isa.repository.RoleRepository;
@@ -150,6 +147,15 @@ public class ClientServiceImpl implements ClientService {
         rentingEntity.addReservation(reservation);
         reservationService.save(reservation);
         emailService.confirmReservationMail(logged,reservation);
+        return true;
+    }
+
+    @Override
+    public Boolean updatePassword(Client logged, PasswordChangeDTO passwordChangeDTO) {
+        if(!passwordEncoderComponent.decode(passwordChangeDTO.getOldPassword(),logged.getPassword()))
+            return false;
+        logged.setPassword(passwordEncoderComponent.encode(passwordChangeDTO.getNewPassword()));
+        save(logged);
         return true;
     }
 

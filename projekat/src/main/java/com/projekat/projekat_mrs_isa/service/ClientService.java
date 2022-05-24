@@ -1,9 +1,6 @@
 package com.projekat.projekat_mrs_isa.service;
 
-import com.projekat.projekat_mrs_isa.dto.ReservationRequestDTO;
-import com.projekat.projekat_mrs_isa.dto.SubscriptionDTO;
-import com.projekat.projekat_mrs_isa.dto.TakenPeriodDTO;
-import com.projekat.projekat_mrs_isa.dto.UserDTO;
+import com.projekat.projekat_mrs_isa.dto.*;
 import com.projekat.projekat_mrs_isa.model.Client;
 
 import java.util.List;
@@ -45,4 +42,6 @@ public interface ClientService {
     List<TakenPeriodDTO> rentingEntityAvailability(Client client, Long id);
 
     Boolean makeClientReservation(Client logged, ReservationRequestDTO reservationRequestDTO);
+
+    Boolean updatePassword(Client logged, PasswordChangeDTO passwordChangeDTO);
 }

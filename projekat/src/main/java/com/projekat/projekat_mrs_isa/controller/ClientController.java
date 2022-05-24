@@ -163,6 +163,19 @@ public class ClientController {
     }
 
 
+    @PutMapping(value = "/changePassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public ResponseEntity<Boolean> changePassword(Principal clientP, @RequestBody PasswordChangeDTO passwordChangeDTO) {
+        Client logged = clientService.findByUsername(clientP.getName());
+        if (logged == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        if(!utilityService.validatePasswords(passwordChangeDTO.getNewPassword(),passwordChangeDTO.getNewPasswordConfirm()))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(clientService.updatePassword(logged,passwordChangeDTO),HttpStatus.OK);
+    }
+
+
     @GetMapping(value = "/loggedClient", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<UserDTO> getLoggedClient(Principal clientP) throws Exception {

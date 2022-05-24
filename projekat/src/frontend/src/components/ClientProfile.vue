@@ -69,6 +69,15 @@
         <button class="btn btn-primary" @click="hideSubscriptions()">Hide</button>
       </div>
 
+      <button v-if="!changingPassword" class="btn btn-primary" @click="toggleChangePassword()">Change Password</button>
+      <div v-else>
+        <input v-model="oldPassword" type="password" placeholder="Old password">
+        <input v-model="newPassword" type="password" placeholder="New password">
+        <input v-model="confirmPassword"  type="password" placeholder="Confirm new password">
+        <button style="margin-right: 20px" class="btn btn-primary" @click="changePassword()">Change</button>
+        <button class="btn btn-primary" @click="cancelChange()">Cancel</button>
+      </div>
+
     </div>
 
   </body>
@@ -92,6 +101,10 @@ export default {
       validNumber: '',
       phoneNum: null,
       deleting: false,
+      changingPassword:false,
+      oldPassword:"",
+      newPassword:"",
+      confirmPassword:"",
       subscriptions:[],
       text: "",
       showSubscriptions:false,
@@ -128,8 +141,7 @@ export default {
         if(errorP.response.status===401){
           //this.$toast.error("Not Logged In");
           this.$root.accessToken=null;
-          localStorage.setItem("jwt",null);
-          
+          localStorage.setItem("jwt",null);          
           this.$router.push("/loginPage");
         }
        
@@ -144,6 +156,46 @@ export default {
       },
     toggleDelete(){
       this.deleting=true;
+    },
+    toggleChangePassword(){
+      this.changingPassword=true;
+    },
+    changePassword(){
+      var passwordRegex=/^[0-9A-Za-z]+$/;
+
+      if(this.newPassword.length<5 || this.newPassword.length > 20){
+        this.$toast.error("Password must be between 5-20 characters");
+        return;
+      }
+      if(!passwordRegex.test(this.newPassword)){
+        this.$toast.error("Password must only contain letters and numbers");
+        return;
+      }
+      if(!passwordRegex.test(this.oldPassword)){
+        this.$toast.error("Password must only contain letters and numbers");
+        return;
+      }
+      if(this.newPassword !== this.confirmPassword){
+        this.$toast.error("Passwords must match");
+        return;
+      }
+
+      const passwordChange={"oldPassword":this.oldPassword,"newPassword":this.newPassword,"newPasswordConfirm":this.confirmPassword};
+      console.log(passwordChange);
+      axios.put(`/api/clients/changePassword`,passwordChange,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response =>{
+        if(response.data==true){
+          this.$root.accessToken=null;
+          this.$root.signedIn=false;
+          localStorage.setItem("jwt",null);          
+          window.location.href = 'http://localhost:3000/loginPage';
+        }else{
+          this.$toast.error("Error");
+        }
+      });
+
+    },
+    cancelChange(){
+      this.changingPassword=false;
     },
     sendDeleteRequest(){
       if(this.text.length<5){
