@@ -2,76 +2,14 @@ package com.projekat.projekat_mrs_isa.service;
 
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.Client;
-import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.Reservation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-@Service
-public class EmailService {
-
-    @Autowired
-    private JavaMailSender javaMailSender;
-
-    @Autowired
-    private Environment environment;
 
 
-    @Async
-    public void testMail(){
-        SimpleMailMessage mail=new SimpleMailMessage();
-        mail.setTo("draganmirkovic2402@gmail.com");
-        mail.setFrom(environment.getProperty("spring.mail.username"));
-        mail.setSubject("Reservation confirmation");
-        mail.setText("You have successfully made a reservation for THE THING");
-        javaMailSender.send(mail);
-    }
+
+public interface EmailService {
 
 
-    @Async
-    public void confirmReservationMail(Client client, Reservation reservation){
-        SimpleMailMessage mail=new SimpleMailMessage();
-        mail.setTo(client.getEmail());
-        mail.setFrom(environment.getProperty("spring.mail.username"));
-        mail.setSubject("Reservation confirmation");
-        mail.setText(mailGeneratorOffer(client.getFirstName()+" "+client.getLastName(),reservation.getRentingEntity().getName(),reservation.getStart()));
-        javaMailSender.send(mail);
-    }
+    void confirmReservationMail(Client client, Reservation reservation);
 
-
-    private String mailGeneratorOffer(String clientName, String entityName, LocalDateTime date){
-        String text="Dear,\n"+clientName+"\n\n";
-        text += "You have successfully made a reservation for "+entityName+" for the date ";
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        text += dateTimeFormatter.format(date)+". Enjoy your stay!\n\n\n";
-        text += "Thank you for using Renting Buddy service";
-        return text;
-
-    }
-
-    private String verificationMailGenerator(String clientName,Long id){
-        id=id*41+105;
-        String text="Dear,\n"+clientName+"\n\n";
-        text += "You have successfully created a profile on RentingBuddy. Your account is connected with this mail, but still not verified. You will not be able " +
-                "to login until you verify your account. To verify your account, please follow this link: \n" +
-                "http://localhost:3000/verification/aTvHtI"+id.toString()+" \n\n\nThank you for using Renting Buddy service";
-        return text;
-    }
-    @Async
-    public void sendVerificationMail(UserDTO userDTO) {
-        SimpleMailMessage mail=new SimpleMailMessage();
-        mail.setTo(userDTO.getEmail());
-        mail.setFrom(environment.getProperty("spring.mail.username"));
-        mail.setSubject("Profile Verification");
-        mail.setText(verificationMailGenerator(userDTO.getFirstName()+" "+userDTO.getLastName(), userDTO.getId()));
-        javaMailSender.send(mail);
-    }
+    void sendVerificationMail(UserDTO userDTO);
 }

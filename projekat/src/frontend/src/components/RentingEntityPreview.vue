@@ -1,7 +1,8 @@
 <template>   
   <div class="main-container" v-if="loaded">
     <h3 class="main-heading">{{rentingEntity.name}}</h3>
-    <vue3-star-ratings class="star-ratings" v-model="rentingEntity.rating" starSize="22"  :showControl=false :disableClick=true :step=0 />
+  
+    <vue3-star-ratings class="star-ratings"  v-model="rentingEntity.rating" starSize="22"  :showControl=false :disableClick=true :step=0 />
     <h5 class="star-heading">({{rentingEntity.reviewsNumber}})</h5>
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
@@ -26,7 +27,7 @@
         <div><b>Address: </b> {{rentingEntity.address}}</div>
         <div><b>Description: </b> {{rentingEntity.promoDescription}}</div>
         <div><b>Behaviour rules: </b> {{rentingEntity.behaviourRules}}</div>
-        <div><b>Price: </b> {{rentingEntity.priceList}} per day</div>
+        <div><b>Price: </b> {{rentingEntity.priceList}}&euro;</div>
         <div><b>Additional info: </b>{{rentingEntity.additionalInfo}}</div>
         <div><b>Cancellation conditions: </b>{{rentingEntity.cancellationConditions}}</div>
         <div v-if="this.displayType==0"><b>Capacity: </b>{{rentingEntity.roomsQuantity}} rooms, {{rentingEntity.bedsPerRoom}} beds per room</div>
@@ -51,6 +52,10 @@
     <div v-if="makingReservation">
           <v-date-picker v-model="range" mode='dateTime' color="blue" is24hr :minute-increment="30" is-range  :min-date=minDate :max-date=maxDate :attributes='attributes' >        
           </v-date-picker>
+            <div v-for="service in additionalServices" :key="service">
+              <label>{{service}}</label>
+              <input type="checkbox" v-model="selectedServices" :value="service" checked/>
+            </div>
           <button @click="confirmReservation">Confirm</button>
           <button @click="closeMakingReservation">Cancel</button>
     </div>
@@ -80,6 +85,7 @@
         </div>
       </div>
     </div>
+  
     </div>
 </template>
 
@@ -101,6 +107,8 @@ export default {
       isSubscribed:false,
       index:0,     
       offers: [],
+      additionalServices:[],
+      selectedServices:[],
       loaded:false,
       makingReservation:false,
       minDate:null,
@@ -136,7 +144,7 @@ export default {
       pathPictures="/api/fishingClasses/"+this.id+"/pictures/all";
     }
 
-    axios.get(path).then( response => this.rentingEntity=response.data);
+    axios.get(path).then( response => {this.rentingEntity=response.data});
 
 
     axios.get(pathPictures).then(response => {
@@ -146,6 +154,7 @@ export default {
         });
     axios.get(pathOffers).then(response => this.offers=response.data);
     this.loaded=true;
+    
 
     if(localStorage.getItem("jwt")!="null"){
       if(this.$root.loggedUser.accountType=="CLIENT"){
@@ -299,12 +308,30 @@ methods:{
     this.takenDates=takenDates;
   },
   toggleMakingReservation(){
+    if(localStorage.getItem("jwt")=="null"){
+      this.$router.push("/loginPage");
+      return;
+    }
+    if(this.$root.loggedUser.accountType!="CLIENT"){
+      this.$toast.error("Only available for clients");
+      return;
+    }
     this.makingReservation=true;
     axios.get(`/api/clients/rentingEntityAvailability/${this.rentingEntity.id}`,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => 
     {
       this.takeCalendar(response.data);
       
       });
+    let servicesPath;
+    if(this.displayType==0){
+      servicesPath="/api/vacationHouseOwners/getServices/"+this.rentingEntity.ownerId;
+    }else if(this.displayType==1){
+      servicesPath="/api/shipOwners/getServices/"+this.rentingEntity.ownerId;
+    }
+    else{
+      servicesPath="/api/fishingInstructors/getServices/"+this.rentingEntity.ownerId;
+    }
+    axios.get(servicesPath,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => this.additionalServices=response.data);
     this.minDate = this.dateFromLocal(this.rentingEntity.availableFrom);
     this.maxDate = this.dateFromLocal(this.rentingEntity.availableTo);
     const availableFrom="Renting entity available from "+this.minDate.getHours()+":"+this.minDate.getMinutes();
@@ -338,8 +365,35 @@ methods:{
   confirmReservation(){
     const start=this.range.start;
     const end=this.range.end;
+  
     if(this.freeSlot(start,end)){
-      this.$toast.success("Reservation made");
+      
+
+      let clientLimit=0;
+      if(this.displayType==0){
+        clientLimit=this.rentingEntity.roomsQuantity*this.rentingEntity.bedsPerRoom;
+      }else{
+        clientLimit=this.rentingEntity.clientLimit;
+      }
+      const reservation={        
+        "place":this.rentingEntity.address,
+        "clientLimit": clientLimit,
+        "additionalServices":this.selectedServices,
+        "price":this.rentingEntity.priceList,
+        "rentingEntityId":this.rentingEntity.id,
+        "start":start,
+        "end":end
+      };
+      axios.post(`/api/clients/makeReservationFull`,reservation,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(
+        response => {
+          if(response.data==true){
+            this.$toast.success("Reservation made");
+            this.closeMakingReservation();
+          }else{
+            this.$toast.error("Error");
+          }
+        }
+      );
     }else{
       this.$toast.error("Select free date");
     }
@@ -370,7 +424,11 @@ methods:{
           this.$toast.error("You can not make a reservation. You have 3 penalties. Wait for next month.");
         }
       });
+  },
+  updateRating(){
+    this.rating=4.1;
   }
+
 }
 }
 </script>

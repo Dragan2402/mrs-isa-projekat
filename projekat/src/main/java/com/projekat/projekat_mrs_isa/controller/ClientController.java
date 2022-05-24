@@ -17,8 +17,7 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.*;
-import java.nio.file.*;
+
 
 @RestController
 @CrossOrigin
@@ -151,6 +150,16 @@ public class ClientController {
         if (saved == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/makeReservationFull", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public ResponseEntity<Boolean> makeReservationFull(Principal clientP, @RequestBody ReservationRequestDTO reservationRequestDTO) {
+        Client logged = clientService.findByUsername(clientP.getName());
+        if (logged == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(clientService.makeClientReservation(logged,reservationRequestDTO),HttpStatus.OK);
     }
 
 

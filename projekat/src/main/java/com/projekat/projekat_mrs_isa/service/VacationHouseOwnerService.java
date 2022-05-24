@@ -2,30 +2,16 @@ package com.projekat.projekat_mrs_isa.service;
 
 
 import com.projekat.projekat_mrs_isa.model.VacationHouseOwner;
-import com.projekat.projekat_mrs_isa.repository.VacationHouseOwnerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-@Service
-public class VacationHouseOwnerService {
-    @Autowired
-    private VacationHouseOwnerRepository vacationHouseOwnerRepository;
 
-    public VacationHouseOwner findById(Long id) {
-        return vacationHouseOwnerRepository.findById(id).orElse(null);
-    }
+public interface VacationHouseOwnerService {
 
-    public List<VacationHouseOwner> findAll() {
-        return vacationHouseOwnerRepository.findAll();
-    }
+    VacationHouseOwner findById(Long id);
 
-    public VacationHouseOwner save(VacationHouseOwner vacationHouseOwner) {
-        return vacationHouseOwnerRepository.save(vacationHouseOwner);
-    }
+    List<VacationHouseOwner> findAll();
 
-    public void remove(Long id) {
-        vacationHouseOwnerRepository.deleteById(id);
-    }
+    VacationHouseOwner save(VacationHouseOwner vacationHouseOwner);
+
+    void remove(Long id);
 }

@@ -117,26 +117,41 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         clientTemp2.setRoles(rolesClient);
         clientRep.save(clientTemp2);
 
+        List<String> vacHouseOwner1AddSrvc=new ArrayList<>();
+        vacHouseOwner1AddSrvc.add("Book a Grill master");
+        vacHouseOwner1AddSrvc.add("Rent a Quad");
+        vacHouseOwner1AddSrvc.add("AC");
         VacationHouseOwner vacHouseOwnerTemp1= new VacationHouseOwner("dimpet96@maildrop.cc","dimitrije",passwordEncoderComponent.encode("Dimpet123"),"pictures/user_pictures/0.png","Dimitrije"
-                ,"Petrov","Telep Gang","Novi Sad","Serbia","+381650000000");
+                ,"Petrov","Telep Gang","Novi Sad","Serbia","+381650000000",vacHouseOwner1AddSrvc);
         vacHouseOwnerTemp1.setVerified(true);
         vacHouseOwnerTemp1.setRoles(rolesVHOwner);
         vacHouseRep.save(vacHouseOwnerTemp1);
 
+
+        List<String> shipOwnerServices=new ArrayList<>();
+        shipOwnerServices.add("Sandwiches");
+        shipOwnerServices.add("Sailor outfits");
         ShipOwner shipOwnerTemp1=new ShipOwner("krtolinat@maildrop.cc","tkrtolina",passwordEncoderComponent.encode("Tomo123"),"pictures/user_pictures/0.png","Tomo"
-                ,"Krtolina","Balkan","Subotica","Serbia","+381653232322");
+                ,"Krtolina","Balkan","Subotica","Serbia","+381653232322",shipOwnerServices);
         shipOwnerTemp1.setVerified(true);
         shipOwnerTemp1.setRoles(rolesShipOwner);
         shipOwnerRep.save(shipOwnerTemp1);
 
 
-        FishingInstructor fishingInstructorTemp=new FishingInstructor("aki96@maildrop.cc","AkiKavasaki",passwordEncoderComponent.encode("Asiasi123"),"pictures/user_pictures/0.png","Andrej","Culjak","Futoska 70","Novi Sad","Serbia","+381611155777");
+        List<String> fishingInstructorAddSrvcs=new ArrayList<>();
+        fishingInstructorAddSrvcs.add("Fishing Rods");
+        fishingInstructorAddSrvcs.add("Bites");
+        FishingInstructor fishingInstructorTemp=new FishingInstructor("aki96@maildrop.cc","AkiKavasaki",passwordEncoderComponent.encode("Asiasi123"),"pictures/user_pictures/0.png","Andrej","Culjak","Futoska 70","Novi Sad","Serbia","+381611155777",fishingInstructorAddSrvcs);
         fishingInstructorTemp.setVerified(true);
         fishingInstructorTemp.setRoles(rolesFCInstructor);
         fishingInstructorRep.save(fishingInstructorTemp);
 
+        List<String> vacHouseOwner2AddSrvc=new ArrayList<>();
+        vacHouseOwner2AddSrvc.add("TV");
+        vacHouseOwner2AddSrvc.add("Bikes");
+        vacHouseOwner2AddSrvc.add("AC");
         VacationHouseOwner vacHouseOwnerTemp2= new VacationHouseOwner("bokiboki@maildrop.cc","Boris",passwordEncoderComponent.encode("Boki222"),"pictures/user_pictures/0.png","Boris"
-                ,"Brejca","Tuzna ulica","Tuzni Grad","Serbia","+381650000111");
+                ,"Brejca","Tuzna ulica","Tuzni Grad","Serbia","+381650000111",vacHouseOwner2AddSrvc);
         vacHouseOwnerTemp2.setVerified(true);
         vacHouseOwnerTemp2.setRoles(rolesVHOwner);
         vacHouseRep.save(vacHouseOwnerTemp2);
@@ -161,7 +176,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 "Skupo je",
                 picsShip,
                 "Zabranjeno skakanje bombe sa broda",
-                "100 evara",
+                100d,
                 "Zabranjeni kerovi",
                 "Nema para nazad",
                 "Ledolomac",
@@ -203,7 +218,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 "Bice interesantno",
                 fishingPics,
                 "Zabranjeno loviti dinamitom",
-                "150 evara",
+                150d,
                 "Pice obezbedjeno",
                 "Nema para nazad",
                 "Instruktor upitne biografije",
@@ -235,7 +250,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 "Glavni kuvar Milos pravi gulas od cevapa",
                 pics1,
                 "Sve je dozvoljeno",
-                "5000 dinara",
+                75d,
                 "Ponesite svoje pice",
                 "Nema para nazad",
                 10,
@@ -258,7 +273,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 "Uzivajte u full vili" ,
                 pics2,
                 "Sve je dozvoljeno",
-                "80 Eura",
+                80d,
                 "Spa je ukljucen u cenu!!!",
                 "3 Dana ranije",
                 10,
@@ -274,7 +289,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         pics3.add("pictures/renting_entities/5/4.jpg");
 
         VacationHouse vacationHouseTemp3= new VacationHouse("Spa Vila Avala","Suplja stena","Spa Vila Avala se nalazi u podnožju istoimene planine u vikend naselju Šuplja stena koje je poznato po čistoći vazduha, " +
-                        "usled uvek prisutne ruže vetrova.",pics3,"NO DRINKING","6000 dinara","Mini bar ne radi","3 dana ranije",2,4);
+                        "usled uvek prisutne ruže vetrova.",pics3,"NO DRINKING",50d,"Mini bar ne radi","3 dana ranije",2,4);
 
 
         vacationHouseTemp3.setAvailableFrom(LocalDateTime.of(2022,4,1, 20, 15));
@@ -427,7 +442,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 "Lakani kruzing",
                 pics4,
                 "Zabranjen ulazak bez 5L ruma",
-                "300 evara",
+                300d,
                 "Zabranjeno driftovanje",
                 "3 dana pred kraj",
                 "Gondola",
@@ -459,7 +474,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 "Nocno pecanje po danu",
                 pics5,
                 "Zabranjene varalice",
-                "50 eura",
+                50d,
                 "Pice obezbedjeno",
                 "3 dana ranije",
                 "Instruktor brz najbri",

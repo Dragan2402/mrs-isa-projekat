@@ -59,7 +59,7 @@ public abstract class RentingEntity {
     private String behaviourRules;
 
     @Column(name = "price_list", nullable = false)
-    private String priceList;
+    private Double priceList;
 
     @Column(name = "additional_info", nullable = false)
     private String additionalInfo;
@@ -79,7 +79,7 @@ public abstract class RentingEntity {
     public RentingEntity() {}
 
     public RentingEntity(String name, String address, String promoDescription, List<String> pictures,
-                         String behaviourRules, String priceList, String additionalInfo, String cancellationConditions) {
+                         String behaviourRules, Double priceList, String additionalInfo, String cancellationConditions) {
         this.name = name;
         this.address = address;
         this.promoDescription = promoDescription;
@@ -218,10 +218,10 @@ public abstract class RentingEntity {
     public void setBehaviourRules(String behaviourRules) {
         this.behaviourRules = behaviourRules;
     }
-    public String getPriceList() {
+    public Double getPriceList() {
         return priceList;
     }
-    public void setPriceList(String priceList) {
+    public void setPriceList(Double priceList) {
         this.priceList = priceList;
     }
     public String getAdditionalInfo() {

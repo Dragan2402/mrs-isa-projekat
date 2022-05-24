@@ -25,7 +25,7 @@ public class VacationHouse extends RentingEntity{
 
 
     public VacationHouse(String name, String address, String promoDescription, List<String> pictures,
-                         String behaviourRules, String priceList, String additionalInfo, String cancellationConditions,
+                         String behaviourRules, Double priceList, String additionalInfo, String cancellationConditions,
                          Integer roomsQuantity, Integer bedsPerRoom) {
         super(name, address, promoDescription, pictures, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.roomsQuantity = roomsQuantity;

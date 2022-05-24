@@ -2,43 +2,23 @@ package com.projekat.projekat_mrs_isa.service;
 
 import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
-import com.projekat.projekat_mrs_isa.repository.VacationHouseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class VacationHouseService {
-    @Autowired
-    private VacationHouseRepository vacationHouseRepository;
 
-    public VacationHouse findById(Long id) {
-        return vacationHouseRepository.findById(id).orElse(null);
-    }
+public interface VacationHouseService {
 
-    public List<VacationHouse> findAll() {
-        return vacationHouseRepository.findAll();
-    }
 
-    public List<VacationHouseDTO> findAllDTO() {
-        return vacationHouseRepository.findAllDTO();
-    }
+    VacationHouse findById(Long id);
 
-    public VacationHouse save(VacationHouse vacationHouse) {
-        return vacationHouseRepository.save(vacationHouse);
-    }
+    List<VacationHouse> findAll();
 
-    public void remove(Long id) {
-        vacationHouseRepository.deleteById(id);
-    }
+    List<VacationHouseDTO> findAllDTO();
 
-    public List<String> findPicturesByVacationHouseId(Long shipId) {
-        VacationHouse vacationHouse = vacationHouseRepository.findById(shipId).orElse(null);
-        if (vacationHouse != null)
-            return vacationHouse.getPictures();
-        else
-            return new ArrayList<>();
-    }
+    VacationHouse save(VacationHouse vacationHouse);
+
+    void remove(Long id);
+
+    List<String> findPicturesByVacationHouseId(Long shipId);
+
+    VacationHouseDTO findDTOById(Long id);
 }

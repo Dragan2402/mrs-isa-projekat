@@ -71,7 +71,7 @@ public class ShipController {
         if (ship == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(new ShipDTO(ship), HttpStatus.OK);
+        return new ResponseEntity<>(shipService.findDTOById(id), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{shipId}/pictures/all", produces = MediaType.APPLICATION_JSON_VALUE)

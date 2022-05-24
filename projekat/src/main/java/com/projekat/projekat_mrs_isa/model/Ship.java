@@ -44,7 +44,7 @@ public class Ship extends RentingEntity{
     public Ship() {}
 
     public Ship(String name, String address, String promoDescription, List<String> pictures, String behaviourRules,
-                String priceList, String additionalInfo, String cancellationConditions, String type, Integer length,
+                Double priceList, String additionalInfo, String cancellationConditions, String type, Integer length,
                 String engineNumber, Integer enginePower, Integer topSpeed, Set<String> navigationEquipment,
                 Integer clientLimit, Set<String> fishingEquipment) {
         super(name, address, promoDescription, pictures, behaviourRules, priceList, additionalInfo, cancellationConditions);

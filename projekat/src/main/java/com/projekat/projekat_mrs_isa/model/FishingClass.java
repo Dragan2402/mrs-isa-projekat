@@ -33,7 +33,7 @@ public class FishingClass extends RentingEntity{
     }
 
     public FishingClass(String name, String address, String promoDescription, List<String> pictures,
-                        String behaviourRules, String priceList, String additionalInfo, String cancellationConditions,
+                        String behaviourRules, Double priceList, String additionalInfo, String cancellationConditions,
                         String instructorBiography, Integer clientLimit, Set<String> fishingEquipment) {
         super(name, address, promoDescription, pictures, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.instructorBiography = instructorBiography;

@@ -65,10 +65,10 @@ public class FishingClassController {
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FishingClassDTO> getFishingClassDTOById(@PathVariable("id") Long id) {
-        FishingClassDTO fishingClassDTO = fishingClassService.findFishingClassDTO(id);
-        if (fishingClassDTO == null)
-            return new ResponseEntity<FishingClassDTO>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<FishingClassDTO>(fishingClassDTO, HttpStatus.OK);
+        FishingClass fishingClass = fishingClassService.findById(id);
+        if (fishingClass == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(fishingClassService.findDTOById(id), HttpStatus.OK);
     }
 
     @PutMapping(value = "update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

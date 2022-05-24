@@ -1,24 +1,22 @@
 package com.projekat.projekat_mrs_isa.service.impl;
 
 import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
+import com.projekat.projekat_mrs_isa.dto.ReservationRequestDTO;
 import com.projekat.projekat_mrs_isa.dto.SubscriptionDTO;
 import com.projekat.projekat_mrs_isa.dto.TakenPeriodDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.repository.ClientRepository;
 import com.projekat.projekat_mrs_isa.repository.RoleRepository;
-import com.projekat.projekat_mrs_isa.service.ClientService;
-import com.projekat.projekat_mrs_isa.service.RentingEntityService;
-import com.projekat.projekat_mrs_isa.service.UtilityService;
+import com.projekat.projekat_mrs_isa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-@Service
 
+@Service
 public class ClientServiceImpl implements ClientService {
     @Autowired
     private ClientRepository clientRepository;
@@ -33,6 +31,13 @@ public class ClientServiceImpl implements ClientService {
     private RoleRepository roleRepository;
 
     @Autowired
+    private ReservationService reservationService;
+
+    @Autowired
+    private EmailService emailService;
+
+
+    @Autowired
     private UtilityService utilityService;
 
     @Override
@@ -43,8 +48,6 @@ public class ClientServiceImpl implements ClientService {
     public UserDTO findUserDTO(Long id) { return  clientRepository.findUserDTO(id) ; }
     @Override
     public List<Client> findAll() { return clientRepository.findAll(); }
-    @Override
-    public Page<Client> findAll(Pageable page) { return clientRepository.findAll(page);}
     @Override
     public Client save(Client client) { return clientRepository.save(client); }
     @Override
@@ -130,6 +133,24 @@ public class ClientServiceImpl implements ClientService {
             takenPeriod.add(takenPeriodDTO);
         }
         return takenPeriod;
+    }
+
+    @Override
+    public Boolean makeClientReservation(Client logged, ReservationRequestDTO reservationRequestDTO) {
+        reservationRequestDTO.setStart(reservationRequestDTO.getStart().plusDays(1));
+        reservationRequestDTO.setEnd(reservationRequestDTO.getEnd().plusDays(1));
+        Duration duration=Duration.between(reservationRequestDTO.getStart(), reservationRequestDTO.getEnd());
+        RentingEntity rentingEntity=rentingEntityService.findById(reservationRequestDTO.getRentingEntityId());
+        if (rentingEntity==null)
+            return false;
+        Reservation reservation= new Reservation(reservationRequestDTO.getPlace(), reservationRequestDTO.getClientLimit(),
+                reservationRequestDTO.getAdditionalServices(),reservationRequestDTO.getPrice(),rentingEntity,
+                logged,reservationRequestDTO.getStart(),duration);
+        logged.addReservation(reservation);
+        rentingEntity.addReservation(reservation);
+        reservationService.save(reservation);
+        emailService.confirmReservationMail(logged,reservation);
+        return true;
     }
 
     @Override
