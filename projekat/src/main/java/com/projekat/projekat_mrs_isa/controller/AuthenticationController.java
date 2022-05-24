@@ -39,6 +39,9 @@ public class AuthenticationController {
     private ShipOwnerService shipOwnerService;
 
     @Autowired
+    private FishingInstructorService fishingInstructorService;
+
+    @Autowired
     private EmailService emailService;
 
     @Autowired
@@ -135,6 +138,23 @@ public class AuthenticationController {
         ShipOwner so = shipOwnerService.addShipOwner(userMap);
         String registrationReason = (String) userMap.get("registrationReason");
         Request registrationRequest = new Request(so, registrationReason, RequestType.BECOME_SH_OWNER);
+        requestService.save(registrationRequest);
+        return new ResponseEntity<>(true,HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/addFishingInstructor", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> addFishingInstructor(@RequestBody Map<String, Object> userMap){
+        if(!utilityService.validateOwnerData(userMap))
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+
+        if(!(userService.isUsernameAvailable((String) userMap.get("username"))
+                && userService.isUsernameAvailable(((String) userMap.get("email")).toLowerCase()))) {
+            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
+        }
+
+        FishingInstructor fi = fishingInstructorService.addFishingInstructor(userMap);
+        String registrationReason = (String) userMap.get("registrationReason");
+        Request registrationRequest = new Request(fi, registrationReason, RequestType.BECOME_INSTRUCTOR);
         requestService.save(registrationRequest);
         return new ResponseEntity<>(true,HttpStatus.CREATED);
     }
