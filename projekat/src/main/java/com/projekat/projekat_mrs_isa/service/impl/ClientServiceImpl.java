@@ -158,4 +158,5 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.findByUsername(name);
 
     }
+
 }
