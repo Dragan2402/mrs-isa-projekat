@@ -19,7 +19,7 @@
           <br>
          <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + reservation.img" style="width: 140px; height: 80px;"></div>
         {{reservation.rentingEntityName}} {{reservation.place}} People: {{reservation.clientLimit}} <label v-if="reservation.additionalServices.length != 0"> Additional Services: <label v-for="service in reservation.additionalServices" :key="service">
-            {{service}}
+            {{service}} 
           </label>
           </label>
             {{reservation.price}} EUR Starting Date: {{reservation.start}} Duration {{msToTime(reservation.duration)}}

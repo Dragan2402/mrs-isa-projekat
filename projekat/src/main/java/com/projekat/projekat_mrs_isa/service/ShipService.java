@@ -2,42 +2,23 @@ package com.projekat.projekat_mrs_isa.service;
 
 import com.projekat.projekat_mrs_isa.dto.ShipDTO;
 import com.projekat.projekat_mrs_isa.model.Ship;
-import com.projekat.projekat_mrs_isa.repository.ShipRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class ShipService {
-    @Autowired
-    private ShipRepository shipRepository;
 
-    public Ship findById(Long id) {
-        return shipRepository.findById(id).orElse(null);
-    }
+public interface ShipService {
 
-    public List<Ship> findAll() {
-        return shipRepository.findAll();
-    }
+    Ship findById(Long id);
 
-    public Ship save(Ship ship) {
-        return shipRepository.save(ship);
-    }
+    List<Ship> findAll();
 
-    public List<ShipDTO> findAllDTO() { return shipRepository.findAllDTO(); }
+    Ship save(Ship ship);
 
-    public void remove(Long id) {
-        shipRepository.deleteById(id);
-    }
+    List<ShipDTO> findAllDTO();
 
-    public List<String> findPicturesByShipId(Long shipId) {
-        Ship ship = shipRepository.findById(shipId).orElse(null);
-        if (ship != null)
-            return ship.getPictures();
-        return new ArrayList<>();
-    }
+    void remove(Long id);
 
+    List<String> findPicturesByShipId(Long shipId);
+
+    ShipDTO findDTOById(Long id);
 
 }

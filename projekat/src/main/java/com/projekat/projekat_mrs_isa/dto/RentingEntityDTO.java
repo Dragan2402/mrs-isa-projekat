@@ -20,13 +20,14 @@ public class RentingEntityDTO {
     private String name;
     private String img;
     private String address;
+    private Long ownerId;
     private String promoDescription;
     @JsonFormat(pattern = ("dd.MM.yyyy HH:mm"))
     private LocalDateTime availableFrom;
     @JsonFormat(pattern = ("dd.MM.yyyy HH:mm"))
     private LocalDateTime availableTo;
     private String behaviourRules;
-    private String priceList;
+    private Double priceList;
     private Double rating;
     private Integer reviewsNumber;
     private String additionalInfo;
@@ -48,6 +49,7 @@ public class RentingEntityDTO {
         cancellationConditions = rentingEntity.getCancellationConditions();
         rating=rentingEntity.getRating();
         reviewsNumber=rentingEntity.getReviewsNumber();
+        ownerId=0L;
         isSubscribed=false;
     }
 
@@ -93,10 +95,10 @@ public class RentingEntityDTO {
     public void setBehaviourRules(String behaviourRules) {
         this.behaviourRules = behaviourRules;
     }
-    public String getPriceList() {
+    public Double getPriceList() {
         return priceList;
     }
-    public void setPriceList(String priceList) {
+    public void setPriceList(Double priceList) {
         this.priceList = priceList;
     }
     public String getAdditionalInfo() {
@@ -110,6 +112,14 @@ public class RentingEntityDTO {
     }
     public void setCancellationConditions(String cancellationConditions) {
         this.cancellationConditions = cancellationConditions;
+    }
+
+    public Long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
     }
 
     public Boolean getSubscribed() {

@@ -1,30 +1,17 @@
 package com.projekat.projekat_mrs_isa.service;
 
 import com.projekat.projekat_mrs_isa.model.Offer;
-import com.projekat.projekat_mrs_isa.repository.OfferRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class OfferService {
-    @Autowired
-    private OfferRepository offerRepository;
 
-    public Offer findById(Long id) {
-        return offerRepository.findById(id).orElse(null);
-    }
+public interface OfferService {
 
-    public List<Offer> findAll() {
-        return offerRepository.findAll();
-    }
+    Offer findById(Long id);
 
-    public Offer save(Offer offer) {
-        return offerRepository.save(offer);
-    }
+    List<Offer> findAll();
 
-    public void remove(Long id) {
-        offerRepository.deleteById(id);
-    }
+    Offer save(Offer offer);
+
+    void remove(Long id);
 }

@@ -1,7 +1,6 @@
 package com.projekat.projekat_mrs_isa.service;
 
 import com.projekat.projekat_mrs_isa.model.Request;
-
 import java.util.List;
 
 public interface RequestService {

@@ -17,8 +17,7 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.*;
-import java.nio.file.*;
+
 
 @RestController
 @CrossOrigin
@@ -153,6 +152,16 @@ public class ClientController {
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
+    @PostMapping(value = "/makeReservationFull", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public ResponseEntity<Boolean> makeReservationFull(Principal clientP, @RequestBody ReservationRequestDTO reservationRequestDTO) {
+        Client logged = clientService.findByUsername(clientP.getName());
+        if (logged == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(clientService.makeClientReservation(logged,reservationRequestDTO),HttpStatus.OK);
+    }
+
 
     @GetMapping(value = "/loggedClient", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('CLIENT')")
@@ -261,6 +270,16 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(clientService.isSubscribed(client,id), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/rentingEntityAvailability/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('CLIENT')")
+    @Transactional
+    public ResponseEntity<List<TakenPeriodDTO>> rentingEntityAvailability(Principal clientP,@PathVariable("id") Long id) {
+        Client client = clientService.findByUsername(clientP.getName());
+        if (client == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(clientService.rentingEntityAvailability(client,id), HttpStatus.OK);
     }
 
 

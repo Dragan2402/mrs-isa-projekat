@@ -45,7 +45,7 @@
             <span style="color: #585858;">({{vacationHouse.reviewsNumber}})</span>
           </div>
           <div class="entity-price">
-            <div><h5 style="font-weight: bold">{{ vacationHouse.priceList }}</h5></div>
+            <div><h5 style="font-weight: bold">{{ vacationHouse.priceList }}&euro;</h5></div>
             <div>
               <button class="custom-btn button-primary" @click="jumpToPreview(vacationHouse)">Explore</button>
             </div>
@@ -64,7 +64,7 @@
             <span style="color: #585858;">({{ship.reviewsNumber}})</span>
           </div>
           <div class="entity-price">
-            <div><h5 style="font-weight: bold">{{ ship.priceList }}</h5></div>
+            <div><h5 style="font-weight: bold">{{ ship.priceList }}&euro;</h5></div>
             <div><button class="custom-btn button-primary" @click="jumpToPreview(ship)">Explore</button></div>
           </div>
         </div>
@@ -80,7 +80,7 @@
             <span style="color: #585858;">({{fishingClass.reviewsNumber}})</span>
           </div>
           <div class="entity-price">
-            <div><h5 style="font-weight: bold">{{ fishingClass.priceList }}</h5></div>
+            <div><h5 style="font-weight: bold">{{ fishingClass.priceList }}&euro;</h5></div>
             <div><button class="custom-btn button-primary" @click="jumpToPreview(fishingClass)">Explore</button></div>
           </div>
         </div>

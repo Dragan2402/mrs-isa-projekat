@@ -61,11 +61,10 @@ public class VacationHouseController {
     //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     @Transactional
     public ResponseEntity<VacationHouseDTO> getVacationHouse(@PathVariable("id") Long id) {
-        VacationHouse vacationHouse = vacationHouseService.findById(id);
-        if (vacationHouse == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(new VacationHouseDTO(vacationHouse), HttpStatus.OK);
+        VacationHouse vacationHouse=vacationHouseService.findById(id);
+        if (vacationHouse==null)
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(vacationHouseService.findDTOById(id), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}/offers", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -80,9 +79,7 @@ public class VacationHouseController {
         for(Offer offer : vacationHouse.getOffers()) {
             if (offer.getStart().compareTo(LocalDateTime.now()) > 0) {
                 OfferDTO temp = new OfferDTO(offer);
-
                 offers.add(temp);
-
             }else{
                 offer.setDeleted(true);
             }

@@ -1,7 +1,8 @@
 <template>   
   <div class="main-container" v-if="loaded">
     <h3 class="main-heading">{{rentingEntity.name}}</h3>
-    <vue3-star-ratings class="star-ratings" v-model="rentingEntity.rating" starSize="22"  :showControl=false :disableClick=true :step=0 />
+  
+    <vue3-star-ratings class="star-ratings"  v-model="rentingEntity.rating" starSize="22"  :showControl=false :disableClick=true :step=0 />
     <h5 class="star-heading">({{rentingEntity.reviewsNumber}})</h5>
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
@@ -26,7 +27,7 @@
         <div><b>Address: </b> {{rentingEntity.address}}</div>
         <div><b>Description: </b> {{rentingEntity.promoDescription}}</div>
         <div><b>Behaviour rules: </b> {{rentingEntity.behaviourRules}}</div>
-        <div><b>Price: </b> {{rentingEntity.priceList}} per day</div>
+        <div><b>Price: </b> {{rentingEntity.priceList}}&euro;</div>
         <div><b>Additional info: </b>{{rentingEntity.additionalInfo}}</div>
         <div><b>Cancellation conditions: </b>{{rentingEntity.cancellationConditions}}</div>
         <div v-if="this.displayType==0"><b>Capacity: </b>{{rentingEntity.roomsQuantity}} rooms, {{rentingEntity.bedsPerRoom}} beds per room</div>
@@ -44,7 +45,22 @@
       <div class="google-map-container">
         <iframe class="google-map" v-bind:src="'https://maps.google.com/maps?q=' + rentingEntity.address + '&t=&z=13&ie=UTF8&iwloc=&output=embed'"></iframe>
       </div>
+
+       
     </div>
+    <button @click="toggleMakingReservation" v-if="!makingReservation">Make Reservation</button>
+    <div v-if="makingReservation">
+          <v-date-picker v-model="range" mode='dateTime' color="blue" is24hr :minute-increment="30" is-range  :min-date=minDate :max-date=maxDate :attributes='attributes' >        
+          </v-date-picker>
+            <div v-for="service in additionalServices" :key="service">
+              <label>{{service}}</label>
+              <input type="checkbox" v-model="selectedServices" :value="service" checked/>
+            </div>
+          <button @click="confirmReservation">Confirm</button>
+          <button @click="closeMakingReservation">Cancel</button>
+    </div>
+    <br>
+      
     <hr>
     <div class="main-offer-container">
       <h4 v-if="this.offers.length !== 0">Offers:</h4>
@@ -69,6 +85,7 @@
         </div>
       </div>
     </div>
+  
     </div>
 </template>
 
@@ -78,89 +95,137 @@ import axios from "axios"
 export default {
   name: "RentingEntityPreview",
   data(){
+        let takenDatesPoppers = [];
     return {
       id:0,
       displayType:0,
       rentingEntity: {},
       selectedOffer: {},
       selected:false,
+      date:null,
       pictures:[],
       isSubscribed:false,
-      index:0,      
+      index:0,     
       offers: [],
-      loaded:false
+      additionalServices:[],
+      selectedServices:[],
+      loaded:false,
+      makingReservation:false,
+      minDate:null,
+      maxDate:null,  
+      takenDates:[],
+      range: {
+        start: new Date(2022, 0, 6,0,0),
+        end: new Date(2022, 0, 9,0,0),
+      },
+      incId: takenDatesPoppers.length,
+      takenDatesPoppers,
+      bars:[]
     }
   },
   mounted(){
-    // axios.get("api/ships/all").then( response => this.ships=response.data);
     this.displayType = this.$route.params.displayType;
     this.id=this.$route.params.id;
     this.loaded=false;
+    let path,pathOffers,pathPictures;
     if(this.displayType==0 && this.id != undefined){      
-      const path="/api/vacation_houses/"+this.id;
-      const pathOffers="/api/vacation_houses/"+this.id+"/offers";
-      const pathPictures="/api/vacation_houses/"+this.id+"/pictures/all";
-      axios.get(path).then( response => this.rentingEntity=response.data);
-      axios.get(pathPictures).then(response => {
-          for (let i = 0; i < response.data.length; i++) {
-            this.pictures.push(response.data[i]);
-          }
-        });
-      axios.get(pathOffers).then(response => this.offers=response.data);
-      this.loaded=true;
+      path="/api/vacation_houses/"+this.id;
+      pathOffers="/api/vacation_houses/"+this.id+"/offers";
+      pathPictures="/api/vacation_houses/"+this.id+"/pictures/all";
       }
     else if(this.displayType==1 && this.id != undefined){
-      const path="/api/ships/"+this.id;
-      const pathOffers="/api/ships/"+this.id+"/offers";
-      const pathPictures="/api/ships/"+this.id+"/pictures/all";
-      axios.get(path).then( response => this.rentingEntity=response.data);
-      axios.get(pathPictures).then(response => {
-          for (let i = 0; i < response.data.length; i++) {
-            this.pictures.push(response.data[i]);
-          }
-        });
-      axios.get(pathOffers).then(response => this.offers=response.data);
-      this.loaded=true;
+      path="/api/ships/"+this.id;
+      pathOffers="/api/ships/"+this.id+"/offers";
+      pathPictures="/api/ships/"+this.id+"/pictures/all";
     }
     else if(this.id != undefined){
-      const path="/api/fishingClasses/"+this.id;
-      const pathOffers="/api/fishingClasses/"+this.id+"/offers";
-      const pathPictures="/api/fishingClasses/"+this.id+"/pictures/all";
-      axios.get(path).then( response => this.rentingEntity=response.data);
-      axios.get(pathPictures).then(response => {
+      path="/api/fishingClasses/"+this.id;
+      pathOffers="/api/fishingClasses/"+this.id+"/offers";
+      pathPictures="/api/fishingClasses/"+this.id+"/pictures/all";
+    }
+
+    axios.get(path).then( response => {this.rentingEntity=response.data});
+
+
+    axios.get(pathPictures).then(response => {
           for (let i = 0; i < response.data.length; i++) {
             this.pictures.push(response.data[i]);
           }
         });
-      axios.get(pathOffers).then(response => this.offers=response.data);
-      this.loaded=true;
-    }
+    axios.get(pathOffers).then(response => this.offers=response.data);
+    this.loaded=true;
+    
+
     if(localStorage.getItem("jwt")!="null"){
       if(this.$root.loggedUser.accountType=="CLIENT"){
-   
         const path="/api/clients/isSubscribed/"+this.id;
         axios.get(path,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} } ).then(response =>{
-          this.isSubscribed=response.data;
-    
+        this.isSubscribed=response.data;
         });
       }
     }
-    
+
 },
+computed: {
+    attributes() {
+      return [
+        ...this.bars,       
+        // Attributes for todos
+        ...this.takenDatesPoppers.map(todo => ({
+          dates: todo.dates,
+          dot: {
+            color: todo.color,
+            class: todo.isComplete ? 'opacity-75' : '',
+          },
+          popover: {
+            label: todo.description,
+          },
+          customData: todo,
+        })),
+      ];
+    },
+  },
 methods:{
     msToTime(duration) {
     var 
-      
       minutes = Math.floor((duration / (1000 * 60)) % 60),
       hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
- 
-    
     if(minutes>0){
       return hours+"H" + " " + minutes;
     }else{
        return hours+"H";
     }
   },
+  dateFromLocal(dateString){
+      if(dateString==null){
+        return new Date();
+      }
+      
+      const parts=dateString.split(" ");
+      
+      if( parts.length !=2){
+        return new Date();
+      }
+      const dateParts= parts[0].split(".");
+      
+      if( dateParts.length !=3){
+        return new Date();
+      }
+      const hourParts=parts[1].split(":");
+      
+      if( hourParts.length !=2){
+        return new Date();
+      }
+      
+      const day = dateParts[0];
+      const month = dateParts[1];
+      const year = dateParts[2];
+      const hours = hourParts[0];
+      const minutes = hourParts[1];
+      // new Date(year, month, day, hours, minutes, seconds, milliseconds)
+      const date= new Date(year,month-1,day,hours,minutes);
+      return date;
+    },
   subscribe(){
     if(localStorage.getItem("jwt")=="null"){
       this.$router.push("/loginPage");
@@ -199,6 +264,143 @@ methods:{
       }
     });
   },
+  generateBar(takenDTO){
+    let color="red";
+    if(takenDTO.type=="Offer"){
+      color="blue";
+    }
+    let datesBars=[]
+    let takenTo= this.dateFromLocal(takenDTO.takenTo);
+    for (var d = this.dateFromLocal(takenDTO.takenFrom); d <= takenTo; d.setDate(d.getDate() + 1)) {
+        const date = new Date(d);
+        datesBars.push(date);
+    }
+    const bar={
+   
+          dates:datesBars,         
+          bar:color,
+    };
+    this.bars.push(bar);
+  },
+  generatePopover(takenDTO){
+    let color="red";
+    if(takenDTO.type=="Offer"){
+      color="blue";
+    }
+    const takenStart={
+        description: takenDTO.startsAt,
+        isComplete: false,
+        dates: this.dateFromLocal(takenDTO.takenFrom), // Every Friday
+        color: color,
+      };
+    const takenEnd={
+        description:  takenDTO.endsAt,
+        isComplete: false,
+        dates: this.dateFromLocal(takenDTO.takenTo), 
+        color: color,
+      };
+    this.takenDatesPoppers.push(takenStart);
+    this.takenDatesPoppers.push(takenEnd);
+  },
+  takeCalendar(takenDates){
+    takenDates.forEach(this.generateBar);
+    takenDates.forEach(this.generatePopover);
+    this.takenDates=takenDates;
+  },
+  toggleMakingReservation(){
+    if(localStorage.getItem("jwt")=="null"){
+      this.$router.push("/loginPage");
+      return;
+    }
+    if(this.$root.loggedUser.accountType!="CLIENT"){
+      this.$toast.error("Only available for clients");
+      return;
+    }
+    this.makingReservation=true;
+    axios.get(`/api/clients/rentingEntityAvailability/${this.rentingEntity.id}`,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => 
+    {
+      this.takeCalendar(response.data);
+      
+      });
+    let servicesPath;
+    if(this.displayType==0){
+      servicesPath="/api/vacationHouseOwners/getServices/"+this.rentingEntity.ownerId;
+    }else if(this.displayType==1){
+      servicesPath="/api/shipOwners/getServices/"+this.rentingEntity.ownerId;
+    }
+    else{
+      servicesPath="/api/fishingInstructors/getServices/"+this.rentingEntity.ownerId;
+    }
+    axios.get(servicesPath,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => this.additionalServices=response.data);
+    this.minDate = this.dateFromLocal(this.rentingEntity.availableFrom);
+    this.maxDate = this.dateFromLocal(this.rentingEntity.availableTo);
+    const availableFrom="Renting entity available from "+this.minDate.getHours()+":"+this.minDate.getMinutes();
+    const availableTo="Renting entity available till "+this.minDate.getHours()+":"+this.minDate.getMinutes();
+    const takenStart={
+        description: availableFrom,
+        isComplete: false,
+        dates: this.minDate, 
+        color: "green",
+      };
+    const takenEnd={
+         description: availableTo,
+        isComplete: false,
+        dates: this.maxDate, 
+        color: "green",
+      };
+    this.takenDatesPoppers.push(takenStart);
+    this.takenDatesPoppers.push(takenEnd);
+
+  },
+  freeSlot(start,end){
+    for (let i = 0; i < this.takenDates.length; i++) {
+        const takenFrom=this.dateFromLocal(this.takenDates[i].takenFrom);
+        const takenTo = this.dateFromLocal(this.takenDates[i].takenTo);
+        if( (start>=takenFrom && end <=takenTo) || (start<=takenFrom && end >=takenTo) || (start>=takenFrom && start<=takenTo) || (end <= takenTo && end >= takenFrom) || start<this.minDate || end>this.maxDate){
+          return false;
+        } 
+    } 
+    return true;
+  },
+  confirmReservation(){
+    const start=this.range.start;
+    const end=this.range.end;
+  
+    if(this.freeSlot(start,end)){
+      
+
+      let clientLimit=0;
+      if(this.displayType==0){
+        clientLimit=this.rentingEntity.roomsQuantity*this.rentingEntity.bedsPerRoom;
+      }else{
+        clientLimit=this.rentingEntity.clientLimit;
+      }
+      const reservation={        
+        "place":this.rentingEntity.address,
+        "clientLimit": clientLimit,
+        "additionalServices":this.selectedServices,
+        "price":this.rentingEntity.priceList,
+        "rentingEntityId":this.rentingEntity.id,
+        "start":start,
+        "end":end
+      };
+      axios.post(`/api/clients/makeReservationFull`,reservation,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(
+        response => {
+          if(response.data==true){
+            this.$toast.success("Reservation made");
+            this.closeMakingReservation();
+          }else{
+            this.$toast.error("Error");
+          }
+        }
+      );
+    }else{
+      this.$toast.error("Select free date");
+    }
+  },
+  closeMakingReservation(){
+    this.makingReservation=false;
+  },
 
   makeReservation(offer,index){
 
@@ -222,9 +424,11 @@ methods:{
           this.$toast.error("You can not make a reservation. You have 3 penalties. Wait for next month.");
         }
       });
-      
-     
+  },
+  updateRating(){
+    this.rating=4.1;
   }
+
 }
 }
 </script>

@@ -1,72 +1,25 @@
 package com.projekat.projekat_mrs_isa.service;
 
 
-import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
-import com.projekat.projekat_mrs_isa.model.Admin;
 import com.projekat.projekat_mrs_isa.model.FishingInstructor;
-import com.projekat.projekat_mrs_isa.model.Role;
-import com.projekat.projekat_mrs_isa.model.ShipOwner;
-import com.projekat.projekat_mrs_isa.repository.FishingInstructorRepository;
-import com.projekat.projekat_mrs_isa.repository.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Map;
 
-@Service
-public class FishingInstructorService {
-    @Autowired
-    private FishingInstructorRepository fishingInstructorRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
 
-    @Autowired
-    private PasswordEncoderComponent passwordEncoderComponent;
+public interface FishingInstructorService {
 
-    public FishingInstructor findById(Long id) {
-        return fishingInstructorRepository.findById(id).orElse(null);
-    }
 
-    public List<FishingInstructor> findAll() {
-        return fishingInstructorRepository.findAll();
-    }
+    FishingInstructor findById(Long id);
 
-    public Page<FishingInstructor> findAll(Pageable page) {
-        return fishingInstructorRepository.findAll(page);
-    }
+    List<FishingInstructor> findAll();
 
-    public FishingInstructor save(FishingInstructor fishingInstructor) {
-        return fishingInstructorRepository.save(fishingInstructor);
-    }
+    FishingInstructor save(FishingInstructor fishingInstructor);
 
-    public void remove(Long id) {
-        fishingInstructorRepository.deleteById(id);
-    }
+    void remove(Long id);
 
-    public FishingInstructor findByEmail(String email) {
-        return fishingInstructorRepository.findByEmail(email);
-    }
+    FishingInstructor findByEmail(String email);
 
-    public FishingInstructor addFishingInstructor(Map<String, Object> userMap) {
-        FishingInstructor fi = new FishingInstructor(
-                (String) userMap.get("email"),
-                (String) userMap.get("username"),
-                passwordEncoderComponent.encode((String) userMap.get("password")),
-                "pictures/user_pictures/0.png",
-                (String) userMap.get("firstName"),
-                (String) userMap.get("lastName"),
-                (String) userMap.get("address"),
-                (String) userMap.get("city"),
-                (String) userMap.get("country"),
-                (String) userMap.get("phoneNum")
-        );
-        List<Role> fishingInstructorRoles = roleRepository.findByName("ROLE_CLIENT");
-        fi.setRoles(fishingInstructorRoles);
-        fishingInstructorRepository.save(fi);
-        return fi;
-    }
+    FishingInstructor addFishingInstructor(Map<String, Object> userMap);
+
 }
