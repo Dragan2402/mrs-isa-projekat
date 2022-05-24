@@ -64,6 +64,12 @@ public abstract class User implements UserDetails {
     @Column(name = "enabled")
     private boolean enabled;
 
+    @Column(name="password_reset_token")
+    private String passwordResetToken;
+
+    @Column(name = "password_reset_token_date")
+    private Timestamp passwordResetTokenDate;
+
     @Column(name = "last_password_reset_date")
     private Timestamp lastPasswordResetDate;
 
@@ -292,6 +298,22 @@ public abstract class User implements UserDetails {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public String getPasswordResetToken() {
+        return passwordResetToken;
+    }
+
+    public void setPasswordResetToken(String passwordResetToken) {
+        this.passwordResetToken = passwordResetToken;
+    }
+
+    public Timestamp getPasswordResetTokenDate() {
+        return passwordResetTokenDate;
+    }
+
+    public void setPasswordResetTokenDate(Timestamp passwordResetTokenDate) {
+        this.passwordResetTokenDate = passwordResetTokenDate;
     }
 
     @JsonIgnore

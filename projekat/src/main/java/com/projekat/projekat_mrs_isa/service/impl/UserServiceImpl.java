@@ -1,13 +1,21 @@
 package com.projekat.projekat_mrs_isa.service.impl;
 
+import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
+import com.projekat.projekat_mrs_isa.dto.PasswordResetDTO;
 import com.projekat.projekat_mrs_isa.model.User;
 import com.projekat.projekat_mrs_isa.repository.UserRepository;
+import com.projekat.projekat_mrs_isa.service.EmailService;
 import com.projekat.projekat_mrs_isa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -15,8 +23,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private EmailService emailService;
 
-
+    @Autowired
+    private PasswordEncoderComponent passwordEncoderComponent;
 
     @Override
     public List<User> findAll() {
@@ -70,6 +81,46 @@ public class UserServiceImpl implements UserService {
     public User findByUsername(String name) {
         return userRepository.findByUsername(name);
 
+    }
+
+    @Override
+    public Boolean sendResetPassword(String mail) {
+        User user = userRepository.findByEmail(mail);
+        if(user==null)
+            return false;
+        user.setPasswordResetToken(generateToken());
+        user.setPasswordResetTokenDate(Timestamp.valueOf(LocalDateTime.now()));
+        save(user);
+        emailService.sendResetPasswordMail(mail,user.getPasswordResetToken());
+        return true;
+    }
+
+    @Override
+    public Boolean resetPassword(PasswordResetDTO passwordResetDTO) {
+        User user= userRepository.findByToken(passwordResetDTO.getToken());
+        if (user==null)
+            return false;
+        if(isTokenExpired(user.getPasswordResetTokenDate()))
+            return false;
+        user.setPassword(passwordEncoderComponent.encode(passwordResetDTO.getNewPassword()));
+        user.setPasswordResetTokenDate(null);
+        user.setPasswordResetToken(null);
+        save(user);
+        return true;
+
+    }
+
+    private String generateToken() {
+        StringBuilder token = new StringBuilder();
+        return token.append(UUID.randomUUID().toString())
+                .append(UUID.randomUUID().toString()).toString();
+    }
+
+    private boolean isTokenExpired(Timestamp tokenCreationDate) {
+
+        LocalDateTime now = LocalDateTime.now();
+        Duration diff = Duration.between(tokenCreationDate.toLocalDateTime(), now);
+        return diff.toMinutes() >= 60;
     }
 
 }

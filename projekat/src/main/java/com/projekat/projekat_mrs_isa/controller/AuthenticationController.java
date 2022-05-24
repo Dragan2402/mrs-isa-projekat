@@ -2,6 +2,7 @@ package com.projekat.projekat_mrs_isa.controller;
 
 
 import com.projekat.projekat_mrs_isa.dto.JwtAuthenticationRequestDTO;
+import com.projekat.projekat_mrs_isa.dto.PasswordResetDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.dto.UserTokenStateDTO;
 import com.projekat.projekat_mrs_isa.model.*;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "api/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationController {
     @Autowired
@@ -180,6 +182,20 @@ public class AuthenticationController {
     public ResponseEntity<Boolean> isUsernameAvailableRequest(@PathVariable("username") String username){
         return new ResponseEntity<>(userService.isUsernameAvailable(username),HttpStatus.OK);
     }
+
+    @GetMapping(value = "/sendResetPassword/{mail}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> sendResetPasswordMail(@PathVariable("mail") String mail){
+        return new ResponseEntity<>(userService.sendResetPassword(mail),HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/resetPassword" , produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> resetPassword(@RequestBody PasswordResetDTO passwordResetDTO){
+        if(!utilityService.validatePasswords(passwordResetDTO.getNewPassword(),passwordResetDTO.getConfirmPassword()))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(userService.resetPassword(passwordResetDTO),HttpStatus.OK);
+    }
+
+
 
     // Endpoint za registraciju novog korisnika
 //    @PostMapping("/signup")

@@ -9,6 +9,11 @@
       <br />
       <br />
       <button @click="login">Login</button>
+      <div>
+        <p>
+          <router-link to="/forgotPasswordPage">Forgot your password?</router-link>
+        </p>
+      </div>
     </div>
 
   </div>

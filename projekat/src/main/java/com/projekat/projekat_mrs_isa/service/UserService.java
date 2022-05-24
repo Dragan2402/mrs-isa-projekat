@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.service;
 
 
+import com.projekat.projekat_mrs_isa.dto.PasswordResetDTO;
 import com.projekat.projekat_mrs_isa.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,4 +15,8 @@ public interface UserService extends UserDetailsService {
     Boolean isUsernameAvailable(String username);
     Boolean isMailAvailable(String mail);
     User findByUsername(String name);
+
+    Boolean sendResetPassword(String mail);
+
+    Boolean resetPassword(PasswordResetDTO passwordResetDTO);
 }

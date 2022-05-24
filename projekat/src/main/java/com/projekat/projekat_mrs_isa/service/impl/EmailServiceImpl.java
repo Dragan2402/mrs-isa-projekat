@@ -61,4 +61,20 @@ public class EmailServiceImpl implements EmailService {
         mail.setText(verificationMailGenerator(userDTO.getFirstName()+" "+userDTO.getLastName(), userDTO.getId()));
         javaMailSender.send(mail);
     }
+
+    @Override
+    @Async
+    public void sendResetPasswordMail(String mailP, String token) {
+        SimpleMailMessage mail=new SimpleMailMessage();
+        mail.setTo(mailP);
+        mail.setFrom(environment.getProperty("spring.mail.username"));
+        mail.setSubject("Password Reset");
+        mail.setText(resetPasswordMailGenerator(token));
+        javaMailSender.send(mail);
+    }
+
+    private String resetPasswordMailGenerator(String token) {
+        return "You have successfully created a password reset request.\nTo complete your password reset please follow the provided link:\n" +
+                "http://localhost:3000/newPassword/"+token+"\n\n\nThank you for using Renting Buddy service";
+    }
 }

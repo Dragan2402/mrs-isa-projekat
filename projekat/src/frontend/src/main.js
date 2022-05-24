@@ -10,6 +10,8 @@ import HomePage from "./components/HomePage";
 import LoginPage from "./components/LoginPage"
 import RegistrationPage from "./components/RegistrationPage";
 import VerificationPage from "./components/VerificationPage";
+import ForgotPasswordPage from "./components/ForgotPasswordPage";
+import NewPasswordPage from "./components/NewPasswordPage";
 import VacationHouseProfile from "@/components/VacationHouseProfile";
 import RentingEntityPreview from "@/components/RentingEntityPreview";
 import ReservationsPage from "@/components/ReservationsPage";
@@ -36,7 +38,9 @@ const routes = [
     {name: "vacationHouseProfile", path: "/vacationHouseProfile", component: VacationHouseProfile},
     {name: "shipProfile", path: "/shipProfile", component: ShipProfile},
     {name: "rentingEntityPreview",path:"/rentingEntityPreview/rID:id$dT:displayType", component: RentingEntityPreview},
-    {name: "verificationPage", path: "//verification/aTvHtI:customId",component: VerificationPage}
+    {name: "verificationPage", path: "//verification/aTvHtI:customId",component: VerificationPage},
+    {name: "newPasswordPage", path: "/newPassword/:token",component:NewPasswordPage},
+    {name: "forgotPasswordPage",path: "/forgotPasswordPage", component:ForgotPasswordPage}
 ];
 
 const router = new createRouter({

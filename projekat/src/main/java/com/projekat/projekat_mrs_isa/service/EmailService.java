@@ -9,4 +9,6 @@ public interface EmailService {
     void confirmReservationMail(Client client, Reservation reservation);
 
     void sendVerificationMail(UserDTO userDTO);
+
+    void sendResetPasswordMail(String mailP, String token);
 }
