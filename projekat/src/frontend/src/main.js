@@ -40,9 +40,9 @@ const routes = [
     {name: "shipProfile", path: "/shipProfile", component: ShipProfile},
     {name: "rentingEntityPreview",path:"/rentingEntityPreview/rID:id$dT:displayType", component: RentingEntityPreview},
     {name: "verificationPage", path: "//verification/aTvHtI:customId",component: VerificationPage},
-    {name: "vacationHouseOwnerProfile", path: "/vacationHouseOwnerProfile", component: VacationHouseOwnerProfile, children: [
-            {name: "vacationHouseOwnerInfo", path: "info", component: VacationHouseOwnerInfo},
-            {name: "vacationHouseOwnerHome", path: "home", component: VacationHouseOwnerHome}
+    {name: "vacationHouseOwnerProfile", path: "/profile", component: VacationHouseOwnerProfile, children: [
+            {name: "vacationHouseOwnerInfo", path: "/profile", component: VacationHouseOwnerInfo},
+            {name: "vacationHouseOwnerHome", path: "/profile", component: VacationHouseOwnerHome}
     ]}
 
 ];

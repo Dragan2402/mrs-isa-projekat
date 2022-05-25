@@ -71,9 +71,9 @@ export default {
 
     function routePage() {
       if(page.value === "homePage")
-        router.push("/vacationHouseOwnerProfile/home");
+        router.push({name: "vacationHouseOwnerHome"});
       else if(page.value === "infoPage")
-        router.push("/vacationHouseOwnerProfile/info");
+        router.push({name: "vacationHouseOwnerInfo"});
     }
 
     return {
