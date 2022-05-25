@@ -27,6 +27,16 @@
           <option value=3>Price ascending</option>
         </select>
       </div>
+      <div class="sort" >
+          <div class="left-bar-text">Group by:</div> 
+          <select class="form-select" v-model="groupBy">
+
+            <option value=1>1</option>
+            <option value=5>5</option>
+            <option value=10>10</option>
+            <option value=15>15</option>
+          </select>
+        </div>
       <br>
       <div class="radio-div">
         <div>
@@ -101,6 +111,7 @@ export default {
       currentPage:0,
       displayCurrentPage:0,
       maximumPage:null,
+      groupBy:5,
       price:[0,1000],
       availabilityInterval: null,
       filterData:{
@@ -109,7 +120,7 @@ export default {
         "address":"",
         "start":null,
         "end":null,
-        "people":null,
+        "people":0,
         "priceMin":0,
         "priceMax":100
       },
@@ -132,7 +143,7 @@ export default {
     // const priceMax=800;
     // console.log(start.toISOString());
     // console.log(end.toISOString());
-    axios.get(`/api/vacation_houses?page=${this.currentPage}&size=1&sort=name,ASC`).then(response => this.entities=response.data);
+    axios.get(`/api/vacation_houses?page=${this.currentPage}&size=5&sort=name,ASC`).then(response => this.entities=response.data);
     //axios.get("api/fishingClasses/all").then(response => this.fishingClasses = response.data);
     //axios.get("api/ships/all").then(response => this.ships = response.data);
 
@@ -202,8 +213,41 @@ export default {
       this.search(false);
     },
     generateUrl(){
-        let url="api/"+this.filterData.type+"?name="+this.filterData.name+"&page="+this.currentPage+"&size=1&sort=name,ASC";
+        let url="api/"+this.filterData.type+"?";
+        if(this.filterData.name!=""){
+          url=url+"&name="+this.filterData.name;
+        }
+        if(this.filterData.address!=""){
+          url=url+"&address="+this.filterData.address;
+        }
+        if(this.filterData.start!=null){
+          url=url+"&start="+this.filterData.start;
+        }
+
+        if(this.filterData.end!=null){
+          url=url+"&end="+this.filterData.end;
+        }
+
+        url=url+"&people="+this.filterData.people
+        +"&priceMin="+this.filterData.priceMin+"&priceMax="+this.filterData.priceMax+"&page="+this.currentPage+"&size="+this.groupBy+
+        this.getSortType();
+
         return url;
+    },
+    
+    getSortType(){
+      //0 name desc, 1 name asc, 2 price asc, 3 price desc
+      //"&sort=name,ASC"
+      if(this.sortType==0){
+        return "&sort=name,DESC";
+      }
+      else if(this.sortType==1){
+        return "&sort=name,ASC";
+      }else if(this.sortType==3){
+        return "&sort=priceList,ASC";
+      }else{
+        return "&sort=priceList,DESC";
+      }
     },
     getType(){
       if(this.toDisplay==0){
@@ -220,15 +264,21 @@ export default {
         this.filterData.name=this.nameFilter;
         this.filterData.address=this.addressFilter;
         if(this.availabilityInterval != null){
-          this.filterData.start=this.availabilityInterval.start;
-          this.filterData.end=this.availabilityInterval.end;
+          this.filterData.start=this.availabilityInterval[0].toISOString();
+          if(this.availabilityInterval[1]!=null){
+            this.filterData.end=this.availabilityInterval[1].toISOString();
+          }else{
+            this.filterData.end=null;
+            this.filterData.start=null;
+          }
         }else{
           this.filterData.start=null;
           this.filterData.end=null;
         }
+
+        this.filterData.people=this.people;
         this.filterData.priceMin=this.price[0];
         this.filterData.priceMax=this.price[1];
-        console.log(this.filterData);
         this.displayType=this.toDisplay;
         this.currentPage=0;
       }
@@ -236,6 +286,7 @@ export default {
       axios.get(url).then(response => {
         if(response.data.length==0){
           this.currentPage=this.currentPage-1;
+          this.$toast.error("No results found");
          
         }else{
           this.entities=response.data;

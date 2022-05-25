@@ -56,6 +56,7 @@ public class VacationHouseController {
                                                                        @PathParam("priceMin") Double priceMin,
                                                                        @PathParam("priceMax") Double priceMax,
                                                                        Pageable page) {
+
         if(address==null)
             address="";
         if(name==null)
@@ -71,11 +72,10 @@ public class VacationHouseController {
             return new ResponseEntity<>(vacationHouseService.findByNoDateCriteria(name,address,people,priceMin,priceMax,page),HttpStatus.OK);
         else{
 
-            startDate = LocalDateTime.parse(start, DateTimeFormatter.ISO_ZONED_DATE_TIME);
-            startDate.plus(1, ChronoUnit.HOURS);
-            endDate = LocalDateTime.parse(end, DateTimeFormatter.ISO_ZONED_DATE_TIME);
-            endDate.plus(1, ChronoUnit.HOURS);
-
+            LocalDateTime startDateTemp = LocalDateTime.parse(start, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+            startDate = startDateTemp.plusHours(2);
+            LocalDateTime endTemp = LocalDateTime.parse(end, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+            endDate=endTemp.plusHours(2);
             return new ResponseEntity<>(vacationHouseService.findByCriteria(name,address,startDate,endDate,people,priceMin,priceMax,page),HttpStatus.OK);
         }
 
