@@ -2,6 +2,7 @@ package com.projekat.projekat_mrs_isa.controller;
 
 import com.projekat.projekat_mrs_isa.dto.OfferDTO;
 import com.projekat.projekat_mrs_isa.dto.ShipDTO;
+import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
 import com.projekat.projekat_mrs_isa.model.Offer;
 import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.Ship;
@@ -11,15 +12,19 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +48,39 @@ public class ShipController {
             shipDTOS.add(shipDTO);
         }
         return new ResponseEntity<>(shipDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping
+    @Transactional
+    public ResponseEntity<List<ShipDTO>> getAllVacationHouses(@PathParam("address") String address,
+                                                                       @PathParam("name") String name,
+                                                                       @PathParam("start") String start,
+                                                                       @PathParam("end") String end,
+                                                                       @PathParam("people") Integer people,
+                                                                       @PathParam("priceMin") Double priceMin,
+                                                                       @PathParam("priceMax") Double priceMax,
+                                                                       Pageable page) {
+        if(address==null)
+            address="";
+        if(name==null)
+            name="";
+        LocalDateTime startDate,endDate;
+        if(people==null)
+            people=0;
+        if(priceMin==null)
+            priceMin=0.0;
+        if(priceMax==null)
+            priceMax=1000.0;
+        if(start==null || end==null)
+            return new ResponseEntity<>(shipService.findByNoDateCriteria(name,address,people,priceMin,priceMax,page),HttpStatus.OK);
+        else{
+            startDate = LocalDateTime.parse(start, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+            startDate.plus(1, ChronoUnit.HOURS);
+            endDate = LocalDateTime.parse(end, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+            endDate.plus(1, ChronoUnit.HOURS);
+            return new ResponseEntity<>(shipService.findByCriteria(name,address,startDate,endDate,people,priceMin,priceMax,page),HttpStatus.OK);
+        }
+
     }
 
     public String encodeImage(RentingEntity rentingEntity){

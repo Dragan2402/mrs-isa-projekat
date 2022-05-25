@@ -10,15 +10,19 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import javax.websocket.server.PathParam;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +46,41 @@ public class FishingClassController {
             fishingClassDTOS.add(fishingClassDTO);
         }
         return new ResponseEntity<>(fishingClassDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping
+    @Transactional
+    public ResponseEntity<List<FishingClassDTO>> getAllVacationHouses(@PathParam("address") String address,
+                                                                       @PathParam("name") String name,
+                                                                       @PathParam("start") String start,
+                                                                       @PathParam("end") String end,
+                                                                       @PathParam("people") Integer people,
+                                                                       @PathParam("priceMin") Double priceMin,
+                                                                       @PathParam("priceMax") Double priceMax,
+                                                                       Pageable page) {
+        if(address==null)
+            address="";
+        if(name==null)
+            name="";
+        LocalDateTime startDate,endDate;
+        if(people==null)
+            people=0;
+        if(priceMin==null)
+            priceMin=0.0;
+        if(priceMax==null)
+            priceMax=1000.0;
+        if(start==null || end==null || start.equals("null") || end.equals("null"))
+            return new ResponseEntity<>(fishingClassService.findByNoDateCriteria(name,address,people,priceMin,priceMax,page),HttpStatus.OK);
+        else{
+
+            startDate = LocalDateTime.parse(start, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+            startDate.plus(1, ChronoUnit.HOURS);
+            endDate = LocalDateTime.parse(end, DateTimeFormatter.ISO_ZONED_DATE_TIME);
+            endDate.plus(1, ChronoUnit.HOURS);
+
+            return new ResponseEntity<>(fishingClassService.findByCriteria(name,address,startDate,endDate,people,priceMin,priceMax,page),HttpStatus.OK);
+        }
+
     }
 
     public String encodeImage(RentingEntity rentingEntity){

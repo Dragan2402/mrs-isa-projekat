@@ -1,13 +1,23 @@
 <template>
   <div class="main-container">
     <div class="left-bar">
-      <h5 style="color: white; font-weight: bold">Search</h5>
       <div class="left-bar-text">Destination name:</div>
       <div>
-        <input class="input-group-text" type="text" placeholder="Filter by name, address..." v-model="filter"/>
+        <input class="input-group-text" type="text" v-model="nameFilter"/>
       </div>
+      <div class="left-bar-text">Destination address:</div>
+      <div>
+        <input class="input-group-text" type="text"  v-model="addressFilter"/>
+      </div>
+    
       <div class="left-bar-text">Date:</div>
       <Datepicker v-model="availabilityInterval" :format="formatRange" range clearable/>
+      <div class="left-bar-text">People:</div>
+      <input type="number" width="50px" :min=0 :max=50 :step=1 v-model="people"/><br><br>
+      <Slider v-model="people" :min=0 :max=50 :width=100 :step=1 :tooltips=false />
+      <div class="left-bar-text">Price &euro;:</div>
+      <input type="number"  :min=0 :max=price[1] :step=50  v-model="price[0]"/> <label style="color:white">-</label> <input type="number" :min=price[0] :max=1000 :step=50 v-model="price[1]"/><br><br>
+      <Slider v-model="price" :min=0 :max=1000 :width=100 :step=50 :tooltips=false />
       <div class="left-bar-text">Sort by:</div>
       <div class="sort">
         <select class="form-select" v-model="sortType" name="example">
@@ -20,22 +30,26 @@
       <br>
       <div class="radio-div">
         <div>
-          <input class="radio" type="radio" id="contactChoice1" name="choice" value=0 v-model="displayType">
+          <input class="radio" type="radio" id="contactChoice1" name="choice" value=0 v-model="toDisplay">
           <label class="custom-btn button-outline" for="contactChoice1">Houses</label>
         </div>
         <div>
-          <input class="radio" type="radio" id="contactChoice2" name="choice" value=1 v-model="displayType">
+          <input class="radio" type="radio" id="contactChoice2" name="choice" value=1 v-model="toDisplay">
           <label class="custom-btn button-outline" for="contactChoice2">Boats</label>
         </div>
         <div>
-          <input class="radio" type="radio" id="contactChoice3" name="choice" value=2 v-model="displayType">
+          <input class="radio" type="radio" id="contactChoice3" name="choice" value=2 v-model="toDisplay">
           <label style="margin: 0;" class="custom-btn button-outline" for="contactChoice3">Fishing classes </label>
         </div>
       </div>
+      <div>
+        <br>
+        <button class="custom-btn button-outline" @click="search(true)">Search</button>
+      </div>
     </div>
     <div class="entities-div">
-      <div v-if="this.displayType==0">
-        <div class="list-entities" v-for="(vacationHouse, index) in this.filteredVacationHouses" @Click="selectEntity(vacationHouse)"
+      <div >
+        <div class="list-entities" v-for="(vacationHouse, index) in this.entities" @Click="selectEntity(vacationHouse)"
             v-bind:index="index" :key="vacationHouse.id" v-bind="{selected: selectedEntity.id===vacationHouse.id}">
           <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + vacationHouse.img" @click="jumpToPreview(vacationHouse)" style="width: 200px; height: 150px; cursor: pointer"></div>
           <div class="entity-name"><h4 @click="jumpToPreview(vacationHouse)" style="font-weight: bold; cursor: pointer">{{ vacationHouse.name }}</h4>
@@ -51,41 +65,14 @@
             </div>
           </div>
         </div>
-
       </div>
-      <div v-if="this.displayType==1">
-        <div class="list-entities" v-for="(ship,index) in this.filteredShips" @Click="selectEntity(ship)" v-bind:index="index" :key="ship.id"
-            v-bind="{selected: selectedEntity.id===ship.id}">
-        <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + ship.img" @click="jumpToPreview(ship)" style="width: 200px; height: 150px; cursor: pointer"></div>
-          <div class="entity-name"><h4 @click="jumpToPreview(ship)" style="cursor: pointer; font-weight: bold">{{ ship.name }}</h4>
-            <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ ship.address }} </div>
-            <div class="entity-description">{{ship.promoDescription}}</div>
-            <vue3-star-ratings class="star-ratings" v-model="ship.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />
-            <span style="color: #585858;">({{ship.reviewsNumber}})</span>
-          </div>
-          <div class="entity-price">
-            <div><h5 style="font-weight: bold">{{ ship.priceList }}&euro;</h5></div>
-            <div><button class="custom-btn button-primary" @click="jumpToPreview(ship)">Explore</button></div>
-          </div>
-        </div>
-      </div>
-      <div v-if="this.displayType==2">
-        <div class="list-entities" v-for="(fishingClass,index) in this.filteredFishingClasses" @Click="selectEntity(fishingClass)"
-             v-bind:index="index" :key="fishingClass.id" v-bind="{selected: selectedEntity.id===fishingClass.id}">
-          <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + fishingClass.img" @click="jumpToPreview(fishingClass)" style="width: 200px; height: 150px; cursor: pointer"></div>
-          <div class="entity-name"><h4 @click="jumpToPreview(fishingClass)" style="cursor: pointer; font-weight: bold">{{ fishingClass.name }}</h4>
-          <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ fishingClass.address }} </div>
-          <div class="entity-description">{{fishingClass.promoDescription}}</div>
-          <vue3-star-ratings class="star-ratings" v-model="fishingClass.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />
-            <span style="color: #585858;">({{fishingClass.reviewsNumber}})</span>
-          </div>
-          <div class="entity-price">
-            <div><h5 style="font-weight: bold">{{ fishingClass.priceList }}&euro;</h5></div>
-            <div><button class="custom-btn button-primary" @click="jumpToPreview(fishingClass)">Explore</button></div>
-          </div>
-        </div>
+      <div align='center'>
+        <button class="btn btn-light" @click="previousPage()">Prev</button>
+        {{displayCurrentPage}}
+        <button class="btn btn-light"  @click="nextPage()">Next</button>
       </div>
       <br><br><br><br><br><br>
+      
       <button class="btn btn-primary" @click="goToUserProfile()">User Profile</button>
       <button class="btn btn-primary" @click="goToFishingClassProfile()">Fishing Class Profile</button>
       <button class="btn btn-primary" @click="goToVacationHouseProfile()">Vacation House Profile</button>
@@ -97,55 +84,60 @@
 
 <script>
 import axios from "axios"
-
+import Slider from '@vueform/slider'
 export default {
 
   name: "HomePage",
+  components: {
+      Slider,
+    },
   data() {
     return {
       publicPath: process.env.BASE_URL,
-      fishingClasses: [],
-      vacationHouses: [],
-      ships: [],
+      entities: [],
       selectedEntity: {},
       selectedRows: [],
+      people:0,
+      currentPage:0,
+      displayCurrentPage:0,
+      maximumPage:null,
+      price:[0,1000],
       availabilityInterval: null,
+      filterData:{
+        "type":"vacation_houses",
+        "name":"",
+        "address":"",
+        "start":null,
+        "end":null,
+        "people":null,
+        "priceMin":0,
+        "priceMax":100
+      },
       sortType: 0, //represents type of sort, 0 name desc, 1 name asc, 2 price asc, 3 price desc
-      filter: "",
+      nameFilter: "",
+      addressFilter:"",
       selected: false,
+      toDisplay:0,
       displayType: 0,  //represents type of renting entity, 0 vac houses, 1 ships , 2 fishing classes
     }
   }
   ,
   mounted() {
-    axios.get("api/vacation_houses/all").then(response => this.vacationHouses=response.data);
-    axios.get("api/fishingClasses/all").then(response => this.fishingClasses = response.data);
-    axios.get("api/ships/all").then(response => this.ships = response.data);
+    // const name="";
+    // const address="";
+    // const start=new Date(2022,3,1,23,0);
+    // const end=new Date(2022,7,8,15,0);
+    // const people=8;
+    // const priceMin=40;
+    // const priceMax=800;
+    // console.log(start.toISOString());
+    // console.log(end.toISOString());
+    axios.get(`/api/vacation_houses?page=${this.currentPage}&size=1&sort=name,ASC`).then(response => this.entities=response.data);
+    //axios.get("api/fishingClasses/all").then(response => this.fishingClasses = response.data);
+    //axios.get("api/ships/all").then(response => this.ships = response.data);
 
   },
   
-  computed: {
-    filteredVacationHouses() {
-      return this.vacationHouses.filter(row => {
-        return this.includes(row);
-      }).sort((a,b)=>{
-        return this.sort(a,b);})
-    },
-    filteredShips() {
-      return this.ships.filter(row => {
-        return this.includes(row);
-      }).sort((a,b)=>{
-       return this.sort(a,b);
-      })
-    },
-    filteredFishingClasses() {
-      return this.fishingClasses.filter(row => {
-        return this.includes(row);
-      }).sort((a,b)=>{
-       return this.sort(a,b);
-      })
-    },
-  },
   methods: {       
     goToReservations(){
       this.$router.push('/reservations');
@@ -197,6 +189,60 @@ export default {
       this.selected = true;
 
     },
+    previousPage(){
+      if((this.currentPage-1)<=0){
+        this.currentPage=0;
+      }else{
+        this.currentPage=this.currentPage-1;
+      }
+      this.search(false);
+    },
+    nextPage(){
+      this.currentPage=this.currentPage+1;
+      this.search(false);
+    },
+    generateUrl(){
+        let url="api/"+this.filterData.type+"?name="+this.filterData.name+"&page="+this.currentPage+"&size=1&sort=name,ASC";
+        return url;
+    },
+    getType(){
+      if(this.toDisplay==0){
+        return "vacation_houses";
+      }else if(this.toDisplay==1){
+        return "ships";
+      }else{
+        return "fishingClasses";
+      }
+    },
+    search(fromButton){
+      if(fromButton){
+        this.filterData.type=this.getType();
+        this.filterData.name=this.nameFilter;
+        this.filterData.address=this.addressFilter;
+        if(this.availabilityInterval != null){
+          this.filterData.start=this.availabilityInterval.start;
+          this.filterData.end=this.availabilityInterval.end;
+        }else{
+          this.filterData.start=null;
+          this.filterData.end=null;
+        }
+        this.filterData.priceMin=this.price[0];
+        this.filterData.priceMax=this.price[1];
+        console.log(this.filterData);
+        this.displayType=this.toDisplay;
+        this.currentPage=0;
+      }
+      const url=this.generateUrl();
+      axios.get(url).then(response => {
+        if(response.data.length==0){
+          this.currentPage=this.currentPage-1;
+         
+        }else{
+          this.entities=response.data;
+          this.displayCurrentPage=this.currentPage;
+        }
+        });
+    },
     dateFromLocal(dateString){
       if(dateString==null){
         return new Date();
@@ -227,91 +273,8 @@ export default {
       const date= new Date(year,month-1,day,hours,minutes);
       return date;
     },
-    includes(row){
-        
-        const name = row.name.toString().toLowerCase();
-        const address = row.address.toString().toLowerCase();
-        const price = row.priceList.toString().toLowerCase();
-        const searchTerm = this.filter.toLowerCase();
-        
-        const availableFrom = this.dateFromLocal(row.availableFrom);        
-        const availableTo= this.dateFromLocal(row.availableTo);
-        let dateInInterval=false;
-        let dateFilterOn=false;
-        if(this.availabilityInterval != null){
-          dateFilterOn=true;
-          let fromFilter = this.availabilityInterval[0]
-          let toFilter= this.availabilityInterval[1]
-          if(fromFilter==null){
-            fromFilter=new Date();
-          }
-          if(toFilter==null){
-            toFilter=new Date()
-          }
-          if(availableFrom<=fromFilter && availableTo>=toFilter){
-            dateInInterval=true;
-            
-          }else{
-            dateInInterval=false;
-            
-          }
-        }
-        
-        if(dateFilterOn && dateInInterval){
-          return (name.includes(searchTerm) || address.includes(searchTerm) || price.includes(searchTerm))
-        }
-        else if(dateFilterOn && !dateInInterval){
-          return false;
-        }
-        return (name.includes(searchTerm) || address.includes(searchTerm) || price.includes(searchTerm))
-        
-    },
-    sort(a,b){
-        if(this.sortType==0){
-          let fa = a.name.toLowerCase(), fb = b.name.toLowerCase();
-          if (fa < fb) {
-            return -1
-          }
-          if (fa > fb) {
-            return 1
-          }
-          return 0
-        }
-        else if (this.sortType == 1){
-          let fa = a.name.toLowerCase(), fb = b.name.toLowerCase();
-           if (fa > fb) {
-            return -1
-          }
-          if (fa < fb) {
-            return 1
-          }
-          return 0
-        }
-        if(this.sortType==2){
-        let fa =parseInt(a.priceList), fb =parseInt(b.priceList)
-        
-          if (fa > fb) {
-            return -1
-          }
-          if (fa < fb) {
-            return 1
-          }
-          return 0
-        }
-        else if (this.sortType == 3){
-          
-          let fa = parseInt(a.priceList), fb =parseInt(b.priceList);
-          
-           if (fa < fb) {
-            return -1
-          }
-          if (fa > fb) {
-            return 1
-          }
-          return 0
-        }
-
-    },
+    
+   
     jumpToPreview(entity) {
       this.selectEntity(entity);
       this.$router.push({

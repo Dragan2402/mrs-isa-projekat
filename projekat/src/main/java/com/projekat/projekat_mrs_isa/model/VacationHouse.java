@@ -16,6 +16,9 @@ public class VacationHouse extends RentingEntity{
     @Column(name = "beds_per_room", nullable = false)
     private Integer bedsPerRoom;
 
+    @Column(name = "client_limit", nullable = false)
+    private Integer clientLimit;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vacation_house_owner_id",nullable = false)
     private VacationHouseOwner vacationHouseOwner;
@@ -30,6 +33,7 @@ public class VacationHouse extends RentingEntity{
         super(name, address, promoDescription, pictures, behaviourRules, priceList, additionalInfo, cancellationConditions);
         this.roomsQuantity = roomsQuantity;
         this.bedsPerRoom = bedsPerRoom;
+        this.clientLimit=roomsQuantity*bedsPerRoom;
     }
 
     public Integer getRoomsQuantity() {
@@ -38,6 +42,7 @@ public class VacationHouse extends RentingEntity{
 
     public void setRoomsQuantity(Integer roomsQuantity) {
         this.roomsQuantity = roomsQuantity;
+        this.clientLimit=roomsQuantity*bedsPerRoom;
     }
 
     public Integer getBedsPerRoom() {
@@ -46,6 +51,15 @@ public class VacationHouse extends RentingEntity{
 
     public void setBedsPerRoom(Integer bedsPerRoom) {
         this.bedsPerRoom = bedsPerRoom;
+        this.clientLimit=roomsQuantity*bedsPerRoom;
+    }
+
+    public Integer getClientLimit() {
+        return clientLimit;
+    }
+
+    public void setClientLimit(Integer clientLimit) {
+        this.clientLimit = clientLimit;
     }
 
     public VacationHouseOwner getVacationHouseOwner() {
