@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -350,6 +351,17 @@ public abstract class User implements UserDetails {
                 ", deleted=" + deleted +
                 ", is verified"+verified+
                 '}';
+    }
+
+    public void update(UserDTO userDTO)
+    {
+        this.firstName = userDTO.getFirstName();
+        this.lastName = userDTO.getLastName();
+        this.email = userDTO.getEmail();
+        this.address = userDTO.getAddress();
+        this.city = userDTO.getCity();
+        this.country = userDTO.getCountry();
+        this.phoneNum = userDTO.getPhoneNum();
     }
 
 }

@@ -10,7 +10,7 @@
       </div>
       <div class="nav-right" v-else>
         <img v-bind:src="'data:image/jpeg;base64,' + loggedPicture" style="width: 50px; height: 40px;">
-        {{loggedUser.username}}
+        <a>{{loggedUser.username}}</a>
         <button type="button"  @click="logout()" class="custom-btn button-outline" >Logout</button>
       </div>
     </div>

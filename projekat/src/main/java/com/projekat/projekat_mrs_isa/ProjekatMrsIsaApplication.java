@@ -122,7 +122,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         vacHouseOwner1AddSrvc.add("Rent a Quad");
         vacHouseOwner1AddSrvc.add("AC");
         VacationHouseOwner vacHouseOwnerTemp1= new VacationHouseOwner("dimpet96@maildrop.cc","dimitrije",passwordEncoderComponent.encode("Dimpet123"),"pictures/user_pictures/0.png","Dimitrije"
-                ,"Petrov","Telep Gang","Novi Sad","Serbia","+381650000000",vacHouseOwner1AddSrvc);
+                ,"Petrov","Somborska 55","Novi Sad","Serbia","+381650000000",vacHouseOwner1AddSrvc);
         vacHouseOwnerTemp1.setVerified(true);
         vacHouseOwnerTemp1.setRoles(rolesVHOwner);
         vacHouseRep.save(vacHouseOwnerTemp1);

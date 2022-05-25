@@ -1,6 +1,6 @@
 <template>
-  <div class="main-container">
-    <div style="display: flex">
+  <div class="main-container mt-3 mb-3">
+    <div class="mb-3" style="display: flex">
       <div style="float: left; width: 70%">
         <h3 class="main-heading">{{vacationHouse.name}}</h3>
         <vue3-star-ratings class="star-ratings" v-model="vacationHouse.rating" starSize="22"  :showControl=false :disableClick=true :step=0 />
@@ -153,7 +153,8 @@ export default {
       additionalInfo: null,
       cancellationConditions: null,
       roomsQuantity: null,
-      bedsPerRoom: null
+      bedsPerRoom: null,
+      reviewsNumber: null
     });
     let offer = ref({
       id: null,

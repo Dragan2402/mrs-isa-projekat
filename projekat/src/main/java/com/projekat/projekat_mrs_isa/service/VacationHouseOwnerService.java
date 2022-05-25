@@ -10,6 +10,8 @@ public interface VacationHouseOwnerService {
 
     VacationHouseOwner findById(Long id);
 
+    VacationHouseOwner findByUsername(String username);
+
     List<VacationHouseOwner> findAll();
 
     VacationHouseOwner addVacationHouseOwner(Map<String, Object> userMap);
