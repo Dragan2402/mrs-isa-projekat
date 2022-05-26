@@ -55,7 +55,7 @@ public abstract class User implements UserDetails {
     @Column(name = "reviews_number",nullable = false)
     private Integer reviewsNumber;
 
-    @Column(name = "type",nullable = false)
+    @Column(name = "acc_type",nullable = false)
     private AccountType type;
 
     @Column(name = "verified", nullable = false)

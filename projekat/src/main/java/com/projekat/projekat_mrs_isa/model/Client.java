@@ -9,6 +9,7 @@ import java.util.Set;
 
 
 @Entity
+@Table(name = "client")
 @SQLDelete(sql = "UPDATE client SET deleted = true WHERE id = ?")
 public class Client extends User {
 
