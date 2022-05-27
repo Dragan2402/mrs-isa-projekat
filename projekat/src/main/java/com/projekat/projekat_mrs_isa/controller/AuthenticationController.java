@@ -55,7 +55,7 @@ public class AuthenticationController {
     @Autowired
     private RequestService requestService;
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserTokenStateDTO> createAuthenticationToken(
             @RequestBody JwtAuthenticationRequestDTO authenticationRequest, HttpServletResponse response) {
 

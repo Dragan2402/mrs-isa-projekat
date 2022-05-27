@@ -14,4 +14,8 @@ public class ClientConstants {
     public static final String DB_CLIENT_COUNTRY="Serbia";
     public static final String DB_CLIENT_PHONE_NUM="+38165656565";
 
+    public static final Long DB_ID = 2L;
+    public static final String DB_FIRST_NAME = "Pero";
+    public static final String DB_LAST_NAME = "Peric";
+
 }

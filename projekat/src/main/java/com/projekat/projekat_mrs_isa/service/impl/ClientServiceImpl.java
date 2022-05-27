@@ -4,6 +4,7 @@ import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
 import com.projekat.projekat_mrs_isa.dto.*;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.repository.ClientRepository;
+import com.projekat.projekat_mrs_isa.repository.RentingEntityRepository;
 import com.projekat.projekat_mrs_isa.repository.RoleRepository;
 import com.projekat.projekat_mrs_isa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Autowired
     private RentingEntityService rentingEntityService;
+
+    @Autowired
+    private RentingEntityRepository rentingEntityRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -73,7 +77,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Boolean subscribe(Client client, Long reId) {
-        RentingEntity rentingEntity = rentingEntityService.findById(reId);
+        RentingEntity rentingEntity = rentingEntityRepository.findById(reId).orElse(null);
         if (rentingEntity == null)
             return false;
         rentingEntity.addSubscription(client);
@@ -94,7 +98,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Boolean isSubscribed(Client client, Long id) {
-        RentingEntity rentingEntity = rentingEntityService.findById(id);
+        RentingEntity rentingEntity = rentingEntityRepository.findById(id).orElse(null);
         if (rentingEntity == null)
             return false;
         return client.isSubscribed(rentingEntity);

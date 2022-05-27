@@ -116,10 +116,11 @@ public class UserServiceImpl implements UserService {
                 .append(UUID.randomUUID().toString()).toString();
     }
 
-    private boolean isTokenExpired(Timestamp tokenCreationDate) {
+    public boolean isTokenExpired(Timestamp tokenCreationDate) {
 
         LocalDateTime now = LocalDateTime.now();
         Duration diff = Duration.between(tokenCreationDate.toLocalDateTime(), now);
+        System.out.println(diff);
         return diff.toMinutes() >= 60;
     }
 
