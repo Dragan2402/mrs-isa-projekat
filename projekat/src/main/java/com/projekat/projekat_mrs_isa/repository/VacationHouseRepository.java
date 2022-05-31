@@ -10,4 +10,7 @@ import java.util.List;
 public interface VacationHouseRepository extends JpaRepository<VacationHouse, Long> {
     @Query("select new com.projekat.projekat_mrs_isa.dto.VacationHouseDTO(vh) from VacationHouse vh")
     public List<VacationHouseDTO> findAllDTO();
+
+    @Query("select vh from VacationHouse vh where vh.vacationHouseOwner.username = ?1")
+    List<VacationHouse> findAllFromOwner(String ownerUsername);
 }

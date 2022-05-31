@@ -1,5 +1,5 @@
 <template>
-  <div class="main-container mt-3 mb-3">
+  <div class="main-container">
     <div style="display: flex" class="mb-3">
       <div style="float: left; width: 70%">
         <h3 class="name-heading">{{firstName}} {{lastName}}</h3>
@@ -49,7 +49,7 @@ export default {
             username.value = response.data.username;
           })
           .catch(error => {
-            alert(error.response);
+            console.log(error.response);
             root.accessToken = null;
             localStorage.setItem("jwt", null);
             router.push("/loginPage");
@@ -90,15 +90,15 @@ export default {
 
 <style scoped>
 
-.main-container {
-  width: 60%;
-  margin: auto auto 20% auto;
-  min-width: 860px;
-}
+/*.main-container {*/
+/*  width: 60%;*/
+/*  margin: auto auto 20% auto;*/
+/*  min-width: 860px;*/
+/*}*/
 
 .name-heading {
   font-weight: bold;
-  margin: 10px 0 0 0;
+  /*margin-top: 1rem;*/
 }
 
 .username-heading {

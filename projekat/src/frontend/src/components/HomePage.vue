@@ -33,13 +33,13 @@
         </div>
       </div>
     </div>
-    <div class="entities-div">
+    <div class="home-entities-div">
       <div v-if="this.displayType==0">
         <div class="list-entities" v-for="(vacationHouse, index) in this.filteredVacationHouses" @Click="selectEntity(vacationHouse)"
             v-bind:index="index" :key="vacationHouse.id" v-bind="{selected: selectedEntity.id===vacationHouse.id}">
           <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + vacationHouse.img" @click="jumpToPreview(vacationHouse)" style="width: 200px; height: 150px; cursor: pointer"></div>
           <div class="entity-name"><h4 @click="jumpToPreview(vacationHouse)" style="font-weight: bold; cursor: pointer">{{ vacationHouse.name }}</h4>
-            <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ vacationHouse.address }} </div>
+            <div class="entity-description"><i class="bi bi-geo-alt-fill"> {{ vacationHouse.address }} </i></div>
             <div class="entity-description">{{ vacationHouse.promoDescription }}</div>
             <vue3-star-ratings class="star-ratings" v-model="vacationHouse.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />
             <span style="color: #585858;">({{vacationHouse.reviewsNumber}})</span>
@@ -342,29 +342,29 @@ export default {
   margin-bottom: 10px;
 }
 
-.entities-div {
-  margin-left: 26%;
-}
+/*.entities-div {*/
+/*  margin-left: 26%;*/
+/*}*/
 
-.main-container {
-  min-width: 1000px;
-  width: 60%;
-  margin: 20px auto auto;
-}
+/*.main-container {*/
+/*  min-width: 1000px;*/
+/*  width: 60%;*/
+/*  margin: 20px auto auto;*/
+/*}*/
 
-.left-bar {
-  margin-top: 0;
-  padding: 10px;
-  border-radius: 5px;
-  float: left;
-  width: 24%;
-  background-color: #00587a;
-}
+/*.left-bar {*/
+/*  margin-top: 0;*/
+/*  padding: 10px;*/
+/*  border-radius: 5px;*/
+/*  float: left;*/
+/*  width: 24%;*/
+/*  background-color: #00587a;*/
+/*}*/
 
-.left-bar-text{
-  margin-top: 10px;
-  color: white;
-}
+/*.left-bar-text{*/
+/*  margin-top: 10px;*/
+/*  color: white;*/
+/*}*/
 
 .datepicker-sort select {
   margin-left: 30px;

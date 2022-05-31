@@ -4,12 +4,14 @@ package com.projekat.projekat_mrs_isa.controller;
 import com.projekat.projekat_mrs_isa.dto.OfferDTO;
 import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
 import com.projekat.projekat_mrs_isa.model.Offer;
+import com.projekat.projekat_mrs_isa.model.Reservation;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
 import com.projekat.projekat_mrs_isa.service.OfferService;
 import com.projekat.projekat_mrs_isa.service.UtilityService;
 import com.projekat.projekat_mrs_isa.service.VacationHouseService;
 import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +42,8 @@ public class VacationHouseController {
     @Autowired
     private ResourceLoader resourceLoader;
 
-    @GetMapping(value = "/all")
-    //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
-    @Transactional
-    public ResponseEntity<List<VacationHouseDTO>> getAllVacationHouses() {
-        List<VacationHouse> vacationHouses = vacationHouseService.findAll();
+    @NotNull
+    private List<VacationHouseDTO> getVacationHouseDTOList(List<VacationHouse> vacationHouses) {
         List<VacationHouseDTO> vacationHouseDTOS=new ArrayList<>();
         for (VacationHouse vacationHouse : vacationHouses){
             VacationHouseDTO vacationHouseDTO= new VacationHouseDTO(vacationHouse);
@@ -54,7 +54,25 @@ public class VacationHouseController {
             vacationHouseDTO.setImg(utilityService.getPictureEncoded(picturePath));
             vacationHouseDTOS.add(vacationHouseDTO);
         }
-        return new ResponseEntity<>(vacationHouseDTOS, HttpStatus.OK);
+        return vacationHouseDTOS;
+    }
+
+    @GetMapping(value = "/all")
+    //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
+    @Transactional
+    public ResponseEntity<List<VacationHouseDTO>> getAllVacationHouses() {
+        List<VacationHouse> vacationHouses = vacationHouseService.findAll();
+        List<VacationHouseDTO> vacationHouseDTOs = getVacationHouseDTOList(vacationHouses);
+        return new ResponseEntity<>(vacationHouseDTOs, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/all/loggedVacationHouseOwner")
+    @PreAuthorize("hasRole('VH_OWNER')")
+    @Transactional
+    public ResponseEntity<List<VacationHouseDTO>> getAllVacationHousesFromOwner(Principal ownerPrincipal) {
+        List<VacationHouse> vacationHouses = vacationHouseService.findAllFromOwner(ownerPrincipal.getName());
+        List<VacationHouseDTO> vacationHouseDTOs = getVacationHouseDTOList(vacationHouses);
+        return new ResponseEntity<>(vacationHouseDTOs, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -65,6 +83,13 @@ public class VacationHouseController {
         if (vacationHouse==null)
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(vacationHouseService.findDTOById(id), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}/hasReservations")
+    @PreAuthorize("hasRole('VH_OWNER')")
+    public boolean isReserved(@PathVariable("id") Long id) {
+        List<Reservation> reservations = vacationHouseService.findAllReservations(id);
+        return reservations.size() != 0;
     }
 
     @GetMapping(value = "/{id}/offers", produces = MediaType.APPLICATION_JSON_VALUE)

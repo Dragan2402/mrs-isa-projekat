@@ -100,7 +100,7 @@ export default {
             user.value = response.data;
           })
           .catch(error => {
-            alert(error.response);
+            console.log(error.response);
             root.accessToken = null;
             localStorage.setItem("jwt", null);
             router.push("/loginPage");
@@ -110,7 +110,7 @@ export default {
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
           .then(response => (picture.value = response.data))
           .catch((error) => {
-            alert(error.response);
+            console.log(error.response);
             root.accessToken = null;
             localStorage.setItem("jwt", null);
             router.push("/loginPage");
@@ -134,10 +134,10 @@ export default {
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             user.value = response.data;
-            alert("Info updated");
+            console.log("Info updated");
           })
           .catch(error => {
-            alert(error.response);
+            console.log(error.response);
           });
     }
 
