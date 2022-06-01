@@ -88,7 +88,7 @@
       <br><br><br><br><br><br>
       <button class="btn btn-primary" @click="goToUserProfile()">User Profile</button>
       <button class="btn btn-primary" @click="goToFishingClassProfile()">Fishing Class Profile</button>
-      <button class="btn btn-primary" @click="goToVacationHouseProfile()">Vacation House Profile</button>
+<!--      <button class="btn btn-primary" @click="goToVacationHouseProfile()">Vacation House Profile</button>-->
       <button class="btn btn-primary" @click="goToShipProfile()">Ship Profile</button>
       <button class="btn btn-primary" @click="goToReservations()">Reservations</button>
     </div>
@@ -179,12 +179,12 @@ export default {
 
       return `${dayFrom}.${monthFrom}.${yearFrom} ${hourFrom}:${minuteFrom} - ${dayTo}.${monthTo}.${yearTo} ${hourTo}:${minuteTo}`
     },
-    goToVacationHouseProfile() {
-      this.$router.push({
-        name: "vacationHouseProfile",
-        params: {id: 3}
-      });
-    },
+    // goToVacationHouseProfile() {
+    //   this.$router.push({
+    //     name: "vacationHouseProfile",
+    //     params: {id: 3}
+    //   });
+    // },
     goToShipProfile() {
       this.$router.push({
         name: "shipProfile",

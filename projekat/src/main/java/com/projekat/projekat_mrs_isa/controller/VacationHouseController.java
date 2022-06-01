@@ -138,11 +138,16 @@ public class VacationHouseController {
     @PutMapping(value = "/loggedVacationHouseOwner/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('VH_OWNER')")
     @Transactional
-    public ResponseEntity<VacationHouseDTO> updateVacationHouse(@RequestBody VacationHouseDTO vacationHouseDTO) {
+    public ResponseEntity<VacationHouseDTO> updateVacationHouse(@RequestBody VacationHouseDTO vacationHouseDTO, @PathVariable("id") Long id) {
         LocalDateTime availableFrom = vacationHouseDTO.getAvailableFrom();
         LocalDateTime availableTo = vacationHouseDTO.getAvailableTo();
-//        if(availableFrom.isAfter(availableTo) || availableFrom.isBefore(LocalDateTime.now()))
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if(availableFrom.isAfter(availableTo) || availableFrom.isBefore(LocalDateTime.now()))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        List<Reservation> reservations = vacationHouseService.findAllReservations(id);
+        if(reservations.size() != 0)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
         VacationHouse vacationHouse = vacationHouseService.findById(vacationHouseDTO.getId());
         vacationHouse.update(vacationHouseDTO);
         vacationHouse = vacationHouseService.save(vacationHouse);
