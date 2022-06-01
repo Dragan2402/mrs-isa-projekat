@@ -122,7 +122,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         vacHouseOwner1AddSrvc.add("Rent a Quad");
         vacHouseOwner1AddSrvc.add("AC");
         VacationHouseOwner vacHouseOwnerTemp1= new VacationHouseOwner("dimpet96@maildrop.cc","dimitrije",passwordEncoderComponent.encode("Dimpet123"),"pictures/user_pictures/0.png","Dimitrije"
-                ,"Petrov","Telep Gang","Novi Sad","Serbia","+381650000000",vacHouseOwner1AddSrvc);
+                ,"Petrov","Somborska 55","Novi Sad","Serbia","+381650000000",vacHouseOwner1AddSrvc);
         vacHouseOwnerTemp1.setVerified(true);
         vacHouseOwnerTemp1.setRoles(rolesVHOwner);
         vacHouseRep.save(vacHouseOwnerTemp1);
@@ -357,6 +357,11 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         clientTemp1.addReview(reviewTemp4);
         vacHouseOwnerTemp1.addReview(reviewTemp4);
         vacHouseRep.save(vacHouseOwnerTemp1);
+
+        Reservation r = new Reservation( "Rakovac", 5, new ArrayList<>(), 100.0,
+                vacationHouseTemp, clientTemp2,
+                LocalDateTime.of(2022,3,1, 20, 15), Duration.ofDays(3));
+        reservationRep.save(r);
 
 
         vacationHouseTemp2.addReview(reviewTemp1);

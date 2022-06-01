@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "api/ships")
 public class ShipController {
     @Autowired

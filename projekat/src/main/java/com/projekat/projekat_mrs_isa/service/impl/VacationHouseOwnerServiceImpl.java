@@ -30,6 +30,11 @@ public class VacationHouseOwnerServiceImpl implements VacationHouseOwnerService 
     }
 
     @Override
+    public VacationHouseOwner findByUsername(String username) {
+        return vacationHouseOwnerRepository.findByUsername(username);
+    }
+
+    @Override
     public List<VacationHouseOwner> findAll() {
         return vacationHouseOwnerRepository.findAll();
     }

@@ -67,6 +67,81 @@ div {
     background: white;
   }
 
+.main-container {
+    width: 60%;
+    margin: 1rem auto;
+    min-width: 1000px;
+}
+
+.left-bar {
+    margin-top: 0;
+    padding: 10px;
+    border-radius: 5px;
+    float: left;
+    width: 24%;
+    background-color: #00587a;
+}
+
+.left-bar-text{
+    margin-top: 10px;
+    color: white;
+}
+
+.home-entities-div {
+    margin-left: 26%;
+}
+
+.home-list-entities {
+    text-align: center;
+    width: 100%;
+    height: 170px;
+    border: 1px solid darkgrey;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.home-entity-picture img {
+    object-fit: cover;
+    margin: 10px;
+    border-radius: 5px;
+    width: 200px;
+    height: 150px;
+}
+
+.home-entity-picture {
+    float:left;
+}
+
+.home-entity-content {
+    float: left;
+    margin: 10px;
+    text-align: left;
+}
+
+.home-entity-description {
+    color: #585858;
+    max-width: 280px;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.home-entity-price {
+    float: right;
+    /*margin: 50px 30px 0 0;*/
+    min-width: 150px;
+}
+
+.home-entity-content .star-ratings {
+    padding: 0;
+    margin: 0;
+    float: left;
+}
+
 /*.user-data-div div{*/
 /*    margin: auto;*/
 /*    max-width: 50%;*/

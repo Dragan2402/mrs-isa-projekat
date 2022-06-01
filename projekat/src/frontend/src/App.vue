@@ -10,8 +10,8 @@
       </div>
       <div class="nav-right" v-else>
         <img v-bind:src="'data:image/jpeg;base64,' + loggedPicture" style="width: 50px; height: 40px;">
-        {{loggedUser.username}}
-        <button type="button" style="margin-right: 0"  @click="logout()" class="custom-btn button-primary" >Logout</button>
+        <router-link class="link-light text-decoration-none" :to="{name: 'vacationHouseOwnerProfile'}">{{loggedUser.username}}</router-link>
+        <button type="button"  @click="logout()" class="custom-btn button-outline" >Logout</button>
       </div>
     </div>
     

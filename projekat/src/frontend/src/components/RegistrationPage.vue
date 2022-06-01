@@ -112,7 +112,6 @@ export default {
   },
   methods:{
     signUp() {
-      console.log(this.role)
       var regExp = /^[A-Za-z]+$/;
       
       if (this.firstName.length < 2 || this.firstName.length > 20) {

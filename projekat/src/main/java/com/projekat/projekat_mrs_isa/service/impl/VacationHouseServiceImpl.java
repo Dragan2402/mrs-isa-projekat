@@ -1,7 +1,9 @@
 package com.projekat.projekat_mrs_isa.service.impl;
 
 import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
+import com.projekat.projekat_mrs_isa.model.Reservation;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
+import com.projekat.projekat_mrs_isa.repository.ReservationRepository;
 import com.projekat.projekat_mrs_isa.repository.VacationHouseRepository;
 import com.projekat.projekat_mrs_isa.service.UtilityService;
 import com.projekat.projekat_mrs_isa.service.VacationHouseService;
@@ -23,6 +25,9 @@ public class VacationHouseServiceImpl implements VacationHouseService {
     @Autowired
     private VacationHouseRepository vacationHouseRepository;
 
+    @Autowired
+    private ReservationRepository reservationRepository;
+
     @Override
     public VacationHouse findById(Long id) {
         return vacationHouseRepository.findById(id).orElse(null);
@@ -34,6 +39,11 @@ public class VacationHouseServiceImpl implements VacationHouseService {
     @Override
     public List<VacationHouse> findAll() {
         return vacationHouseRepository.findAll();
+    }
+
+    @Override
+    public List<VacationHouse> findAllFromOwner(String ownerUsername) {
+        return vacationHouseRepository.findAllFromOwner(ownerUsername);
     }
 
     @Override
@@ -107,5 +117,13 @@ public class VacationHouseServiceImpl implements VacationHouseService {
             vacationHouseDTOS.add(vacationHouseDTO);
         }
         return vacationHouseDTOS;
+      }
+      
+    public List<Reservation> findAllReservations(Long vacationHouseId) {
+        VacationHouse vacationHouse = findById(vacationHouseId);
+        if(vacationHouse != null)
+            return reservationRepository.findAllFromEntity(vacationHouse);
+        else
+            return new ArrayList<>();
     }
 }

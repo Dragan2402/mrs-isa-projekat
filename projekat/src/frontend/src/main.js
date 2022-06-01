@@ -1,6 +1,6 @@
 import App from './App.vue';
-import {createApp} from 'vue'
-import {createRouter, createWebHistory} from 'vue-router'
+import { createApp } from 'vue'
+import { createRouter, createWebHistory } from 'vue-router'
 import ClientProfile from "./components/ClientProfile";
 import Toaster from '@meforma/vue-toaster';
 import Datepicker from '@vuepic/vue-datepicker';
@@ -27,21 +27,34 @@ import './assets/main.css'; //main css
 import 'v-calendar/dist/style.css';
 import "@vueform/slider/themes/default.css"
 import VCalendar from 'v-calendar';
+import VacationHouseOwnerProfile from "@/components/vacation_house_owner/VacationHouseOwnerProfile";
+import VacationHouseOwnerInfo from "@/components/vacation_house_owner/VacationHouseOwnerInfo";
+import VacationHouseOwnerHome from "@/components/vacation_house_owner/VacationHouseOwnerHome";
 
 
 const routes = [
-    {path: "/", component: HomePage},
-    {path: "/registrationPage", component:RegistrationPage},
-    {path: "/loginPage",component:LoginPage},
-    {path: "/clientProfile", component: ClientProfile},
-    {path: "/reservations",component:ReservationsPage},
-    {path: "/fishingClassProfile", component: FishingClassProfile},
-    {name: "vacationHouseProfile", path: "/vacationHouseProfile", component: VacationHouseProfile},
-    {name: "shipProfile", path: "/shipProfile", component: ShipProfile},
-    {name: "rentingEntityPreview",path:"/rentingEntityPreview/rID:id$dT:displayType", component: RentingEntityPreview},
-    {name: "verificationPage", path: "//verification/aTvHtI:customId",component: VerificationPage},
-    {name: "newPasswordPage", path: "/newPassword/:token",component:NewPasswordPage},
-    {name: "forgotPasswordPage",path: "/forgotPasswordPage", component:ForgotPasswordPage}
+    { path: "/", component: HomePage },
+    { path: "/registrationPage", component: RegistrationPage },
+    { path: "/loginPage", component: LoginPage },
+    { path: "/clientProfile", component: ClientProfile },
+    { path: "/reservations", component: ReservationsPage },
+    { path: "/fishingClassProfile", component: FishingClassProfile },
+    { name: "vacationHouseProfile", path: "/vacationHouseProfile", component: VacationHouseProfile },
+    { name: "shipProfile", path: "/shipProfile", component: ShipProfile },
+    { name: "rentingEntityPreview", path: "/rentingEntityPreview/rID:id$dT:displayType", component: RentingEntityPreview },
+    { name: "verificationPage", path: "//verification/aTvHtI:customId", component: VerificationPage },
+    { name: "newPasswordPage", path: "/newPassword/:token", component: NewPasswordPage },
+    { name: "forgotPasswordPage", path: "/forgotPasswordPage", component: ForgotPasswordPage },
+    {
+        name: "vacationHouseOwnerProfile",
+        path: "/profile",
+        component: VacationHouseOwnerProfile,
+        children: [
+            { name: "vacationHouseOwnerInfo", path: "/profile", component: VacationHouseOwnerInfo },
+            { name: "vacationHouseOwnerHome", path: "/profile", component: VacationHouseOwnerHome }
+        ]
+    }
+
 ];
 
 const router = new createRouter({
@@ -52,7 +65,6 @@ const router = new createRouter({
 
 createApp(App)
     .use(router)
-    .use(Toaster, {position: 'top', duration: 2000}).use(vueCountryRegionSelect).use(VueTelInput).use(VCalendar, {})
-    .component('Datepicker', Datepicker).component('PictureInput',PictureInput).component("vue3-star-ratings", vue3StarRatings)
+    .use(Toaster, { position: 'top', duration: 2000 }).use(vueCountryRegionSelect).use(VueTelInput).use(VCalendar, {})
+    .component('Datepicker', Datepicker).component('PictureInput', PictureInput).component("vue3-star-ratings", vue3StarRatings)
     .mount('#app')
-

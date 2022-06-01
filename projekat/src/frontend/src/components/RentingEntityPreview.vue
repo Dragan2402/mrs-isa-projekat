@@ -2,7 +2,7 @@
   <div class="main-container" v-if="loaded">
     <h3 class="main-heading">{{rentingEntity.name}}</h3>
   
-    <vue3-star-ratings class="star-ratings"  v-model="rentingEntity.rating" starSize="22"  :showControl=false :disableClick=true :step=0 />
+    <vue3-star-ratings v-if="loaded" class="star-ratings"  v-model="rentingEntity.rating" starSize="22"  :showControl=false :disableClick=true :step=0 />
     <h5 class="star-heading">({{rentingEntity.reviewsNumber}})</h5>
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
@@ -128,9 +128,9 @@ export default {
     this.loaded=false;
     let path,pathOffers,pathPictures;
     if(this.displayType==0 && this.id != undefined){      
-      path="/api/vacation_houses/"+this.id;
-      pathOffers="/api/vacation_houses/"+this.id+"/offers";
-      pathPictures="/api/vacation_houses/"+this.id+"/pictures/all";
+      path="/api/vacationHouses/anyUser/"+this.id;
+      pathOffers="/api/vacationHouses/anyUser/"+this.id+"/offers";
+      pathPictures="/api/vacationHouses/anyUser/"+this.id+"/pictures/all";
       }
     else if(this.displayType==1 && this.id != undefined){
       path="/api/ships/"+this.id;
@@ -143,7 +143,10 @@ export default {
       pathPictures="/api/fishingClasses/"+this.id+"/pictures/all";
     }
 
-    axios.get(path).then( response => {this.rentingEntity=response.data});
+    axios.get(path).then( response => {
+      this.rentingEntity=response.data;
+      this.loaded=true
+    });
 
 
     axios.get(pathPictures).then(response => {
@@ -152,7 +155,7 @@ export default {
           }
         });
     axios.get(pathOffers).then(response => this.offers=response.data);
-    this.loaded=true;
+
     
 
     if(localStorage.getItem("jwt")!="null"){
