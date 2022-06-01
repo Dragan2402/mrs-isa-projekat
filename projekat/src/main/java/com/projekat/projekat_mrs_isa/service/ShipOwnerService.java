@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.service;
 
 import com.projekat.projekat_mrs_isa.model.ShipOwner;
+
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,8 @@ import java.util.Map;
 public interface ShipOwnerService {
 
     ShipOwner findById(Long id);
+
+    ShipOwner findByUsername(String username);
 
     void remove(Long id);
 

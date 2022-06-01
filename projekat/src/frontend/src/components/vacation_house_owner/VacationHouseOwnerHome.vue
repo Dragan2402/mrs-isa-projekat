@@ -43,6 +43,8 @@
         </div>
         <vue3-star-ratings class="star-ratings" v-model="vacationHouse.rating" starSize="15" :showControl=false :disableClick=true :step=0 />
         <span style="color: #585858;">({{vacationHouse.reviewsNumber}})</span>
+        <v-calendar v-model="range" color="blue" :min-date=minDate :max-date=maxDate :attributes='attributes'  is-range>
+        </v-calendar>
       </div>
       <div class="home-entity-price h-100 d-flex">
         <div class="align-self-center">
@@ -142,6 +144,43 @@ export default {
     let availabilityInterval = ref(null);
     let sortType = ref(0);
     let hasReservations = ref();
+
+    let range = ref({
+      start: new Date(2022, 0, 6,0,0),
+      end: new Date(2022, 0, 9,0,0)
+    });
+    let bars = ref([]);
+    let takenDatesPoppers = ref([]);
+    let minDate = ref(null);
+    let maxDate = ref(null);
+
+    const filteredVacationHouses = computed(() => {
+      return vacationHouses.value
+          .filter(row => {
+            return includes(row);
+          })
+          .sort((a, b) => {
+            return sort(a, b);
+          })
+    })
+
+    const attributes = computed(() => {
+      return [
+        ...bars.value,
+        // Attributes for todos
+        ...takenDatesPoppers.value.map(todo => ({
+          dates: todo.dates,
+          dot: {
+            color: todo.color,
+            class: todo.isComplete ? 'opacity-75' : '',
+          },
+          popover: {
+            label: todo.description,
+          },
+          customData: todo,
+        })),
+      ];
+    })
 
     onMounted(() => {
       loadData();
@@ -256,16 +295,6 @@ export default {
       }
     }
 
-    const filteredVacationHouses = computed(() => {
-      return vacationHouses.value
-          .filter(row => {
-            return includes(row);
-          })
-          .sort((a, b) => {
-            return sort(a, b);
-          })
-    })
-
     function loadData() {
       axios
           .get(`api/vacationHouses/loggedVacationHouseOwner/all`,
@@ -361,6 +390,10 @@ export default {
       availabilityInterval,
       filteredVacationHouses,
       hasReservations,
+      range,
+      attributes,
+      minDate,
+      maxDate,
       vacationHouseHasReservations,
       updateVacationHouse,
       deleteVacationHouse,

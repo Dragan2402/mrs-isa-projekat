@@ -2,8 +2,9 @@ package com.projekat.projekat_mrs_isa.controller;
 
 import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
 import com.projekat.projekat_mrs_isa.dto.OfferDTO;
-import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
-import com.projekat.projekat_mrs_isa.model.*;
+import com.projekat.projekat_mrs_isa.model.FishingClass;
+import com.projekat.projekat_mrs_isa.model.Offer;
+import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.service.FishingClassService;
 import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -22,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +48,7 @@ public class FishingClassController {
         return new ResponseEntity<>(fishingClassDTOS, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping(value = "/anyUser/**")
     @Transactional
     public ResponseEntity<List<FishingClassDTO>> getAllVacationHouses(@PathParam("address") String address,
                                                                        @PathParam("name") String name,
