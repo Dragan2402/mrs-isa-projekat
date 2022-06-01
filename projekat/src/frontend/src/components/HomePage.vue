@@ -285,9 +285,14 @@ export default {
       }
       const url=this.generateUrl();
       axios.get(url).then(response => {
+        
         if(response.data.length==0){
-          this.currentPage=this.currentPage-1;
-          this.$toast.error("No results found");
+          if(fromButton){
+            this.$toast.error("No results found");
+          }
+          if(!fromButton){
+          this.currentPage=this.currentPage-1; 
+          }
          
         }else{
           this.entities=response.data;
