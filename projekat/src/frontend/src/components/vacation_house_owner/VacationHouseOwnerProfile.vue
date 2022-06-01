@@ -54,16 +54,6 @@ export default {
             localStorage.setItem("jwt", null);
             router.push("/loginPage");
           });
-      // axios
-      //     .get("/api/users/loggedUser/picture",
-      //         { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
-      //     .then(response => (picture.value = response.data))
-      //     .catch((error) => {
-      //       alert(error.response);
-      //       root.accessToken = null;
-      //       localStorage.setItem("jwt", null);
-      //       router.push("/loginPage");
-      //     });
 
       page.value = "homePage";
       routePage();

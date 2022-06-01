@@ -43,15 +43,15 @@
 <!--        <span style="color: #585858;">({{vacationHouse.reviewsNumber}})</span>-->
       </div>
       <div class="home-entity-price">
-        <div><h5 style="font-weight: bold">{{ vacationHouse.priceList }}&euro;</h5></div>
+<!--        <div><h5 style="font-weight: bold">{{ vacationHouse.priceList }}&euro;</h5></div>-->
         <div>
-          <button class="custom-btn button-primary">Explore</button>
-          <button type="button" class="custom-btn button-primary" @mousedown="vacationHouseHasReservations(vacationHouse.id)" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+          <button class="custom-btn button-primary" @click="openVacationHouseProfile(vacationHouse.id)">Open Profile</button>
+          <button type="button" class="custom-btn button-primary" @click="vacationHouseHasReservations(vacationHouse.id)" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
         </div>
       </div>
 
       <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title mx-auto" v-if="hasReservations">This vacation house is currently reserved</h5>
@@ -75,10 +75,13 @@
 <script>
 import {computed, ref, onMounted} from "vue";
 import axios from "axios";
+import {useRouter} from "vue-router";
 
 export default {
   name: "VacationHouseOwnerHome",
   setup() {
+    const router = useRouter();
+
     let vacationHouses  = ref([{}]);
     let filter = ref("");
     let availabilityInterval = ref(null);
@@ -229,14 +232,18 @@ export default {
           });
     }
 
-    function deleteVacationHouse(id) {
+    function deleteVacationHouse(vacationHouseId) {
       axios
-          .delete(`api/vacationHouses/loggedVacationHouseOwner/${id}`,
+          .delete(`api/vacationHouses/loggedVacationHouseOwner/${vacationHouseId}`,
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             console.log(response.data);
             loadData();
           });
+    }
+
+    function openVacationHouseProfile(vacationHouseId) {
+      router.push({name: "vacationHouseProfile", params: {id: vacationHouseId}});
     }
 
     return {
@@ -246,7 +253,8 @@ export default {
       filteredVacationHouses,
       hasReservations,
       vacationHouseHasReservations,
-      deleteVacationHouse
+      deleteVacationHouse,
+      openVacationHouseProfile
     }
   }
 }
