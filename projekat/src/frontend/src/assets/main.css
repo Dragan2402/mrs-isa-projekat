@@ -20,20 +20,17 @@ div {
     transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.button-outline {
-    color: white;
-    background-color: transparent;
-    border-color: white;
+.button-secondary {
+    color: #00587a;
+    background-color: white;
 }
 
-.button-outline:hover {
-    background-color: #196887;
+.button-secondary:hover {
+    background-color: #ccc;
 }
 
-.button-outline:active {
-    border-color: #bbb;
-    color: #bbb;
-    background-color: #004661;
+.button-secondary:active {
+    background-color: #aaa;
 }
 
 .button-primary {
@@ -67,6 +64,7 @@ div {
 .input-group-text {
     width: 100%;
     margin: auto;
+    background: white;
   }
 
 /*.user-data-div div{*/

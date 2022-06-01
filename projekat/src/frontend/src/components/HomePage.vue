@@ -1,7 +1,7 @@
 <template>
   <div class="main-container">
     <div class="left-bar">
-      <div class="left-bar-text">Destination name:</div>
+      <div class="left-bar-text" style="margin-top: 0">Destination name:</div>
       <div>
         <input class="input-group-text" type="text" v-model="nameFilter"/>
       </div>
@@ -9,15 +9,18 @@
       <div>
         <input class="input-group-text" type="text"  v-model="addressFilter"/>
       </div>
-    
       <div class="left-bar-text">Date:</div>
       <Datepicker v-model="availabilityInterval" :format="formatRange" range clearable/>
       <div class="left-bar-text">People:</div>
-      <input type="number" width="50px" :min=0 :max=50 :step=1 v-model="people"/><br><br>
-      <Slider v-model="people" :min=0 :max=50 :width=100 :step=1 :tooltips=false />
+      <input type="number" class="input-group-text" style="text-align: left" :min=0 :max=50 :step=1 v-model="people"/><br>
+      <Slider style="width: 95%; margin: auto" v-model="people" :min=0 :max=50 :width=100 :step=1 :tooltips=false />
       <div class="left-bar-text">Price &euro;:</div>
-      <input type="number"  :min=0 :max=price[1] :step=50  v-model="price[0]"/> <label style="color:white">-</label> <input type="number" :min=price[0] :max=1000 :step=50 v-model="price[1]"/><br><br>
-      <Slider v-model="price" :min=0 :max=1000 :width=100 :step=50 :tooltips=false />
+      <div style="display: block; align-content: space-between; text-align: center; min-height: 38px">
+      <input class="input-group-text" style="width: 45%; float: left" type="number"  :min=0 :max=price[1] :step=50  v-model="price[0]"/>
+      <label style="color:white; margin-top: 5px">-</label>
+      <input class="input-group-text" style="width: 45%; float: right" type="number" :min=price[0] :max=1000 :step=50 v-model="price[1]"/>
+      </div><br>
+      <Slider style="width: 95%; margin: auto" v-model="price" :min=0 :max=1000 :width=100 :step=50 :tooltips=false />
       <div class="left-bar-text">Sort by:</div>
       <div class="sort">
         <select class="form-select" v-model="sortType" name="example">
@@ -30,7 +33,6 @@
       <div class="sort" >
           <div class="left-bar-text">Group by:</div> 
           <select class="form-select" v-model="groupBy">
-
             <option value=1>1</option>
             <option value=5>5</option>
             <option value=10>10</option>
@@ -41,20 +43,19 @@
       <div class="radio-div">
         <div>
           <input class="radio" type="radio" id="contactChoice1" name="choice" value=0 v-model="toDisplay">
-          <label class="custom-btn button-outline" for="contactChoice1">Houses</label>
+          <label class="custom-btn button-primary" for="contactChoice1">Houses</label>
         </div>
         <div>
           <input class="radio" type="radio" id="contactChoice2" name="choice" value=1 v-model="toDisplay">
-          <label class="custom-btn button-outline" for="contactChoice2">Boats</label>
+          <label class="custom-btn button-primary" for="contactChoice2">Boats</label>
         </div>
         <div>
           <input class="radio" type="radio" id="contactChoice3" name="choice" value=2 v-model="toDisplay">
-          <label style="margin: 0;" class="custom-btn button-outline" for="contactChoice3">Fishing classes </label>
+          <label class="custom-btn button-primary" for="contactChoice3">Fishing classes </label>
         </div>
       </div>
       <div>
-        <br>
-        <button class="custom-btn button-outline" @click="search(true)">Search</button>
+        <button style="margin-bottom: 7px" class="custom-btn button-secondary" @click="search(true)">Search</button>
       </div>
     </div>
     <div class="entities-div">
@@ -76,7 +77,7 @@
           </div>
         </div>
       </div>
-      <div align='center'>
+      <div>
         <button class="btn btn-light" @click="previousPage()">Prev</button>
         {{displayCurrentPage}}
         <button class="btn btn-light"  @click="nextPage()">Next</button>
@@ -358,6 +359,7 @@ export default {
 
 .entities-div {
   margin-left: 26%;
+  text-align: center;
 }
 
 .main-container {
@@ -432,7 +434,7 @@ div.star-ratings {
   height: 0;
 }
 
-.button-outline {
+.button-primary, .button-secondary {
   cursor: pointer;
   width: 100%;
   margin-bottom: 25px;

@@ -60,13 +60,11 @@
           <button @click="closeMakingReservation">Cancel</button>
     </div>
     <br>
-      
     <hr>
     <div class="main-offer-container">
       <h4 v-if="this.offers.length !== 0">Offers:</h4>
       <div class="inner-offer-container">
-        <div class="offer" v-for="(offer, index) in this.offers" 
-             v-bind:index="index" :key="offer.id">
+        <div class="offer" v-for="(offer, index) in this.offers" v-bind:index="index" :key="offer.id">
           <div class="offer-description">
             <div class="offer-left">
               <div><b>Address: </b> {{offer.place}}</div>
@@ -74,8 +72,9 @@
               <div><b>Client limit: </b>{{offer.clientLimit}}</div>
               <div><b>Starting at: </b>{{offer.start}}</div>
               <div><b>Duration: </b>{{msToTime(offer.duration)}}</div>
-              <div v-if="offer.additionalServices.length != 0"> <b>Additional Services:</b>
-                <div class="additional-service" v-for="service in offer.additionalServices" :key="service"> {{service}}</div>
+              <div v-if="offer.additionalServices.length != 0"> <b>Additional Services: </b>
+                <span v-for="service in offer.additionalServices.slice(0,-1)" :key="service"> {{service}}, </span>
+                <span>{{offer.additionalServices.at(-1)}}</span>
               </div>
             </div>
             <div class="offer-right">
@@ -494,14 +493,18 @@ div.star-ratings {
 }
 
 .inner-offer-container {
-  display: grid;
-  grid-template-columns: 50% 50%;
-  grid-gap: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .offer {
+  min-width: 100%;
+  padding: 10px;
   border: 1px solid darkgrey;
   border-radius: 5px;
+  margin-bottom: 10px;
 }
 
 .offer-description {
@@ -514,15 +517,11 @@ div.star-ratings {
   width: 60%;
 }
 
-.additional-service {
-  margin-left: 10px;
-}
-
 .offer-right {
   float: right;
+  margin: auto;
+  text-align: center;
   width: 40%;
-  align-items: center;
-  display: flex;
   overflow: hidden;
 }
 

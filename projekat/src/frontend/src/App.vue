@@ -5,13 +5,13 @@
         <h4 class="brand" @click="jumpToHomePage()">Renting Buddy</h4>
       </div>
       <div class="nav-right" v-if="this.signedIn==false">
-        <button type="button" v-if="signIn" @click="jmpToLoginPage()" class="custom-btn button-outline">Sign in</button>
-        <button type="button"  v-if="signUp" @click="jmpToRegistrationPage()"  style="margin-right: 0" class="custom-btn button-outline">Register</button>
+        <button type="button" v-if="signIn" @click="jmpToLoginPage()" class="custom-btn button-primary">Sign in</button>
+        <button type="button"  v-if="signUp" @click="jmpToRegistrationPage()"  style="margin-right: 0" class="custom-btn button-primary">Register</button>
       </div>
       <div class="nav-right" v-else>
         <img v-bind:src="'data:image/jpeg;base64,' + loggedPicture" style="width: 50px; height: 40px;">
         {{loggedUser.username}}
-        <button type="button"  @click="logout()" class="custom-btn button-outline" >Logout</button>
+        <button type="button" style="margin-right: 0"  @click="logout()" class="custom-btn button-primary" >Logout</button>
       </div>
     </div>
     
