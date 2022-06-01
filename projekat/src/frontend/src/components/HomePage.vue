@@ -118,7 +118,7 @@ export default {
   }
   ,
   mounted() {
-    axios.get("api/vacation_houses/all").then(response => this.vacationHouses=response.data);
+    axios.get("api/vacationHouses/anyUser/all").then(response => this.vacationHouses=response.data);
     axios.get("api/fishingClasses/all").then(response => this.fishingClasses = response.data);
     axios.get("api/ships/all").then(response => this.ships = response.data);
 

@@ -37,29 +37,29 @@
     <div class="home-list-entities" v-for="vacationHouse in filteredVacationHouses" :key="vacationHouse.id">
       <div class="home-entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + vacationHouse.img" v-bind:alt="vacationHouse.id" style="width: 200px; height: 150px; cursor: pointer"></div>
       <div class="home-entity-content"><h4 style="font-weight: bold; cursor: pointer">{{ vacationHouse.name }}</h4>
-        <div class="home-entity-description"><i class="bi bi-geo-alt-fill"> {{ vacationHouse.address }} </i></div>
-        <div class="home-entity-description">{{ vacationHouse.promoDescription }}</div>
-        <vue3-star-ratings class="star-ratings" v-model="vacationHouse.rating" starSize="15" :showControl=false :disableClick=true :step=0 />
-        <span style="color: #585858;">({{vacationHouse.reviewsNumber}})</span>
+<!--        <div class="home-entity-description"><i class="bi bi-geo-alt-fill"> {{ vacationHouse.address }} </i></div>-->
+<!--        <div class="home-entity-description">{{ vacationHouse.promoDescription }}</div>-->
+<!--        <vue3-star-ratings class="star-ratings" v-model="vacationHouse.rating" starSize="15" :showControl=false :disableClick=true :step=0 />-->
+<!--        <span style="color: #585858;">({{vacationHouse.reviewsNumber}})</span>-->
       </div>
       <div class="home-entity-price">
         <div><h5 style="font-weight: bold">{{ vacationHouse.priceList }}&euro;</h5></div>
         <div>
           <button class="custom-btn button-primary">Explore</button>
-          <button type="button" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+          <button type="button" class="custom-btn button-primary" @mousedown="vacationHouseHasReservations(vacationHouse.id)" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
         </div>
       </div>
 
       <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-sm">
           <div class="modal-content">
-            <div class="modal-body">
-              <p v-if="vacationHouseHasReservations(vacationHouse.id)">This vacation house is currently reserved</p>
-              <p v-else>Are you sure?</p>
+            <div class="modal-header">
+              <h5 class="modal-title mx-auto" v-if="hasReservations">This vacation house is currently reserved</h5>
+              <h5 class="modal-title mx-auto" v-if="!hasReservations">Are you sure?</h5>
             </div>
             <div class="modal-footer">
-              <button type="button" class="custom-btn button-primary" data-bs-dismiss="modal">Cancel</button>
-              <button v-if="!vacationHouseHasReservations(vacationHouse.id)" type="button" class="custom-btn button-primary" data-bs-dismiss="modal">Delete</button>
+              <button type="button" class="custom-btn button-close" data-bs-dismiss="modal">Cancel</button>
+              <button v-if="!hasReservations" type="button" class="custom-btn button-primary" @click="deleteVacationHouse(vacationHouse.id)" data-bs-dismiss="modal">Delete</button>
 <!--              @click="deleteVacationHouse(vacationHouse.id)"-->
             </div>
           </div>
@@ -83,17 +83,10 @@ export default {
     let filter = ref("");
     let availabilityInterval = ref(null);
     let sortType = ref(0);
+    let hasReservations = ref();
 
     onMounted(() => {
-      axios
-          .get(`api/vacation_houses/all/loggedVacationHouseOwner`,
-              { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
-          .then(response => {
-            vacationHouses.value = response.data;
-          })
-          .catch(error => {
-            console.log(error.response);
-          });
+      loadData();
     });
 
     function dateFromLocal(dateString) {
@@ -215,15 +208,35 @@ export default {
           })
     })
 
-    function vacationHouseHasReservations(id) {
-      let hasReservations = false;
+    function loadData() {
       axios
-          .get(`api/vacation_houses/${id}/hasReservations`,
+          .get(`api/vacationHouses/loggedVacationHouseOwner/all`,
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
-            hasReservations = response.data;
+            vacationHouses.value = response.data;
+          })
+          .catch(error => {
+            console.log(error.response);
           });
-      return hasReservations;
+    }
+
+    function vacationHouseHasReservations(id) {
+      axios
+          .get(`api/vacationHouses/loggedVacationHouseOwner/${id}/hasReservations`,
+              { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
+          .then(response => {
+            hasReservations.value = response.data;
+          });
+    }
+
+    function deleteVacationHouse(id) {
+      axios
+          .delete(`api/vacationHouses/loggedVacationHouseOwner/${id}`,
+              { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
+          .then(response => {
+            console.log(response.data);
+            loadData();
+          });
     }
 
     return {
@@ -231,7 +244,9 @@ export default {
       sortType,
       availabilityInterval,
       filteredVacationHouses,
-      vacationHouseHasReservations
+      hasReservations,
+      vacationHouseHasReservations,
+      deleteVacationHouse
     }
   }
 }

@@ -260,10 +260,6 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         vacationHouseTemp.setAvailableFrom(LocalDateTime.of(2022,1,1, 20, 15));
         vacationHouseTemp.setAvailableTo(LocalDateTime.of(2022,6,1, 20, 30));
 
-        Reservation r = new Reservation( "Rakovac", 5, new ArrayList<>(), 100.0,
-                vacationHouseTemp, clientTemp2,
-                LocalDateTime.of(2022,3,1, 20, 15), Duration.ofDays(3));
-
         List<String> pics2 = new ArrayList<>();
         pics2.add("pictures/renting_entities/4/1.jpg");
         pics2.add("pictures/renting_entities/4/2.jpg");
@@ -361,6 +357,11 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         clientTemp1.addReview(reviewTemp4);
         vacHouseOwnerTemp1.addReview(reviewTemp4);
         vacHouseRep.save(vacHouseOwnerTemp1);
+
+        Reservation r = new Reservation( "Rakovac", 5, new ArrayList<>(), 100.0,
+                vacationHouseTemp, clientTemp2,
+                LocalDateTime.of(2022,3,1, 20, 15), Duration.ofDays(3));
+        reservationRep.save(r);
 
 
         vacationHouseTemp2.addReview(reviewTemp1);

@@ -129,9 +129,9 @@ export default {
     this.loaded=false;
     let path,pathOffers,pathPictures;
     if(this.displayType==0 && this.id != undefined){      
-      path="/api/vacation_houses/"+this.id;
-      pathOffers="/api/vacation_houses/"+this.id+"/offers";
-      pathPictures="/api/vacation_houses/"+this.id+"/pictures/all";
+      path="/api/vacationHouses/anyUser/"+this.id;
+      pathOffers="/api/vacationHouses/anyUser/"+this.id+"/offers";
+      pathPictures="/api/vacationHouses/anyUser/"+this.id+"/pictures/all";
       }
     else if(this.displayType==1 && this.id != undefined){
       path="/api/ships/"+this.id;

@@ -31,7 +31,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "api/vacation_houses")
+@RequestMapping(value = "api/vacationHouses")
 public class VacationHouseController {
     @Autowired
     private VacationHouseService vacationHouseService;
@@ -57,7 +57,7 @@ public class VacationHouseController {
         return vacationHouseDTOS;
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/anyUser/all")
     //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     @Transactional
     public ResponseEntity<List<VacationHouseDTO>> getAllVacationHouses() {
@@ -66,16 +66,7 @@ public class VacationHouseController {
         return new ResponseEntity<>(vacationHouseDTOs, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/all/loggedVacationHouseOwner")
-    @PreAuthorize("hasRole('VH_OWNER')")
-    @Transactional
-    public ResponseEntity<List<VacationHouseDTO>> getAllVacationHousesFromOwner(Principal ownerPrincipal) {
-        List<VacationHouse> vacationHouses = vacationHouseService.findAllFromOwner(ownerPrincipal.getName());
-        List<VacationHouseDTO> vacationHouseDTOs = getVacationHouseDTOList(vacationHouses);
-        return new ResponseEntity<>(vacationHouseDTOs, HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/anyUser/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     @Transactional
     public ResponseEntity<VacationHouseDTO> getVacationHouse(@PathVariable("id") Long id) {
@@ -85,14 +76,7 @@ public class VacationHouseController {
         return new ResponseEntity<>(vacationHouseService.findDTOById(id), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{id}/hasReservations")
-    @PreAuthorize("hasRole('VH_OWNER')")
-    public boolean isReserved(@PathVariable("id") Long id) {
-        List<Reservation> reservations = vacationHouseService.findAllReservations(id);
-        return reservations.size() != 0;
-    }
-
-    @GetMapping(value = "/{id}/offers", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/anyUser/{id}/offers", produces = MediaType.APPLICATION_JSON_VALUE)
     //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     @Transactional
     public ResponseEntity<List<OfferDTO>> getOffers(@PathVariable("id") Long id) {
@@ -113,7 +97,7 @@ public class VacationHouseController {
         }
 
 
-    @GetMapping(value = "/{vacationHouseId}/pictures/{pictureId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/anyUser/{vacationHouseId}/pictures/{pictureId}", produces = MediaType.APPLICATION_JSON_VALUE)
    //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     @Transactional
     public ResponseEntity<String> getPicture(@PathVariable("vacationHouseId") Long vacationHouseId, @PathVariable("pictureId") Long pictureId) {
@@ -129,7 +113,7 @@ public class VacationHouseController {
         }
     }
 
-    @GetMapping(value = "/{vacationHouseId}/pictures/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/anyUser/{vacationHouseId}/pictures/all", produces = MediaType.APPLICATION_JSON_VALUE)
     //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     @Transactional
     public ResponseEntity<List<String>> getAllPictures(@PathVariable("vacationHouseId") Long vacationHouseId) {
@@ -151,7 +135,7 @@ public class VacationHouseController {
         return new ResponseEntity<>(encodedPictures, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/loggedVacationHouseOwner/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('VH_OWNER')")
     @Transactional
     public ResponseEntity<VacationHouseDTO> updateVacationHouse(@RequestBody VacationHouseDTO vacationHouseDTO) {
@@ -164,6 +148,40 @@ public class VacationHouseController {
         vacationHouse = vacationHouseService.save(vacationHouse);
         if (vacationHouse == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(new VacationHouseDTO(vacationHouse), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/loggedVacationHouseOwner/all")
+    @PreAuthorize("hasRole('VH_OWNER')")
+    @Transactional
+    public ResponseEntity<List<VacationHouseDTO>> getAllVacationHousesFromOwner(Principal ownerPrincipal) {
+        List<VacationHouse> vacationHouses = vacationHouseService.findAllFromOwner(ownerPrincipal.getName());
+        List<VacationHouseDTO> vacationHouseDTOs = getVacationHouseDTOList(vacationHouses);
+        return new ResponseEntity<>(vacationHouseDTOs, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/loggedVacationHouseOwner/{id}/hasReservations")
+    @PreAuthorize("hasRole('VH_OWNER')")
+    public ResponseEntity<Boolean> hasReservations(@PathVariable("id") Long id) {
+        List<Reservation> reservations = vacationHouseService.findAllReservations(id);
+        Boolean hasReservations = reservations.size() != 0;
+        return new ResponseEntity<>(hasReservations, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/loggedVacationHouseOwner/{id}")
+    @PreAuthorize("hasRole('VH_OWNER')")
+//    @Transactional
+    public ResponseEntity<VacationHouseDTO> deleteVacationHouse(@PathVariable("id") Long id, Principal ownerPrincipal) {
+        List<Reservation> reservations = vacationHouseService.findAllReservations(id);
+        if(reservations.size() != 0)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        VacationHouse vacationHouse = vacationHouseService.findById(id);
+        String username = vacationHouse.getVacationHouseOwner().getUsername();
+        if(!username.equals(ownerPrincipal.getName()))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        vacationHouseService.remove(id);
         return new ResponseEntity<>(new VacationHouseDTO(vacationHouse), HttpStatus.OK);
     }
 }

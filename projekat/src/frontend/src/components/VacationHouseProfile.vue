@@ -195,7 +195,7 @@ export default {
         id.value = route.params.id;
       }
       axios
-        .get(`/api/vacation_houses/${id.value}`, {headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
+        .get(`/api/vacationHouses/anyUser/${id.value}`, {headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
         .then(response => {
           vacationHouse.value = response.data;
           let from = stringToDateTime(vacationHouse.value.availableFrom);
@@ -208,7 +208,7 @@ export default {
         });
 
       axios
-        .get(`/api/vacation_houses/${id.value}/pictures/all`, {headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
+        .get(`/api/vacationHouses/anyUser/${id.value}/pictures/all`, {headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
         .then(response => {
           for (let i = 0; i < response.data.length; i++) {
             pictures.value.push(response.data[i]);
@@ -232,7 +232,7 @@ export default {
         calendarAttributes.value[0].dates.end = availabilityInterval.value.end;
 
         axios
-            .put(`/api/vacation_houses/${id.value}`, vacationHouse.value, { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
+            .put(`/api/vacationHouses/loggedVacationHouseOwner/${id.value}`, vacationHouse.value, { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
             .then(response => {
               vacationHouse.value = response.data;
               toast.success("Info updated");
