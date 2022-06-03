@@ -23,7 +23,8 @@ import vueCountryRegionSelect from 'vue3-country-region-select'
 import vue3StarRatings from "vue3-star-ratings";
 import VueTelInput from 'vue3-tel-input';
 import 'vue3-tel-input/dist/vue3-tel-input.css'
-import './assets/main.css'; //main css
+import './assets/main.css';
+import './assets/common-profile.css';
 import 'v-calendar/dist/style.css';
 import "@vueform/slider/themes/default.css"
 import VCalendar from 'v-calendar';

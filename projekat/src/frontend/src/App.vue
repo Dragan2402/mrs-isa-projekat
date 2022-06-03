@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar" >
-    <div class="navbar-top">
+    <div class="navbar-top" style="min-width: 1000px">
       <div class="nav-left">
         <h4 class="brand" @click="jumpToHomePage()">Renting Buddy</h4>
       </div>

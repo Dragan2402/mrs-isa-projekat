@@ -1,0 +1,71 @@
+.carousel-inner {
+    border-radius: 5px;
+}
+
+.w-100 {
+    object-fit: cover;
+    height: 500px;
+}
+
+.main-container .star-ratings {
+    padding: 0;
+    margin: 0;
+    float: left;
+}
+
+.main-heading {
+    font-weight: bold;
+    margin: 0;
+}
+
+.star-ratings {
+    margin-right: 5px;
+}
+
+.star-heading {
+    margin-top: 3px;
+}
+
+.main-description {
+    display:flex;
+    margin-top: 17px;
+}
+
+.inner-description {
+    margin-right: 50px;
+    float:left;
+    width: 65%;
+    overflow: hidden;
+}
+
+.google-map-container {
+    display: flex;
+    float: right;
+    width: 35%;
+    overflow: hidden;
+}
+
+.google-map {
+    width: 400px;
+    border-radius: 5px;
+}
+
+.heading-flex {
+    display: flex;
+}
+
+.heading-left {
+    float: left;
+    width: 70%;
+}
+
+.heading-right {
+    width: 30%;
+    margin-top: 20px;
+}
+
+.heading-right-buttons {
+    float: right;
+    display: flex;
+    overflow: hidden;
+}

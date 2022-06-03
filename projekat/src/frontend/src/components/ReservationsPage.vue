@@ -344,18 +344,7 @@ export default {
 }
 </script>
 
-<style>
-
-.main-container {
-  width: 60%;
-  margin: auto auto 20% auto;
-  min-width: 860px;
-}
-
-.main-heading {
-  font-weight: bold;
-  margin: 10px 0 0 0;
-}
+<style scoped>
 
 .reservation {
   text-align: center;
