@@ -82,7 +82,7 @@
             <div class="modal-content">
               <div class="modal-body">
                 <div>
-                  <vue3-star-ratings style="position: relative" :showControl=false v-model="ratingRE"/>
+                  <vue3-star-ratings :showControl=false v-model="ratingRE"/>
                   <textarea v-model="commentRatingRE" style="height: 100px" type="text" class="form-control" placeholder="Comment..."></textarea><br>
                   <button class="custom-btn button-primary" @click="rateRE(reservationHistory)">Rate renting entity</button>
                 </div>

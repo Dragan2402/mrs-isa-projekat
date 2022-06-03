@@ -4,19 +4,19 @@
       <div class="radio-div">
         <div>
           <input class="radio" type="radio" id="addClient" name="choice" value="addClient" v-model="role" checked>
-          <label class="custom-btn button-outline input-group-width mb-2 mt-5" for="addClient">Client</label>
+          <label class="custom-btn button-primary input-group-width mb-2 mt-5" for="addClient">Client</label>
         </div>
         <div>
           <input class="radio" type="radio" id="addVacationHouseOwner" name="choice" value="addVacationHouseOwner" v-model="role">
-          <label class="custom-btn button-outline input-group-width mb-2" for="addVacationHouseOwner">Vacation House Owner</label>
+          <label class="custom-btn button-primary input-group-width mb-2" for="addVacationHouseOwner">Vacation House Owner</label>
         </div>
         <div>
           <input class="radio" type="radio" id="addShipOwner" name="choice" value="addShipOwner" v-model="role">
-          <label class="custom-btn button-outline input-group-width mb-2" for="addShipOwner">Ship Owner</label>
+          <label class="custom-btn button-primary input-group-width mb-2" for="addShipOwner">Ship Owner</label>
         </div>
         <div>
           <input class="radio" type="radio" id="addFishingInstructor" name="choice" value="addFishingInstructor" v-model="role">
-          <label class="custom-btn button-outline input-group-width mb-4" for="addFishingInstructor">Fishing Instructor</label>
+          <label class="custom-btn button-primary input-group-width mb-4" for="addFishingInstructor">Fishing Instructor</label>
         </div>
       </div>
       <form class="w-100"  @submit.prevent="signUp">
@@ -66,7 +66,7 @@
         </div>
 
         <div>
-          <button class="custom-btn button-outline input-group-width mb-4 mt-5">Sign up</button>
+          <button class="custom-btn button-secondary input-group-width mb-4 mt-5">Sign up</button>
         </div>
       </form>
 

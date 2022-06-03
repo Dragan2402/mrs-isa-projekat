@@ -64,7 +64,7 @@
             v-bind:index="index" :key="vacationHouse.id" v-bind="{selected: selectedEntity.id===vacationHouse.id}">
           <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + vacationHouse.img" @click="jumpToPreview(vacationHouse)" style="width: 200px; height: 150px; cursor: pointer"></div>
           <div class="entity-name"><h4 @click="jumpToPreview(vacationHouse)" style="font-weight: bold; cursor: pointer">{{ vacationHouse.name }}</h4>
-            <div class="entity-description"><i class="bi bi-geo-alt-fill"> {{ vacationHouse.address }} </i></div>
+            <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ vacationHouse.address }} </div>
             <div class="entity-description">{{ vacationHouse.promoDescription }}</div>
             <vue3-star-ratings class="star-ratings" v-model="vacationHouse.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />
             <span style="color: #585858;">({{vacationHouse.reviewsNumber}})</span>
