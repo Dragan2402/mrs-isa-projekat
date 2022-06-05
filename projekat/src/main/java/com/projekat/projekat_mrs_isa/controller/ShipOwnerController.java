@@ -30,17 +30,19 @@ public class ShipOwnerController {
         return new ResponseEntity<>(shipOwner.getAdditionalServices(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/loggedShipOwner", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('SH_OWNER')")
+    @GetMapping(value = "loggedShipOwner", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('SHIP_OWNER')")
+//    @PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     public ResponseEntity<UserDTO> getLoggedShipOwner(Principal soPrincipal) {
         ShipOwner so = shipOwnerService.findByUsername(soPrincipal.getName());
         if (so == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        System.out.println(so.getUsername());
         return new ResponseEntity<>(new UserDTO(so), HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('SH_OWNER')")
+    @PreAuthorize("hasRole('SHIP_OWNER')")
     @Transactional
     public ResponseEntity<UserDTO> updateShipOwner(@RequestBody UserDTO userDTO) {
         ShipOwner so = shipOwnerService.findById(userDTO.getId());

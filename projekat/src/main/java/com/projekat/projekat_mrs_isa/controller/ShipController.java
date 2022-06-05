@@ -173,12 +173,12 @@ public class ShipController {
     }
 
     @PutMapping(value = "/loggedShipOwner/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('SH_OWNER')")
+    @PreAuthorize("hasRole('SHIP_OWNER')")
     @Transactional
     public ResponseEntity<ShipDTO> updateShip(@RequestBody ShipDTO shipDTO, @PathVariable("id") Long id) {
         LocalDateTime availableFrom = shipDTO.getAvailableFrom();
         LocalDateTime availableTo = shipDTO.getAvailableTo();
-        if(availableFrom.isAfter(availableTo) || availableFrom.isBefore(LocalDateTime.now()))
+        if(availableFrom.isAfter(availableTo))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         List<Reservation> reservations = shipService.findAllReservations(id);
@@ -197,7 +197,7 @@ public class ShipController {
     }
 
     @GetMapping(value = "/loggedShipOwner/all")
-    @PreAuthorize("hasRole('SH_OWNER')")
+    @PreAuthorize("hasAnyRole('SHIP_OWNER')")
     @Transactional
     public ResponseEntity<List<ShipDTO>> getAllShipsFromOwner(Principal ownerPrincipal) {
         List<Ship> ships = shipService.findAllFromOwner(ownerPrincipal.getName());
@@ -206,7 +206,7 @@ public class ShipController {
     }
 
     @GetMapping(value = "/loggedShipOwner/{id}/hasReservations")
-    @PreAuthorize("hasRole('SH_OWNER')")
+    @PreAuthorize("hasRole('SHIP_OWNER')")
     public ResponseEntity<Boolean> hasReservations(@PathVariable("id") Long id) {
         List<Reservation> reservations = shipService.findAllReservations(id);
         Boolean hasReservations = reservations.size() != 0;
@@ -214,7 +214,7 @@ public class ShipController {
     }
 
     @DeleteMapping(value = "/loggedShipOwner/{id}")
-    @PreAuthorize("hasRole('SH_OWNER')")
+    @PreAuthorize("hasRole('SHIP_OWNER')")
 //    @Transactional
     public ResponseEntity<ShipDTO> deleteShip(@PathVariable("id") Long id, Principal ownerPrincipal) {
         List<Reservation> reservations = shipService.findAllReservations(id);

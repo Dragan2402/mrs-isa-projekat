@@ -181,7 +181,7 @@ public class VacationHouseController {
     public ResponseEntity<VacationHouseDTO> updateVacationHouse(@RequestBody VacationHouseDTO vacationHouseDTO, @PathVariable("id") Long id) {
         LocalDateTime availableFrom = vacationHouseDTO.getAvailableFrom();
         LocalDateTime availableTo = vacationHouseDTO.getAvailableTo();
-        if(availableFrom.isAfter(availableTo) || availableFrom.isBefore(LocalDateTime.now()))
+        if(availableFrom.isAfter(availableTo))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         List<Reservation> reservations = vacationHouseService.findAllReservations(id);

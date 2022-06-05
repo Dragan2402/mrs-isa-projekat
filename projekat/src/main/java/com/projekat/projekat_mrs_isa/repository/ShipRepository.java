@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface ShipRepository extends JpaRepository<Ship, Long> {
 
@@ -25,4 +26,7 @@ public interface ShipRepository extends JpaRepository<Ship, Long> {
 
     @Query("select s from Ship s where s.shipOwner.username = ?1")
     List<Ship> findAllFromOwner(String ownerUsername);
+
+    @Query("select s from Ship s join fetch s.shipOwner where s.id = ?1")
+    Optional<Ship> findById(Long id);
 }
