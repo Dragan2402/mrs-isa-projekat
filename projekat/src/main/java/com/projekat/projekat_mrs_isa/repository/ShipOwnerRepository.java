@@ -10,4 +10,7 @@ public interface ShipOwnerRepository  extends JpaRepository<ShipOwner,Long> {
 
     @Query(value = "SELECT shOwner FROM ShipOwner shOwner JOIN FETCH shOwner.additionalServices where shOwner.id=?1")
     Optional<ShipOwner> findById(Long id);
+
+    @Query("select so from ShipOwner so where so.username = ?1")
+    ShipOwner findByUsername(String username);
 }

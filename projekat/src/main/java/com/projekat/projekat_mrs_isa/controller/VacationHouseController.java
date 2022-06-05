@@ -15,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,11 +26,9 @@ import javax.transaction.Transactional;
 import javax.websocket.server.PathParam;
 import java.io.File;
 import java.io.IOException;
-import java.time.Duration;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,21 +137,21 @@ public class VacationHouseController {
         }
 
 
-    @GetMapping(value = "/anyUser/{vacationHouseId}/pictures/{pictureId}", produces = MediaType.APPLICATION_JSON_VALUE)
-   //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
-    @Transactional
-    public ResponseEntity<String> getPicture(@PathVariable("vacationHouseId") Long vacationHouseId, @PathVariable("pictureId") Long pictureId) {
-        Resource r = resourceLoader
-                .getResource("classpath:pictures/renting_entities/" + vacationHouseId + "/" + pictureId + ".jpg");
-        try {
-            File file = r.getFile();
-            byte[] picture = FileUtils.readFileToByteArray(file);
-            String encodedPicture = Base64.encodeBase64String(picture);
-            return new ResponseEntity<>(encodedPicture, HttpStatus.OK);
-        } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+//    @GetMapping(value = "/anyUser/{vacationHouseId}/pictures/{pictureId}", produces = MediaType.APPLICATION_JSON_VALUE)
+//   //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
+//    @Transactional
+//    public ResponseEntity<String> getPicture(@PathVariable("vacationHouseId") Long vacationHouseId, @PathVariable("pictureId") Long pictureId) {
+//        Resource r = resourceLoader
+//                .getResource("classpath:pictures/renting_entities/" + vacationHouseId + "/" + pictureId + ".jpg");
+//        try {
+//            File file = r.getFile();
+//            byte[] picture = FileUtils.readFileToByteArray(file);
+//            String encodedPicture = Base64.encodeBase64String(picture);
+//            return new ResponseEntity<>(encodedPicture, HttpStatus.OK);
+//        } catch (IOException e) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
     @GetMapping(value = "/anyUser/{vacationHouseId}/pictures/all", produces = MediaType.APPLICATION_JSON_VALUE)
     //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
@@ -184,7 +181,7 @@ public class VacationHouseController {
     public ResponseEntity<VacationHouseDTO> updateVacationHouse(@RequestBody VacationHouseDTO vacationHouseDTO, @PathVariable("id") Long id) {
         LocalDateTime availableFrom = vacationHouseDTO.getAvailableFrom();
         LocalDateTime availableTo = vacationHouseDTO.getAvailableTo();
-        if(availableFrom.isAfter(availableTo) || availableFrom.isBefore(LocalDateTime.now()))
+        if(availableFrom.isAfter(availableTo))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         List<Reservation> reservations = vacationHouseService.findAllReservations(id);
@@ -192,6 +189,9 @@ public class VacationHouseController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         VacationHouse vacationHouse = vacationHouseService.findById(vacationHouseDTO.getId());
+        if (vacationHouse == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         vacationHouse.update(vacationHouseDTO);
         vacationHouse = vacationHouseService.save(vacationHouse);
         if (vacationHouse == null)

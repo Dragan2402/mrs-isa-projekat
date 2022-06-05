@@ -43,7 +43,7 @@ public class VacationHouseOwnerController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('VH_OWNER')")
     @Transactional
-    public ResponseEntity<UserDTO> updateVacationHouse(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> updateVacationHouseOwner(@RequestBody UserDTO userDTO) {
         VacationHouseOwner vacationHouseOwner = vacationHouseOwnerService.findById(userDTO.getId());
         vacationHouseOwner.update(userDTO);
         vacationHouseOwner = vacationHouseOwnerService.save(vacationHouseOwner);

@@ -9,7 +9,7 @@
         <div style="float: right; display: flex; overflow: hidden;">
           <div>
             <input class="radio" type="radio" id="homePageRadio" name="page" value="homePage" v-model="page" @change="routePage">
-            <label class="custom-btn button-primary me-3" for="homePageRadio">Vacation Houses</label>
+            <label class="custom-btn button-primary me-3" for="homePageRadio">Ships</label>
           </div>
           <div>
             <input class="radio" type="radio" id="infoPageRadio" name="page" value="infoPage" v-model="page" @change="routePage">
@@ -23,16 +23,14 @@
 </template>
 
 <script>
-
 import {useRouter} from "vue-router";
-import {ref, getCurrentInstance, onMounted} from "vue";
+import {ref, onMounted} from "vue";
 import axios from "axios";
 
 export default {
-  name: "VacationHouseOwnerProfile",
+  name: "ShipOwnerProfile",
   setup() {
     const router = useRouter();
-    const root = getCurrentInstance();
 
     let firstName = ref("");
     let lastName = ref("");
@@ -41,7 +39,7 @@ export default {
 
     onMounted(() => {
       axios
-          .get("/api/vacationHouseOwners/loggedVacationHouseOwner",
+          .get("/api/shipOwners/loggedShipOwner",
               { headers: { "Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
           .then(response => {
             firstName.value = response.data.firstName;
@@ -49,10 +47,10 @@ export default {
             username.value = response.data.username;
           })
           .catch(error => {
-            console.log(error.response);
-            root.accessToken = null;
-            localStorage.setItem("jwt", null);
-            router.push("/loginPage");
+            console.log(`get /api/shipOwner/loggedShipOwner: ${error}`);
+            // root.accessToken = null;
+            // localStorage.setItem("jwt", null);
+            // router.push("/loginPage");
           });
 
       page.value = "homePage";
@@ -61,9 +59,9 @@ export default {
 
     function routePage() {
       if(page.value === "homePage")
-        router.push({name: "vacationHouseOwnerHome"});
+        router.push({name: "shipOwnerHome"});
       else if(page.value === "infoPage")
-        router.push({name: "vacationHouseOwnerInfo"});
+        router.push({name: "shipOwnerInfo"});
     }
 
     return {
@@ -75,16 +73,9 @@ export default {
     }
   }
 }
-
 </script>
 
 <style scoped>
-
-/*.main-container {*/
-/*  width: 60%;*/
-/*  margin: auto auto 20% auto;*/
-/*  min-width: 860px;*/
-/*}*/
 
 .name-heading {
   font-weight: bold;

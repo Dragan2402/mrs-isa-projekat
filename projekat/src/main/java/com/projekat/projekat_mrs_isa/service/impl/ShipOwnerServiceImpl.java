@@ -30,6 +30,11 @@ public class ShipOwnerServiceImpl implements ShipOwnerService {
     }
 
     @Override
+    public ShipOwner findByUsername(String username) {
+        return shipOwnerRepository.findByUsername(username);
+    }
+
+    @Override
     public void remove(Long id) {
             shipOwnerRepository.deleteById(id);
         }

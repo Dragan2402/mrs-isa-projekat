@@ -61,8 +61,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                                     .antMatchers("/api/fishingInstructors/**").permitAll()
                                     //.antMatchers("/api/offers/**").permitAll()
                                     .antMatchers("/api/reservations/**").permitAll()
-                                    .antMatchers("/api/ships/**").permitAll()
-                                    .antMatchers("/api/shipOwners/**").permitAll()
+//                                    .antMatchers("/api/ships/**").permitAll()
+//                                    .antMatchers("/api/shipOwners/**").permitAll()
 //                                    .antMatchers("/api/vacation_houses/all").permitAll()
 //                                    .antMatchers("/api/vacationHouseOwners/**").permitAll()
 //                                    .antMatchers("/api/vacation_houses/all/loggedVacationHouseOwner").permitAll()
@@ -82,6 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers(HttpMethod.PUT,"/api/auth/resetPassword");
 
         web.ignoring().antMatchers(HttpMethod.GET,"/api/vacationHouses/anyUser/**");
+        web.ignoring().antMatchers(HttpMethod.GET,"/api/ships/anyUser/**");
 
         web.ignoring().antMatchers(HttpMethod.POST,"/api/auth/addClient");
         web.ignoring().antMatchers(HttpMethod.GET,"/api/clients/all");

@@ -24,4 +24,9 @@ public interface ShipRepository extends JpaRepository<Ship, Long> {
             countQuery = "SELECT count(sh) FROM Ship sh WHERE  sh.name LIKE %?1% and sh.address LIKE %?2% and sh.clientLimit >= ?3 and sh.priceList >= ?4 and sh.priceList <= ?5")
     Page<Ship> findByNoDateCriteria(String name, String address, Integer people, Double priceMin, Double priceMax, Pageable page);
 
+    @Query("select s from Ship s where s.shipOwner.username = ?1")
+    List<Ship> findAllFromOwner(String ownerUsername);
+
+    @Query("select s from Ship s join fetch s.shipOwner where s.id = ?1")
+    Optional<Ship> findById(Long id);
 }

@@ -6,7 +6,6 @@
       <input class="input-group-text" type="text" placeholder="Filter by name, address..." v-model="filter"/>
     </div>
     <div class="left-bar-text">Date:</div>
-<!--    <Datepicker v-model="availabilityInterval" :format="formatRange" range clearable/>-->
     <v-date-picker v-model="availabilityInterval" is-range>
       <template v-slot="{ inputValue, inputEvents }">
         <div class="flex justify-center items-center">
@@ -34,21 +33,21 @@
     </div>
   </div>
   <div class="home-entities-div">
-    <div class="home-list-entities" v-for="vacationHouse in filteredVacationHouses" :key="vacationHouse.id">
-      <div class="home-entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + vacationHouse.img" v-bind:alt="vacationHouse.id" style="width: 200px; height: 150px; cursor: pointer"></div>
+    <div class="home-list-entities" v-for="ship in filteredShips" :key="ship.id">
+      <div class="home-entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + ship.img" v-bind:alt="ship.id" style="width: 200px; height: 150px; cursor: pointer"></div>
       <div class="home-entity-content">
-        <h4 style="font-weight: bold; cursor: pointer">{{ vacationHouse.name }}</h4>
+        <h4 style="font-weight: bold; cursor: pointer">{{ ship.name }}</h4>
         <div class="home-entity-description">
-          <i class="bi bi-geo-alt-fill"></i> {{ vacationHouse.address }}
+          <i class="bi bi-geo-alt-fill"></i> {{ ship.address }}
         </div>
-        <vue3-star-ratings class="star-ratings" v-model="vacationHouse.rating" starSize="15" :showControl=false :disableClick=true :step=0 />
-        <span style="color: #585858;">({{vacationHouse.reviewsNumber}})</span>
+        <vue3-star-ratings class="star-ratings" v-model="ship.rating" starSize="15" :showControl=false :disableClick=true :step=0 />
+        <span style="color: #585858;">({{ship.reviewsNumber}})</span>
       </div>
       <div class="home-entity-price h-100 d-flex">
         <div class="align-self-center">
-          <button type="button" class="custom-btn button-primary d-block w-100" @click="openVacationHouseProfile(vacationHouse.id)">Open Profile</button>
-          <button type="button" class="custom-btn button-primary d-block w-100" @click="vacationHouseHasReservations(vacationHouse.id)" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button>
-          <button type="button" class="custom-btn button-primary d-block w-100" @click="vacationHouseHasReservations(vacationHouse.id)" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+          <button type="button" class="custom-btn button-primary d-block w-100" @click="openShipProfile(ship.id)">Open Profile</button>
+          <button type="button" class="custom-btn button-primary d-block w-100" @click="shipHasReservations(ship.id)" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button>
+          <button type="button" class="custom-btn button-primary d-block w-100" @click="shipHasReservations(ship.id)" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
         </div>
       </div>
 
@@ -56,50 +55,72 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
           <div class="modal-content">
             <div class="modal-header" v-if="hasReservations">
-              <h5 class="modal-title mx-auto">This vacation house is currently reserved</h5>
+              <h5 class="modal-title mx-auto">This ship is currently reserved</h5>
             </div>
             <div class="modal-body" v-if="!hasReservations">
               <div class="form-floating mb-3">
-                <input v-model="vacationHouse.name" type="text" class="form-control" id="floatName" placeholder="Title">
+                <input v-model="ship.name" type="text" class="form-control" id="floatName" placeholder="Title">
                 <label for="floatName">Title</label>
               </div>
               <div class="form-floating mb-3">
-                <input v-model="vacationHouse.address" type="text" class="form-control" id="floatAddress" placeholder="Address">
+                <input v-model="ship.address" type="text" class="form-control" id="floatAddress" placeholder="Address">
                 <label for="floatAddress">Address</label>
               </div>
               <div class="form-floating mb-3">
-                <textarea style="height: 100px" v-model="vacationHouse.promoDescription" type="text" class="form-control" id="floatPromoDescription" placeholder="Description"></textarea>
+                <textarea style="height: 100px" v-model="ship.promoDescription" type="text" class="form-control" id="floatPromoDescription" placeholder="Description"></textarea>
                 <label for="floatPromoDescription">Description</label>
               </div>
               <div class="form-floating mb-3">
-                <textarea style="height: 100px" v-model="vacationHouse.behaviourRules" type="text" class="form-control" id="floatBehaviourRules" placeholder="Behaviour rules"></textarea>
+                <textarea style="height: 100px" v-model="ship.behaviourRules" type="text" class="form-control" id="floatBehaviourRules" placeholder="Behaviour rules"></textarea>
                 <label for="floatBehaviourRules">Behaviour rules</label>
               </div>
               <div class="form-floating mb-3">
-                <input v-model="vacationHouse.priceList" type="text" class="form-control" id="floatPriceList" placeholder="Price">
+                <input v-model="ship.priceList" type="text" class="form-control" id="floatPriceList" placeholder="Price">
                 <label for="floatPriceList">Price</label>
               </div>
               <div class="form-floating mb-3">
-                <textarea style="height: 100px" v-model="vacationHouse.additionalInfo" type="text" class="form-control" id="floatAdditionalInfo" placeholder="Additional info"></textarea>
+                <textarea style="height: 100px" v-model="ship.additionalInfo" type="text" class="form-control" id="floatAdditionalInfo" placeholder="Additional info"></textarea>
                 <label for="floatAdditionalInfo">Additional info</label>
               </div>
               <div class="form-floating mb-3">
-                <input v-model="vacationHouse.cancellationConditions" type="text" class="form-control" id="floatCancellationConditions" placeholder="Cancellation conditions">
+                <input v-model="ship.cancellationConditions" type="text" class="form-control" id="floatCancellationConditions" placeholder="Cancellation conditions">
                 <label for="floatCancellationConditions">Cancellation conditions</label>
               </div>
+
+
+
               <div class="form-floating mb-3">
-                <input v-model="vacationHouse.roomsQuantity" type="text" class="form-control" id="floatRoomsQuantity" placeholder="Rooms quantity">
-                <label for="floatRoomsQuantity">Rooms quantity</label>
+                <input v-model="ship.type" type="text" class="form-control" id="floatType" placeholder="Type">
+                <label for="floatType">Type</label>
               </div>
               <div class="form-floating mb-3">
-                <input v-model="vacationHouse.bedsPerRoom" type="text" class="form-control" id="floatBedsPerRoom" placeholder="Beds per room">
-                <label for="floatBedsPerRoom">Beds per room</label>
+                <input v-model="ship.length" type="text" class="form-control" id="floatLength" placeholder="Length">
+                <label for="floatLength">Length</label>
               </div>
-              <v-date-picker v-model="vacationHouse.availabilityInterval" :min-date="new Date()" :from-date="vacationHouse.fromDate" mode="dateTime" is-range is-expanded is24hr ></v-date-picker>
+              <div class="form-floating mb-3">
+                <input v-model="ship.engineNumber" type="text" class="form-control" id="floatEngineNumber" placeholder="Engine number">
+                <label for="floatEngineNumber">Engine number</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input v-model="ship.enginePower" type="text" class="form-control" id="floatEnginePower" placeholder="Engine power">
+                <label for="floatEnginePower">Engine power</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input v-model="ship.topSpeed" type="text" class="form-control" id="floatTopSpeed" placeholder="Top speed">
+                <label for="floatTopSpeed">Top speed</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input v-model="ship.clientLimit" type="text" class="form-control" id="floatClientLimit" placeholder="Client limit">
+                <label for="floatClientLimit">Client limit</label>
+              </div>
+
+
+
+              <v-date-picker v-model="ship.availabilityInterval" :min-date="new Date()" :from-date="ship.fromDate" mode="dateTime" is-range is-expanded is24hr ></v-date-picker>
             </div>
             <div class="modal-footer">
               <button type="button" class="custom-btn button-primary" data-bs-dismiss="modal">Close</button>
-              <button v-if="!hasReservations" type="button" @click="updateVacationHouse(vacationHouse)" class="custom-btn button-primary" data-bs-dismiss="modal">Update</button>
+              <button v-if="!hasReservations" type="button" @click="updateShip(ship)" class="custom-btn button-primary" data-bs-dismiss="modal">Update</button>
             </div>
           </div>
         </div>
@@ -109,13 +130,13 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title mx-auto" v-if="hasReservations">This vacation house is currently reserved</h5>
+              <h5 class="modal-title mx-auto" v-if="hasReservations">This ship is currently reserved</h5>
               <h5 class="modal-title mx-auto" v-if="!hasReservations">Are you sure?</h5>
             </div>
             <div class="modal-footer">
               <button type="button" class="custom-btn button-close" data-bs-dismiss="modal">Cancel</button>
-              <button v-if="!hasReservations" type="button" class="custom-btn button-primary" @click="deleteVacationHouse(vacationHouse.id)" data-bs-dismiss="modal">Delete</button>
-<!--              @click="deleteVacationHouse(vacationHouse.id)"-->
+              <button v-if="!hasReservations" type="button" class="custom-btn button-primary" @click="deleteShip(ship.id)" data-bs-dismiss="modal">Delete</button>
+              <!--              @click="deleteVacationHouse(vacationHouse.id)"-->
             </div>
           </div>
         </div>
@@ -123,8 +144,6 @@
 
     </div>
   </div>
-
-
 </template>
 
 <script>
@@ -133,15 +152,30 @@ import axios from "axios";
 import {useRouter} from "vue-router";
 
 export default {
-  name: "VacationHouseOwnerHome",
+  name: "ShipOwnerHome",
   setup() {
     const router = useRouter();
 
-    let vacationHouses  = ref([{}]);
+    let ships = ref([{}]);
     let filter = ref("");
     let availabilityInterval = ref(null);
     let sortType = ref(0);
     let hasReservations = ref();
+
+    let range = ref({
+      start: new Date(),
+      end: new Date()
+    });
+
+    const filteredShips = computed(() => {
+      return ships.value
+          .filter(row => {
+            return includes(row);
+          })
+          .sort((a, b) => {
+            return sort(a, b);
+          })
+    });
 
     onMounted(() => {
       loadData();
@@ -172,9 +206,7 @@ export default {
       const year = dateParts[2];
       const hours = hourParts[0];
       const minutes = hourParts[1];
-      // new Date(year, month, day, hours, minutes, seconds, milliseconds)
-      // const date = new Date(year,month-1,day,hours,minutes);
-      return new Date(year,month-1,day,hours,minutes);
+      return new Date(year, month-1, day, hours, minutes);
     }
 
     function includes(row) {
@@ -187,7 +219,7 @@ export default {
       const searchTerm = filter.value.toLowerCase();
 
       const availableFrom = dateFromLocal(row.availableFrom);
-      const availableTo= dateFromLocal(row.availableTo);
+      const availableTo = dateFromLocal(row.availableTo);
       let dateInInterval = false;
       let dateFilterOn = false;
 
@@ -256,52 +288,43 @@ export default {
       }
     }
 
-    const filteredVacationHouses = computed(() => {
-      return vacationHouses.value
-          .filter(row => {
-            return includes(row);
-          })
-          .sort((a, b) => {
-            return sort(a, b);
-          })
-    })
-
     function loadData() {
       axios
-          .get(`api/vacationHouses/loggedVacationHouseOwner/all`,
+          .get(`/api/ships/loggedShipOwner/all`,
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
-            vacationHouses.value = response.data;
-            vacationHouses.value.forEach(vh => {
-              vh.availabilityInterval = {
+            ships.value = response.data;
+            ships.value.forEach(s => {
+              s.availabilityInterval = {
                 start: null,
                 end: null
               }
-              vh.availabilityInterval.start = stringToDateTime(vh.availableFrom);
-              vh.availabilityInterval.end = stringToDateTime(vh.availableTo);
-              vh.fromDate = vh.availabilityInterval.start;
+              s.availabilityInterval.start = stringToDateTime(s.availableFrom);
+              s.availabilityInterval.end = stringToDateTime(s.availableTo);
+              s.fromDate = s.availabilityInterval.start;
             })
           })
           .catch(error => {
-            console.log(error.response);
+            console.log(`get /api/ships/loggedShipOwner/all: ${error}`);
           });
     }
 
-    function vacationHouseHasReservations(id) {
+    function shipHasReservations(id) {
       axios
-          .get(`api/vacationHouses/loggedVacationHouseOwner/${id}/hasReservations`,
+          .get(`api/ships/loggedShipOwner/${id}/hasReservations`,
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             hasReservations.value = response.data;
           });
     }
 
-    function updateVacationHouse(vh) {
-      vh.availableFrom = dateTimeToString(vh.availabilityInterval.start);
-      vh.availableTo = dateTimeToString(vh.availabilityInterval.end);
+    function updateShip(ship) {
+      ship.availableFrom = dateTimeToString(ship.availabilityInterval.start);
+      ship.availableTo = dateTimeToString(ship.availabilityInterval.end);
 
+      console.log(ship);
       axios
-          .put(`api/vacationHouses/loggedVacationHouseOwner/${vh.id}`, vh,
+          .put(`api/ships/loggedShipOwner/${ship.id}`, ship,
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             console.log(response.data);
@@ -312,9 +335,9 @@ export default {
           });
     }
 
-    function deleteVacationHouse(vacationHouseId) {
+    function deleteShip(shipId) {
       axios
-          .delete(`/api/vacationHouses/loggedVacationHouseOwner/${vacationHouseId}`,
+          .delete(`/api/ships/loggedShipOwner/${shipId}`,
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             console.log(response.data);
@@ -325,8 +348,13 @@ export default {
           });
     }
 
-    function openVacationHouseProfile(vacationHouseId) {
-      router.push({name: "vacationHouseProfile", params: {id: vacationHouseId}});
+    function openShipProfile(shipId) {
+      router.push({
+        name: "shipProfile",
+        params: {
+          id: shipId
+        }
+      });
     }
 
     function stringToDateTime(s) {
@@ -359,12 +387,13 @@ export default {
       filter,
       sortType,
       availabilityInterval,
-      filteredVacationHouses,
+      filteredShips,
       hasReservations,
-      vacationHouseHasReservations,
-      updateVacationHouse,
-      deleteVacationHouse,
-      openVacationHouseProfile
+      range,
+      shipHasReservations,
+      updateShip,
+      deleteShip,
+      openShipProfile
     }
   }
 }

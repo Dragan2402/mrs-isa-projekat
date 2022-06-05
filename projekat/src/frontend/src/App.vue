@@ -10,7 +10,7 @@
       </div>
       <div class="nav-right" v-else>
         <img v-bind:src="'data:image/jpeg;base64,' + loggedPicture" style="width: 50px; height: 40px;">
-        <router-link class="link-light text-decoration-none" :to="{name: 'vacationHouseOwnerProfile'}">{{loggedUser.username}}</router-link>
+        <router-link class="link-light text-decoration-none" :to="{name: 'userProfile'}">{{loggedUser.username}}</router-link>
         <button type="button"  @click="logout()" class="custom-btn button-outline" >Logout</button>
       </div>
     </div>
@@ -31,6 +31,7 @@ export default {
       loggedUser: {},
       loggedPicture:null,
       accessToken: null,
+      accountType: ""
     }
   }, 
   mounted(){    
@@ -41,7 +42,11 @@ export default {
         this.signIn=false;
         this.signUp=false;
         this.signedIn=true;      
-        axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {this.loggedUser=response.data});
+        axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {
+          this.loggedUser=response.data;
+          this.accountType = response.data.accountType;
+
+        });
         axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.loggedPicture=response.data));
       }else{
         this.signIn=true;

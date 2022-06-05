@@ -1,9 +1,9 @@
 package com.projekat.projekat_mrs_isa.service.impl;
 
 import com.projekat.projekat_mrs_isa.dto.ShipDTO;
-import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
+import com.projekat.projekat_mrs_isa.model.Reservation;
 import com.projekat.projekat_mrs_isa.model.Ship;
-import com.projekat.projekat_mrs_isa.model.VacationHouse;
+import com.projekat.projekat_mrs_isa.repository.ReservationRepository;
 import com.projekat.projekat_mrs_isa.repository.ShipRepository;
 import com.projekat.projekat_mrs_isa.service.ShipService;
 import com.projekat.projekat_mrs_isa.service.UtilityService;
@@ -23,6 +23,9 @@ public class ShipServiceImpl implements ShipService {
 
     @Autowired
     private UtilityService utilityService;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     @Override
     public Ship findById(Long id) {
@@ -96,5 +99,19 @@ public class ShipServiceImpl implements ShipService {
             shipsDTOS.add(shipDTO);
         }
         return shipsDTOS;
+    }
+
+    @Override
+    public List<Reservation> findAllReservations(Long shipId) {
+        Ship ship = findById(shipId);
+        if(ship != null)
+            return reservationRepository.findAllFromEntity(ship);
+        else
+            return new ArrayList<>();
+    }
+
+    @Override
+    public List<Ship> findAllFromOwner(String ownerUsername) {
+        return shipRepository.findAllFromOwner(ownerUsername);
     }
 }

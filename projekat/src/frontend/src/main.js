@@ -27,9 +27,13 @@ import './assets/main.css'; //main css
 import 'v-calendar/dist/style.css';
 import "@vueform/slider/themes/default.css"
 import VCalendar from 'v-calendar';
-import VacationHouseOwnerProfile from "@/components/vacation_house_owner/VacationHouseOwnerProfile";
-import VacationHouseOwnerInfo from "@/components/vacation_house_owner/VacationHouseOwnerInfo";
-import VacationHouseOwnerHome from "@/components/vacation_house_owner/VacationHouseOwnerHome";
+import UserProfile from "@/components/user_profiles/UserProfile"
+import VacationHouseOwnerProfile from "@/components/user_profiles/vacation_house_owner/VacationHouseOwnerProfile"
+import VacationHouseOwnerInfo from "@/components/user_profiles/vacation_house_owner/VacationHouseOwnerInfo"
+import VacationHouseOwnerHome from "@/components/user_profiles/vacation_house_owner/VacationHouseOwnerHome"
+import ShipOwnerProfile from "@/components/user_profiles/ship_owner/ShipOwnerProfile";
+import ShipOwnerHome from "@/components/user_profiles/ship_owner/ShipOwnerHome";
+import ShipOwnerInfo from "@/components/user_profiles/ship_owner/ShipOwnerInfo";
 
 
 const routes = [
@@ -46,14 +50,42 @@ const routes = [
     { name: "newPasswordPage", path: "/newPassword/:token", component: NewPasswordPage },
     { name: "forgotPasswordPage", path: "/forgotPasswordPage", component: ForgotPasswordPage },
     {
-        name: "vacationHouseOwnerProfile",
+        name: "userProfile",
         path: "/profile",
-        component: VacationHouseOwnerProfile,
+        component: UserProfile,
         children: [
-            { name: "vacationHouseOwnerInfo", path: "/profile", component: VacationHouseOwnerInfo },
-            { name: "vacationHouseOwnerHome", path: "/profile", component: VacationHouseOwnerHome }
+            {
+                name: "vacationHouseOwnerProfile",
+                path: "/profile",
+                component: VacationHouseOwnerProfile,
+                children: [
+                    { name: "vacationHouseOwnerInfo", path: "/profile", component: VacationHouseOwnerInfo },
+                    { name: "vacationHouseOwnerHome", path: "/profile", component: VacationHouseOwnerHome }
+                ]
+            },
+            {
+                name: "shipOwnerProfile",
+                path: "/profile",
+                component: ShipOwnerProfile,
+                children: [
+                    { name: "shipOwnerInfo", path: "/profile", component: ShipOwnerInfo },
+                    { name: "shipOwnerHome", path: "/profile", component: ShipOwnerHome }
+                ]
+            }
         ]
     }
+
+
+
+    // {
+    //     name: "vacationHouseOwnerProfile",
+    //     path: "/profile",
+    //     component: VacationHouseOwnerProfile,
+    //     children: [
+    //         { name: "vacationHouseOwnerInfo", path: "/profile", component: VacationHouseOwnerInfo },
+    //         { name: "vacationHouseOwnerHome", path: "/profile", component: VacationHouseOwnerHome }
+    //     ]
+    // }
 
 ];
 
