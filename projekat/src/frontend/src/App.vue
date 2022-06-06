@@ -10,6 +10,7 @@
       </div>
       <div class="nav-right" v-else>
         <img v-bind:src="'data:image/jpeg;base64,' + loggedPicture" style="width: 50px; height: 40px;">
+        <!--        <router-link v-if="loggedUser.accountType==='CLIENT'" class="link-light text-decoration-none" :to="{name: 'clientProfile'}">{{loggedUser.username}}</router-link>-->
         <router-link class="link-light text-decoration-none" :to="{name: 'userProfile'}">{{loggedUser.username}}</router-link>
         <button type="button"  @click="logout()" class="custom-btn button-outline" >Logout</button>
       </div>

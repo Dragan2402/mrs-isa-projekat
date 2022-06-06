@@ -15,12 +15,19 @@ export default {
     onMounted(() => {
       axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
-            if(response.data.accountType === "VH_OWNER") {
-              router.push({name: "vacationHouseOwnerHome"});
-            } else if (response.data.accountType === "SH_OWNER") {
-              console.log(`UserProfile push: ${response.data.accountType}`);
-              router.push({name: "shipOwnerHome"});
+            if(response.data.accountType === "CLIENT") {
+              router.push({name: "clientProfile"});
+
+            } else if (response.data.accountType === undefined ||
+                       response.data.accountType === null ||
+                       response.data.accountType === "") {
+              router.push({name: "loginPage"});
+
+            } else {
+              // console.log(`UserProfile push: ${response.data.accountType}`);
+              router.push({name: "ownerHome"});
             }
+            // ADMIN?
           });
     })
   }
