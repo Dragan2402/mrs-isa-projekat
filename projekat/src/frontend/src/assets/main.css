@@ -56,11 +56,6 @@ div {
     width: 50%;
 }
 
-.user-data-div{
-    border-radius: 20px;
-    background-color: lightgray;
-    padding: 50px;
-}
 .input-group-text {
     width: 100%;
     margin: auto;
@@ -69,7 +64,7 @@ div {
 
 .main-container {
     width: 60%;
-    margin: 1rem auto;
+    margin: 1rem auto 20% auto;
     min-width: 1000px;
 }
 
@@ -132,7 +127,6 @@ div {
 
 .home-entity-price {
     float: right;
-    /*margin: 50px 30px 0 0;*/
     min-width: 150px;
 }
 
@@ -141,8 +135,3 @@ div {
     margin: 0;
     float: left;
 }
-
-/*.user-data-div div{*/
-/*    margin: auto;*/
-/*    max-width: 50%;*/
-/*}*/

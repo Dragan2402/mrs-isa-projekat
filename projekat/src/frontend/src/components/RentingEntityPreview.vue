@@ -1,16 +1,26 @@
-<template>   
+<template>
   <div class="main-container" v-if="loaded">
-    <h3 class="main-heading">{{rentingEntity.name}}</h3>
-  
-    <vue3-star-ratings v-if="loaded" class="star-ratings"  v-model="rentingEntity.rating" starSize="22"  :showControl=false :disableClick=true :step=0 />
-    <h5 class="star-heading">({{rentingEntity.reviewsNumber}})</h5>
+    <div class="heading-flex">
+      <div class="heading-left">
+        <h3 class="main-heading">{{rentingEntity.name}}</h3>
+        <vue3-star-ratings v-if="loaded" class="star-ratings"  v-model="rentingEntity.rating" starSize="22"  :showControl=false :disableClick=true :step=0 />
+        <h5 class="star-heading">({{rentingEntity.reviewsNumber}})</h5>
+      </div>
+      <div class="heading-right">
+        <div class="heading-right-buttons">
+          <button style="margin-right: 20px" class="custom-btn button-primary" v-if="!isSubscribed" @click="subscribe()">Subscribe</button>
+          <button style="margin-right: 20px" class="custom-btn button-primary" v-else @click="unSubscribe()">Unsubscribe</button>
+          <button type="button" @click="toggleMakingReservation" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#modalReservation">Custom reservation</button>
+        </div>
+      </div>
+    </div>
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <img class="d-block w-100" alt="Active picture" v-bind:src="'data:image/jpeg;base64,' + pictures.at(0)">
+          <img class="carousel-image d-block w-100" alt="Active picture" v-bind:src="'data:image/jpeg;base64,' + pictures.at(0)">
         </div>
         <div class="carousel-item" v-for="(picture, index) in pictures.slice(1)" :key="index">
-          <img class="d-block w-100" alt="Item picture" v-bind:src="'data:image/jpeg;base64,' + picture">
+          <img class="carousel-image d-block w-100" alt="Item picture" v-bind:src="'data:image/jpeg;base64,' + picture">
         </div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -39,27 +49,11 @@
         <div v-if="this.displayType==1"><b>Client Limit: </b>{{rentingEntity.clientLimit}}</div>
         <div v-if="this.displayType==2"><b>Instructor biography: </b>{{rentingEntity.instructorBiography}}</div>
         <div v-if="this.displayType==2"><b>Client limit: </b>{{rentingEntity.clientLimit}}</div>
-        <div v-if="!isSubscribed"><button @click="subscribe()">Subscribe</button></div>
-        <div v-else @click="unSubscribe()"><button>Unsubscribe</button></div>
       </div>
       <div class="google-map-container">
         <iframe class="google-map" v-bind:src="'https://maps.google.com/maps?q=' + rentingEntity.address + '&t=&z=13&ie=UTF8&iwloc=&output=embed'"></iframe>
       </div>
-
-       
     </div>
-    <button @click="toggleMakingReservation" v-if="!makingReservation">Make Reservation</button>
-    <div v-if="makingReservation">
-          <v-date-picker v-model="range" mode='dateTime' color="blue" is24hr :minute-increment="30" is-range  :min-date=minDate :max-date=maxDate :attributes='attributes' >        
-          </v-date-picker>
-            <div v-for="service in additionalServices" :key="service">
-              <label>{{service}}</label>
-              <input type="checkbox" v-model="selectedServices" :value="service" checked/>
-            </div>
-          <button @click="confirmReservation">Confirm</button>
-          <button @click="closeMakingReservation">Cancel</button>
-    </div>
-    <br>
     <hr>
     <div class="main-offer-container">
       <h4 v-if="this.offers.length !== 0">Offers:</h4>
@@ -84,8 +78,25 @@
         </div>
       </div>
     </div>
-  
+  </div>
+  <div class="modal fade" id="modalReservation" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <v-date-picker style="width: 100%" v-model="range" mode='dateTime' color="blue" is24hr :minute-increment="30" is-range  :min-date=minDate :max-date=maxDate :attributes='attributes'>
+          </v-date-picker>
+          <div style="margin-top: 10px" v-for="service in additionalServices" :key="service">
+            <span style="margin-right: 10px">{{service}} </span>
+            <input type="checkbox" v-model="selectedServices" :value="service" checked/>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="custom-btn button-primary" data-bs-dismiss="modal">Close</button>
+          <button type="button" @click="confirmReservation" class="custom-btn button-primary" data-bs-dismiss="modal">Confirm</button>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -109,7 +120,6 @@ export default {
       additionalServices:[],
       selectedServices:[],
       loaded:false,
-      makingReservation:false,
       minDate:null,
       maxDate:null,  
       takenDates:[],
@@ -198,6 +208,7 @@ methods:{
        return hours+"H";
     }
   },
+
   dateFromLocal(dateString){
       if(dateString==null){
         return new Date();
@@ -318,7 +329,6 @@ methods:{
       this.$toast.error("Only available for clients");
       return;
     }
-    this.makingReservation=true;
     axios.get(`/api/clients/rentingEntityAvailability/${this.rentingEntity.id}`,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => 
     {
       this.takeCalendar(response.data);
@@ -390,7 +400,6 @@ methods:{
         response => {
           if(response.data==true){
             this.$toast.success("Reservation made");
-            this.closeMakingReservation();
           }else{
             this.$toast.error("Error");
           }
@@ -399,9 +408,6 @@ methods:{
     }else{
       this.$toast.error("Select free date");
     }
-  },
-  closeMakingReservation(){
-    this.makingReservation=false;
   },
 
   makeReservation(offer,index){
@@ -436,64 +442,6 @@ methods:{
 </script>
 
 <style scoped>
-
-.carousel-inner {
-  border-radius: 5px;
-}
-
-.w-100 {
-  object-fit: cover;
-  height: 500px;
-}
-
-div.star-ratings {
-  padding: 0;
-  margin: 0;
-  float: left;
-}
-
-.main-container {
-  width: 60%;
-  margin: auto auto 20% auto;
-  min-width: 860px;
-}
-
-.main-heading {
-  font-weight: bold;
-  margin: 10px 0 0 0;
-}
-
-.star-ratings {
-  margin-right: 5px;
-}
-
-.star-heading {
-  margin-top: 3px;
-}
-
-.main-description {
-  display:flex;
-  margin-top: 17px;
-}
-
-.inner-description {
-  margin-right: 50px;
-  float:left;
-  width: 65%;
-  overflow: hidden;
-}
-
-.google-map-container {
-  display: flex;
-  float: right;
-  width: 35%;
-  overflow: hidden;
-}
-
-.google-map {
-  width: 400px;
-  border-radius: 5px;
-}
 
 .inner-offer-container {
   display: flex;

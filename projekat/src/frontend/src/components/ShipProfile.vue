@@ -1,13 +1,13 @@
 <template>
   <div class="main-container">
-    <div style="display: flex">
-      <div style="float: left; width: 70%">
+    <div class="heading-flex">
+      <div class="heading-left">
         <h3 class="main-heading">{{ship.name}}</h3>
         <vue3-star-ratings class="star-ratings" v-model="ship.rating" starSize="22"  :showControl=false :disableClick=true :step=0 />
         <h5 class="star-heading">({{ship.reviewsNumber}})</h5>
       </div>
-      <div style="width: 30%; margin-top: 20px">
-        <div style="float: right; display: flex; overflow: hidden;">
+      <div class="heading-right">
+        <div class="heading-right-buttons">
           <button style="margin-right: 20px" type="button" @click="toggleEdit()" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#modal">Edit info</button>
           <button type="button" @click="toggleCreatingOffer()" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#modalOffer">Create offer</button>
         </div>
@@ -16,10 +16,10 @@
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <img class="d-block w-100" alt="Active picture" v-bind:src="'data:image/jpeg;base64,' + pictures.at(0)">
+          <img class="carousel-image d-block w-100" alt="Active picture" v-bind:src="'data:image/jpeg;base64,' + pictures.at(0)">
         </div>
         <div class="carousel-item" v-for="(picture, index) in pictures.slice(1)" :key="index">
-          <img class="d-block w-100" alt="Item picture" v-bind:src="'data:image/jpeg;base64,' + picture">
+          <img class="carousel-image d-block w-100" alt="Item picture" v-bind:src="'data:image/jpeg;base64,' + picture">
         </div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -52,6 +52,7 @@
       </div>
     </div>
     <hr>
+<!--    UBACITI KALENDAR OVDE-->
   </div>
   <div class="modal fade" id="modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -134,6 +135,7 @@
             Additional Services:
             <vue3-tags-input style="height: 100px" :tags="offer.additionalServices" @on-tags-changed="updateTags" class="form-control" aria-label="Username" aria-describedby="additionalServicesOffer"/>
           </div>
+<!--          IZMENITI NA NOVI DATEPICKER-->
           <Datepicker v-model="offerInterval" :format="formatRange" range/>
         </div>
         <div class="modal-footer">
@@ -334,63 +336,5 @@ export default {
 </script>
 
 <style scoped>
-
-.carousel-inner {
-  border-radius: 5px;
-}
-
-.w-100 {
-  object-fit: cover;
-  height: 500px;
-}
-
-div.star-ratings {
-  padding: 0;
-  margin: 0;
-  float: left;
-}
-
-.main-container {
-  width: 60%;
-  margin: auto auto 20% auto;
-  min-width: 860px;
-}
-
-.main-heading {
-  font-weight: bold;
-  margin: 10px 0 0 0;
-}
-
-.star-ratings {
-  margin-right: 5px;
-}
-
-.star-heading {
-  margin-top: 3px;
-}
-
-.main-description {
-  display:flex;
-  margin-top: 17px;
-}
-
-.inner-description {
-  margin-right: 50px;
-  float:left;
-  width: 65%;
-  overflow: hidden;
-}
-
-.google-map-container {
-  display: flex;
-  float: right;
-  width: 35%;
-  overflow: hidden;
-}
-
-.google-map {
-  width: 400px;
-  border-radius: 5px;
-}
 
 </style>

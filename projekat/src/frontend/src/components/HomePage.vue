@@ -1,6 +1,7 @@
 <template>
   <div class="main-container">
     <div class="left-bar">
+      <h5 style="color: white; font-weight: bold">Search</h5>
       <div class="left-bar-text" style="margin-top: 0">Destination name:</div>
       <div>
         <input class="input-group-text" type="text" v-model="nameFilter"/>
@@ -64,7 +65,7 @@
             v-bind:index="index" :key="vacationHouse.id" v-bind="{selected: selectedEntity.id===vacationHouse.id}">
           <div class="entity-picture"><img v-bind:src="'data:image/jpeg;base64,' + vacationHouse.img" @click="jumpToPreview(vacationHouse)" style="width: 200px; height: 150px; cursor: pointer"></div>
           <div class="entity-name"><h4 @click="jumpToPreview(vacationHouse)" style="font-weight: bold; cursor: pointer">{{ vacationHouse.name }}</h4>
-            <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> {{ vacationHouse.address }} </div>
+            <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> <b>{{ vacationHouse.address }}</b> </div>
             <div class="entity-description">{{ vacationHouse.promoDescription }}</div>
             <vue3-star-ratings class="star-ratings" v-model="vacationHouse.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />
             <span style="color: #585858;">({{vacationHouse.reviewsNumber}})</span>
@@ -77,7 +78,7 @@
           </div>
         </div>
       </div>
-      <div>
+      <div style="text-align: center">
         <button class="btn btn-light" @click="previousPage()">Prev</button>
         {{displayCurrentPage}}
         <button class="btn btn-light"  @click="nextPage()">Next</button>
@@ -86,7 +87,7 @@
       
       <button class="btn btn-primary" @click="goToUserProfile()">User Profile</button>
       <button class="btn btn-primary" @click="goToFishingClassProfile()">Fishing Class Profile</button>
-<!--      <button class="btn btn-primary" @click="goToVacationHouseProfile()">Vacation House Profile</button>-->
+      <button class="btn btn-primary" @click="goToVacationHouseProfile()">Vacation House Profile</button>
       <button class="btn btn-primary" @click="goToShipProfile()">Ship Profile</button>
       <button class="btn btn-primary" @click="goToReservations()">Reservations</button>
     </div>
@@ -183,12 +184,12 @@ export default {
 
       return `${dayFrom}.${monthFrom}.${yearFrom} ${hourFrom}:${minuteFrom} - ${dayTo}.${monthTo}.${yearTo} ${hourTo}:${minuteTo}`
     },
-    // goToVacationHouseProfile() {
-    //   this.$router.push({
-    //     name: "vacationHouseProfile",
-    //     params: {id: 3}
-    //   });
-    // },
+    goToVacationHouseProfile() {
+      this.$router.push({
+        name: "vacationHouseProfile",
+        params: {id: 3}
+      });
+    },
     goToShipProfile() {
       this.$router.push({
         name: "shipProfile",
@@ -362,39 +363,9 @@ export default {
   margin-bottom: 10px;
 }
 
-/*.entities-div {*/
-/*  margin-left: 26%;*/
-/*}*/
-
-/*.main-container {*/
-/*  min-width: 1000px;*/
-/*  width: 60%;*/
-/*  margin: 20px auto auto;*/
-/*}*/
-
-/*.left-bar {*/
-/*  margin-top: 0;*/
-/*  padding: 10px;*/
-/*  border-radius: 5px;*/
-/*  float: left;*/
-/*  width: 24%;*/
-/*  background-color: #00587a;*/
-/*}*/
-
-/*.left-bar-text{*/
-/*  margin-top: 10px;*/
-/*  color: white;*/
-/*}*/
-
 .datepicker-sort select {
   margin-left: 30px;
   width: 200px;
-}
-
-div.star-ratings {
-  padding: 0;
-  margin: 0;
-  float: left;
 }
 
 .entity-picture img {
