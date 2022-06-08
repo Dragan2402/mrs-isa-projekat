@@ -2,7 +2,7 @@
     border-radius: 5px;
 }
 
-.w-100 {
+.carousel-image{
     object-fit: cover;
     height: 500px;
 }

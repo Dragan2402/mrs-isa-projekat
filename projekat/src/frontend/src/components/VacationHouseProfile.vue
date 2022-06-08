@@ -16,10 +16,10 @@
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <img class="d-block w-100" alt="Active picture" v-bind:src="'data:image/jpeg;base64,' + pictures.at(0)">
+          <img class="carousel-image d-block w-100" alt="Active picture" v-bind:src="'data:image/jpeg;base64,' + pictures.at(0)">
         </div>
         <div class="carousel-item" v-for="(picture, index) in pictures.slice(1)" :key="index">
-          <img class="d-block w-100" alt="Item picture" v-bind:src="'data:image/jpeg;base64,' + picture">
+          <img class="carousel-image d-block w-100" alt="Item picture" v-bind:src="'data:image/jpeg;base64,' + picture">
         </div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -117,7 +117,7 @@
             <input v-model="offer.price" type="text" class="form-control" id="floatPrice" placeholder="Price">
             <label for="floatPrice">Price</label>
           </div>
-<!--          IZMENITI NA NOVI DATEPICKER-->
+<!--          IZMENITI NA NOVI DATEPICKER I DODATI ADDITIONAL SERVICES-->
           <Datepicker v-model="offerInterval" :format="formatRange" range/>
         </div>
         <div class="modal-footer">
