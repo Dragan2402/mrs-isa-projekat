@@ -4,8 +4,10 @@ import com.projekat.projekat_mrs_isa.model.Reservation;
 import com.projekat.projekat_mrs_isa.repository.ReservationRepository;
 import com.projekat.projekat_mrs_isa.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -23,7 +25,8 @@ public class ReservationServiceImpl implements ReservationService {
     public Reservation save(Reservation reservation) { return reservationRepository.save(reservation); }
 
     @Override
-    public Boolean cancelReservation(Long id) {
+    @Transactional
+    public Boolean cancelReservation(Long id) throws OptimisticLockingFailureException {
         Reservation reservation=this.findById(id);
         if (reservation==null)
             return false;

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,14 +65,11 @@ public class OfferController {
         if(clientLogged.getPenalties()==3){
             return new ResponseEntity<>(false,HttpStatus.OK);
         }
-        Reservation reservation= new Reservation(offer.getPlace(),offer.getClientLimit(), new ArrayList<>(offer.getAdditionalServices()),
-                offer.getPrice(),offer.getRentingEntity(),clientLogged,offer.getStart(),offer.getDuration());
-        clientLogged.addReservation(reservation);
-        offer.getRentingEntity().addReservation(reservation);
-        reservationService.save(reservation);
-        offer.setDeleted(true);
-        offerService.save(offer);
-        emailService.confirmReservationMail(clientLogged,reservation);
-        return new ResponseEntity<>(true,HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(clientService.makeQuickReservation(clientLogged,offer),HttpStatus.OK);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(false,HttpStatus.LOCKED);
+        }
     }
 }

@@ -84,7 +84,7 @@ public class AuthenticationControllerTest {
     @Test
     @Transactional
     @Rollback(true)
-    public void testDeleteStudent() throws Exception {
+    public void testVerifyClient() throws Exception {
         int id=1*41+105;
         String url=URL_PREFIX+"/verify/"+id;
         String status=this.mockMvc.perform(get(url)).andExpect(status().isOk())

@@ -73,6 +73,10 @@ public abstract class RentingEntity {
     @Column(name = "reviews_number",nullable = false)
     private Integer reviewsNumber;
 
+    @Version
+    @Column(name = "version",nullable = false,unique = false)
+    private Integer version;
+
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 

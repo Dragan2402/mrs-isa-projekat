@@ -1,5 +1,6 @@
 package com.projekat.projekat_mrs_isa.controller;
 
+import ch.qos.logback.core.encoder.EchoEncoder;
 import com.projekat.projekat_mrs_isa.dto.*;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.service.*;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -157,7 +159,12 @@ public class ClientController {
         Client logged = clientService.findByUsername(clientP.getName());
         if (logged == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        return new ResponseEntity<>(clientService.makeClientReservation(logged,reservationRequestDTO),HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(clientService.makeClientReservation(logged,reservationRequestDTO),HttpStatus.OK);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(false,HttpStatus.LOCKED);
+        }
     }
 
 
@@ -240,7 +247,13 @@ public class ClientController {
         Client client = clientService.findByUsername(clientP.getName());
         if (client == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(reservationService.cancelReservation(reservationDTO.getId()), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(reservationService.cancelReservation(reservationDTO.getId()), HttpStatus.OK);
+        }
+        catch (ObjectOptimisticLockingFailureException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(false,HttpStatus.LOCKED);
+        }
     }
 
     @PutMapping(value = "/subscribe", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -321,7 +334,7 @@ public class ClientController {
                 return new ResponseEntity<UserDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
             return new ResponseEntity<UserDTO>(new UserDTO(updatedCLient), HttpStatus.OK);
         } else {
-            System.out.println("DATA IS BAD");
+
             return new ResponseEntity<>(new UserDTO(), HttpStatus.BAD_REQUEST);
         }
     }

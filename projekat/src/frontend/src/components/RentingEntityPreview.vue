@@ -91,7 +91,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="custom-btn button-primary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="custom-btn button-primary" id="close-btn" data-bs-dismiss="modal">Close</button>
           <button type="button" @click="confirmReservation" class="custom-btn button-primary" data-bs-dismiss="modal">Confirm</button>
         </div>
       </div>
@@ -124,8 +124,8 @@ export default {
       maxDate:null,  
       takenDates:[],
       range: {
-        start: new Date(2022, 0, 6,0,0),
-        end: new Date(2022, 0, 9,0,0),
+        start: null,
+        end: null,
       },
       incId: takenDatesPoppers.length,
       takenDatesPoppers,
@@ -316,6 +316,8 @@ methods:{
     this.takenDatesPoppers.push(takenEnd);
   },
   takeCalendar(takenDates){
+    this.bars= [];
+    this.takenDatesPoppers=[];
     takenDates.forEach(this.generateBar);
     takenDates.forEach(this.generatePopover);
     this.takenDates=takenDates;
@@ -329,25 +331,38 @@ methods:{
       this.$toast.error("Only available for clients");
       return;
     }
+
     axios.get(`/api/clients/rentingEntityAvailability/${this.rentingEntity.id}`,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => 
     {
       this.takeCalendar(response.data);
+          const availableFromDate = this.dateFromLocal(this.rentingEntity.availableFrom);
+    const availableToDate = this.dateFromLocal(this.rentingEntity.availableTo);
+    const now = new Date();
+
+    if(availableFromDate<=now){
+      this.minDate=now;
       
-      });
-    let servicesPath;
-    if(this.displayType==0){
-      servicesPath="/api/vacationHouseOwners/getServices/"+this.rentingEntity.ownerId;
-    }else if(this.displayType==1){
-      servicesPath="/api/shipOwners/getServices/"+this.rentingEntity.ownerId;
+    }else{
+      this.minDate = availableFromDate;
     }
-    else{
-      servicesPath="/api/fishingInstructors/getServices/"+this.rentingEntity.ownerId;
+
+    if(availableToDate <= now){    
+      this.maxDate=now;
+    }else{
+      this.maxDate = availableToDate;
     }
-    axios.get(servicesPath,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => this.additionalServices=response.data);
-    this.minDate = this.dateFromLocal(this.rentingEntity.availableFrom);
-    this.maxDate = this.dateFromLocal(this.rentingEntity.availableTo);
-    const availableFrom="Renting entity available from "+this.minDate.getHours()+":"+this.minDate.getMinutes();
-    const availableTo="Renting entity available till "+this.minDate.getHours()+":"+this.minDate.getMinutes();
+    
+ 
+    
+    //this.minDate = this.dateFromLocal(this.rentingEntity.availableFrom);
+    //this.maxDate = this.dateFromLocal(this.rentingEntity.availableTo);
+    let availableFrom="Renting entity available from "+this.minDate.getHours()+":"+this.minDate.getMinutes();
+    let availableTo="Renting entity available till "+this.minDate.getHours()+":"+this.minDate.getMinutes();
+    if(availableToDate < now && availableFromDate < now){
+      this.$toast.error("Entity is not available currently");  
+      availableFrom="Not available";
+      availableTo="Not available";
+    }
     const takenStart={
         description: availableFrom,
         isComplete: false,
@@ -362,6 +377,19 @@ methods:{
       };
     this.takenDatesPoppers.push(takenStart);
     this.takenDatesPoppers.push(takenEnd);
+      
+      });
+    let servicesPath;
+    if(this.displayType==0){
+      servicesPath="/api/vacationHouseOwners/getServices/"+this.rentingEntity.ownerId;
+    }else if(this.displayType==1){
+      servicesPath="/api/shipOwners/getServices/"+this.rentingEntity.ownerId;
+    }
+    else{
+      servicesPath="/api/fishingInstructors/getServices/"+this.rentingEntity.ownerId;
+    }
+    axios.get(servicesPath,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => this.additionalServices=response.data);
+
 
   },
   freeSlot(start,end){
@@ -387,6 +415,13 @@ methods:{
       }else{
         clientLimit=this.rentingEntity.clientLimit;
       }
+      if(this.$root.loggedUser.penalties==3){
+       this.$toast.error("You can not make a reservation. You have 3 penalties. Wait for next month.");
+       return;
+      }
+      if(this.minDate == this.maxDate){
+        return;
+      }
       const reservation={        
         "place":this.rentingEntity.address,
         "clientLimit": clientLimit,
@@ -401,7 +436,11 @@ methods:{
           if(response.data==true){
             this.$toast.success("Reservation made");
           }else{
-            this.$toast.error("Error");
+            if(response.status == 423){
+                this.$toast.error("Try later.");
+            }else{
+              this.$toast.error("Error");
+            }
           }
         }
       );

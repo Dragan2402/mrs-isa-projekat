@@ -8,9 +8,11 @@ import com.projekat.projekat_mrs_isa.repository.RentingEntityRepository;
 import com.projekat.projekat_mrs_isa.repository.RoleRepository;
 import com.projekat.projekat_mrs_isa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private OfferService offerService;
 
     @Autowired
     private ReservationService reservationService;
@@ -137,7 +142,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Boolean makeClientReservation(Client logged, ReservationRequestDTO reservationRequestDTO) {
+    @Transactional
+    public Boolean makeClientReservation(Client logged, ReservationRequestDTO reservationRequestDTO) throws ObjectOptimisticLockingFailureException {
         reservationRequestDTO.setStart(reservationRequestDTO.getStart().plusDays(1));
         reservationRequestDTO.setEnd(reservationRequestDTO.getEnd().plusDays(1));
         Duration duration=Duration.between(reservationRequestDTO.getStart(), reservationRequestDTO.getEnd());
@@ -161,6 +167,20 @@ public class ClientServiceImpl implements ClientService {
         logged.setPassword(passwordEncoderComponent.encode(passwordChangeDTO.getNewPassword()));
         save(logged);
         return true;
+    }
+
+    @Override
+    @Transactional
+    public Boolean makeQuickReservation(Client clientLogged, Offer offer) throws ObjectOptimisticLockingFailureException {
+        Reservation reservation= new Reservation(offer.getPlace(),offer.getClientLimit(), new ArrayList<>(offer.getAdditionalServices()),
+                offer.getPrice(),offer.getRentingEntity(),clientLogged,offer.getStart(),offer.getDuration());
+        clientLogged.addReservation(reservation);
+        offer.getRentingEntity().addReservation(reservation);
+        reservationService.save(reservation);
+        offer.setDeleted(true);
+        offerService.save(offer);
+        emailService.confirmReservationMail(clientLogged,reservation);
+        return  true;
     }
 
     @Override

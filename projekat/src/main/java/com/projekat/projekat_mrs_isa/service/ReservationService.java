@@ -2,6 +2,7 @@ package com.projekat.projekat_mrs_isa.service;
 
 
 import com.projekat.projekat_mrs_isa.model.Reservation;
+import org.springframework.dao.OptimisticLockingFailureException;
 
 public interface ReservationService {
 
@@ -10,5 +11,5 @@ public interface ReservationService {
 
     Reservation save(Reservation reservation);
 
-    Boolean cancelReservation(Long id);
+    Boolean cancelReservation(Long id) throws OptimisticLockingFailureException;
 }

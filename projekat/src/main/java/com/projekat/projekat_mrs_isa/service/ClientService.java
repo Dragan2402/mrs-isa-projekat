@@ -2,6 +2,8 @@ package com.projekat.projekat_mrs_isa.service;
 
 import com.projekat.projekat_mrs_isa.dto.*;
 import com.projekat.projekat_mrs_isa.model.Client;
+import com.projekat.projekat_mrs_isa.model.Offer;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 import java.util.List;
 
@@ -41,7 +43,9 @@ public interface ClientService {
 
     List<TakenPeriodDTO> rentingEntityAvailability(Client client, Long id);
 
-    Boolean makeClientReservation(Client logged, ReservationRequestDTO reservationRequestDTO);
+    Boolean makeClientReservation(Client logged, ReservationRequestDTO reservationRequestDTO) throws ObjectOptimisticLockingFailureException;
 
     Boolean updatePassword(Client logged, PasswordChangeDTO passwordChangeDTO);
+
+    Boolean makeQuickReservation(Client clientLogged, Offer offer) throws ObjectOptimisticLockingFailureException;
 }

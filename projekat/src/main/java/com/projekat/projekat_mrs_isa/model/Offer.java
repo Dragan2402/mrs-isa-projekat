@@ -40,6 +40,10 @@ public class Offer {
     @Column(name = "duration", nullable = false)
     private Duration duration;
 
+    @Version
+    @Column(name = "version",nullable = false,unique = false)
+    private Integer version;
+
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
