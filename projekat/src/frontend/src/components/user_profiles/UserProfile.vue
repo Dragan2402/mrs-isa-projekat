@@ -22,8 +22,13 @@ export default {
                        response.data.accountType === null ||
                        response.data.accountType === "") {
               router.push({name: "loginPage"});
+            }
 
-            } else {
+            else if (response.data.accountType === "ADMIN"){
+              router.push({name: "adminInfo"})
+            }
+
+            else {
               // console.log(`UserProfile push: ${response.data.accountType}`);
               router.push({name: "ownerHome"});
             }

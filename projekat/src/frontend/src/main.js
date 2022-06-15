@@ -37,6 +37,8 @@ import UserProfile from "@/components/user_profiles/UserProfile"
 import OwnerProfile from "@/components/user_profiles/owner_profiles/OwnerProfile";
 import OwnerHome from "@/components/user_profiles/owner_profiles/OwnerHome";
 import OwnerInfo from "@/components/user_profiles/owner_profiles/OwnerInfo";
+import AdminProfile from "@/components/user_profiles/admin_profile/AdminProfile";
+import AdminInfo from "@/components/user_profiles/admin_profile/AdminInfo";
 
 
 const routes = [
@@ -70,6 +72,14 @@ const routes = [
                 name: "clientProfile",
                 path: "/profile",
                 component: ClientProfile
+            },
+            {
+                name: "adminProfile",
+                path: "/profile",
+                component: AdminProfile,
+                children: [
+                    {name: "adminInfo", path: "/profile", component: AdminInfo}
+                ]
             }
         ]
     }
