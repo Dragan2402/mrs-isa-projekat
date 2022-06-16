@@ -1,11 +1,14 @@
 package com.projekat.projekat_mrs_isa.controller;
 
 import com.projekat.projekat_mrs_isa.dto.ComplaintDTO;
+import com.projekat.projekat_mrs_isa.dto.ReviewDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
 import com.projekat.projekat_mrs_isa.model.Complaint;
+import com.projekat.projekat_mrs_isa.model.Review;
 import com.projekat.projekat_mrs_isa.service.AdminService;
 import com.projekat.projekat_mrs_isa.service.ComplaintService;
+import com.projekat.projekat_mrs_isa.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +25,9 @@ import java.util.List;
 public class AdminController {
 
     @Autowired
+    private ReviewService reviewService;
+
+    @Autowired
     private AdminService adminService;
 
     @Autowired
@@ -30,7 +36,7 @@ public class AdminController {
     @GetMapping(value = "/complaints/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ComplaintDTO>> getAllComplaints() {
-        List<ComplaintDTO> complaints = adminService.findAllComplaintsDTO();
+        List<ComplaintDTO> complaints = complaintService.findAllDTO();
         return new ResponseEntity<>(complaints, HttpStatus.OK);
     }
 
@@ -38,12 +44,32 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public ResponseEntity<Boolean> approveComplaint(@RequestBody ComplaintDTO complaintDTO) {
-        Complaint complaint = adminService.findComplaintById(complaintDTO.getId());
+        Complaint complaint = complaintService.findById(complaintDTO.getId());
         if (complaint == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         complaint.setApproved(true);
         complaintService.save(complaint);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/reviews/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<ReviewDTO>> getAllReviews() {
+        List<ReviewDTO> reviews = reviewService.findAllDTO();
+        return new ResponseEntity<>(reviews, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/reviews", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public ResponseEntity<Boolean> approveReview(@RequestBody ReviewDTO reviewDTO) {
+        Review review = reviewService.findById(reviewDTO.getId());
+        if (review == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        review.setApproved(true);
+        reviewService.save(review);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

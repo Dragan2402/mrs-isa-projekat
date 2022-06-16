@@ -16,10 +16,4 @@ public interface AdminRepository extends JpaRepository<Admin,Long> {
 
     @Query("select a from Admin a where a.email= ?1")
     public Admin findByEmail(String email);
-
-    @Query("select new com.projekat.projekat_mrs_isa.dto.ComplaintDTO(c) from Complaint c")
-    List<ComplaintDTO> findAllComplaintsDTO();
-
-    @Query("select c from Complaint c where c.id= ?1")
-    public Complaint findComplaintById(Long id);
 }

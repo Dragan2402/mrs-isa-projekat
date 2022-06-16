@@ -27,14 +27,6 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<ComplaintDTO> findAllComplaintsDTO() { return adminRepository.findAllComplaintsDTO(); }
-
-    @Override
-    public Complaint findComplaintById(Long id) {
-        return adminRepository.findComplaintById(id);
-    }
-
-    @Override
     public Admin save(Admin admin) {
         return adminRepository.save(admin);
     }

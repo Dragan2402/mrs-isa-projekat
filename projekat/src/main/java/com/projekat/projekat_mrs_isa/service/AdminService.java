@@ -13,9 +13,6 @@ public interface AdminService {
     Admin findById(Long id);
 
     List<Admin> findAll();
-    List<ComplaintDTO> findAllComplaintsDTO();
-
-    Complaint findComplaintById(Long id);
 
     Admin save(Admin admin);
 
