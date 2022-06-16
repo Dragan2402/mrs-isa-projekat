@@ -16,6 +16,14 @@
       <button class="custom-btn button-primary" @click="approveReview(review, index)">Approve Review</button>
     </div>
   </div>
+  <hr>
+  <div style="border: 1px solid black; margin: 10px; padding: 10px" v-for="(request, index) in this.requests" v-bind:index="index" :key="request.id">
+    <div>Text: {{ request.text }}</div>
+    <div>Type: {{request.type}}</div>
+    <div>
+      <button class="custom-btn button-primary" @click="approveRequest(request, index)">Approve Request</button>
+    </div>
+  </div>
 
 
   <router-view></router-view>
@@ -30,13 +38,15 @@ export default {
   data() {
     return {
       complaints: [],
-      reviews: []
+      reviews: [],
+      requests: [],
     }
   },
 
   mounted() {
     axios.get("api/admins/complaints/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.complaints = response.data))
     axios.get("api/admins/reviews/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.reviews = response.data))
+    axios.get("api/admins/requests/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.requests = response.data))
 
   },
 
@@ -61,7 +71,18 @@ export default {
           this.$toast.error("Problem has occurred!");
         }
       });
-    }
+    },
+
+    approveRequest(request, index) {
+      axios.put("api/admins/requests", request, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
+        if (response.data == true) {
+          this.$toast.success("Deleted");
+          this.requests[index].deleted = true;
+        } else {
+          this.$toast.error("Problem has occurred!");
+        }
+      });
+    },
   }
 }
 </script>
