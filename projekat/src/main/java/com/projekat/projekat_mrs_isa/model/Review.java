@@ -34,6 +34,9 @@ public class Review {
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
+    @Column(name = "approved", nullable = false)
+    private boolean approved;
+
     public Review(){}
 
     public Review(RentingEntity rentingEntity,Client client,Double rating){
@@ -43,6 +46,7 @@ public class Review {
         this.rating=rating;
         this.comment="";
         this.deleted=false;
+        this.approved=false;
     }
 
     public Review(RentingEntity rentingEntity,Client client,Double rating,String comment){
@@ -52,6 +56,7 @@ public class Review {
         this.rating=rating;
         this.comment=comment;
         this.deleted=false;
+        this.approved=false;
     }
 
     public Review(User rentingEntityOwner,Client client,Double rating,String comment){
@@ -61,6 +66,7 @@ public class Review {
         this.rating=rating;
         this.comment=comment;
         this.deleted=false;
+        this.approved=false;
     }
 
     public Long getId() {
@@ -117,6 +123,14 @@ public class Review {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 
     @Override

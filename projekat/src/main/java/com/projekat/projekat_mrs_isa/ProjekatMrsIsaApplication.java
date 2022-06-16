@@ -94,7 +94,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         List<Role> rolesFCInstructor = roleRepository.findByName("ROLE_FC_INSTRUCTOR");
 
 
-        Admin adminTemp= new Admin("email@maildrop.cc","gageMadjija",passwordEncoderComponent.encode("Gage123"),"pictures/user_pictures/0.png","Dragan"
+        Admin adminTemp= new Admin("email@maildrop.cc","Andrej",passwordEncoderComponent.encode("asi123"),"pictures/user_pictures/0.png","Dragan"
         ,"Mirkovic","Hopovska 4","Novi Sad","Serbia","+381692402000");
         adminTemp.setVerified(true);
         adminTemp.setRoles(rolesAdmin);

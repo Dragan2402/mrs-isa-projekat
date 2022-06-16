@@ -1,5 +1,6 @@
 package com.projekat.projekat_mrs_isa.model;
 
+import com.projekat.projekat_mrs_isa.dto.ComplaintDTO;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -30,6 +31,9 @@ public class Complaint {
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
+    @Column(name = "approved", nullable = false)
+    private boolean approved;
+
     public Complaint(){}
 
     public Complaint(User complainant,RentingEntity rentingEntity,String text){
@@ -38,6 +42,7 @@ public class Complaint {
         this.respondent=null;
         this.text=text;
         this.deleted=false;
+        this.approved=false;
     }
 
     public Complaint(User complainant,User respondent,String text){
@@ -46,6 +51,7 @@ public class Complaint {
         this.respondent=respondent;
         this.text=text;
         this.deleted=false;
+        this.approved=false;
     }
 
     public Long getId() {
@@ -94,6 +100,14 @@ public class Complaint {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 
     @Override
