@@ -6,13 +6,13 @@
 
     </div>
     <div class="inner-description">
-      <div><b>First Name: </b> {{user.firstName}}</div>
-      <div><b>Last Name: </b> {{user.lastName}}</div>
-      <div><b>E-mail: </b> {{user.email}}</div>
-      <div><b>Address: </b> {{user.address}}</div>
-      <div><b>Place: </b> {{user.city}}</div>
-      <div><b>Country: </b> {{user.country}}</div>
-      <div><b>Phone Number: </b> {{user.phoneNum}}</div>
+      <div><b>First Name: </b> {{owner.firstName}}</div>
+      <div><b>Last Name: </b> {{owner.lastName}}</div>
+      <div><b>E-mail: </b> {{owner.email}}</div>
+      <div><b>Address: </b> {{owner.address}}</div>
+      <div><b>Place: </b> {{owner.city}}</div>
+      <div><b>Country: </b> {{owner.country}}</div>
+      <div><b>Phone Number: </b> {{owner.phoneNum}}</div>
     </div>
   </div>
 
@@ -26,27 +26,27 @@
       <div class="modal-content">
         <div class="modal-body">
           <div class="form-floating mb-3">
-            <input v-model="user.firstName" type="text" class="form-control" id="modalFirstName" placeholder="First Name">
+            <input v-model="owner.firstName" type="text" class="form-control" id="modalFirstName" placeholder="First Name">
             <label for="modalFirstName">First Name</label>
           </div>
           <div class="form-floating mb-3">
-            <input v-model="user.lastName" type="text" class="form-control" id="modalLastName" placeholder="Last Name">
+            <input v-model="owner.lastName" type="text" class="form-control" id="modalLastName" placeholder="Last Name">
             <label for="modalLastName">Last Name</label>
           </div>
           <div class="form-floating mb-3">
-            <input v-model="user.email" type="email" class="form-control" id="modalEmail" placeholder="E-mail">
+            <input v-model="owner.email" type="email" class="form-control" id="modalEmail" placeholder="E-mail">
             <label for="modalEmail">E-mail</label>
           </div>
           <div class="form-floating mb-3">
-            <input v-model="user.address" type="text" class="form-control" id="modalAddress" placeholder="Address">
+            <input v-model="owner.address" type="text" class="form-control" id="modalAddress" placeholder="Address">
             <label for="modalAddress">Address</label>
           </div>
           <div class="form-floating mb-3">
-            <input v-model="user.city" type="text" class="form-control" id="modalCity" placeholder="Place">
+            <input v-model="owner.city" type="text" class="form-control" id="modalCity" placeholder="Place">
             <label for="modalCity">Place</label>
           </div>
           <div class="form-floating mb-3">
-            <country-select v-model="user.country" class="form-control" id="modalCountry" :usei18n="false" :autocomplete="true"  :countryName="true"/>
+            <country-select v-model="owner.country" class="form-control" id="modalCountry" :usei18n="false" :autocomplete="true"  :countryName="true"/>
             <label for="modalCountry">Country</label>
           </div>
           <div class="form-floating mb-3">
@@ -64,17 +64,21 @@
 </template>
 
 <script>
+import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
-import {getCurrentInstance, onMounted, ref} from "vue";
 import axios from "axios";
 
 export default {
-  name: "VacationHouseOwnerInfo",
+  name: "OwnerInfo",
   setup() {
     const router = useRouter();
-    const root = getCurrentInstance();
+    // const root = getCurrentInstance();
 
-    let user = ref({
+    let entityTypeInfo = ref({
+      urlPart: ""
+    });
+
+    let owner = ref({
       id: null,
       email: null,
       username: null,
@@ -94,16 +98,32 @@ export default {
 
     onMounted(() => {
       axios
-          .get("/api/vacationHouseOwners/loggedVacationHouseOwner",
+          .get("/api/users/loggedUser",
               { headers: { "Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
           .then(response => {
-            user.value = response.data;
+            owner.value = response.data;
+
+            if(response.data.accountType === "VH_OWNER") {
+              entityTypeInfo.value = {
+                urlPart: "vacationHouseOwners"
+              };
+
+            } else if (response.data.accountType === "SH_OWNER") {
+              entityTypeInfo.value = {
+                urlPart: "shipOwners"
+              };
+
+              // else if INSTRUCTOR, ADMIN
+
+            } else {
+              router.push({name: "homePage"});
+            }
           })
           .catch(error => {
             console.log(error.response);
-            root.accessToken = null;
-            localStorage.setItem("jwt", null);
-            router.push("/loginPage");
+            // root.accessToken = null;
+            // localStorage.setItem("jwt", null);
+            // router.push("/loginPage");
           });
       axios
           .get("/api/users/loggedUser/picture",
@@ -111,9 +131,6 @@ export default {
           .then(response => (picture.value = response.data))
           .catch((error) => {
             console.log(error.response);
-            root.accessToken = null;
-            localStorage.setItem("jwt", null);
-            router.push("/loginPage");
           });
     });
 
@@ -127,13 +144,13 @@ export default {
 
     function saveInfoEdit(){
       if (validatedPhoneNum.value !== "")
-        user.value.phoneNum = validatedPhoneNum.value;
+        owner.value.phoneNum = validatedPhoneNum.value;
 
       axios
-          .put(`/api/vacationHouseOwners/${user.value.id}`, user.value,
+          .put(`/api/${entityTypeInfo.value.urlPart}/${owner.value.id}`, owner.value,
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
-            user.value = response.data;
+            owner.value = response.data;
             console.log("Info updated");
           })
           .catch(error => {
@@ -142,7 +159,7 @@ export default {
     }
 
     return {
-      user,
+      owner,
       phoneNum,
       picture,
       page,

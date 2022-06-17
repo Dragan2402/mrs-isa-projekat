@@ -1,6 +1,10 @@
 package com.projekat.projekat_mrs_isa.service;
 
+import com.projekat.projekat_mrs_isa.dto.ComplaintDTO;
+import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.Admin;
+import com.projekat.projekat_mrs_isa.model.Complaint;
+
 import java.util.List;
 
 

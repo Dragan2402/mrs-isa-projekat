@@ -1,7 +1,15 @@
 package com.projekat.projekat_mrs_isa.repository;
 
+import com.projekat.projekat_mrs_isa.dto.ComplaintDTO;
+import com.projekat.projekat_mrs_isa.dto.ReviewDTO;
 import com.projekat.projekat_mrs_isa.model.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review,Long> {
+
+    @Query("select new com.projekat.projekat_mrs_isa.dto.ReviewDTO(r) from Review r")
+    List<ReviewDTO> findAllDTO();
 }

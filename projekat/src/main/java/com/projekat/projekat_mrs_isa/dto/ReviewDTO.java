@@ -10,27 +10,32 @@ public class ReviewDTO {
     private Long clientId;
     private Double rating;
     private String comment;
+    private Boolean approved;
 
     private ReviewDTO(){}
 
     public ReviewDTO(@NotNull Review review){
         this.id=review.getId();
-        this.rentingEntityId=review.getRentingEntity().getId();
-        this.rentingOwnerId=0L;
+        if (review.getRentingEntity() != null) rentingEntityId=review.getRentingEntity().getId();
+        else rentingEntityId = 0L;
+        if (review.getRentingOwner() != null) rentingEntityId=review.getRentingOwner().getId();
+        else rentingOwnerId = 0L;
         this.clientId=review.getClient().getId();
         this.rating=review.getRating();
         this.comment=review.getComment();
+        this.approved=review.isApproved();
     }
 
 
 
-    public ReviewDTO(Long id, Long rentingEntityId,Long rentingOwnerId, Long clientId, Double rating, String comment) {
+    public ReviewDTO(Long id, Long rentingEntityId,Long rentingOwnerId, Long clientId, Double rating, String comment, Boolean approved) {
         this.id = id;
         this.rentingEntityId = rentingEntityId;
         this.rentingOwnerId=rentingOwnerId;
         this.clientId = clientId;
         this.rating = rating;
         this.comment = comment;
+        this.approved = approved;
     }
 
     public Long getId() {
@@ -79,5 +84,13 @@ public class ReviewDTO {
 
     public void setRentingOwnerId(Long rentingOwnerId) {
         this.rentingOwnerId = rentingOwnerId;
+    }
+
+    public Boolean getApproved() {
+        return approved;
+    }
+
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
     }
 }

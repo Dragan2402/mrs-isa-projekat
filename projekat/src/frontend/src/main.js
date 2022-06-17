@@ -29,19 +29,24 @@ import 'v-calendar/dist/style.css';
 import "@vueform/slider/themes/default.css"
 import VCalendar from 'v-calendar';
 import UserProfile from "@/components/user_profiles/UserProfile"
-import VacationHouseOwnerProfile from "@/components/user_profiles/vacation_house_owner/VacationHouseOwnerProfile"
-import VacationHouseOwnerInfo from "@/components/user_profiles/vacation_house_owner/VacationHouseOwnerInfo"
-import VacationHouseOwnerHome from "@/components/user_profiles/vacation_house_owner/VacationHouseOwnerHome"
-import ShipOwnerProfile from "@/components/user_profiles/ship_owner/ShipOwnerProfile";
-import ShipOwnerHome from "@/components/user_profiles/ship_owner/ShipOwnerHome";
-import ShipOwnerInfo from "@/components/user_profiles/ship_owner/ShipOwnerInfo";
+// import VacationHouseOwnerProfile from "@/components/user_profiles/vacation_house_owner/VacationHouseOwnerProfile"
+// import VacationHouseOwnerInfo from "@/components/user_profiles/vacation_house_owner/VacationHouseOwnerInfo"
+// import VacationHouseOwnerHome from "@/components/user_profiles/vacation_house_owner/VacationHouseOwnerHome"
+// import ShipOwnerProfile from "@/components/user_profiles/ship_owner/ShipOwnerProfile";
+// import ShipOwnerHome from "@/components/user_profiles/ship_owner/ShipOwnerHome";
+// import ShipOwnerInfo from "@/components/user_profiles/ship_owner/ShipOwnerInfo";
+import OwnerProfile from "@/components/user_profiles/owner_profiles/OwnerProfile";
+import OwnerHome from "@/components/user_profiles/owner_profiles/OwnerHome";
+import OwnerInfo from "@/components/user_profiles/owner_profiles/OwnerInfo";
+import AdminProfile from "@/components/user_profiles/admin_profile/AdminProfile";
+import AdminInfo from "@/components/user_profiles/admin_profile/AdminInfo";
 
 
 const routes = [
-    { path: "/", component: HomePage },
+    { name: "homePage", path: "/", component: HomePage },
     { path: "/registrationPage", component: RegistrationPage },
-    { path: "/loginPage", component: LoginPage },
-    { path: "/clientProfile", component: ClientProfile },
+    { name: "loginPage", path: "/loginPage", component: LoginPage },
+    // { name: "clientProfile", path: "/clientProfile", component: ClientProfile },
     { path: "/reservations", component: ReservationsPage },
     { path: "/fishingClassProfile", component: FishingClassProfile },
     { name: "vacationHouseProfile", path: "/vacationHouseProfile", component: VacationHouseProfile },
@@ -56,38 +61,29 @@ const routes = [
         component: UserProfile,
         children: [
             {
-                name: "vacationHouseOwnerProfile",
+                name: "ownerProfile",
                 path: "/profile",
-                component: VacationHouseOwnerProfile,
+                component: OwnerProfile,
                 children: [
-                    { name: "vacationHouseOwnerInfo", path: "/profile", component: VacationHouseOwnerInfo },
-                    { name: "vacationHouseOwnerHome", path: "/profile", component: VacationHouseOwnerHome }
+                    { name: "ownerHome", path: "/profile", component: OwnerHome },
+                    { name: "ownerInfo", path: "/profile", component: OwnerInfo }
                 ]
             },
             {
-                name: "shipOwnerProfile",
+                name: "clientProfile",
                 path: "/profile",
-                component: ShipOwnerProfile,
+                component: ClientProfile
+            },
+            {
+                name: "adminProfile",
+                path: "/profile",
+                component: AdminProfile,
                 children: [
-                    { name: "shipOwnerInfo", path: "/profile", component: ShipOwnerInfo },
-                    { name: "shipOwnerHome", path: "/profile", component: ShipOwnerHome }
+                    {name: "adminInfo", path: "/profile", component: AdminInfo}
                 ]
             }
         ]
     }
-
-
-
-    // {
-    //     name: "vacationHouseOwnerProfile",
-    //     path: "/profile",
-    //     component: VacationHouseOwnerProfile,
-    //     children: [
-    //         { name: "vacationHouseOwnerInfo", path: "/profile", component: VacationHouseOwnerInfo },
-    //         { name: "vacationHouseOwnerHome", path: "/profile", component: VacationHouseOwnerHome }
-    //     ]
-    // }
-
 ];
 
 const router = new createRouter({
