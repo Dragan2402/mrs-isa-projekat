@@ -18,6 +18,8 @@ public class Admin extends User{
                  String country, String phoneNum) {
         super(email, username,password,picture, firstName, lastName, address, city, country, phoneNum);
         super.setType(AccountType.ADMIN);
+        super.setEnabled(true);
+        super.setVerified(true);
         firstLogin=true;
     }
 

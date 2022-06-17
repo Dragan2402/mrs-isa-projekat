@@ -4,20 +4,23 @@ import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
 import com.projekat.projekat_mrs_isa.dto.ComplaintDTO;
 import com.projekat.projekat_mrs_isa.dto.PasswordChangeDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
-import com.projekat.projekat_mrs_isa.model.Admin;
-import com.projekat.projekat_mrs_isa.model.Client;
-import com.projekat.projekat_mrs_isa.model.Complaint;
+import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.repository.AdminRepository;
+import com.projekat.projekat_mrs_isa.repository.RoleRepository;
 import com.projekat.projekat_mrs_isa.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AdminServiceImpl implements AdminService {
     @Autowired
     private AdminRepository adminRepository;
+    @Autowired
+    private RoleRepository roleRepository;
     @Autowired
     private PasswordEncoderComponent passwordEncoderComponent;
 
@@ -57,5 +60,25 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Admin findByEmail(String email) {
         return adminRepository.findByEmail(email);
+    }
+
+    @Override
+    public Admin addAdmin(Map<String, Object> adminMap) {
+        Admin admin = new Admin(
+                (String) adminMap.get("email"),
+                (String) adminMap.get("username"),
+                passwordEncoderComponent.encode((String) adminMap.get("password")),
+                "pictures/user_pictures/0.png",
+                (String) adminMap.get("firstName"),
+                (String) adminMap.get("lastName"),
+                (String) adminMap.get("address"),
+                (String) adminMap.get("city"),
+                (String) adminMap.get("country"),
+                (String) adminMap.get("phoneNum")
+        );
+        List<Role> adminRoles = roleRepository.findByName("ROLE_CLIENT");
+        admin.setRoles(adminRoles);
+        adminRepository.save(admin);
+        return admin;
     }
 }

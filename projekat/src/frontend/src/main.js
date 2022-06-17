@@ -81,9 +81,13 @@ const routes = [
                 component: AdminProfile,
                 children: [
                     {name: "adminInfo", path: "/profile", component: AdminInfo},
-                    {name: "firstLogin", path: "/profile/firstLogin", component: FirstLogin}
                 ]
-            }
+            },
+            {
+                name: "firstLogin",
+                path: "/firstLogin",
+                component: FirstLogin
+            },
         ]
     }
 ];
