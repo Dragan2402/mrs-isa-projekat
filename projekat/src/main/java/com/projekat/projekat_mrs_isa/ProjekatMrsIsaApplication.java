@@ -97,6 +97,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         Admin adminTemp= new Admin("email@maildrop.cc","Andrej",passwordEncoderComponent.encode("asi123"),"pictures/user_pictures/0.png","Dragan"
         ,"Mirkovic","Hopovska 4","Novi Sad","Serbia","+381692402000");
         adminTemp.setVerified(true);
+        adminTemp.setEnabled(true);
         adminTemp.setRoles(rolesAdmin);
         adminRep.save(adminTemp);
 

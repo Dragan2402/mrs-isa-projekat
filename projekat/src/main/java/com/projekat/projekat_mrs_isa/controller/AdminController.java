@@ -1,13 +1,8 @@
 package com.projekat.projekat_mrs_isa.controller;
 
 import com.projekat.projekat_mrs_isa.dto.*;
-import com.projekat.projekat_mrs_isa.model.Complaint;
-import com.projekat.projekat_mrs_isa.model.Request;
-import com.projekat.projekat_mrs_isa.model.Review;
-import com.projekat.projekat_mrs_isa.service.AdminService;
-import com.projekat.projekat_mrs_isa.service.ComplaintService;
-import com.projekat.projekat_mrs_isa.service.RequestService;
-import com.projekat.projekat_mrs_isa.service.ReviewService;
+import com.projekat.projekat_mrs_isa.model.*;
+import com.projekat.projekat_mrs_isa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +18,10 @@ import java.util.List;
 @RequestMapping(value = "api/admins")
 public class AdminController {
 
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private RentingEntityService rentingEntityService;
     @Autowired
     private RequestService requestService;
     @Autowired
@@ -46,8 +45,13 @@ public class AdminController {
     @Transactional
     public ResponseEntity<Boolean> approveComplaint(@RequestBody ComplaintDTO complaintDTO) {
         Complaint complaint = complaintService.findById(complaintDTO.getId());
-        if (complaint == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (complaint == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (complaint.getRentingEntity() == null) {
+            User user = userService.findById(complaintDTO.getRespodentId());
+            user.recieveComplaint(complaint);
+        } else {
+            RentingEntity rentingEntity = rentingEntityService.findById(complaintDTO.getRentingEntityId());
+            rentingEntity.addComplaint(complaint);
         }
         complaint.setApproved(true);
         complaintService.save(complaint);
@@ -66,8 +70,13 @@ public class AdminController {
     @Transactional
     public ResponseEntity<Boolean> approveReview(@RequestBody ReviewDTO reviewDTO) {
         Review review = reviewService.findById(reviewDTO.getId());
-        if (review == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (review == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (review.getRentingEntity() == null) {
+            User user = userService.findById(reviewDTO.getRentingOwnerId());
+            user.addReview(review);
+        } else {
+            RentingEntity rentingEntity = rentingEntityService.findById(reviewDTO.getRentingEntityId());
+            rentingEntity.addReview(review);
         }
         review.setApproved(true);
         reviewService.save(review);
@@ -86,9 +95,15 @@ public class AdminController {
     @Transactional
     public ResponseEntity<Boolean> approveRequest(@RequestBody RequestDTO requestDTO) {
         Request request = requestService.findById(requestDTO.getId());
-        if (request == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        if (request == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        User user = userService.findById(requestDTO.getSubmitterId());
+        if (requestDTO.getType() == RequestType.DELETE_ACCOUNT) {
+            user.setDeleted(true);
+            userService.save(user);
+        } else if (requestDTO.getType() == RequestType.BECOME_VH_OWNER || requestDTO.getType() == RequestType.BECOME_SH_OWNER || requestDTO.getType() == RequestType.BECOME_INSTRUCTOR) {
+            user.setEnabled(true);
+            userService.save(user);
+        } else return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         request.setDeleted(true);
         requestService.save(request);
         return new ResponseEntity<>(true, HttpStatus.OK);

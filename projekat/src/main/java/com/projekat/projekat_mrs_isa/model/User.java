@@ -118,7 +118,7 @@ public abstract class User implements UserDetails {
         this.penalties=0;
         this.phoneNum = phoneNum;
         this.verified=false;
-        this.enabled=true;
+        this.enabled=false;
         this.deleted = false;
     }
 

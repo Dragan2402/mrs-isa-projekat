@@ -18,7 +18,7 @@ public class ReviewDTO {
         this.id=review.getId();
         if (review.getRentingEntity() != null) rentingEntityId=review.getRentingEntity().getId();
         else rentingEntityId = 0L;
-        if (review.getRentingOwner() != null) rentingEntityId=review.getRentingOwner().getId();
+        if (review.getRentingOwner() != null) rentingOwnerId=review.getRentingOwner().getId();
         else rentingOwnerId = 0L;
         this.clientId=review.getClient().getId();
         this.rating=review.getRating();

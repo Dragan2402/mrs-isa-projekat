@@ -86,7 +86,7 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Review review = new Review(rentingEntity, client, reviewDTO.getRating(), reviewDTO.getComment());
-        rentingEntity.addReview(review);
+        //rentingEntity.addReview(review);
         client.addReview(review);
         Review saved = reviewService.save(review);
         if (saved == null)
@@ -105,7 +105,7 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Complaint complaint=new Complaint(client,rentingEntity,complaintDTO.getText());
-        rentingEntity.addComplaint(complaint);
+        //rentingEntity.addComplaint(complaint);
         client.sendComplaint(complaint);
         Complaint complaintSaved = complaintService.save(complaint);
         if (complaintSaved == null)
@@ -124,7 +124,7 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Complaint complaint=new Complaint(client,respodent,complaintDTO.getText());
-        respodent.recieveComplaint(complaint);
+        //respodent.recieveComplaint(complaint);
         client.sendComplaint(complaint);
         Complaint complaintSaved = complaintService.save(complaint);
         if (complaintSaved == null)
@@ -144,7 +144,7 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Review review = new Review(user, client, reviewDTO.getRating(), reviewDTO.getComment());
-        user.addReview(review);
+        //user.addReview(review);
         client.addReview(review);
         Review saved = reviewService.save(review);
         if (saved == null)

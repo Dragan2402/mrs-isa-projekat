@@ -8,7 +8,7 @@
       <button class="custom-btn button-primary" @click="approveReport(complaint, index)">Approve Complaint</button>
     </div>
   </div>
-  <hr>
+  <br><hr><br>
   <div style="border: 1px solid black; margin: 10px; padding: 10px" v-for="(review, index) in this.reviews" v-bind:index="index" :key="review.id">
     <div>Text: {{ review.comment }}</div>
     <div>Approved: {{ review.approved }}</div>
@@ -16,7 +16,7 @@
       <button class="custom-btn button-primary" @click="approveReview(review, index)">Approve Review</button>
     </div>
   </div>
-  <hr>
+  <br><hr><br>
   <div style="border: 1px solid black; margin: 10px; padding: 10px" v-for="(request, index) in this.requests" v-bind:index="index" :key="request.id">
     <div>Text: {{ request.text }}</div>
     <div>Type: {{request.type}}</div>
