@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -20,6 +21,9 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UtilityService utilityService;
     @Autowired
     private RentingEntityService rentingEntityService;
     @Autowired
@@ -107,5 +111,16 @@ public class AdminController {
         request.setDeleted(true);
         requestService.save(request);
         return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/changePassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public ResponseEntity<Boolean> changePassword(Principal adminP, @RequestBody PasswordChangeDTO passwordChangeDTO) {
+        Admin loggedAdmin = adminService.findByUsername(adminP.getName());
+        if (loggedAdmin == null) return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        if (!utilityService.validatePasswords(passwordChangeDTO.getNewPassword(), passwordChangeDTO.getNewPasswordConfirm()))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(adminService.updatePassword(loggedAdmin, passwordChangeDTO), HttpStatus.OK);
     }
 }
