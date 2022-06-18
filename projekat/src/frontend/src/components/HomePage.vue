@@ -84,12 +84,6 @@
         <button class="btn btn-light"  @click="nextPage()">Next</button>
       </div>
       <br><br><br><br><br><br>
-      
-      <button class="btn btn-primary" @click="goToUserProfile()">User Profile</button>
-      <button class="btn btn-primary" @click="goToFishingClassProfile()">Fishing Class Profile</button>
-      <button class="btn btn-primary" @click="goToVacationHouseProfile()">Vacation House Profile</button>
-      <button class="btn btn-primary" @click="goToShipProfile()">Ship Profile</button>
-      <button class="btn btn-primary" @click="goToReservations()">Reservations</button>
     </div>
   </div>
 </template>
@@ -117,7 +111,7 @@ export default {
       price:[0,1000],
       availabilityInterval: null,
       filterData:{
-        "type":"vacation_houses",
+        "type":"vacationHouses",
         "name":"",
         "address":"",
         "start":null,
@@ -152,15 +146,7 @@ export default {
   },
   
   methods: {       
-    goToReservations(){
-      this.$router.push('/reservations');
-    },
-    goToUserProfile() {
-      this.$router.push('/clientProfile');
-    },
-    goToFishingClassProfile() {
-      this.$router.push('/fishingClassProfile');
-    },
+
     formatRange(dates){
       let from = dates[0];
       let to = dates[1];
@@ -183,18 +169,6 @@ export default {
       const minuteTo = to.getMinutes();
 
       return `${dayFrom}.${monthFrom}.${yearFrom} ${hourFrom}:${minuteFrom} - ${dayTo}.${monthTo}.${yearTo} ${hourTo}:${minuteTo}`
-    },
-    goToVacationHouseProfile() {
-      this.$router.push({
-        name: "vacationHouseProfile",
-        params: {id: 3}
-      });
-    },
-    goToShipProfile() {
-      this.$router.push({
-        name: "shipProfile",
-        params: {id: 1}
-      });
     },
     selectEntity(entity) {
 
@@ -285,6 +259,7 @@ export default {
         this.currentPage=0;
       }
       const url=this.generateUrl();
+   
       axios.get(url).then(response => {
         
         if(response.data.length==0){

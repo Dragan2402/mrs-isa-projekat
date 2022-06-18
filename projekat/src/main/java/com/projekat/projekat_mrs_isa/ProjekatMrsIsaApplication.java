@@ -189,7 +189,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 fisheq1
         );
         shipTemp.setAvailableFrom(LocalDateTime.now());
-        shipTemp.setAvailableTo(LocalDateTime.now().plus(Duration.ofDays(1)));
+        shipTemp.setAvailableTo(LocalDateTime.now().plus(Duration.ofDays(20)));
         shipOwnerTemp1.addShip(shipTemp);
 
         List<String> services=new ArrayList<>();
@@ -226,8 +226,8 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 fisheq1
         );
 
-        fishingClassTemp.setAvailableFrom(LocalDateTime.of(2021,1,1, 20, 15));
-        fishingClassTemp.setAvailableTo(LocalDateTime.of(2021,2,1, 20, 30));
+        fishingClassTemp.setAvailableFrom(LocalDateTime.of(2021,9,1, 20, 15));
+        fishingClassTemp.setAvailableTo(LocalDateTime.of(2021,11,1, 20, 30));
 
         fishingInstructorTemp.addFishingClass(fishingClassTemp);
 
@@ -257,8 +257,8 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 5
         );
 
-        vacationHouseTemp.setAvailableFrom(LocalDateTime.of(2022,1,1, 20, 15));
-        vacationHouseTemp.setAvailableTo(LocalDateTime.of(2022,6,1, 20, 30));
+        vacationHouseTemp.setAvailableFrom(LocalDateTime.of(2022,8,1, 20, 15));
+        vacationHouseTemp.setAvailableTo(LocalDateTime.of(2022,10,1, 20, 30));
 
         List<String> pics2 = new ArrayList<>();
         pics2.add("pictures/renting_entities/4/1.jpg");
@@ -279,7 +279,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 10,
                 2
         );
-        vacationHouseTemp2.setAvailableFrom(LocalDateTime.of(2022,6,1, 20, 15));
+        vacationHouseTemp2.setAvailableFrom(LocalDateTime.of(2022,7,1, 20, 15));
         vacationHouseTemp2.setAvailableTo(LocalDateTime.of(2022,10,1, 20, 30));
 
         List<String> pics3=new ArrayList<>();
@@ -292,8 +292,8 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                         "usled uvek prisutne ruže vetrova.",pics3,"NO DRINKING",50d,"Mini bar ne radi","3 dana ranije",2,4);
 
 
-        vacationHouseTemp3.setAvailableFrom(LocalDateTime.of(2022,4,1, 20, 15));
-        vacationHouseTemp3.setAvailableTo(LocalDateTime.of(2022,8,30, 20, 30));
+        vacationHouseTemp3.setAvailableFrom(LocalDateTime.of(2022,9,1, 20, 15));
+        vacationHouseTemp3.setAvailableTo(LocalDateTime.of(2022,11,30, 20, 30));
 
         vacHouseOwnerTemp2.addVacationHouse(vacationHouseTemp3);
 
@@ -459,8 +459,8 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 4,
                 fisheq1
         );
-        shipTemp2.setAvailableFrom(LocalDateTime.of(2021,1,1, 20, 15));
-        shipTemp2.setAvailableTo(LocalDateTime.of(2021,2,1, 20, 30));
+        shipTemp2.setAvailableFrom(LocalDateTime.of(2021,8,1, 20, 15));
+        shipTemp2.setAvailableTo(LocalDateTime.of(2021,11,1, 20, 30));
         shipOwnerTemp1.addShip(shipTemp2);
         shipRep.save(shipTemp2);
 
@@ -487,7 +487,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 fisheq1
         );
 
-        fishingClassTemp2.setAvailableFrom(LocalDateTime.of(2022,7,1, 20, 15));
+        fishingClassTemp2.setAvailableFrom(LocalDateTime.of(2022,8,1, 20, 15));
         fishingClassTemp2.setAvailableTo(LocalDateTime.of(2022,9,1, 20, 30));
         fishingInstructorTemp.addFishingClass(fishingClassTemp2);
         fishingClassRep.save(fishingClassTemp2);

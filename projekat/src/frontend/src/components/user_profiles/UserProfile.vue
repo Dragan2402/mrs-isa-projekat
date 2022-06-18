@@ -15,6 +15,7 @@ export default {
     onMounted(() => {
       axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
+            console.log(response);
             if(response.data.accountType === "CLIENT") {
               router.push({name: "clientProfile"});
 
@@ -36,6 +37,7 @@ export default {
           });
     })
   }
+  
 }
 </script>
 

@@ -5,6 +5,7 @@ import com.projekat.projekat_mrs_isa.dto.*;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.repository.ClientRepository;
 import com.projekat.projekat_mrs_isa.repository.RentingEntityRepository;
+import com.projekat.projekat_mrs_isa.repository.ReservationRepository;
 import com.projekat.projekat_mrs_isa.repository.RoleRepository;
 import com.projekat.projekat_mrs_isa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -37,7 +40,7 @@ public class ClientServiceImpl implements ClientService {
     private OfferService offerService;
 
     @Autowired
-    private ReservationService reservationService;
+    private ReservationRepository reservationRepository;
 
     @Autowired
     private EmailService emailService;
@@ -131,8 +134,10 @@ public class ClientServiceImpl implements ClientService {
             return null;
         List<TakenPeriodDTO> takenPeriod = new ArrayList<>();
         for(Reservation reservation : rentingEntity.getReservations()){
-            TakenPeriodDTO takenPeriodDTO=new TakenPeriodDTO(reservation.getStart(),reservation.getStart().plus(reservation.getDuration()),"Reservation");
-            takenPeriod.add(takenPeriodDTO);
+                if(!reservation.isDeleted()){
+                TakenPeriodDTO takenPeriodDTO=new TakenPeriodDTO(reservation.getStart(),reservation.getStart().plus(reservation.getDuration()),"Reservation");
+                takenPeriod.add(takenPeriodDTO);
+            }
         }
         for(Offer offer : rentingEntity.getOffers()){
             TakenPeriodDTO takenPeriodDTO=new TakenPeriodDTO(offer.getStart(),offer.getStart().plus(offer.getDuration()),"Offer");
@@ -144,8 +149,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     @Transactional
     public Boolean makeClientReservation(Client logged, ReservationRequestDTO reservationRequestDTO) throws ObjectOptimisticLockingFailureException {
-        reservationRequestDTO.setStart(reservationRequestDTO.getStart().plusDays(1));
-        reservationRequestDTO.setEnd(reservationRequestDTO.getEnd().plusDays(1));
+        reservationRequestDTO.setStart(reservationRequestDTO.getStart().plusHours(2));
+        reservationRequestDTO.setEnd(reservationRequestDTO.getEnd().plusHours(2));
         Duration duration=Duration.between(reservationRequestDTO.getStart(), reservationRequestDTO.getEnd());
         RentingEntity rentingEntity=rentingEntityService.findById(reservationRequestDTO.getRentingEntityId());
         if (rentingEntity==null)
@@ -153,11 +158,32 @@ public class ClientServiceImpl implements ClientService {
         Reservation reservation= new Reservation(reservationRequestDTO.getPlace(), reservationRequestDTO.getClientLimit(),
                 reservationRequestDTO.getAdditionalServices(),reservationRequestDTO.getPrice(),rentingEntity,
                 logged,reservationRequestDTO.getStart(),duration);
-        logged.addReservation(reservation);
-        rentingEntity.addReservation(reservation);
-        reservationService.save(reservation);
-        emailService.confirmReservationMail(logged,reservation);
+        if(haveNotMadeReservationBefore(logged,reservation)){
+            logged.addReservation(reservation);
+            rentingEntity.addReservation(reservation);
+            reservationRepository.save(reservation);
+            emailService.confirmReservationMail(logged,reservation);
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional
+    public boolean haveNotMadeReservationBefore(Client logged, Reservation reservation) {
+        for(Reservation reservation_made : findAllCanceledReservationClient(logged)) {
+            if (Objects.equals(reservation_made.getRentingEntity().getId(), reservation.getRentingEntity().getId()) &&  reservation_made.getDuration().equals(reservation.getDuration()))
+            {
+                LocalDateTime reservationHourBefore = reservation.getStart().minusHours(1);
+                LocalDateTime reservationHourAfter = reservation.getStart().plusHours(1);
+                System.out.println(reservationHourBefore);
+                System.out.println(reservationHourAfter);
+                System.out.println(reservation_made.getStart());
+                if(reservation_made.getStart().compareTo(reservationHourBefore)>=0 && reservation_made.getStart().compareTo(reservationHourAfter)<=0)
+                    return false;
+            }
+        }
         return true;
+
     }
 
     @Override
@@ -176,11 +202,16 @@ public class ClientServiceImpl implements ClientService {
                 offer.getPrice(),offer.getRentingEntity(),clientLogged,offer.getStart(),offer.getDuration());
         clientLogged.addReservation(reservation);
         offer.getRentingEntity().addReservation(reservation);
-        reservationService.save(reservation);
+        reservationRepository.save(reservation);
         offer.setDeleted(true);
         offerService.save(offer);
         emailService.confirmReservationMail(clientLogged,reservation);
         return  true;
+    }
+
+    @Override
+    public List<Reservation> findAllCanceledReservationClient(Client clientLogged) {
+        return reservationRepository.findAllCanceledReservationClient(clientLogged);
     }
 
     @Override

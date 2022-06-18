@@ -9,9 +9,9 @@
         <button type="button"  v-if="signUp" @click="jmpToRegistrationPage()"  style="margin-right: 0" class="custom-btn button-primary">Register</button>
       </div>
       <div class="nav-right" v-else>
-        <img v-bind:src="'data:image/jpeg;base64,' + loggedPicture" style="width: 50px; height: 40px;">
+        <img v-bind:src="'data:image/jpeg;base64,' + loggedPicture" style="width: 50px; height: 40px;" @click="jmpToUserProfile()">
         <!--        <router-link v-if="loggedUser.accountType==='CLIENT'" class="link-light text-decoration-none" :to="{name: 'clientProfile'}">{{loggedUser.username}}</router-link>-->
-        <router-link class="link-light text-decoration-none" :to="{name: 'userProfile'}">{{loggedUser.username}}</router-link>
+        <label class="link-light text-decoration-none" @click="jmpToUserProfile()">{{loggedUser.username}}</label>
         <button type="button"  @click="logout()" class="custom-btn button-outline" >Logout</button>
       </div>
     </div>
@@ -40,12 +40,13 @@ export default {
         // this.signIn=true;
         // this.signUp=true;
         // this.signedIn=false;
-        this.signIn=false;
-        this.signUp=false;
-        this.signedIn=true;      
+     
         axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {
           this.loggedUser=response.data;
           this.accountType = response.data.accountType;
+          this.signIn=false;
+          this.signUp=false;
+          this.signedIn=true; 
 
         });
         axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.loggedPicture=response.data));
@@ -66,6 +67,15 @@ export default {
     },
     jmpToLoginPage(){
       this.$router.push("/loginPage")
+    },
+    jmpToUserProfile(){
+      if(this.loggedUser.accountType==="CLIENT"){
+        this.$router.push({name: "clientProfile"});
+      }else if (this.loggedUser.accountType==="VH_OWNER"){
+        this.$router.push({name: "ownerHome"});
+      }else if(this.loggedUser.accountType==="ADMIN"){
+       this.$router.push({name: "adminInfo"})
+      }
     },
     logout(){
       this.accessToken=null;

@@ -14,7 +14,7 @@ import ForgotPasswordPage from "./components/ForgotPasswordPage";
 import NewPasswordPage from "./components/NewPasswordPage";
 import VacationHouseProfile from "@/components/VacationHouseProfile";
 import RentingEntityPreview from "@/components/RentingEntityPreview";
-import ReservationsPage from "@/components/ReservationsPage";
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import PictureInput from 'vue-picture-input'
@@ -46,8 +46,7 @@ const routes = [
     { name: "homePage", path: "/", component: HomePage },
     { path: "/registrationPage", component: RegistrationPage },
     { name: "loginPage", path: "/loginPage", component: LoginPage },
-    // { name: "clientProfile", path: "/clientProfile", component: ClientProfile },
-    { path: "/reservations", component: ReservationsPage },
+    { name: "clientProfile", path: "/clientProfile", component: ClientProfile },
     { path: "/fishingClassProfile", component: FishingClassProfile },
     { name: "vacationHouseProfile", path: "/vacationHouseProfile", component: VacationHouseProfile },
     { name: "shipProfile", path: "/shipProfile", component: ShipProfile },
@@ -62,24 +61,24 @@ const routes = [
         children: [
             {
                 name: "ownerProfile",
-                path: "/profile",
+                path: "/profileO",
                 component: OwnerProfile,
                 children: [
-                    { name: "ownerHome", path: "/profile", component: OwnerHome },
-                    { name: "ownerInfo", path: "/profile", component: OwnerInfo }
+                    { name: "ownerHome", path: "/profileO", component: OwnerHome },
+                    { name: "ownerInfo", path: "/profileO", component: OwnerInfo }
                 ]
             },
             {
                 name: "clientProfile",
-                path: "/profile",
+                path: "/profileC",
                 component: ClientProfile
             },
             {
                 name: "adminProfile",
-                path: "/profile",
+                path: "/profileA",
                 component: AdminProfile,
                 children: [
-                    {name: "adminInfo", path: "/profile", component: AdminInfo}
+                    {name: "adminInfo", path: "/profileA", component: AdminInfo}
                 ]
             }
         ]

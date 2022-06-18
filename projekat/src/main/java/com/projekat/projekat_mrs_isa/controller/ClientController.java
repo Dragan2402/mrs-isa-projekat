@@ -201,7 +201,7 @@ public class ClientController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         List<ReservationDTO> reservationsDtos = new ArrayList<>();
         for (Reservation reservation : client.getReservations()) {
-            if (reservation.getStart().plus(reservation.getDuration()).compareTo(LocalDateTime.now()) < 0) {
+            if (reservation.getStart().plus(reservation.getDuration()).compareTo(LocalDateTime.now()) < 0 && !reservation.isDeleted()) {
                 ReservationDTO reservationDTO = new ReservationDTO(reservation);
                 reservationDTO.setRentingEntityOwnerId(getRentingEntityOwnerId(reservation.getRentingEntity()));
                 reservationDTO.setRentingEntityOwner(getRentingEntityOwner(reservation.getRentingEntity()));
@@ -225,7 +225,7 @@ public class ClientController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         List<ReservationDTO> reservationsDtos = new ArrayList<>();
         for (Reservation reservation : client.getReservations()) {
-            if (reservation.getStart().plus(reservation.getDuration()).compareTo(LocalDateTime.now()) >= 0) {
+            if (reservation.getStart().plus(reservation.getDuration()).compareTo(LocalDateTime.now()) >= 0 && !reservation.isDeleted()) {
                 ReservationDTO reservationDTO = new ReservationDTO(reservation);
                 reservationDTO.setRentingEntityOwnerId(getRentingEntityOwnerId(reservation.getRentingEntity()));
                 reservationDTO.setRentingEntityOwner(getRentingEntityOwner(reservation.getRentingEntity()));

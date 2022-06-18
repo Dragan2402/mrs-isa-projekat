@@ -3,6 +3,7 @@ package com.projekat.projekat_mrs_isa.service;
 import com.projekat.projekat_mrs_isa.dto.*;
 import com.projekat.projekat_mrs_isa.model.Client;
 import com.projekat.projekat_mrs_isa.model.Offer;
+import com.projekat.projekat_mrs_isa.model.Reservation;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 import java.util.List;
@@ -48,4 +49,6 @@ public interface ClientService {
     Boolean updatePassword(Client logged, PasswordChangeDTO passwordChangeDTO);
 
     Boolean makeQuickReservation(Client clientLogged, Offer offer) throws ObjectOptimisticLockingFailureException;
+
+    List<Reservation> findAllCanceledReservationClient(Client clientLogged);
 }
