@@ -49,6 +49,9 @@ public abstract class RentingEntity {
     @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Set<Reservation> reservations = new HashSet<>();
 
+    @Column(name = "reservations_counter")
+    private Integer reservationsCounter;
+
     @OneToMany(mappedBy = "rentingEntity" , fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private Set<Review> reviews = new HashSet<>();
 
@@ -94,6 +97,7 @@ public abstract class RentingEntity {
         this.cancellationConditions = cancellationConditions;
         this.rating=0.0;
         this.reviewsNumber=0;
+        reservationsCounter=0;
         this.deleted = false;
     }
 
@@ -161,10 +165,12 @@ public abstract class RentingEntity {
     }
     public void addReservation(Reservation reservation) {
         reservations.add(reservation);
+        reservationsCounter++;
         reservation.setRentingEntity(this);
     }
     public void removeReservation(Reservation reservation) {
         reservations.remove(reservation);
+        reservationsCounter--;
         reservation.setRentingEntity(null);
     }
     public void addReview(Review review){

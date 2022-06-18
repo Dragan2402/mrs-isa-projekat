@@ -15,4 +15,14 @@ public class RentingEntityServiceImpl implements RentingEntityService {
     public RentingEntity findById(Long id) {
         return rentingEntityRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public void save(RentingEntity rentingEntity) {
+        rentingEntityRepository.save(rentingEntity);
+    }
+
+    @Override
+    public void flush() {
+        rentingEntityRepository.flush();
+    }
 }
