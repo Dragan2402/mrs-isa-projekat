@@ -83,8 +83,10 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-body">
-          <v-date-picker style="width: 100%" v-model="range" mode='dateTime' color="blue" is24hr :minute-increment="30" is-range  :min-date=minDate :max-date=maxDate :attributes='attributes'>
-          </v-date-picker>
+          <div v-if="loadedCalendar">
+            <v-date-picker style="width: 100%" v-model="range" mode='dateTime' color="blue" is24hr :minute-increment="30" is-range  :min-date=minDate :max-date=maxDate :attributes='attributes'>
+            </v-date-picker>
+          </div>
           <div style="margin-top: 10px" v-for="service in additionalServices" :key="service">
             <span style="margin-right: 10px">{{service}} </span>
             <input type="checkbox" v-model="selectedServices" :value="service" checked/>
@@ -120,8 +122,7 @@ export default {
       additionalServices:[],
       selectedServices:[],
       loaded:false,
-      minDate:null,
-      maxDate:null,  
+      loadedCalendar:false,
       takenDates:[],
       range: {
         start: null,
@@ -133,6 +134,8 @@ export default {
     }
   },
   mounted(){
+    this.minDate=null;
+    this.maxDate=null;
     this.displayType = this.$route.params.displayType;
     this.id=this.$route.params.id;
     this.loaded=false;
@@ -336,28 +339,32 @@ methods:{
     {
       this.takeCalendar(response.data);
           const availableFromDate = this.dateFromLocal(this.rentingEntity.availableFrom);
-    const availableToDate = this.dateFromLocal(this.rentingEntity.availableTo);
-    const now = new Date();
+      const availableToDate = this.dateFromLocal(this.rentingEntity.availableTo);
+      const now = new Date();
+      console.log(availableFromDate);
+      console.log(availableToDate);
 
     if(availableFromDate<=now){
-      this.minDate=now;
-      
+      this.minDate=now;     
+
     }else{
       this.minDate = availableFromDate;
+
     }
 
     if(availableToDate <= now){    
       this.maxDate=now;
+
     }else{
       this.maxDate = availableToDate;
+
     }
     
- 
-    
-    //this.minDate = this.dateFromLocal(this.rentingEntity.availableFrom);
-    //this.maxDate = this.dateFromLocal(this.rentingEntity.availableTo);
+  
+
     let availableFrom="Renting entity available from "+this.minDate.getHours()+":"+this.minDate.getMinutes();
-    let availableTo="Renting entity available till "+this.minDate.getHours()+":"+this.minDate.getMinutes();
+    let availableTo="Renting entity available till "+this.maxDate.getHours()+":"+this.maxDate.getMinutes();
+
     if(availableToDate < now && availableFromDate < now){
       this.$toast.error("Entity is not available currently");  
       availableFrom="Not available";
@@ -377,8 +384,8 @@ methods:{
       };
     this.takenDatesPoppers.push(takenStart);
     this.takenDatesPoppers.push(takenEnd);
-      
-      });
+    this.loadedCalendar=true;
+    });
     let servicesPath;
     if(this.displayType==0){
       servicesPath="/api/vacationHouseOwners/getServices/"+this.rentingEntity.ownerId;

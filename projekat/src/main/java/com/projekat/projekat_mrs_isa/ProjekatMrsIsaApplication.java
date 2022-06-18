@@ -257,7 +257,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 5
         );
 
-        vacationHouseTemp.setAvailableFrom(LocalDateTime.of(2022,8,1, 20, 15));
+        vacationHouseTemp.setAvailableFrom(LocalDateTime.of(2022,8,2, 20, 15));
         vacationHouseTemp.setAvailableTo(LocalDateTime.of(2022,10,1, 20, 30));
 
         List<String> pics2 = new ArrayList<>();
