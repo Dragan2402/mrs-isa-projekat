@@ -15,4 +15,7 @@ public interface ReservationRepository extends JpaRepository<Reservation,Long> {
 
     @Query("select reservation from Reservation reservation where reservation.client = ?1 and reservation.deleted = true")
     List<Reservation> findAllCanceledReservationClient(Client client);
+
+    @Query("select reservation from Reservation reservation where reservation.client = ?1 and reservation.deleted=false")
+    List<Reservation> getByClient(Client client);
 }

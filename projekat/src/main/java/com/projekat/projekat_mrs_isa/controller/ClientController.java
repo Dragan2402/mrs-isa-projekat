@@ -38,20 +38,12 @@ public class ClientController {
     @Autowired
     private RentingEntityService rentingEntityService;
 
-    @Autowired
-    private VacationHouseService vacationHouseService;
 
-    @Autowired
-    private ShipService shipService;
-
-    @Autowired
-    private FishingClassService fishingClassService;
 
     @Autowired
     private UtilityService utilityService;
 
-    @Autowired
-    private EmailService emailService;
+
 
     @Autowired
     private ComplaintService complaintService;
@@ -199,21 +191,7 @@ public class ClientController {
         Client client = clientService.findByUsername(clientP.getName());
         if (client == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        List<ReservationDTO> reservationsDtos = new ArrayList<>();
-        for (Reservation reservation : client.getReservations()) {
-            if (reservation.getStart().plus(reservation.getDuration()).compareTo(LocalDateTime.now()) < 0 && !reservation.isDeleted()) {
-                ReservationDTO reservationDTO = new ReservationDTO(reservation);
-                reservationDTO.setRentingEntityOwnerId(getRentingEntityOwnerId(reservation.getRentingEntity()));
-                reservationDTO.setRentingEntityOwner(getRentingEntityOwner(reservation.getRentingEntity()));
-                String picturePath = "pictures/renting_entities/0.png";
-                if (reservation.getRentingEntity().getPictures().size() > 0) {
-                    picturePath = reservation.getRentingEntity().getPictures().get(0);
-                }
-                reservationDTO.setImg(utilityService.getPictureEncoded(picturePath));
-                reservationsDtos.add(reservationDTO);
-            }
-        }
-        return new ResponseEntity<>(reservationsDtos, HttpStatus.OK);
+        return new ResponseEntity<>(clientService.getClientReservationHistory(client), HttpStatus.OK);
     }
 
     @GetMapping(value = "/loggedClient/reservations", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -223,21 +201,7 @@ public class ClientController {
         Client client = clientService.findByUsername(clientP.getName());
         if (client == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        List<ReservationDTO> reservationsDtos = new ArrayList<>();
-        for (Reservation reservation : client.getReservations()) {
-            if (reservation.getStart().plus(reservation.getDuration()).compareTo(LocalDateTime.now()) >= 0 && !reservation.isDeleted()) {
-                ReservationDTO reservationDTO = new ReservationDTO(reservation);
-                reservationDTO.setRentingEntityOwnerId(getRentingEntityOwnerId(reservation.getRentingEntity()));
-                reservationDTO.setRentingEntityOwner(getRentingEntityOwner(reservation.getRentingEntity()));
-                String picturePath = "pictures/renting_entities/0.png";
-                if (reservation.getRentingEntity().getPictures().size() > 0) {
-                    picturePath = reservation.getRentingEntity().getPictures().get(0);
-                }
-                reservationDTO.setImg(utilityService.getPictureEncoded(picturePath));
-                reservationsDtos.add(reservationDTO);
-            }
-        }
-        return new ResponseEntity<>(reservationsDtos, HttpStatus.OK);
+        return new ResponseEntity<>(clientService.getClientReservations(client), HttpStatus.OK);
     }
 
     @PutMapping(value = "/cancelReservation", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -359,30 +323,5 @@ public class ClientController {
         }
     }
 
-    private String getRentingEntityOwner(RentingEntity rentingEntity) {
-
-
-        if (rentingEntity.getREType().equals("VH")) {
-            return vacationHouseService.findById(rentingEntity.getId()).getVacationHouseOwner().getUsername();
-        } else if (rentingEntity.getREType().equals("FC")) {
-            return fishingClassService.findById(rentingEntity.getId()).getFishingInstructor().getUsername();
-        } else {
-            return shipService.findById(rentingEntity.getId()).getShipOwner().getUsername();
-        }
-
-    }
-
-    private Long getRentingEntityOwnerId(RentingEntity rentingEntity) {
-
-
-        if (rentingEntity.getREType().equals("VH")) {
-            return vacationHouseService.findById(rentingEntity.getId()).getVacationHouseOwner().getId();
-        } else if (rentingEntity.getREType().equals("FC")) {
-            return fishingClassService.findById(rentingEntity.getId()).getFishingInstructor().getId();
-        } else {
-            return shipService.findById(rentingEntity.getId()).getShipOwner().getId();
-        }
-
-    }
 
 }

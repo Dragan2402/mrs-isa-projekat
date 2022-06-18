@@ -43,6 +43,15 @@ public class ClientServiceImpl implements ClientService {
     private ReservationRepository reservationRepository;
 
     @Autowired
+    private VacationHouseService vacationHouseService;
+
+    @Autowired
+    private ShipService shipService;
+
+    @Autowired
+    private FishingClassService fishingClassService;
+
+    @Autowired
     private EmailService emailService;
 
 
@@ -115,7 +124,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public List<SubscriptionDTO> getSubscriptions(Client client) {
         List<SubscriptionDTO> subscriptions=new ArrayList<>();
-        for(RentingEntity rentingEntity : client.getSubscriptions()){
+        for(RentingEntity rentingEntity : rentingEntityRepository.getSubscribedRentingEntitiesByClient(client.getId())){
             SubscriptionDTO subscriptionDTO=new SubscriptionDTO(rentingEntity);
             String picturePath="pictures/renting_entities/0.png";
             if(rentingEntity.getPictures().size()>0){
@@ -215,8 +224,71 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public List<ReservationDTO> getClientReservationHistory(Client client) {
+        List<ReservationDTO> reservationsDtos = new ArrayList<>();
+        for (Reservation reservation : reservationRepository.getByClient(client)) {
+            if (reservation.getStart().plus(reservation.getDuration()).compareTo(LocalDateTime.now()) < 0 && !reservation.isDeleted()) {
+                ReservationDTO reservationDTO = new ReservationDTO(reservation);
+                reservationDTO.setRentingEntityOwnerId(getRentingEntityOwnerId(reservation.getRentingEntity()));
+                reservationDTO.setRentingEntityOwner(getRentingEntityOwner(reservation.getRentingEntity()));
+                String picturePath = "pictures/renting_entities/0.png";
+                if (reservation.getRentingEntity().getPictures().size() > 0) {
+                    picturePath = reservation.getRentingEntity().getPictures().get(0);
+                }
+                reservationDTO.setImg(utilityService.getPictureEncoded(picturePath));
+                reservationsDtos.add(reservationDTO);
+            }
+        }
+        return reservationsDtos;
+    }
+
+    @Override
+    public List<ReservationDTO> getClientReservations(Client client) {
+        List<ReservationDTO> reservationsDTOs = new ArrayList<>();
+        for (Reservation reservation : reservationRepository.getByClient(client)) {
+            if (reservation.getStart().plus(reservation.getDuration()).compareTo(LocalDateTime.now()) >= 0 && !reservation.isDeleted()) {
+                ReservationDTO reservationDTO = new ReservationDTO(reservation);
+                reservationDTO.setRentingEntityOwnerId(getRentingEntityOwnerId(reservation.getRentingEntity()));
+                reservationDTO.setRentingEntityOwner(getRentingEntityOwner(reservation.getRentingEntity()));
+                String picturePath = "pictures/renting_entities/0.png";
+                if (reservation.getRentingEntity().getPictures().size() > 0) {
+                    picturePath = reservation.getRentingEntity().getPictures().get(0);
+                }
+                reservationDTO.setImg(utilityService.getPictureEncoded(picturePath));
+                reservationsDTOs.add(reservationDTO);
+            }
+        }
+        return reservationsDTOs;
+    }
+
+    @Override
     public Client findByUsername(String name) {
         return clientRepository.findByUsername(name);
+
+    }
+    private String getRentingEntityOwner(RentingEntity rentingEntity) {
+
+
+        if (rentingEntity.getREType().equals("VH")) {
+            return vacationHouseService.findById(rentingEntity.getId()).getVacationHouseOwner().getUsername();
+        } else if (rentingEntity.getREType().equals("FC")) {
+            return fishingClassService.findById(rentingEntity.getId()).getFishingInstructor().getUsername();
+        } else {
+            return shipService.findById(rentingEntity.getId()).getShipOwner().getUsername();
+        }
+
+    }
+
+    private Long getRentingEntityOwnerId(RentingEntity rentingEntity) {
+
+
+        if (rentingEntity.getREType().equals("VH")) {
+            return vacationHouseService.findById(rentingEntity.getId()).getVacationHouseOwner().getId();
+        } else if (rentingEntity.getREType().equals("FC")) {
+            return fishingClassService.findById(rentingEntity.getId()).getFishingInstructor().getId();
+        } else {
+            return shipService.findById(rentingEntity.getId()).getShipOwner().getId();
+        }
 
     }
 

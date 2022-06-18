@@ -4,6 +4,7 @@ import com.projekat.projekat_mrs_isa.dto.*;
 import com.projekat.projekat_mrs_isa.model.Client;
 import com.projekat.projekat_mrs_isa.model.Offer;
 import com.projekat.projekat_mrs_isa.model.Reservation;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public interface ClientService {
 
     Client findByEmail(String email);
 
+    @Cacheable(value = "user",key = "#name")
     Client findByUsername(String name);
 
     Client addClient(String email, String username, String password, String picture, String firstName, String lastName, String address, String city, String country, String phoneNum);
@@ -51,4 +53,8 @@ public interface ClientService {
     Boolean makeQuickReservation(Client clientLogged, Offer offer) throws ObjectOptimisticLockingFailureException;
 
     List<Reservation> findAllCanceledReservationClient(Client clientLogged);
+
+    List<ReservationDTO> getClientReservationHistory(Client client);
+
+    List<ReservationDTO> getClientReservations(Client client);
 }
