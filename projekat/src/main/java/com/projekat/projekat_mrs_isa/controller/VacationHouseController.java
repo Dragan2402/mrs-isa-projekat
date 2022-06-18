@@ -4,9 +4,11 @@ package com.projekat.projekat_mrs_isa.controller;
 import com.projekat.projekat_mrs_isa.dto.OfferDTO;
 import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
 import com.projekat.projekat_mrs_isa.model.Offer;
+import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.Reservation;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
 import com.projekat.projekat_mrs_isa.service.OfferService;
+import com.projekat.projekat_mrs_isa.service.RentingEntityService;
 import com.projekat.projekat_mrs_isa.service.UtilityService;
 import com.projekat.projekat_mrs_isa.service.VacationHouseService;
 import org.apache.commons.io.FileUtils;
@@ -38,13 +40,10 @@ import java.util.List;
 public class VacationHouseController {
     @Autowired
     private VacationHouseService vacationHouseService;
-    @Autowired
-    private OfferService offerService;
-    @Autowired
-    private UtilityService utilityService;
-    @Autowired
-    private ResourceLoader resourceLoader;
 
+
+    @Autowired
+    private RentingEntityService rentingEntityService;
 
     @GetMapping(value = "/anyUser/**")
     @Transactional
@@ -83,27 +82,8 @@ public class VacationHouseController {
 
     @NotNull
     private List<VacationHouseDTO> getVacationHouseDTOList(List<VacationHouse> vacationHouses) {
-        List<VacationHouseDTO> vacationHouseDTOS=new ArrayList<>();
-        for (VacationHouse vacationHouse : vacationHouses){
-            VacationHouseDTO vacationHouseDTO= new VacationHouseDTO(vacationHouse);
-            String picturePath="pictures/renting_entities/0.png";
-            if(vacationHouse.getPictures().size()>0){
-                picturePath=vacationHouse.getPictures().get(0);
-            }
-            vacationHouseDTO.setImg(utilityService.getPictureEncoded(picturePath));
-            vacationHouseDTOS.add(vacationHouseDTO);
-        }
-        return vacationHouseDTOS;
+        return vacationHouseService.convertToDto(vacationHouses);
     }
-
-    // @GetMapping(value = "/anyUser/all")
-    // //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
-    // @Transactional
-    // public ResponseEntity<List<VacationHouseDTO>> getAllVacationHouses() {
-    //     List<VacationHouse> vacationHouses = vacationHouseService.findAll();
-    //     List<VacationHouseDTO> vacationHouseDTOs = getVacationHouseDTOList(vacationHouses);
-    //     return new ResponseEntity<>(vacationHouseDTOs, HttpStatus.OK);
-    // }
 
     
    @GetMapping(value = "/anyUser/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -117,62 +97,28 @@ public class VacationHouseController {
     }
 
     @GetMapping(value = "/anyUser/{id}/offers", produces = MediaType.APPLICATION_JSON_VALUE)
-    //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     @Transactional
     public ResponseEntity<List<OfferDTO>> getOffers(@PathVariable("id") Long id) {
         VacationHouse vacationHouse = vacationHouseService.findById(id);
         if (vacationHouse == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        List<OfferDTO> offers=new ArrayList<>();
-        for(Offer offer : vacationHouse.getOffers()) {
-            if (offer.getStart().compareTo(LocalDateTime.now()) > 0) {
-                OfferDTO temp = new OfferDTO(offer);
-                offers.add(temp);
-            }else{
-                offer.setDeleted(true);
-            }
-            }
-        return new ResponseEntity<>(offers, HttpStatus.OK);
+
+        return new ResponseEntity<>(rentingEntityService.getOffersByREId(vacationHouse),HttpStatus.OK);
         }
 
 
-//    @GetMapping(value = "/anyUser/{vacationHouseId}/pictures/{pictureId}", produces = MediaType.APPLICATION_JSON_VALUE)
-//   //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
-//    @Transactional
-//    public ResponseEntity<String> getPicture(@PathVariable("vacationHouseId") Long vacationHouseId, @PathVariable("pictureId") Long pictureId) {
-//        Resource r = resourceLoader
-//                .getResource("classpath:pictures/renting_entities/" + vacationHouseId + "/" + pictureId + ".jpg");
-//        try {
-//            File file = r.getFile();
-//            byte[] picture = FileUtils.readFileToByteArray(file);
-//            String encodedPicture = Base64.encodeBase64String(picture);
-//            return new ResponseEntity<>(encodedPicture, HttpStatus.OK);
-//        } catch (IOException e) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
 
     @GetMapping(value = "/anyUser/{vacationHouseId}/pictures/all", produces = MediaType.APPLICATION_JSON_VALUE)
     //@PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     @Transactional
     public ResponseEntity<List<String>> getAllPictures(@PathVariable("vacationHouseId") Long vacationHouseId) {
-        List<String> picturePaths = vacationHouseService.findPicturesByVacationHouseId(vacationHouseId);
-        List<String> encodedPictures = new ArrayList<>();
-
-        for (String picturePath: picturePaths) {
-            Resource r = resourceLoader
-                    .getResource("classpath:" + picturePath);
-            try {
-                File file = r.getFile();
-                byte[] picture = FileUtils.readFileToByteArray(file);
-                String encodedPicture = Base64.encodeBase64String(picture);
-                encodedPictures.add(encodedPicture);
-            } catch (IOException e) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
+        VacationHouse vacationHouse = vacationHouseService.findById(vacationHouseId);
+        if (vacationHouse == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(encodedPictures, HttpStatus.OK);
+
+        return new ResponseEntity<>(rentingEntityService.getPicturesByRentingEntity(vacationHouse),HttpStatus.OK);
     }
 
     @PutMapping(value = "/loggedVacationHouseOwner/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

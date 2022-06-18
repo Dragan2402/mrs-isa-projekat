@@ -5,6 +5,8 @@ import com.projekat.projekat_mrs_isa.dto.ShipDTO;
 import com.projekat.projekat_mrs_isa.model.Offer;
 import com.projekat.projekat_mrs_isa.model.Reservation;
 import com.projekat.projekat_mrs_isa.model.Ship;
+import com.projekat.projekat_mrs_isa.model.VacationHouse;
+import com.projekat.projekat_mrs_isa.service.RentingEntityService;
 import com.projekat.projekat_mrs_isa.service.ShipService;
 import com.projekat.projekat_mrs_isa.service.UtilityService;
 import org.apache.commons.io.FileUtils;
@@ -42,6 +44,9 @@ public class ShipController {
 
     @Autowired
     private UtilityService utilityService;
+
+    @Autowired
+    private RentingEntityService rentingEntityService;
 
     @GetMapping(value = "/anyUser/**")
     @Transactional
@@ -121,16 +126,7 @@ public class ShipController {
         if (ship == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        List<OfferDTO> offers = new ArrayList<>();
-        for(Offer offer : ship.getOffers()) {
-            if (offer.getStart().compareTo(LocalDateTime.now()) > 0) {
-                OfferDTO temp = new OfferDTO(offer);
-                offers.add(temp);
-            }else{
-                offer.setDeleted(true);
-            }
-        }
-        return new ResponseEntity<>(offers, HttpStatus.OK);
+        return new ResponseEntity<>(rentingEntityService.getOffersByREId(ship),HttpStatus.OK);
     }
 
 //    public String encodeImage(RentingEntity rentingEntity){
@@ -155,21 +151,12 @@ public class ShipController {
     @GetMapping(value = "/anyUser/{shipId}/pictures/all", produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     public ResponseEntity<List<String>> getAllPictures(@PathVariable("shipId") Long shipId) {
-        List<String> picturePaths = shipService.findPicturesByShipId(shipId);
-        List<String> encodedPictures = new ArrayList<>();
-
-        for (String picturePath : picturePaths) {
-            Resource r = resourceLoader.getResource("classpath:" + picturePath);
-            try {
-                File file = r.getFile();
-                String encodedPicture = Base64.encodeBase64String(
-                        FileUtils.readFileToByteArray(file));
-                encodedPictures.add(encodedPicture);
-            } catch (IOException e) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
+        Ship ship = shipService.findById(shipId);
+        if (ship == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(encodedPictures, HttpStatus.OK);
+
+        return new ResponseEntity<>(rentingEntityService.getPicturesByRentingEntity(ship),HttpStatus.OK);
     }
 
     @PutMapping(value = "/loggedShipOwner/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

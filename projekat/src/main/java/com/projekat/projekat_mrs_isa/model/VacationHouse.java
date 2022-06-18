@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @SQLDelete(sql = "UPDATE vacation_house SET deleted = true WHERE id = ?")
-public class VacationHouse extends RentingEntity{
+public class VacationHouse extends RentingEntity {
 
     @Column(name = "rooms_quantity", nullable = false)
     private Integer roomsQuantity;

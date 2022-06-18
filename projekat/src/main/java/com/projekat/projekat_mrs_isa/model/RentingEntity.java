@@ -4,6 +4,7 @@ import com.projekat.projekat_mrs_isa.dto.RentingEntityDTO;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.Set;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Where(clause = "deleted = false")
-public abstract class RentingEntity {
+public abstract class RentingEntity  implements Serializable {
     @Id
     @SequenceGenerator(name = "rentingEntitiesSeqGen", sequenceName = "rentingEntitiesSeq", initialValue = 1, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rentingEntitiesSeqGen")

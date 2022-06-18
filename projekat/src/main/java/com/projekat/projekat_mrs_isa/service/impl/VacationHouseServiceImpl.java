@@ -7,6 +7,8 @@ import com.projekat.projekat_mrs_isa.repository.ReservationRepository;
 import com.projekat.projekat_mrs_isa.repository.VacationHouseRepository;
 import com.projekat.projekat_mrs_isa.service.UtilityService;
 import com.projekat.projekat_mrs_isa.service.VacationHouseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +24,8 @@ import java.util.List;
 @Service
 public class VacationHouseServiceImpl implements VacationHouseService {
 
+    private final Logger LOG = LoggerFactory.getLogger(VacationHouseServiceImpl.class);
+
     @Autowired
     private VacationHouseRepository vacationHouseRepository;
 
@@ -30,7 +34,10 @@ public class VacationHouseServiceImpl implements VacationHouseService {
 
     @Override
     public VacationHouse findById(Long id) {
-        return vacationHouseRepository.findById(id).orElse(null);
+        {
+            LOG.info("Vacation house with id:"+id+" successfully cached");
+            return vacationHouseRepository.findById(id).orElse(null);
+        }
     }
 
     @Autowired
@@ -92,6 +99,7 @@ public class VacationHouseServiceImpl implements VacationHouseService {
         List<VacationHouseDTO> vacationHouseDTOS=new ArrayList<>();
         for (VacationHouse vacationHouse : vacationHouses){
             VacationHouseDTO vacationHouseDTO= new VacationHouseDTO(vacationHouse);
+            LOG.info("Vacation house with id:"+vacationHouseDTO.getId()+" successfully cached");
             String picturePath="pictures/renting_entities/0.png";
             if(vacationHouse.getPictures().size()>0){
                 picturePath=vacationHouse.getPictures().get(0);
@@ -109,6 +117,7 @@ public class VacationHouseServiceImpl implements VacationHouseService {
         List<VacationHouseDTO> vacationHouseDTOS=new ArrayList<>();
         for (VacationHouse vacationHouse : vacationHouses){
             VacationHouseDTO vacationHouseDTO= new VacationHouseDTO(vacationHouse);
+            LOG.info("Vacation house with id:"+vacationHouseDTO.getId()+" successfully cached");
             String picturePath="pictures/renting_entities/0.png";
             if(vacationHouse.getPictures().size()>0){
                 picturePath=vacationHouse.getPictures().get(0);
@@ -125,5 +134,20 @@ public class VacationHouseServiceImpl implements VacationHouseService {
             return reservationRepository.findAllFromEntity(vacationHouse);
         else
             return new ArrayList<>();
+    }
+
+    @Override
+    public List<VacationHouseDTO> convertToDto(List<VacationHouse> vacationHouses) {
+        List<VacationHouseDTO> vacationHouseDTOS=new ArrayList<>();
+        for (VacationHouse vacationHouse : vacationHouses){
+            VacationHouseDTO vacationHouseDTO= new VacationHouseDTO(vacationHouse);
+            String picturePath="pictures/renting_entities/0.png";
+            if(vacationHouse.getPictures().size()>0){
+                picturePath=vacationHouse.getPictures().get(0);
+            }
+            vacationHouseDTO.setImg(utilityService.getPictureEncoded(picturePath));
+            vacationHouseDTOS.add(vacationHouseDTO);
+        }
+        return vacationHouseDTOS;
     }
 }

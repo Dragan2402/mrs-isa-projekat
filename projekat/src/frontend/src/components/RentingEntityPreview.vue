@@ -146,14 +146,14 @@ export default {
       pathPictures="/api/vacationHouses/anyUser/"+this.id+"/pictures/all";
       }
     else if(this.displayType==1 && this.id != undefined){
-      path="/api/ships/"+this.id;
-      pathOffers="/api/ships/"+this.id+"/offers";
-      pathPictures="/api/ships/"+this.id+"/pictures/all";
+      path="/api/ships/anyUser/"+this.id;
+      pathOffers="/api/ships/anyUser/"+this.id+"/offers";
+      pathPictures="/api/ships/anyUser/"+this.id+"/pictures/all";
     }
     else if(this.id != undefined){
-      path="/api/fishingClasses/"+this.id;
-      pathOffers="/api/fishingClasses/"+this.id+"/offers";
-      pathPictures="/api/fishingClasses/"+this.id+"/pictures/all";
+      path="/api/fishingClasses/anyUser/"+this.id;
+      pathOffers="/api/fishingClasses/anyUser/"+this.id+"/offers";
+      pathPictures="/api/fishingClasses/anyUser/"+this.id+"/pictures/all";
     }
 
     axios.get(path).then( response => {
