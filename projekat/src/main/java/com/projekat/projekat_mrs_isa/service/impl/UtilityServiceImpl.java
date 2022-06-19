@@ -159,7 +159,7 @@ public class UtilityServiceImpl implements UtilityService {
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
             return true;
         } catch (IOException ioe) {
-            throw new IOException("Could not save image file: " + fileName, ioe);
+            throw new IOException("Could not save the image file: " + fileName, ioe);
 
         }
     }
