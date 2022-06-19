@@ -1,0 +1,65 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "-": "^0.0.1",
+    "@johmun/vue-tags-input": "^2.1.0",
+    "@meforma/vue-toaster": "^1.3.0",
+    "@vueform/slider": "^2.0.10",
+    "@vuepic/vue-datepicker": "^3.1.1",
+    "axios": "^0.26.1",
+    "bootstrap": "^5.1.3",
+    "bootstrap-icons": "^1.8.1",
+    "core-js": "^3.8.3",
+    "moment": "^2.29.3",
+    "save": "^2.4.0",
+    "stylus": "^0.57.0",
+    "stylus-loader": "^3.0.2",
+    "v-calendar": "^3.0.0-alpha.8",
+    "vue": "^3.2.13",
+    "vue-axios": "^3.4.1",
+    "vue-i18n": "^8.27.1",
+    "vue-picture-input": "^2.1.6",
+    "vue-router": "^4.0.14",
+    "vue-toastr": "^2.1.2",
+    "vue3-country-region-select": "^1.0.0",
+    "vue3-star-ratings": "^1.1.0",
+    "vue3-tags-input": "^1.0.2",
+    "vue3-tel-input": "^1.0.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^8.0.3"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "@babel/eslint-parser"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+}
