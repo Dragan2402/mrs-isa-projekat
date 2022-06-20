@@ -383,7 +383,7 @@ export default {
           this.$root.accessToken=null;
           this.$root.signedIn=false;
           localStorage.setItem("jwt",null);          
-          window.location.href = 'http://localhost:3000/loginPage';
+          this.$router.push("/loginPage");
         }else{
           this.$toast.error("Error");
         }
@@ -456,7 +456,7 @@ export default {
           
       this.user.phoneNum=this.validNumber;
       
-      axios.post("https://renting-buddy-spring.herokuapp.com/api/clients/loggedClient",this.user,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => this.user=response.data ).then(this.toastMessage());
+      axios.put("https://renting-buddy-spring.herokuapp.com/api/clients/loggedClient",this.user,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => this.user=response.data ).then(this.toastMessage());
       this.editing=false;
     },
     telValidate(phoneNum) {
@@ -490,7 +490,7 @@ export default {
       }else{
       const fd=new FormData();
       fd.append('image',this.selectedFile,this.selectedFile.name);
-      axios.post("https://renting-buddy-spring.herokuapp.com/api/clients/loggedClient/picture",fd,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} },{
+      axios.put("https://renting-buddy-spring.herokuapp.com/api/clients/loggedClient/picture",fd,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} },{
         onUploadProgress: uploadEvent => {
           console.log("Upload Progress: "+ Math.round(uploadEvent.loaded/uploadEvent.total * 100) + '%');
         }

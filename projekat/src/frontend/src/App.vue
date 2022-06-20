@@ -81,7 +81,7 @@ export default {
     logout(){
       this.accessToken=null;
       localStorage.setItem("jwt",null);          
-      window.location.href = 'http://localhost:3000/';
+      this.$router.push("/");
      
     }
   }
