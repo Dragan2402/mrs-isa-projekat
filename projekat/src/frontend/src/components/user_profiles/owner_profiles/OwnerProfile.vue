@@ -38,8 +38,10 @@ export default {
     let page = ref("homePage");
 
     onMounted(() => {
+      console.log("ownerProfile onMounted")
       axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
+            console.log("ownerProfile axios then")
             owner.value = response.data;
 
             if(response.data.accountType === "VH_OWNER") {
@@ -60,6 +62,7 @@ export default {
     });
 
     function routePage() {
+      console.log("ownerProfile routePage home")
       if(page.value === "homePage")
         router.push({name: "ownerHome"});
       else if(page.value === "infoPage")

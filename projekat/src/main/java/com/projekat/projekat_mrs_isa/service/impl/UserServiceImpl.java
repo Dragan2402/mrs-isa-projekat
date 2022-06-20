@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.service.impl;
 
 import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
+import com.projekat.projekat_mrs_isa.dto.PasswordChangeDTO;
 import com.projekat.projekat_mrs_isa.dto.PasswordResetDTO;
 import com.projekat.projekat_mrs_isa.model.User;
 import com.projekat.projekat_mrs_isa.repository.UserRepository;
@@ -122,6 +123,15 @@ public class UserServiceImpl implements UserService {
         Duration diff = Duration.between(tokenCreationDate.toLocalDateTime(), now);
         System.out.println(diff);
         return diff.toMinutes() >= 60;
+    }
+
+    @Override
+    public Boolean updatePassword(User logged, PasswordChangeDTO passwordChangeDTO) {
+        if(!passwordEncoderComponent.decode(passwordChangeDTO.getOldPassword(), logged.getPassword()))
+            return false;
+        logged.setPassword(passwordEncoderComponent.encode(passwordChangeDTO.getNewPassword()));
+        save(logged);
+        return true;
     }
 
 }

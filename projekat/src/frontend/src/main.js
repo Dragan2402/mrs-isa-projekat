@@ -54,16 +54,16 @@ const routes = [
     { name: "forgotPasswordPage", path: "/forgotPasswordPage", component: ForgotPasswordPage },
     {
         name: "userProfile",
-        path: "/profile",
+        path: "/user",
         component: UserProfile,
         children: [
             {
                 name: "ownerProfile",
-                path: "/profile",
+                path: "/owner",
                 component: OwnerProfile,
                 children: [
-                    { name: "ownerHome", path: "/profile", component: OwnerHome },
-                    { name: "ownerInfo", path: "/profile", component: OwnerInfo }
+                    { name: "ownerHome", path: "/home", component: OwnerHome },
+                    { name: "ownerInfo", path: "/info", component: OwnerInfo }
                 ]
             },
             {

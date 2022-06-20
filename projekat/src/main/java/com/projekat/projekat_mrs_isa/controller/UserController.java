@@ -1,5 +1,6 @@
 package com.projekat.projekat_mrs_isa.controller;
 
+import com.projekat.projekat_mrs_isa.dto.PasswordChangeDTO;
 import com.projekat.projekat_mrs_isa.dto.RequestDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.Request;
@@ -73,5 +74,18 @@ public class UserController {
         String picturePath = userService.findByUsername(userP.getName()).getPicture();
         return new ResponseEntity<>(utilityService.getPictureEncoded(picturePath), HttpStatus.OK);
 
+    }
+
+    @PutMapping(value = "/loggedUser/changePassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
+    @Transactional
+    public ResponseEntity<Boolean> changePassword(Principal userP, @RequestBody PasswordChangeDTO passwordChangeDTO) {
+        User logged = userService.findByUsername(userP.getName());
+        if (logged == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(!utilityService.validatePasswords(passwordChangeDTO.getNewPassword(),passwordChangeDTO.getNewPasswordConfirm()))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Boolean success = userService.updatePassword(logged, passwordChangeDTO);
+        return new ResponseEntity<>(success, HttpStatus.OK);
     }
 }

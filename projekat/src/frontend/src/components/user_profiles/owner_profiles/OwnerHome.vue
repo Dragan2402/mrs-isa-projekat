@@ -230,10 +230,12 @@ export default {
     // })
 
     onMounted(() => {
+      console.log("ownerHome onMounted")
       axios
           .get("/api/users/loggedUser",
           { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
+            console.log("ownerHome axios then")
             if(response.data.accountType === "VH_OWNER") {
               entityTypeInfo.value = {
                 name: "vacation house",
@@ -251,6 +253,8 @@ export default {
             // else if INSTRUCTOR, ADMIN
 
             } else {
+
+              console.log("ownerHome axios then push")
               router.push({name: "homePage"});
             }
 
