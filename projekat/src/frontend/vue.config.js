@@ -4,16 +4,7 @@ module.exports = defineConfig({
     devServer: {
         port: 3000,
         proxy: {
-            '/api/': {
-                target: 'https://renting-buddy-spring.herokuapp.com/',
-                ws: true,
-                changeOrigin: true
-            },
-            '/auth' : {
-                target: 'https://renting-buddy-spring.herokuapp.com/',
-                ws: true,
-                changeOrigin: true
-            }
+            '/api/': { target: 'https://renting-buddy-spring.herokuapp.com/api', pathRewrite: { '^/api/': '' } }
         }
     }
 })
