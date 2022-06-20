@@ -53,6 +53,9 @@ public class AuthenticationController {
     private UserService userService;
 
     @Autowired
+    private AdminService adminService;
+
+    @Autowired
     private RequestService requestService;
 
     @PostMapping(value = "/login",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
@@ -157,6 +160,18 @@ public class AuthenticationController {
         String registrationReason = (String) userMap.get("registrationReason");
         Request registrationRequest = new Request(fi, registrationReason, RequestType.BECOME_INSTRUCTOR);
         requestService.save(registrationRequest);
+        return new ResponseEntity<>(true,HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/addAdmin", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> addAdmin(@RequestBody Map<String, Object> adminMap){
+        if(!utilityService.validateUserData(adminMap))
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        if(!(userService.isUsernameAvailable((String) adminMap.get("username"))
+                && userService.isUsernameAvailable(((String) adminMap.get("email")).toLowerCase()))) {
+            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
+        }
+        adminService.addAdmin(adminMap);
         return new ResponseEntity<>(true,HttpStatus.CREATED);
     }
 

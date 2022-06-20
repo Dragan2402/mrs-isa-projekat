@@ -30,6 +30,7 @@ public class Client extends User {
                   String country, String phoneNum) {
         super(email, username, password, picture, firstName, lastName, address, city, country, phoneNum);
         super.setType(AccountType.CLIENT);
+        super.setEnabled(true);
 
     }
 

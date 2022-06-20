@@ -56,6 +56,9 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
     private ReservationRepository reservationRep;
 
     @Autowired
+    private FeeRepository feeRepository;
+
+    @Autowired
     private RequestService requestService;
 
     @Autowired
@@ -94,10 +97,14 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         List<Role> rolesVHOwner = roleRepository.findByName("ROLE_VH_OWNER");
         List<Role> rolesFCInstructor = roleRepository.findByName("ROLE_FC_INSTRUCTOR");
 
+        Fee fee = new Fee(0.02);
+        feeRepository.save(fee);
 
-        Admin adminTemp= new Admin("email@maildrop.cc","gageMadjija",passwordEncoderComponent.encode("Gage123"),"pictures/user_pictures/0.png","Dragan"
+
+        Admin adminTemp= new Admin("email@maildrop.cc","Andrej",passwordEncoderComponent.encode("asi123"),"pictures/user_pictures/0.png","Dragan"
         ,"Mirkovic","Hopovska 4","Novi Sad","Serbia","+381692402000");
         adminTemp.setVerified(true);
+        adminTemp.setEnabled(true);
         adminTemp.setRoles(rolesAdmin);
         adminRep.save(adminTemp);
 
@@ -360,9 +367,10 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         vacHouseRep.save(vacHouseOwnerTemp1);
 
         Reservation r = new Reservation( "Rakovac", 5, new ArrayList<>(), 100.0,
-                vacationHouseTemp, clientTemp2,
-                LocalDateTime.of(2022,3,1, 20, 15), Duration.ofDays(3));
+                vacationHouseTemp, clientTemp2,LocalDateTime.of(2022,3,1, 20, 15), Duration.ofDays(3), fee.getValue());
         reservationRep.save(r);
+
+
 
 
         vacationHouseTemp2.addReview(reviewTemp1);
@@ -399,7 +407,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
                 vacationHouseTemp,
                 clientTemp1,
                 LocalDateTime.of(2022,1,24,20,10),
-                Duration.ofDays(3)
+                Duration.ofDays(3), fee.getValue()
         );
 
         Reservation reservationTemp2 = new Reservation(
@@ -410,7 +418,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
                 vacationHouseTemp,
                 clientTemp1,
                 LocalDateTime.of(2022,9,24,20,10),
-                Duration.ofDays(3)
+                Duration.ofDays(3), fee.getValue()
         );
 
         Reservation reservationTemp3 = new Reservation(
@@ -421,7 +429,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
                 vacationHouseTemp,
                 clientTemp1,
                 LocalDateTime.of(2022,5,20,20,10),
-                Duration.ofDays(3)
+                Duration.ofDays(3), fee.getValue()
         );
 
         vacationHouseTemp.addReservation(reservationTemp3);

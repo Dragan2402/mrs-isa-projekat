@@ -78,7 +78,7 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Review review = new Review(rentingEntity, client, reviewDTO.getRating(), reviewDTO.getComment());
-        rentingEntity.addReview(review);
+        //rentingEntity.addReview(review);
         client.addReview(review);
         Review saved = reviewService.save(review);
         if (saved == null)
@@ -97,7 +97,7 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Complaint complaint=new Complaint(client,rentingEntity,complaintDTO.getText());
-        rentingEntity.addComplaint(complaint);
+        //rentingEntity.addComplaint(complaint);
         client.sendComplaint(complaint);
         Complaint complaintSaved = complaintService.save(complaint);
         if (complaintSaved == null)
@@ -116,7 +116,7 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Complaint complaint=new Complaint(client,respodent,complaintDTO.getText());
-        respodent.recieveComplaint(complaint);
+        //respodent.recieveComplaint(complaint);
         client.sendComplaint(complaint);
         Complaint complaintSaved = complaintService.save(complaint);
         if (complaintSaved == null)
@@ -136,7 +136,7 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Review review = new Review(user, client, reviewDTO.getRating(), reviewDTO.getComment());
-        user.addReview(review);
+        //user.addReview(review);
         client.addReview(review);
         Review saved = reviewService.save(review);
         if (saved == null)
@@ -302,26 +302,4 @@ public class ClientController {
             return new ResponseEntity<>(new UserDTO(), HttpStatus.BAD_REQUEST);
         }
     }
-
-
-    @PutMapping(value = "/loggedClient/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasRole('CLIENT')")
-    @Transactional
-    public ResponseEntity<String> updateLoggedClientPicture(Principal clientP, @RequestPart("image") MultipartFile image) throws IOException {
-
-        Client clientToUpdate = clientService.findByUsername(clientP.getName());
-        String pictureName = "pictures/user_pictures/" + clientToUpdate.getId().toString() + ".png";
-        clientToUpdate.setPicture(pictureName);
-        Client updatedClient = clientService.save(clientToUpdate);
-
-        boolean resp = utilityService.saveFile("src/main/resources/", pictureName, image);
-        boolean resp2 = utilityService.saveFile("target/classes/", pictureName, image);
-        if (resp && resp2) {
-            return new ResponseEntity<>(utilityService.getPictureEncoded(updatedClient.getPicture()), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-
 }

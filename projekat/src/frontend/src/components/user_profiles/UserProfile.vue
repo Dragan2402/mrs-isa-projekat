@@ -26,7 +26,7 @@ export default {
             }
 
             else if (response.data.accountType === "ADMIN"){
-              router.push({name: "adminInfo"})
+              router.push({name: "adminProfile"})
             }
 
             else {

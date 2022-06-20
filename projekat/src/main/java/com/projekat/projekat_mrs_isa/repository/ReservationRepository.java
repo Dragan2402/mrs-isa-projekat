@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.repository;
 
 import com.projekat.projekat_mrs_isa.model.Client;
+import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
 import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,8 @@ public interface ReservationRepository extends JpaRepository<Reservation,Long> {
 
     @Query("select reservation from Reservation reservation where reservation.client = ?1 and reservation.deleted=false")
     List<Reservation> getByClient(Client client);
+
+
+    @Query("select new com.projekat.projekat_mrs_isa.dto.ReservationDTO(r) from Reservation r")
+    List<ReservationDTO> findAllDTO();
 }

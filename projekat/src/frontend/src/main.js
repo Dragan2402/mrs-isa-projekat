@@ -39,7 +39,7 @@ import OwnerProfile from "@/components/user_profiles/owner_profiles/OwnerProfile
 import OwnerHome from "@/components/user_profiles/owner_profiles/OwnerHome";
 import OwnerInfo from "@/components/user_profiles/owner_profiles/OwnerInfo";
 import AdminProfile from "@/components/user_profiles/admin_profile/AdminProfile";
-import AdminInfo from "@/components/user_profiles/admin_profile/AdminInfo";
+import FirstLogin from "@/components/user_profiles/admin_profile/FirstLogin";
 
 
 const routes = [
@@ -75,12 +75,15 @@ const routes = [
             },
             {
                 name: "adminProfile",
-                path: "/profileA",
+                path: "/adminProfile",
                 component: AdminProfile,
-                children: [
-                    {name: "adminInfo", path: "/profileA", component: AdminInfo}
-                ]
-            }
+            }                
+            ,
+            {
+                name: "firstLogin",
+                path: "/firstLogin",
+                component: FirstLogin
+            },
         ]
     }
 ];
