@@ -1,12 +1,7 @@
 package com.projekat.projekat_mrs_isa.dto;
 
-import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.Ship;
 import org.jetbrains.annotations.NotNull;
-
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import java.util.List;
 
 public class ShipDTO extends RentingEntityDTO{
     private String type;

@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.service;
 
 import com.projekat.projekat_mrs_isa.model.VacationHouseOwner;
+
 import java.util.List;
 import java.util.Map;
 

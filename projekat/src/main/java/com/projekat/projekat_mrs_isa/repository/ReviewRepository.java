@@ -1,6 +1,5 @@
 package com.projekat.projekat_mrs_isa.repository;
 
-import com.projekat.projekat_mrs_isa.dto.ComplaintDTO;
 import com.projekat.projekat_mrs_isa.dto.ReviewDTO;
 import com.projekat.projekat_mrs_isa.model.Review;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -5,6 +5,7 @@ import com.projekat.projekat_mrs_isa.dto.PasswordResetDTO;
 import com.projekat.projekat_mrs_isa.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
 import java.util.List;
 
 public interface UserService extends UserDetailsService {

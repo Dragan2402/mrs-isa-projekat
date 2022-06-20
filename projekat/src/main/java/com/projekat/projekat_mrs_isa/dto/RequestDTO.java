@@ -2,7 +2,6 @@ package com.projekat.projekat_mrs_isa.dto;
 
 import com.projekat.projekat_mrs_isa.model.Request;
 import com.projekat.projekat_mrs_isa.model.RequestType;
-import com.projekat.projekat_mrs_isa.model.Review;
 import org.jetbrains.annotations.NotNull;
 
 public class RequestDTO {

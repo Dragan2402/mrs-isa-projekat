@@ -1,6 +1,8 @@
 package com.projekat.projekat_mrs_isa.controller;
 
-import com.projekat.projekat_mrs_isa.dto.*;
+import com.projekat.projekat_mrs_isa.dto.ComplaintDTO;
+import com.projekat.projekat_mrs_isa.dto.RequestDTO;
+import com.projekat.projekat_mrs_isa.dto.ReviewDTO;
 import com.projekat.projekat_mrs_isa.model.Complaint;
 import com.projekat.projekat_mrs_isa.model.Request;
 import com.projekat.projekat_mrs_isa.model.Review;
@@ -19,7 +21,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 @RequestMapping(value = "api/admins")
 public class AdminController {
 

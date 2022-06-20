@@ -2,7 +2,6 @@ package com.projekat.projekat_mrs_isa.model;
 
 import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;

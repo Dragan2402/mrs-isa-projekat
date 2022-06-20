@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @RestController
-@CrossOrigin
 @RequestMapping(value = "api/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationController {
     @Autowired

@@ -2,7 +2,6 @@ package com.projekat.projekat_mrs_isa.model;
 
 import org.hibernate.annotations.Where;
 
-
 import javax.persistence.*;
 
 @Entity

@@ -1,6 +1,5 @@
 package com.projekat.projekat_mrs_isa.model;
 
-import com.projekat.projekat_mrs_isa.dto.ComplaintDTO;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;

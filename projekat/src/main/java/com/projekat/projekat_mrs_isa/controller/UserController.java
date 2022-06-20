@@ -19,7 +19,6 @@ import java.security.Principal;
 
 
 @RestController
-@CrossOrigin
 @RequestMapping(value = "api/users")
 public class UserController {
 

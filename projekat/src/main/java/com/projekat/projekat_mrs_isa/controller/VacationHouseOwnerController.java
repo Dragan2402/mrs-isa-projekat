@@ -16,7 +16,6 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 @RequestMapping(value = "api/vacationHouseOwners")
 public class VacationHouseOwnerController {
     @Autowired

@@ -1,6 +1,5 @@
 package com.projekat.projekat_mrs_isa.service.impl;
 
-import com.projekat.projekat_mrs_isa.dto.ComplaintDTO;
 import com.projekat.projekat_mrs_isa.dto.RequestDTO;
 import com.projekat.projekat_mrs_isa.model.Request;
 import com.projekat.projekat_mrs_isa.repository.RequestRepository;

@@ -2,7 +2,6 @@ package com.projekat.projekat_mrs_isa.util;
 
 
 import com.projekat.projekat_mrs_isa.service.ClientService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;

@@ -1,16 +1,8 @@
 package com.projekat.projekat_mrs_isa.repository;
 
-import com.projekat.projekat_mrs_isa.dto.ComplaintDTO;
-import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.Admin;
-import com.projekat.projekat_mrs_isa.model.Client;
-import com.projekat.projekat_mrs_isa.model.Complaint;
-import com.projekat.projekat_mrs_isa.model.VacationHouse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface AdminRepository extends JpaRepository<Admin,Long> {
 

@@ -1,7 +1,6 @@
 package com.projekat.projekat_mrs_isa.dto;
 
 import com.projekat.projekat_mrs_isa.model.FishingClass;
-import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import org.jetbrains.annotations.NotNull;
 
 public class FishingClassDTO extends RentingEntityDTO {

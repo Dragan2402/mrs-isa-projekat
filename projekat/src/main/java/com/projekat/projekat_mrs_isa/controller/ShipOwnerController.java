@@ -15,7 +15,6 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 @RequestMapping(value = "api/shipOwners")
 public class ShipOwnerController {
     @Autowired

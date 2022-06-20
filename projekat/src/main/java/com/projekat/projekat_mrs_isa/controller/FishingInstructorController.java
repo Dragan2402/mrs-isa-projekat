@@ -2,7 +2,6 @@ package com.projekat.projekat_mrs_isa.controller;
 
 
 import com.projekat.projekat_mrs_isa.model.FishingInstructor;
-import com.projekat.projekat_mrs_isa.model.VacationHouseOwner;
 import com.projekat.projekat_mrs_isa.service.FishingInstructorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 @RequestMapping(value = "api/fishingInstructors")
 public class FishingInstructorController {
     @Autowired

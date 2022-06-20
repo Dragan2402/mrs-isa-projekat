@@ -1,7 +1,6 @@
 package com.projekat.projekat_mrs_isa.dto;
 
 import com.projekat.projekat_mrs_isa.model.AccountType;
-import com.projekat.projekat_mrs_isa.model.Client;
 import com.projekat.projekat_mrs_isa.model.User;
 import org.jetbrains.annotations.NotNull;
 

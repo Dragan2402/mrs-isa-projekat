@@ -1,6 +1,5 @@
 package com.projekat.projekat_mrs_isa.controller;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import com.projekat.projekat_mrs_isa.dto.*;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.service.*;
@@ -16,13 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
 @RestController
-@CrossOrigin
 @RequestMapping(value = "api/clients")
 public class ClientController {
 

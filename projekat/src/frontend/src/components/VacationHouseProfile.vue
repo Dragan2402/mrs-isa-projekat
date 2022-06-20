@@ -131,7 +131,7 @@
 
 <script>
 import axios from "axios";
-import { useRoute } from 'vue-router';
+import {useRoute} from 'vue-router';
 import {getCurrentInstance, onMounted, ref} from 'vue';
 
 export default {
