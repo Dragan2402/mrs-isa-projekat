@@ -2,7 +2,9 @@
     "root": "dist/",
     "proxies":  {
         "/api": {
-            "origin": "https://renting-buddy-spring.herokuapp.com/"
+            "origin": "https://renting-buddy-spring.herokuapp.com/",
+            "ws": true,
+            "changeOrigin":true
         }
     }
 }
