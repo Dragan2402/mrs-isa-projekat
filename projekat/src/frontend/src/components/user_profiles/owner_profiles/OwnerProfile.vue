@@ -38,7 +38,7 @@ export default {
     let page = ref("homePage");
 
     onMounted(() => {
-      axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
+      axios.get("https://renting-buddy-spring.herokuapp.com/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             owner.value = response.data;
 

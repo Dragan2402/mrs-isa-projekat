@@ -140,7 +140,7 @@ export default {
     // const priceMax=800;
     // console.log(start.toISOString());
     // console.log(end.toISOString());
-    axios.get(`/api/vacationHouses/anyUser/?page=${this.currentPage}&size=5&sort=name,ASC`).then(response => this.entities=response.data);
+    axios.get(`https://renting-buddy-spring.herokuapp.com/api/vacationHouses/anyUser/?page=${this.currentPage}&size=5&sort=name,ASC`).then(response => this.entities=response.data);
     //axios.get("api/fishingClasses/all").then(response => this.fishingClasses = response.data);
     //axios.get("api/ships/all").then(response => this.ships = response.data);
 
@@ -190,7 +190,7 @@ export default {
       this.search(false);
     },
     generateUrl(){
-        let url="api/"+this.filterData.type+"/anyUser/?";
+        let url="https://renting-buddy-spring.herokuapp.com/api/"+this.filterData.type+"/anyUser/?";
         if(this.filterData.name!=""){
           url=url+"&name="+this.filterData.name;
         }

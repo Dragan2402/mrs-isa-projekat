@@ -28,7 +28,7 @@ export default {
     this.customId=this.$route.params.customId;
    
     
-    axios.get(`/api/auth/verify/${this.customId}`).then(response => {
+    axios.get(`https://renting-buddy-spring.herokuapp.com/api/auth/verify/${this.customId}`).then(response => {
       if(response.data==true){
         this.verified=true;
         this.$toast.success("Account successfully verified");    

@@ -32,7 +32,7 @@ export default {
          return;     
       }
       this.email.toLowerCase();
-      axios.get(`/api/auth/sendResetPassword/${this.email}`).then(response => {
+      axios.get(`https://renting-buddy-spring.herokuapp.com/api/auth/sendResetPassword/${this.email}`).then(response => {
         
         if(response.data==true){
           this.$toast.success("Reset password mail successfully sent");

@@ -195,7 +195,7 @@ export default {
         id.value = route.params.id;
       }
       axios
-        .get(`/api/vacationHouses/anyUser/${id.value}`, {headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
+        .get(`https://renting-buddy-spring.herokuapp.com/api/vacationHouses/anyUser/${id.value}`, {headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
         .then(response => {
           vacationHouse.value = response.data;
           let from = stringToDateTime(vacationHouse.value.availableFrom);
@@ -208,7 +208,7 @@ export default {
         });
 
       axios
-        .get(`/api/vacationHouses/anyUser/${id.value}/pictures/all`, {headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
+        .get(`https://renting-buddy-spring.herokuapp.com/api/vacationHouses/anyUser/${id.value}/pictures/all`, {headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
         .then(response => {
           for (let i = 0; i < response.data.length; i++) {
             pictures.value.push(response.data[i]);
@@ -232,7 +232,7 @@ export default {
         calendarAttributes.value[0].dates.end = availabilityInterval.value.end;
 
         axios
-            .put(`/api/vacationHouses/loggedVacationHouseOwner/${id.value}`, vacationHouse.value, { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
+            .put(`https://renting-buddy-spring.herokuapp.com/api/vacationHouses/loggedVacationHouseOwner/${id.value}`, vacationHouse.value, { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
             .then(response => {
               vacationHouse.value = response.data;
               toast.success("Info updated");
@@ -256,7 +256,7 @@ export default {
       offer.value.rentingEntityId = id.value;
 
       axios
-          .post("/api/offers/new", offer.value, {headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
+          .post("https://renting-buddy-spring.herokuapp.com/api/offers/new", offer.value, {headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
           .then(response => {
             offer.value = response.data;
             toast.success("Info updated");

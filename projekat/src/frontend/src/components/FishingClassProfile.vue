@@ -86,7 +86,7 @@ export default {
   },
   mounted() {
     axios
-        .get("/api/fishingClasses/2")
+        .get("https://renting-buddy-spring.herokuapp.com/api/fishingClasses/2")
         .then(response => (this.fishingClass = response.data));
   },
   methods: {
@@ -105,7 +105,7 @@ export default {
     saveEdit() {
       this.fishingClass.availableFrom = this.parseDate(this.dateFrom);
       this.fishingClass.availableTo = this.parseDate(this.dateTo);
-      axios.put("/api/fishingClasses/update", this.fishingClass).then(response => this.fishingClass = response.data).then(this.toastMessage());
+      axios.put("https://renting-buddy-spring.herokuapp.com/api/fishingClasses/update", this.fishingClass).then(response => this.fishingClass = response.data).then(this.toastMessage());
       this.editing = false;
     },
     toastMessage() {

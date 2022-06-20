@@ -47,7 +47,7 @@ export default {
         "confirmPassword":this.confirmPassword
       }
 
-      axios.put("/api/auth/resetPassword",passwordResetDTO).then(response =>{
+      axios.put("https://renting-buddy-spring.herokuapp.com/api/auth/resetPassword",passwordResetDTO).then(response =>{
         if(response.data==true){
           this.$toast.success("Password changed successfully");
           this.$router.push("/loginPage");

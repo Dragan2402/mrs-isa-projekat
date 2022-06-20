@@ -141,19 +141,19 @@ export default {
     this.loaded=false;
     let path,pathOffers,pathPictures;
     if(this.displayType==0 && this.id != undefined){      
-      path="/api/vacationHouses/anyUser/"+this.id;
-      pathOffers="/api/vacationHouses/anyUser/"+this.id+"/offers";
-      pathPictures="/api/vacationHouses/anyUser/"+this.id+"/pictures/all";
+      path="https://renting-buddy-spring.herokuapp.com/api/vacationHouses/anyUser/"+this.id;
+      pathOffers="https://renting-buddy-spring.herokuapp.com/api/vacationHouses/anyUser/"+this.id+"/offers";
+      pathPictures="https://renting-buddy-spring.herokuapp.com/api/vacationHouses/anyUser/"+this.id+"/pictures/all";
       }
     else if(this.displayType==1 && this.id != undefined){
-      path="/api/ships/anyUser/"+this.id;
-      pathOffers="/api/ships/anyUser/"+this.id+"/offers";
-      pathPictures="/api/ships/anyUser/"+this.id+"/pictures/all";
+      path="https://renting-buddy-spring.herokuapp.com/api/ships/anyUser/"+this.id;
+      pathOffers="https://renting-buddy-spring.herokuapp.com/api/ships/anyUser/"+this.id+"/offers";
+      pathPictures="https://renting-buddy-spring.herokuapp.com/api/ships/anyUser/"+this.id+"/pictures/all";
     }
     else if(this.id != undefined){
-      path="/api/fishingClasses/anyUser/"+this.id;
-      pathOffers="/api/fishingClasses/anyUser/"+this.id+"/offers";
-      pathPictures="/api/fishingClasses/anyUser/"+this.id+"/pictures/all";
+      path="https://renting-buddy-spring.herokuapp.com/api/fishingClasses/anyUser/"+this.id;
+      pathOffers="https://renting-buddy-spring.herokuapp.com/api/fishingClasses/anyUser/"+this.id+"/offers";
+      pathPictures="https://renting-buddy-spring.herokuapp.com/api/fishingClasses/anyUser/"+this.id+"/pictures/all";
     }
 
     axios.get(path).then( response => {
@@ -173,7 +173,7 @@ export default {
 
     if(localStorage.getItem("jwt")!="null"){
       if(this.$root.loggedUser.accountType=="CLIENT"){
-        const path="/api/clients/isSubscribed/"+this.id;
+        const path="https://renting-buddy-spring.herokuapp.com/api/clients/isSubscribed/"+this.id;
         axios.get(path,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} } ).then(response =>{
         this.isSubscribed=response.data;
         });
@@ -251,7 +251,7 @@ methods:{
       this.$toast.error("Only available for clients");
       return;
     }
-    axios.put(`/api/clients/subscribe`,this.rentingEntity,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response =>{
+    axios.put(`https://renting-buddy-spring.herokuapp.com/api/clients/subscribe`,this.rentingEntity,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response =>{
       if(response.data==true){
         this.$toast.success("Subscribed");
         this.isSubscribed=true;
@@ -270,7 +270,7 @@ methods:{
       this.$toast.error("Only available for clients");
       return;
     }
-    axios.put(`/api/clients/unSubscribe`,this.rentingEntity,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response =>{
+    axios.put(`https://renting-buddy-spring.herokuapp.com/api/clients/unSubscribe`,this.rentingEntity,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response =>{
       if(response.data==true){
         this.$toast.success("Unsubscribed");
         this.isSubscribed=false;
@@ -335,7 +335,7 @@ methods:{
       return;
     }
 
-    axios.get(`/api/clients/rentingEntityAvailability/${this.rentingEntity.id}`,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => 
+    axios.get(`https://renting-buddy-spring.herokuapp.com/api/clients/rentingEntityAvailability/${this.rentingEntity.id}`,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => 
     {
       this.takeCalendar(response.data);
           const availableFromDate = this.dateFromLocal(this.rentingEntity.availableFrom);
@@ -388,12 +388,12 @@ methods:{
     });
     let servicesPath;
     if(this.displayType==0){
-      servicesPath="/api/vacationHouseOwners/getServices/"+this.rentingEntity.ownerId;
+      servicesPath="https://renting-buddy-spring.herokuapp.com/api/vacationHouseOwners/getServices/"+this.rentingEntity.ownerId;
     }else if(this.displayType==1){
-      servicesPath="/api/shipOwners/getServices/"+this.rentingEntity.ownerId;
+      servicesPath="https://renting-buddy-spring.herokuapp.com/api/shipOwners/getServices/"+this.rentingEntity.ownerId;
     }
     else{
-      servicesPath="/api/fishingInstructors/getServices/"+this.rentingEntity.ownerId;
+      servicesPath="https://renting-buddy-spring.herokuapp.com/api/fishingInstructors/getServices/"+this.rentingEntity.ownerId;
     }
     axios.get(servicesPath,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => this.additionalServices=response.data);
 
@@ -438,7 +438,7 @@ methods:{
         "start":start,
         "end":end
       };
-      axios.post(`/api/clients/makeReservationFull`,reservation,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(
+      axios.post(`https://renting-buddy-spring.herokuapp.com/api/clients/makeReservationFull`,reservation,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(
         response => {
           if(response.data==true){
             this.$toast.success("Reservation made");
@@ -470,7 +470,7 @@ methods:{
        this.$toast.error("You can not make a reservation. You have 3 penalties. Wait for next month.");
        return;
      }
-      axios.post(`/api/offers/makeQuickReservation`,offer,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {
+      axios.post(`https://renting-buddy-spring.herokuapp.com/api/offers/makeQuickReservation`,offer,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {
         if(response.data==true){
            this.$toast.success("Reservation made");    
            this.offers.splice(index,1);

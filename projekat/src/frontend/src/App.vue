@@ -42,7 +42,7 @@ export default {
         // this.signUp=true;
         // this.signedIn=false;
      
-        axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {
+        axios.get("https://renting-buddy-spring.herokuapp.com/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {
           this.loggedUser=response.data;
           this.accountType = response.data.accountType;
           this.signIn=false;
@@ -50,7 +50,7 @@ export default {
           this.signedIn=true; 
 
         });
-        axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.loggedPicture=response.data));
+        axios.get("https://renting-buddy-spring.herokuapp.com/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.loggedPicture=response.data));
       }else{
         this.signIn=true;
         this.signUp=true;

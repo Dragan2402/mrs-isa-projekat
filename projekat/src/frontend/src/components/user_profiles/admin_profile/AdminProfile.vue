@@ -44,15 +44,15 @@ export default {
   },
 
   mounted() {
-    axios.get("api/admins/complaints/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.complaints = response.data))
-    axios.get("api/admins/reviews/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.reviews = response.data))
-    axios.get("api/admins/requests/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.requests = response.data))
+    axios.get("https://renting-buddy-spring.herokuapp.com/api/admins/complaints/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.complaints = response.data))
+    axios.get("https://renting-buddy-spring.herokuapp.com/api/admins/reviews/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.reviews = response.data))
+    axios.get("https://renting-buddy-spring.herokuapp.com/api/admins/requests/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.requests = response.data))
 
   },
 
   methods: {
     approveReport(complaint, index) {
-      axios.put("api/admins/complaints", complaint, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
+      axios.put("https://renting-buddy-spring.herokuapp.com/api/admins/complaints", complaint, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
         if (response.data == true) {
           this.$toast.success("Approved");
           this.complaints[index].approved = true;
@@ -63,7 +63,7 @@ export default {
     },
 
     approveReview(review, index) {
-      axios.put("api/admins/reviews", review, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
+      axios.put("https://renting-buddy-spring.herokuapp.com/api/admins/reviews", review, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
         if (response.data == true) {
           this.$toast.success("Approved");
           this.reviews[index].approved = true;
@@ -74,7 +74,7 @@ export default {
     },
 
     approveRequest(request, index) {
-      axios.put("api/admins/requests", request, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
+      axios.put("https://renting-buddy-spring.herokuapp.com/api/admins/requests", request, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
         if (response.data == true) {
           this.$toast.success("Deleted");
           this.requests[index].deleted = true;

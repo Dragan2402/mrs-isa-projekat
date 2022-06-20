@@ -231,7 +231,7 @@ export default {
 
     onMounted(() => {
       axios
-          .get("/api/users/loggedUser",
+          .get("https://renting-buddy-spring.herokuapp.com/api/users/loggedUser",
           { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             if(response.data.accountType === "VH_OWNER") {
@@ -268,7 +268,7 @@ export default {
       console.log("loadData:")
       console.log(entityTypeInfo.value);
       axios
-          .get(`api/${entityTypeInfo.value.urlPart}/all`,
+          .get(`https://renting-buddy-spring.herokuapp.com/api/${entityTypeInfo.value.urlPart}/all`,
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             entities.value = response.data;
@@ -289,7 +289,7 @@ export default {
 
     function entityHasReservations(id) {
       axios
-          .get(`api/${entityTypeInfo.value.urlPart}/${id}/hasReservations`,
+          .get(`https://renting-buddy-spring.herokuapp.com/api/${entityTypeInfo.value.urlPart}/${id}/hasReservations`,
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             hasReservations.value = response.data;
@@ -301,7 +301,7 @@ export default {
       entity.availableTo = dateTimeToString(entity.availabilityInterval.end);
 
       axios
-          .put(`api/${entityTypeInfo.value.urlPart}/${entity.id}`, entity,
+          .put(`https://renting-buddy-spring.herokuapp.com/api/${entityTypeInfo.value.urlPart}/${entity.id}`, entity,
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             console.log(response.data);
@@ -314,7 +314,7 @@ export default {
 
     function deleteEntity(entityId) {
       axios
-          .delete(`/api/${entityTypeInfo.value.urlPart}/${entityId}`,
+          .delete(`https://renting-buddy-spring.herokuapp.com/api/${entityTypeInfo.value.urlPart}/${entityId}`,
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             console.log(response.data);

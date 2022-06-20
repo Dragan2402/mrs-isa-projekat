@@ -207,14 +207,14 @@ export default {
         id.value = route.params.id;
       }
       axios
-          .get(`/api/ships/${id.value}`)
+          .get(`https://renting-buddy-spring.herokuapp.com/api/ships/${id.value}`)
           .then(response => {
             ship.value = response.data;
             availabilityInterval.value = [stringToDateTime(ship.value.availableFrom),
                                           stringToDateTime(ship.value.availableTo)];
           });
       axios
-          .get(`/api/ships/${id.value}/pictures/all`)
+          .get(`https://renting-buddy-spring.herokuapp.com/api/ships/${id.value}/pictures/all`)
           .then(response => {
             for (let i = 0; i < response.data.length; i++) {
               pictures.value.push(response.data[i]);
@@ -240,7 +240,7 @@ export default {
       ship.value.availableTo = dateTimeToString(availabilityInterval.value[1]);
 
       axios
-          .put(`/api/ships/${id.value}`, ship.value)
+          .put(`https://renting-buddy-spring.herokuapp.com/api/ships/${id.value}`, ship.value)
           .then(response => {
             ship.value = response.data;
             toast.success("Info updated");
@@ -256,7 +256,7 @@ export default {
       offer.value.rentingEntityId = parseInt(id.value);
 
       axios
-          .post("/api/offers/new", offer.value)
+          .post("https://renting-buddy-spring.herokuapp.com/api/offers/new", offer.value)
           .then(response => {
             offer.value = response.data;
             toast.success("Info updated");

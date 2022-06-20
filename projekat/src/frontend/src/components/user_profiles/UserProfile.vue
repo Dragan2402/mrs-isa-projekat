@@ -13,7 +13,7 @@ export default {
     const router = useRouter();
 
     onMounted(() => {
-      axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
+      axios.get("https://renting-buddy-spring.herokuapp.com/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             console.log(response);
             if(response.data.accountType === "CLIENT") {

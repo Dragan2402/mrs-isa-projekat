@@ -62,20 +62,20 @@ export default {
       'password': this.password
       };
       
-      axios.post("/api/auth/login",body,loginHeaders).then(response =>{        
+      axios.post("https://renting-buddy-spring.herokuapp.com/api/auth/login",body,loginHeaders).then(response =>{        
         this.$root.accessToken=response.data.accessToken;
         this.$root.signedIn=true;
        
         localStorage.setItem("jwt",response.data.accessToken);
         this.$toast.success("Login successfull");   
  
-        axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
+        axios.get("https://renting-buddy-spring.herokuapp.com/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
             .then(response => {
               this.$root.loggedUser=response.data
               this.$root.accountType = response.data.accountType;
               console.log(response.data.accountType)
             });
-        axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.$root.loggedPicture=response.data));
+        axios.get("https://renting-buddy-spring.herokuapp.com/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.$root.loggedPicture=response.data));
         this.$router.push("/");  
       
       }).catch((error) => {

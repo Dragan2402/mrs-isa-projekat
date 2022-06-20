@@ -281,7 +281,7 @@ export default {
     },
      mounted() {
       axios
-        .get("/api/clients/loggedClient",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} } )
+        .get("https://renting-buddy-spring.herokuapp.com/api/clients/loggedClient",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} } )
         .then(response => (this.user = response.data)).catch((errorP) => {
         
         if(errorP.response.status===401){
@@ -293,7 +293,7 @@ export default {
         }
        
       });
-      axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.picture=response.data)).catch((errorP) => {
+      axios.get("https://renting-buddy-spring.herokuapp.com/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.picture=response.data)).catch((errorP) => {
         
         if(errorP.response.status===401){
           //this.$toast.error("Not Logged In");
@@ -304,7 +304,7 @@ export default {
         }
        
       });  
-      axios.get("/api/clients/subscriptions",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.subscriptions=response.data)).catch((errorP) => {
+      axios.get("https://renting-buddy-spring.herokuapp.com/api/clients/subscriptions",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.subscriptions=response.data)).catch((errorP) => {
         
         if(errorP.response.status===401){
           //this.$toast.error("Not Logged In");
@@ -314,7 +314,7 @@ export default {
         }
        
       }); 
-        axios.get("/api/clients/loggedClient/reservations",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.reservations=response.data)).catch((errorP) => {
+        axios.get("https://renting-buddy-spring.herokuapp.com/api/clients/loggedClient/reservations",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.reservations=response.data)).catch((errorP) => {
         
         if(errorP.response.status===401){
           //this.$toast.error("Not Logged In");
@@ -324,7 +324,7 @@ export default {
         }
        
       });
-        axios.get("/api/clients/loggedClient/reservationHistory",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.reservationsHistory=response.data)).catch((errorP) => {
+        axios.get("https://renting-buddy-spring.herokuapp.com/api/clients/loggedClient/reservationHistory",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.reservationsHistory=response.data)).catch((errorP) => {
         
         if(errorP.response.status===401){
           //this.$toast.error("Not Logged In");
@@ -378,7 +378,7 @@ export default {
 
       const passwordChange={"oldPassword":this.oldPassword,"newPassword":this.newPassword,"newPasswordConfirm":this.confirmPassword};
       console.log(passwordChange);
-      axios.put(`/api/clients/changePassword`,passwordChange,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response =>{
+      axios.put(`https://renting-buddy-spring.herokuapp.com/api/clients/changePassword`,passwordChange,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response =>{
         if(response.data==true){
           this.$root.accessToken=null;
           this.$root.signedIn=false;
@@ -398,13 +398,13 @@ export default {
       }
       const request={"id":0,'submitterId':this.user.id,'submitterUsername':this.user.username,'text':this.text,'type':0};
       console.log(request);
-      axios.post("/api/users/submitRequest",request,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Request Sent");}else{
+      axios.post("https://renting-buddy-spring.herokuapp.com/api/users/submitRequest",request,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Request Sent");}else{
           this.$toast.error("Error");
       }})
     },
 
     unsubscribe(subscription,index){
-      axios.put(`/api/clients/unSubscribeDTO`,subscription,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response =>{
+      axios.put(`https://renting-buddy-spring.herokuapp.com/api/clients/unSubscribeDTO`,subscription,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response =>{
         if(response.data==true){
           this.$toast.success("Unsubscribed");
           this.subscriptions.splice(index,1);
@@ -456,7 +456,7 @@ export default {
           
       this.user.phoneNum=this.validNumber;
       
-      axios.post("/api/clients/loggedClient",this.user,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => this.user=response.data ).then(this.toastMessage());
+      axios.post("https://renting-buddy-spring.herokuapp.com/api/clients/loggedClient",this.user,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => this.user=response.data ).then(this.toastMessage());
       this.editing=false;
     },
     telValidate(phoneNum) {
@@ -490,7 +490,7 @@ export default {
       }else{
       const fd=new FormData();
       fd.append('image',this.selectedFile,this.selectedFile.name);
-      axios.post("/api/clients/loggedClient/picture",fd,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} },{
+      axios.post("https://renting-buddy-spring.herokuapp.com/api/clients/loggedClient/picture",fd,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} },{
         onUploadProgress: uploadEvent => {
           console.log("Upload Progress: "+ Math.round(uploadEvent.loaded/uploadEvent.total * 100) + '%');
         }
@@ -537,7 +537,7 @@ export default {
       if(date < dateCheck){
         this.$toast.error("You can not cancel the reservation within the 3 days");
       }else{
-        axios.put("/api/clients/cancelReservation",reservation,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {
+        axios.put("https://renting-buddy-spring.herokuapp.com/api/clients/cancelReservation",reservation,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {
           if(response.data == true){
             this.$toast.success("You have successfully canceled the reservation");
             this.reservations.splice(index,1);
@@ -565,13 +565,13 @@ export default {
   },
   rateRE(reservationHistory){
     const review={"id":0,'rentingEntityId':reservationHistory.rentingEntityId,'rentingOwnerId':reservationHistory.rentingEntityOwnerId,'clientId':0,'rating':this.ratingRE,'comment':this.commentRatingRE};
-    axios.post("/api/clients/addReviewRE",review,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Review Added");}else{
+    axios.post("https://renting-buddy-spring.herokuapp.com/api/clients/addReviewRE",review,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Review Added");}else{
       this.$toast.error("Error");
     }})
   },
   rateRO(reservationHistory){
     const review={"id":0,'rentingEntityId':reservationHistory.rentingEntityId,'rentingOwnerId':reservationHistory.rentingEntityOwnerId,'clientId':0,'rating':this.ratingRO,'comment':this.commentRatingRO};
-    axios.post("/api/clients/addReviewRO",review,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Review Added");}else{
+    axios.post("https://renting-buddy-spring.herokuapp.com/api/clients/addReviewRO",review,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Review Added");}else{
       this.$toast.error("Error");
     }})
 
@@ -583,7 +583,7 @@ export default {
       }
  
     const complaint={"id":0,"complainantId":0,"rentingEntityId":reservationHistory.rentingEntityId,"respodentId":0,"text":this.commentReportRE};
-    axios.post("/api/clients/addComplaintRE",complaint,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Complaint Sent");}else{
+    axios.post("https://renting-buddy-spring.herokuapp.com/api/clients/addComplaintRE",complaint,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Complaint Sent");}else{
           this.$toast.error("Error");
         }})
   },
@@ -593,7 +593,7 @@ export default {
         return;
       }
     const complaint={"id":0,"complainantId":0,"rentingEntityId":0,"respodentId":reservationHistory.rentingEntityOwnerId,"text":this.commentReportRO};
-    axios.post("/api/clients/addComplaintRO",complaint,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Complaint Sent");}else{
+    axios.post("https://renting-buddy-spring.herokuapp.com/api/clients/addComplaintRO",complaint,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Complaint Sent");}else{
           this.$toast.error("Error");
         }})
   },
