@@ -19,6 +19,7 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
+
     @Autowired
     private Environment environment;
 

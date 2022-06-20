@@ -5,6 +5,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Entity
 @SQLDelete(sql = "UPDATE reservation SET deleted = true WHERE id = ?")
-public class Reservation {
+public class Reservation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

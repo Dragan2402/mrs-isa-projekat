@@ -168,7 +168,6 @@ public class ClientServiceImpl implements ClientService {
                 reservationRequestDTO.getAdditionalServices(),reservationRequestDTO.getPrice(),rentingEntity,
                 logged,reservationRequestDTO.getStart(),duration);
         if(haveNotMadeReservationBefore(logged,reservation)){
-            logged.addReservation(reservation);
             rentingEntity.addReservation(reservation);
             reservationRepository.save(reservation);
             emailService.confirmReservationMail(logged,reservation);
@@ -209,7 +208,6 @@ public class ClientServiceImpl implements ClientService {
     public Boolean makeQuickReservation(Client clientLogged, Offer offer) throws ObjectOptimisticLockingFailureException {
         Reservation reservation= new Reservation(offer.getPlace(),offer.getClientLimit(), new ArrayList<>(offer.getAdditionalServices()),
                 offer.getPrice(),offer.getRentingEntity(),clientLogged,offer.getStart(),offer.getDuration());
-        clientLogged.addReservation(reservation);
         offer.getRentingEntity().addReservation(reservation);
         reservationRepository.save(reservation);
         offer.setDeleted(true);
