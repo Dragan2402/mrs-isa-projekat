@@ -14,7 +14,7 @@
     <name>Projekat_mrs_isa</name>
     <description>Projekat_mrs_isa</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>14</java.version>
         <sonar.organization>rentingbuddykey</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
@@ -116,6 +116,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+
             </plugin>
         </plugins>
     </build>
