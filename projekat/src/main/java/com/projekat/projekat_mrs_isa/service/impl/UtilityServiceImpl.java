@@ -79,13 +79,14 @@ public class UtilityServiceImpl implements UtilityService {
 
     @Override
     public String getPictureEncoded(String picturePath) {
-        Resource r = resourceLoader
-                .getResource("classpath:" + picturePath);
+//        Resource r = resourceLoader
+//                .getResource("classpath:" + picturePath);
 
         try {
-            File file = r.getFile();
-            byte[] picture = FileUtils.readFileToByteArray(file);
-            return Base64.encodeBase64String(picture);
+            Path path = Paths.get(picturePath);
+            byte[] bytes = Files.readAllBytes(path);
+//            byte[] picture = FileUtils.readFileToByteArray(file);
+            return Base64.encodeBase64String(bytes);
         } catch (IOException e) {
             return null;
         }

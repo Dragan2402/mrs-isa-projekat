@@ -126,7 +126,7 @@ public class ClientServiceImpl implements ClientService {
         List<SubscriptionDTO> subscriptions=new ArrayList<>();
         for(RentingEntity rentingEntity : rentingEntityRepository.getSubscribedRentingEntitiesByClient(client.getId())){
             SubscriptionDTO subscriptionDTO=new SubscriptionDTO(rentingEntity);
-            String picturePath="pictures/renting_entities/0.png";
+            String picturePath="src/main/resources/pictures/renting_entities/0.png";
             if(rentingEntity.getPictures().size()>0){
                 picturePath=rentingEntity.getPictures().get(0);
             }
