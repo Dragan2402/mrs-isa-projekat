@@ -306,7 +306,7 @@ public class ClientController {
     public ResponseEntity<String> updateLoggedClientPicture(Principal clientP, @RequestPart("image") MultipartFile image) throws IOException {
 
         Client clientToUpdate = clientService.findByUsername(clientP.getName());
-        String pictureName = "pictures/user_pictures/" + clientToUpdate.getId().toString() + ".png";
+        String pictureName = "src/main/resources/pictures/user_pictures/" + clientToUpdate.getId().toString() + ".png";
         clientToUpdate.setPicture(pictureName);
         Client updatedClient = clientService.save(clientToUpdate);
 

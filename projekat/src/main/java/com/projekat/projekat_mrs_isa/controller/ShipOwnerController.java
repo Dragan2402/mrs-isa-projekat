@@ -36,7 +36,6 @@ public class ShipOwnerController {
         ShipOwner so = shipOwnerService.findByUsername(soPrincipal.getName());
         if (so == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        System.out.println(so.getUsername());
         return new ResponseEntity<>(new UserDTO(so), HttpStatus.OK);
     }
 

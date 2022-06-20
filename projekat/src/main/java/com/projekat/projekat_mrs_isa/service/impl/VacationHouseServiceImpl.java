@@ -97,7 +97,7 @@ public class VacationHouseServiceImpl implements VacationHouseService {
         for (VacationHouse vacationHouse : vacationHouses){
             VacationHouseDTO vacationHouseDTO= new VacationHouseDTO(vacationHouse);
             LOG.info("Vacation house with id:"+vacationHouseDTO.getId()+" successfully cached");
-            String picturePath="pictures/renting_entities/0.png";
+            String picturePath="src/main/resources/pictures/renting_entities/0.png";
             if(vacationHouse.getPictures().size()>0){
                 picturePath=vacationHouse.getPictures().get(0);
             }
@@ -115,7 +115,7 @@ public class VacationHouseServiceImpl implements VacationHouseService {
         for (VacationHouse vacationHouse : vacationHouses){
             VacationHouseDTO vacationHouseDTO= new VacationHouseDTO(vacationHouse);
             LOG.info("Vacation house with id:"+vacationHouseDTO.getId()+" successfully cached");
-            String picturePath="pictures/renting_entities/0.png";
+            String picturePath="src/main/resources/pictures/renting_entities/0.png";
             if(vacationHouse.getPictures().size()>0){
                 picturePath=vacationHouse.getPictures().get(0);
             }
@@ -138,7 +138,7 @@ public class VacationHouseServiceImpl implements VacationHouseService {
         List<VacationHouseDTO> vacationHouseDTOS=new ArrayList<>();
         for (VacationHouse vacationHouse : vacationHouses){
             VacationHouseDTO vacationHouseDTO= new VacationHouseDTO(vacationHouse);
-            String picturePath="pictures/renting_entities/0.png";
+            String picturePath="src/main/resources/pictures/renting_entities/0.png";
             if(vacationHouse.getPictures().size()>0){
                 picturePath=vacationHouse.getPictures().get(0);
             }

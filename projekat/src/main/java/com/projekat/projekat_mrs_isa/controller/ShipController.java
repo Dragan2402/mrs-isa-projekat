@@ -78,7 +78,7 @@ public class ShipController {
         List<ShipDTO> shipDTOList = new ArrayList<>();
         for (Ship ship : ships){
             ShipDTO shipDTO = new ShipDTO(ship);
-            String picturePath="pictures/renting_entities/0.png";
+            String picturePath="src/main/resources/pictures/renting_entities/0.png";
             if(ship.getPictures().size() > 0) {
                 picturePath = ship.getPictures().get(0);
             }

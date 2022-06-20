@@ -111,7 +111,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         clientTemp1.addPenalty();
         clientRep.save(clientTemp1);
 
-        Client clientTemp2= new Client("jovo@maildrop.cc","jovo",passwordEncoderComponent.encode("Jovo123"),"pictures/user_pictures/0.png","Jovo"
+        Client clientTemp2= new Client("jovo@maildrop.cc","jovo",passwordEncoderComponent.encode("Jovo123"),"src/main/resources/pictures/user_pictures/0.png","Jovo"
                 ,"Jovic","Jovanovska 19","Novi Sad","Serbia","+381656565222");
         clientTemp2.setVerified(true);
         clientTemp2.setRoles(rolesClient);
@@ -121,7 +121,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         vacHouseOwner1AddSrvc.add("Book a Grill master");
         vacHouseOwner1AddSrvc.add("Rent a Quad");
         vacHouseOwner1AddSrvc.add("AC");
-        VacationHouseOwner vacHouseOwnerTemp1= new VacationHouseOwner("dimpet96@maildrop.cc","dimitrije",passwordEncoderComponent.encode("Dimpet123"),"pictures/user_pictures/0.png","Dimitrije"
+        VacationHouseOwner vacHouseOwnerTemp1= new VacationHouseOwner("dimpet96@maildrop.cc","dimitrije",passwordEncoderComponent.encode("Dimpet123"),"src/main/resources/pictures/user_pictures/0.png","Dimitrije"
                 ,"Petrov","Somborska 55","Novi Sad","Serbia","+381650000000",vacHouseOwner1AddSrvc);
         vacHouseOwnerTemp1.setVerified(true);
         vacHouseOwnerTemp1.setRoles(rolesVHOwner);
@@ -131,7 +131,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         List<String> shipOwnerServices=new ArrayList<>();
         shipOwnerServices.add("Sandwiches");
         shipOwnerServices.add("Sailor outfits");
-        ShipOwner shipOwnerTemp1=new ShipOwner("krtolinat@maildrop.cc","tkrtolina",passwordEncoderComponent.encode("Tomo123"),"pictures/user_pictures/0.png","Tomo"
+        ShipOwner shipOwnerTemp1=new ShipOwner("krtolinat@maildrop.cc","tkrtolina",passwordEncoderComponent.encode("Tomo123"),"src/main/resources/pictures/user_pictures/0.png","Tomo"
                 ,"Krtolina","Balkan","Subotica","Serbia","+381653232322",shipOwnerServices);
         shipOwnerTemp1.setVerified(true);
         shipOwnerTemp1.setRoles(rolesShipOwner);
@@ -141,7 +141,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         List<String> fishingInstructorAddSrvcs=new ArrayList<>();
         fishingInstructorAddSrvcs.add("Fishing Rods");
         fishingInstructorAddSrvcs.add("Bites");
-        FishingInstructor fishingInstructorTemp=new FishingInstructor("aki96@maildrop.cc","AkiKavasaki",passwordEncoderComponent.encode("Asiasi123"),"pictures/user_pictures/0.png","Andrej","Culjak","Futoska 70","Novi Sad","Serbia","+381611155777",fishingInstructorAddSrvcs);
+        FishingInstructor fishingInstructorTemp=new FishingInstructor("aki96@maildrop.cc","AkiKavasaki",passwordEncoderComponent.encode("Asiasi123"),"src/main/resources/pictures/user_pictures/0.png","Andrej","Culjak","Futoska 70","Novi Sad","Serbia","+381611155777",fishingInstructorAddSrvcs);
         fishingInstructorTemp.setVerified(true);
         fishingInstructorTemp.setRoles(rolesFCInstructor);
         fishingInstructorRep.save(fishingInstructorTemp);
@@ -150,7 +150,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         vacHouseOwner2AddSrvc.add("TV");
         vacHouseOwner2AddSrvc.add("Bikes");
         vacHouseOwner2AddSrvc.add("AC");
-        VacationHouseOwner vacHouseOwnerTemp2= new VacationHouseOwner("bokiboki@maildrop.cc","Boris",passwordEncoderComponent.encode("Boki222"),"pictures/user_pictures/0.png","Boris"
+        VacationHouseOwner vacHouseOwnerTemp2= new VacationHouseOwner("bokiboki@maildrop.cc","Boris",passwordEncoderComponent.encode("Boki222"),"src/main/resources/pictures/user_pictures/0.png","Boris"
                 ,"Brejca","Tuzna ulica","Tuzni Grad","Serbia","+381650000111",vacHouseOwner2AddSrvc);
         vacHouseOwnerTemp2.setVerified(true);
         vacHouseOwnerTemp2.setRoles(rolesVHOwner);
@@ -158,17 +158,17 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
 
 
         List<String> pics1 = new ArrayList<>();
-        pics1.add("pictures/renting_entities/3/1.jpg");
-        pics1.add("pictures/renting_entities/3/2.jpg");
-        pics1.add("pictures/renting_entities/3/3.jpg");
-        pics1.add("pictures/renting_entities/3/4.jpg");
+        pics1.add("src/main/resources/pictures/renting_entities/3/1.jpg");
+        pics1.add("src/main/resources/pictures/renting_entities/3/2.jpg");
+        pics1.add("src/main/resources/pictures/renting_entities/3/3.jpg");
+        pics1.add("src/main/resources/pictures/renting_entities/3/4.jpg");
 
         Set<String> nav1 = new HashSet<>();
         Set<String> fisheq1 = new HashSet<>();
 
         List<String> picsShip=new ArrayList<>();
-        picsShip.add("pictures/renting_entities/1/1.jpg");
-        picsShip.add("pictures/renting_entities/1/2.jpg");
+        picsShip.add("src/main/resources/pictures/renting_entities/1/1.jpg");
+        picsShip.add("src/main/resources/pictures/renting_entities/1/2.jpg");
 
         Ship shipTemp = new Ship(
                 "Takanik",
@@ -209,8 +209,8 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         shipRep.save(shipTemp);
 
         List<String> fishingPics=new ArrayList<>();
-        fishingPics.add("pictures/renting_entities/2/1.jpg");
-        fishingPics.add("pictures/renting_entities/2/2.jpg");
+        fishingPics.add("src/main/resources/pictures/renting_entities/2/1.jpg");
+        fishingPics.add("src/main/resources/pictures/renting_entities/2/2.jpg");
 
         FishingClass fishingClassTemp = new FishingClass(
                 "Pecajmo s Milosem",
@@ -261,12 +261,12 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         vacationHouseTemp.setAvailableTo(LocalDateTime.of(2022,10,1, 20, 30));
 
         List<String> pics2 = new ArrayList<>();
-        pics2.add("pictures/renting_entities/4/1.jpg");
-        pics2.add("pictures/renting_entities/4/2.jpg");
-        pics2.add("pictures/renting_entities/4/3.jpg");
-        pics2.add("pictures/renting_entities/4/4.jpg");
-        pics2.add("pictures/renting_entities/4/5.jpg");
-        pics2.add("pictures/renting_entities/4/6.jpg");
+        pics2.add("src/main/resources/pictures/renting_entities/4/1.jpg");
+        pics2.add("src/main/resources/pictures/renting_entities/4/2.jpg");
+        pics2.add("src/main/resources/pictures/renting_entities/4/3.jpg");
+        pics2.add("src/main/resources/pictures/renting_entities/4/4.jpg");
+        pics2.add("src/main/resources/pictures/renting_entities/4/5.jpg");
+        pics2.add("src/main/resources/pictures/renting_entities/4/6.jpg");
         VacationHouse vacationHouseTemp2 = new VacationHouse(
                 "Angel’s Nest",
                 "Beograd",
@@ -283,10 +283,10 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         vacationHouseTemp2.setAvailableTo(LocalDateTime.of(2022,10,1, 20, 30));
 
         List<String> pics3=new ArrayList<>();
-        pics3.add("pictures/renting_entities/5/1.jpg");
-        pics3.add("pictures/renting_entities/5/2.jpg");
-        pics3.add("pictures/renting_entities/5/3.jpg");
-        pics3.add("pictures/renting_entities/5/4.jpg");
+        pics3.add("src/main/resources/pictures/renting_entities/5/1.jpg");
+        pics3.add("src/main/resources/pictures/renting_entities/5/2.jpg");
+        pics3.add("src/main/resources/pictures/renting_entities/5/3.jpg");
+        pics3.add("src/main/resources/pictures/renting_entities/5/4.jpg");
 
         VacationHouse vacationHouseTemp3= new VacationHouse("Spa Vila Avala","Suplja stena","Spa Vila Avala se nalazi u podnožju istoimene planine u vikend naselju Šuplja stena koje je poznato po čistoći vazduha, " +
                         "usled uvek prisutne ruže vetrova.",pics3,"NO DRINKING",50d,"Mini bar ne radi","3 dana ranije",2,4);
@@ -436,9 +436,9 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         reservationRep.save(reservationTemp2);
 //        System.out.println("Working Directory = " + System.getProperty("user.dir"));
         List<String> pics4=new ArrayList<>();
-        pics4.add("pictures/renting_entities/6/1.jpg");
-        pics4.add("pictures/renting_entities/6/2.jpg");
-        pics4.add("pictures/renting_entities/6/3.jpg");
+        pics4.add("src/main/resources/pictures/renting_entities/6/1.jpg");
+        pics4.add("src/main/resources/pictures/renting_entities/6/2.jpg");
+        pics4.add("src/main/resources/pictures/renting_entities/6/3.jpg");
 
 
         Ship shipTemp2 = new Ship(
@@ -466,12 +466,12 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
 
 
         List<String> pics5=new ArrayList<>();
-        pics5.add("pictures/renting_entities/7/1.jpg");
-        pics5.add("pictures/renting_entities/7/2.jpg");
-        pics5.add("pictures/renting_entities/7/3.jpg");
-        pics5.add("pictures/renting_entities/7/4.jpg");
-        pics5.add("pictures/renting_entities/7/5.jpg");
-        pics5.add("pictures/renting_entities/7/6.jpg");
+        pics5.add("src/main/resources/pictures/renting_entities/7/1.jpg");
+        pics5.add("src/main/resources/pictures/renting_entities/7/2.jpg");
+        pics5.add("src/main/resources/pictures/renting_entities/7/3.jpg");
+        pics5.add("src/main/resources/pictures/renting_entities/7/4.jpg");
+        pics5.add("src/main/resources/pictures/renting_entities/7/5.jpg");
+        pics5.add("src/main/resources/pictures/renting_entities/7/6.jpg");
 
         FishingClass fishingClassTemp2 = new FishingClass(
                 "Fishing with the best",
