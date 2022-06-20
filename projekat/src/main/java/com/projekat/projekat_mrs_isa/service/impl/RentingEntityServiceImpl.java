@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +30,6 @@ public class RentingEntityServiceImpl implements RentingEntityService {
     @Autowired
     private OfferRepository offerRepositroy;
 
-    @Autowired
-    private ResourceLoader resourceLoader;
 
     @Override
     public RentingEntity findById(Long id) {
@@ -69,12 +70,12 @@ public class RentingEntityServiceImpl implements RentingEntityService {
         List<String> encodedPictures = new ArrayList<>();
 
         for (String picturePath: picturePaths) {
-            Resource r = resourceLoader
-                    .getResource("classpath:" + picturePath);
+
             try {
-                File file = r.getFile();
-                byte[] picture = FileUtils.readFileToByteArray(file);
-                String encodedPicture = Base64.encodeBase64String(picture);
+                Path path = Paths.get(picturePath);
+                byte[] bytes = Files.readAllBytes(path);
+//            byte[] picture = FileUtils.readFileToByteArray(file);
+                String encodedPicture = Base64.encodeBase64String(bytes);
                 encodedPictures.add(encodedPicture);
             } catch (IOException e) {
                 return null;
