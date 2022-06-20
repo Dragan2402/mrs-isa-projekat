@@ -339,26 +339,6 @@ public class ClientController {
         }
     }
 
-
-    @PutMapping(value = "/loggedClient/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasRole('CLIENT')")
-    @Transactional
-    public ResponseEntity<String> updateLoggedClientPicture(Principal clientP, @RequestPart("image") MultipartFile image) throws IOException {
-
-        Client clientToUpdate = clientService.findByUsername(clientP.getName());
-        String pictureName = "pictures/user_pictures/" + clientToUpdate.getId().toString() + ".png";
-        clientToUpdate.setPicture(pictureName);
-        Client updatedClient = clientService.save(clientToUpdate);
-
-        boolean resp = utilityService.saveFile("src/main/resources/", pictureName, image);
-        boolean resp2 = utilityService.saveFile("target/classes/", pictureName, image);
-        if (resp && resp2) {
-            return new ResponseEntity<>(utilityService.getPictureEncoded(updatedClient.getPicture()), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
     private String getRentingEntityOwner(RentingEntity rentingEntity) {
 
 

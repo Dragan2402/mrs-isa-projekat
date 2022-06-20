@@ -38,7 +38,7 @@ public class AdminController {
     private AdminService adminService;
 
     @Autowired
-    private TransactionService transactionService;
+    private ReservationService reservationService;
 
     @Autowired
     private ComplaintService complaintService;
@@ -148,10 +148,10 @@ public class AdminController {
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/transactions/all")
+    @GetMapping(value = "/reservations/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<TransactionDTO>> getAllTransactions() {
-        List<TransactionDTO> transactionDTOS = transactionService.findAllDTO();
-        return new ResponseEntity<>(transactionDTOS, HttpStatus.OK);
+    public ResponseEntity<List<ReservationDTO>> getAllReservations() {
+        List<ReservationDTO> reservationDTOS = reservationService.findAllDTO();
+        return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
     }
 }

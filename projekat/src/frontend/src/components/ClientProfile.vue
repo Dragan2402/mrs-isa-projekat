@@ -303,7 +303,7 @@ export default {
       }else{
       const fd=new FormData();
       fd.append('image',this.selectedFile,this.selectedFile.name);
-      axios.post("/api/clients/loggedClient/picture",fd,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} },{
+      axios.post("/api/users/loggedUser/picture",fd,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} },{
         onUploadProgress: uploadEvent => {
           console.log("Upload Progress: "+ Math.round(uploadEvent.loaded/uploadEvent.total * 100) + '%');
         }

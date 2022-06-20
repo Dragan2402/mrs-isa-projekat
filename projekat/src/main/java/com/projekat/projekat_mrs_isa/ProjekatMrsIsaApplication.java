@@ -58,9 +58,6 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
     private FeeRepository feeRepository;
 
     @Autowired
-    private TransactionRepository transactionRepository;
-
-    @Autowired
     private RequestService requestService;
 
     @Autowired
@@ -115,9 +112,6 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 ,"Peric","Jovanova 14","Novi Sad","Serbia","+38165656565");
         clientTemp1.setVerified(true);
         clientTemp1.setRoles(rolesClient);
-        clientTemp1.addPenalty();
-        clientTemp1.addPenalty();
-        clientTemp1.addPenalty();
         clientTemp1.addPenalty();
         clientRep.save(clientTemp1);
 
@@ -370,7 +364,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
 
         Reservation r = new Reservation( "Rakovac", 5, new ArrayList<>(), 100.0,
                 vacationHouseTemp, clientTemp2,
-                LocalDateTime.of(2022,3,1, 20, 15), Duration.ofDays(3));
+                LocalDateTime.of(2022,3,1, 20, 15), Duration.ofDays(3), fee.getValue());
         reservationRep.save(r);
 
 
@@ -410,7 +404,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 vacationHouseTemp,
                 clientTemp1,
                 LocalDateTime.of(2022,1,24,20,10),
-                Duration.ofDays(3)
+                Duration.ofDays(3), fee.getValue()
         );
 
         Reservation reservationTemp2 = new Reservation(
@@ -421,7 +415,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 vacationHouseTemp,
                 clientTemp1,
                 LocalDateTime.of(2022,9,24,20,10),
-                Duration.ofDays(3)
+                Duration.ofDays(3), fee.getValue()
         );
 
         Reservation reservationTemp3 = new Reservation(
@@ -432,7 +426,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
                 vacationHouseTemp,
                 clientTemp1,
                 LocalDateTime.of(2022,5,20,20,10),
-                Duration.ofDays(3)
+                Duration.ofDays(3), fee.getValue()
         );
 
         vacationHouseTemp.addReservation(reservationTemp3);
@@ -446,16 +440,6 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         vacationHouseTemp.addReservation(reservationTemp2);
         clientTemp1.addReservation(reservationTemp2);
         reservationRep.save(reservationTemp2);
-
-        Transaction t1 = new Transaction(r, fee.getValue());
-        Transaction t2 = new Transaction(reservationTemp, fee.getValue());
-        Transaction t3 = new Transaction(reservationTemp2, fee.getValue());
-        Transaction t4 = new Transaction(reservationTemp3, fee.getValue());
-
-        transactionRepository.save(t1);
-        transactionRepository.save(t2);
-        transactionRepository.save(t3);
-        transactionRepository.save(t4);
 
 //        System.out.println("Working Directory = " + System.getProperty("user.dir"));
         List<String> pics4=new ArrayList<>();

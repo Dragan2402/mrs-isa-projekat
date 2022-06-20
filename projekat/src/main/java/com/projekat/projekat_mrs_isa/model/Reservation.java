@@ -50,12 +50,15 @@ public class Reservation {
     @Column(name = "version",nullable = false,unique = false)
     private Integer version;
 
+    @Column(name = "fee", nullable = false)
+    private Double fee;
+
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
     public Reservation() {}
 
-    public Reservation(Offer offer, Client client) {
+    public Reservation(Offer offer, Client client, Double fee) {
         this.place = offer.getPlace();
         this.clientLimit = offer.getClientLimit();
         this.additionalServices = offer.getAdditionalServices();
@@ -64,6 +67,7 @@ public class Reservation {
         this.client = client;
         this.start = offer.getStart();
         this.duration = offer.getDuration();
+        this.fee = fee;
         this.deleted = false;
     }
 
@@ -76,11 +80,12 @@ public class Reservation {
         this.client = client;
         this.start = reservationDTO.getStart();
         this.duration = Duration.ofMillis(reservationDTO.getDuration());
+        this.fee = reservationDTO.getFee();
         this.deleted = false;
     }
 
     public Reservation( String place, Integer clientLimit, List<String> additionalServices, Double price,
-                        RentingEntity rentingEntity, Client client, LocalDateTime start, Duration duration) {
+                        RentingEntity rentingEntity, Client client, LocalDateTime start, Duration duration, Double fee) {
 
         this.place = place;
         this.clientLimit = clientLimit;
@@ -90,6 +95,7 @@ public class Reservation {
         this.client = client;
         this.start = start;
         this.duration = duration;
+        this.fee = fee;
         this.deleted = false;
     }
 
@@ -163,6 +169,14 @@ public class Reservation {
 
     public void setDuration(Duration duration) {
         this.duration = duration;
+    }
+
+    public Double getFee() {
+        return fee;
+    }
+
+    public void setFee(Double fee) {
+        this.fee = fee;
     }
 
     public boolean isDeleted() {

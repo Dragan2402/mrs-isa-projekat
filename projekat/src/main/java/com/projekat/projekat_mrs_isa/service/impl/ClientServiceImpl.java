@@ -42,6 +42,8 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private FeeService feeService;
 
     @Autowired
     private UtilityService utilityService;
@@ -150,9 +152,10 @@ public class ClientServiceImpl implements ClientService {
         RentingEntity rentingEntity=rentingEntityService.findById(reservationRequestDTO.getRentingEntityId());
         if (rentingEntity==null)
             return false;
+        Fee fee = feeService.findFee(1L);
         Reservation reservation= new Reservation(reservationRequestDTO.getPlace(), reservationRequestDTO.getClientLimit(),
                 reservationRequestDTO.getAdditionalServices(),reservationRequestDTO.getPrice(),rentingEntity,
-                logged,reservationRequestDTO.getStart(),duration);
+                logged,reservationRequestDTO.getStart(),duration, fee.getValue());
         logged.addReservation(reservation);
         rentingEntity.addReservation(reservation);
         reservationService.save(reservation);
@@ -172,8 +175,9 @@ public class ClientServiceImpl implements ClientService {
     @Override
     @Transactional
     public Boolean makeQuickReservation(Client clientLogged, Offer offer) throws ObjectOptimisticLockingFailureException {
+        Fee fee = feeService.findFee(1L);
         Reservation reservation= new Reservation(offer.getPlace(),offer.getClientLimit(), new ArrayList<>(offer.getAdditionalServices()),
-                offer.getPrice(),offer.getRentingEntity(),clientLogged,offer.getStart(),offer.getDuration());
+                offer.getPrice(),offer.getRentingEntity(),clientLogged,offer.getStart(),offer.getDuration(), fee.getValue());
         clientLogged.addReservation(reservation);
         offer.getRentingEntity().addReservation(reservation);
         reservationService.save(reservation);

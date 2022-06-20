@@ -23,6 +23,8 @@ public class ReservationDTO {
     private LocalDateTime start;
     private Long duration;
 
+    private Double fee;
+
     public ReservationDTO() {}
 
     public ReservationDTO(@NotNull Reservation reservation) {
@@ -36,6 +38,7 @@ public class ReservationDTO {
         this.clientId = reservation.getClient().getId();
         this.start = reservation.getStart();
         this.duration = reservation.getDuration().toMillis();
+        this.fee = reservation.getFee();
     }
 
 
@@ -110,6 +113,14 @@ public class ReservationDTO {
 
     public void setDuration(Long duration) {
         this.duration = duration;
+    }
+
+    public Double getFee() {
+        return fee;
+    }
+
+    public void setFee(Double fee) {
+        this.fee = fee;
     }
 
     public String getRentingEntityName() {

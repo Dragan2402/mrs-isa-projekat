@@ -76,7 +76,7 @@ public class AdminServiceImpl implements AdminService {
                 (String) adminMap.get("country"),
                 (String) adminMap.get("phoneNum")
         );
-        List<Role> adminRoles = roleRepository.findByName("ROLE_CLIENT");
+        List<Role> adminRoles = roleRepository.findByName("ROLE_ADMIN");
         admin.setRoles(adminRoles);
         adminRepository.save(admin);
         return admin;

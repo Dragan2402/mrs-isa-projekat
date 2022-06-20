@@ -2,6 +2,7 @@ package com.projekat.projekat_mrs_isa.controller;
 
 import com.projekat.projekat_mrs_isa.dto.RequestDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
+import com.projekat.projekat_mrs_isa.model.Client;
 import com.projekat.projekat_mrs_isa.model.Request;
 import com.projekat.projekat_mrs_isa.model.User;
 import com.projekat.projekat_mrs_isa.service.RequestService;
@@ -13,8 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.security.Principal;
 
 
@@ -73,5 +76,22 @@ public class UserController {
         String picturePath = userService.findByUsername(userP.getName()).getPicture();
         return new ResponseEntity<>(utilityService.getPictureEncoded(picturePath), HttpStatus.OK);
 
+    }
+
+    @PutMapping(value = "/loggedUser/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
+    @Transactional
+    public ResponseEntity<String> updateLoggedUserPicture(Principal userP, @RequestPart("image") MultipartFile image) throws IOException {
+        User userToUpdate = userService.findByUsername(userP.getName());
+        String pictureName = "pictures/user_pictures/" + userToUpdate.getId().toString() + ".png";
+        userToUpdate.setPicture(pictureName);
+        User updatedUser = userService.save(userToUpdate);
+        boolean resp = utilityService.saveFile("src/main/resources/", pictureName, image);
+        boolean resp2 = utilityService.saveFile("target/classes/", pictureName, image);
+        if (resp && resp2) {
+            return new ResponseEntity<>(utilityService.getPictureEncoded(updatedUser.getPicture()), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

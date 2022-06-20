@@ -2,7 +2,7 @@
   <h2>TU SMO JACI SMO</h2>
   <input v-model="newPassword" type="password" placeholder="New password">
   <input v-model="confirmPassword" type="password" placeholder="Confirm new password">
-  <button class="btn btn-primary" @click="changePassword()">Change</button>
+  <button class="btn btn-primary" @click="changePassword">Change</button>
 </template>
 
 <script>
@@ -37,7 +37,7 @@ export default {
         return;
       }
 
-      const passwordChange = {"newPassword": this.newPassword, "newPasswordConfirm": this.confirmPassword};
+      const passwordChange = {"oldPassword": null, "newPassword": this.newPassword, "newPasswordConfirm": this.confirmPassword};
       console.log(passwordChange);
       axios.put(`/api/admins/changePassword`, passwordChange, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
         if (response.data == true) {
