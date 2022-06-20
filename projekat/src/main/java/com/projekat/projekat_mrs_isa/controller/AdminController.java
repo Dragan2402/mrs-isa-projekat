@@ -32,7 +32,13 @@ public class AdminController {
     private ReviewService reviewService;
 
     @Autowired
+    private FeeService feeService;
+
+    @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private TransactionService transactionService;
 
     @Autowired
     private ComplaintService complaintService;
@@ -122,5 +128,30 @@ public class AdminController {
         if (!utilityService.validatePasswords(passwordChangeDTO.getNewPassword(), passwordChangeDTO.getNewPasswordConfirm()))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(adminService.updatePassword(loggedAdmin, passwordChangeDTO), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/fee")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Double> getFee() {
+        Fee fee = feeService.findFee(1L);
+        return new ResponseEntity<>(fee.getValue(), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/fee", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public ResponseEntity<Boolean> setFee(@RequestBody FeeDTO feeDTO) {
+        Fee fee = feeService.findFee(1L);
+        if (fee == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        fee.setValue(feeDTO.getValue());
+        feeService.save(fee);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/transactions/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<TransactionDTO>> getAllTransactions() {
+        List<TransactionDTO> transactionDTOS = transactionService.findAllDTO();
+        return new ResponseEntity<>(transactionDTOS, HttpStatus.OK);
     }
 }

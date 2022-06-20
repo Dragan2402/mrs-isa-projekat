@@ -32,6 +32,7 @@
     </div>
   </div>
 
+<!--------------------------------------------------------------------------------------------------------------------->
 
   <div style="text-align: center; width: 50%">
     <div class="w-100">
@@ -86,6 +87,27 @@
   </div>
 
 
+<!--------------------------------------------------------------------------------------------------------------------->
+
+  <br><hr><br>
+  <input v-model="fee"/>
+  <button class="custom-btn button-primary" @click="saveFee" >Save fee</button>
+
+
+<!--------------------------------------------------------------------------------------------------------------------->
+<br><hr><br>
+
+  <div style="border: 1px solid black; margin: 10px; padding: 10px" v-for="(transaction, index) in this.transactions"
+       v-bind:index="index" :key="transaction.id">
+    <div>Name: {{ transaction.name }}</div>
+    <div>Price: {{ transaction.price }}</div>
+    <div>Fee: {{ transaction.fee }}</div>
+    <div>Date: {{ transaction.start }}</div>
+    <div>Duration: {{ transaction.duration }}</div>
+  </div>
+
+
+
   <router-view></router-view>
 </template>
 
@@ -100,6 +122,8 @@ export default {
       complaints: [],
       reviews: [],
       requests: [],
+      transactions: [],
+      fee: null,
 
 
       firstName: '',
@@ -120,6 +144,8 @@ export default {
     axios.get("api/admins/complaints/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.complaints = response.data))
     axios.get("api/admins/reviews/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.reviews = response.data))
     axios.get("api/admins/requests/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.requests = response.data))
+    axios.get("api/admins/transactions/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.transactions = response.data))
+    axios.get("api/admins/fee", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.fee = response.data))
 
   },
 
@@ -168,6 +194,17 @@ export default {
     validateEmail(email) {
       var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(email);
+    },
+
+    saveFee() {
+      const feeDTO = {id: 1, value: this.fee};
+      axios.put("api/admins/fee", feeDTO, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
+        if (response.data == true) {
+          this.$toast.success("Successfully saved!");
+        } else {
+          this.$toast.error("Problem has occurred!");
+        }
+      });
     },
 
     addAdmin() {
@@ -255,7 +292,6 @@ export default {
             }else{
               const admin={'firstName':this.firstName,'lastName':this.lastName,'username':this.username,'email':this.email,'password':this.password,"confirmPassword":this.confirmPassword,
                 'address':this.address,'city':this.city,'country':this.country,'phoneNum':this.validNumber};
-              console.log(admin);
               axios.post("/api/auth/addAdmin", admin).then(response => {
                 if(response.data==false){
                   this.$toast.error("Registration failed");

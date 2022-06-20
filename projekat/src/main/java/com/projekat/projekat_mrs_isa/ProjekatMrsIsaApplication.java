@@ -55,6 +55,12 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
     private ReservationRepository reservationRep;
 
     @Autowired
+    private FeeRepository feeRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
+
+    @Autowired
     private RequestService requestService;
 
     @Autowired
@@ -92,6 +98,9 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         List<Role> rolesShipOwner = roleRepository.findByName("ROLE_SHIP_OWNER");
         List<Role> rolesVHOwner = roleRepository.findByName("ROLE_VH_OWNER");
         List<Role> rolesFCInstructor = roleRepository.findByName("ROLE_FC_INSTRUCTOR");
+
+        Fee fee = new Fee(0.02);
+        feeRepository.save(fee);
 
 
         Admin adminTemp= new Admin("email@maildrop.cc","Andrej",passwordEncoderComponent.encode("asi123"),"pictures/user_pictures/0.png","Dragan"
@@ -365,6 +374,8 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         reservationRep.save(r);
 
 
+
+
         vacationHouseTemp2.addReview(reviewTemp1);
         vacationHouseTemp2.addReview(reviewTemp2);
         vacationHouseTemp2.addReview(reviewTemp3);
@@ -435,6 +446,17 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner {
         vacationHouseTemp.addReservation(reservationTemp2);
         clientTemp1.addReservation(reservationTemp2);
         reservationRep.save(reservationTemp2);
+
+        Transaction t1 = new Transaction(r, fee.getValue());
+        Transaction t2 = new Transaction(reservationTemp, fee.getValue());
+        Transaction t3 = new Transaction(reservationTemp2, fee.getValue());
+        Transaction t4 = new Transaction(reservationTemp3, fee.getValue());
+
+        transactionRepository.save(t1);
+        transactionRepository.save(t2);
+        transactionRepository.save(t3);
+        transactionRepository.save(t4);
+
 //        System.out.println("Working Directory = " + System.getProperty("user.dir"));
         List<String> pics4=new ArrayList<>();
         pics4.add("pictures/renting_entities/6/1.jpg");
