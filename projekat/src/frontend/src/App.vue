@@ -80,7 +80,10 @@ export default {
     },
     logout(){
       this.accessToken=null;
-      localStorage.setItem("jwt",null);          
+      localStorage.setItem("jwt",null);    
+      this.signIn=true;
+      this.signUp=true;
+      this.signedIn=false;      
       this.$router.push("/");
      
     }
