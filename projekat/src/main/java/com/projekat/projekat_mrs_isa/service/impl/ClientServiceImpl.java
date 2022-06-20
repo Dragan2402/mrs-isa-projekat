@@ -192,7 +192,7 @@ public class ClientServiceImpl implements ClientService {
                 if(reservation_made.getStart().compareTo(reservationHourBefore)>=0 && reservation_made.getStart().compareTo(reservationHourAfter)<=0)
                     return false;
             }
-        }
+        } return true;
     }
 
 

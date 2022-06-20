@@ -1,10 +1,10 @@
 <template>
-<div>ENTITIES</div>
+<div>LOYALTY</div>
 </template>
 
 <script>
 export default {
-  name: "AdminEntities",
+  name: "AdminLoyalty",
   data() {
     return {
 

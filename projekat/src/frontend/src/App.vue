@@ -74,7 +74,7 @@ export default {
       }else if (this.loggedUser.accountType==="VH_OWNER"){
         this.$router.push({name: "ownerHome"});
       }else if(this.loggedUser.accountType==="ADMIN"){
-       this.$router.push({name: "adminInfo"})
+       this.$router.push({name: "adminHome"})
       }
     },
     logout(){

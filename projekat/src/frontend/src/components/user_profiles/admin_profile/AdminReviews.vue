@@ -15,8 +15,8 @@ import axios from "axios";
 export default {
   name: "AdminReviews",
   data() {
-    return{
-      reviews: [],
+    return {
+      reviews: []
     }
   },
   mounted() {

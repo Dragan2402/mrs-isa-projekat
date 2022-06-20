@@ -1,10 +1,11 @@
 <template>
-<div>ENTITIES</div>
+  <div>REPORTS</div>
 </template>
 
 <script>
+
 export default {
-  name: "AdminEntities",
+  name: "AdminReports",
   data() {
     return {
 

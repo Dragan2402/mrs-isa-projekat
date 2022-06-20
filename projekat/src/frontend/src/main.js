@@ -38,8 +38,18 @@ import UserProfile from "@/components/user_profiles/UserProfile"
 import OwnerProfile from "@/components/user_profiles/owner_profiles/OwnerProfile";
 import OwnerHome from "@/components/user_profiles/owner_profiles/OwnerHome";
 import OwnerInfo from "@/components/user_profiles/owner_profiles/OwnerInfo";
-import AdminProfile from "@/components/user_profiles/admin_profile/AdminProfile";
 import FirstLogin from "@/components/user_profiles/admin_profile/FirstLogin";
+import AdminComplaints from "@/components/user_profiles/admin_profile/AdminComplaints";
+import AdminEntities from "@/components/user_profiles/admin_profile/AdminEntities";
+import AdminFee from "@/components/user_profiles/admin_profile/AdminFee";
+import AdminHome from "@/components/user_profiles/admin_profile/AdminHome";
+import AdminLoyalty from "@/components/user_profiles/admin_profile/AdminLoyalty";
+import AdminProfile from "@/components/user_profiles/admin_profile/AdminProfile";
+import AdminRegister from "@/components/user_profiles/admin_profile/AdminRegister";
+import AdminReports from "@/components/user_profiles/admin_profile/AdminReports";
+import AdminRequests from "@/components/user_profiles/admin_profile/AdminRequests";
+import AdminReservations from "@/components/user_profiles/admin_profile/AdminReservations";
+import AdminReviews from "@/components/user_profiles/admin_profile/AdminReviews";
 
 
 const routes = [
@@ -74,11 +84,22 @@ const routes = [
                 component: ClientProfile
             },
             {
-                name: "adminProfile",
-                path: "/adminProfile",
-                component: AdminProfile,
-            }                
-            ,
+                name: "adminHome",
+                path: "/adminHome",
+                component: AdminHome,
+                children: [
+                    { name: "adminComplaints", path: "/adminHome", component: AdminComplaints },
+                    { name: "adminEntities", path: "/adminHome", component: AdminEntities },
+                    { name: "adminFee", path: "/adminHome", component: AdminFee },
+                    { name: "adminLoyalty", path: "/adminHome", component: AdminLoyalty },
+                    { name: "adminProfile", path: "/adminHome", component: AdminProfile },
+                    { name: "adminRegister", path: "/adminHome", component: AdminRegister },
+                    { name: "adminReports", path: "/adminHome", component: AdminReports },
+                    { name: "adminRequests", path: "/adminHome", component: AdminRequests },
+                    { name: "adminReservations", path: "/adminHome", component: AdminReservations },
+                    { name: "adminReviews", path: "/adminHome", component: AdminReviews }
+                ]
+            },
             {
                 name: "firstLogin",
                 path: "/firstLogin",
