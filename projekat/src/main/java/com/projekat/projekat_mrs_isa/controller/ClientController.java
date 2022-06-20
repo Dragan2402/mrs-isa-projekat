@@ -79,7 +79,7 @@ public class ClientController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Review review = new Review(rentingEntity, client, reviewDTO.getRating(), reviewDTO.getComment());
         //rentingEntity.addReview(review);
-        client.addReview(review);
+        //client.addReview(review);
         Review saved = reviewService.save(review);
         if (saved == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -98,7 +98,7 @@ public class ClientController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Complaint complaint=new Complaint(client,rentingEntity,complaintDTO.getText());
         //rentingEntity.addComplaint(complaint);
-        client.sendComplaint(complaint);
+        //client.sendComplaint(complaint);
         Complaint complaintSaved = complaintService.save(complaint);
         if (complaintSaved == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -117,7 +117,7 @@ public class ClientController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Complaint complaint=new Complaint(client,respodent,complaintDTO.getText());
         //respodent.recieveComplaint(complaint);
-        client.sendComplaint(complaint);
+        //client.sendComplaint(complaint);
         Complaint complaintSaved = complaintService.save(complaint);
         if (complaintSaved == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -137,7 +137,7 @@ public class ClientController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Review review = new Review(user, client, reviewDTO.getRating(), reviewDTO.getComment());
         //user.addReview(review);
-        client.addReview(review);
+        //client.addReview(review);
         Review saved = reviewService.save(review);
         if (saved == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -292,11 +292,9 @@ public class ClientController {
             Client clientToUpdate = clientService.findByUsername(clientP.getName());
             clientToUpdate.update(userDTO);
             Client updatedCLient = clientService.save(clientToUpdate);
-
-
             if (updatedCLient == null)
-                return new ResponseEntity<UserDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
-            return new ResponseEntity<UserDTO>(new UserDTO(updatedCLient), HttpStatus.OK);
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new UserDTO(updatedCLient), HttpStatus.OK);
         } else {
 
             return new ResponseEntity<>(new UserDTO(), HttpStatus.BAD_REQUEST);

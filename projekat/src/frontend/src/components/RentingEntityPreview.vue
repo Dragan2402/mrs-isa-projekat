@@ -3,8 +3,7 @@
     <div class="heading-flex">
       <div class="heading-left">
         <h3 class="main-heading">{{rentingEntity.name}}</h3>
-        <vue3-star-ratings v-if="loaded" class="star-ratings"  v-model="rentingEntity.rating" starSize="22"  :showControl=false :disableClick=true :step=0 />
-        <h5 class="star-heading">({{rentingEntity.reviewsNumber}})</h5>
+        <h5 class="star-heading">{{rentingEntity.rating}} &#11088; ({{rentingEntity.reviewsNumber}})</h5>
       </div>
       <div class="heading-right">
         <div class="heading-right-buttons">
