@@ -29,7 +29,7 @@ public interface ClientService {
 
     Client findByEmail(String email);
 
-    @Cacheable(value = "user",key = "#name")
+    @Cacheable(value = "user",key = "#name",unless="#result == null")
     Client findByUsername(String name);
 
     Client addClient(String email, String username, String password, String picture, String firstName, String lastName, String address, String city, String country, String phoneNum);

@@ -12,4 +12,7 @@ public interface ReviewRepository extends JpaRepository<Review,Long> {
 
     @Query("select new com.projekat.projekat_mrs_isa.dto.ReviewDTO(r) from Review r")
     List<ReviewDTO> findAllDTO();
+
+    @Query("select r from Review r where r.rentingEntity.id=?1 or r.rentingOwner.id=?2 ")
+    List<Review> getByREIdOrOwnerId(Long reID, Long owId);
 }

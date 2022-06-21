@@ -62,6 +62,9 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
     private RequestService requestService;
 
     @Autowired
+    private ReviewRepository reviewRepository;
+
+    @Autowired
     private RoleRepository roleRepository;
 
     @Autowired
@@ -358,28 +361,13 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
 
         vacationHouseRep.save(vacationHouseTemp);
         vacationHouseRep.save(vacationHouseTemp2);
-        Review reviewTemp1=new Review(vacationHouseTemp2,clientTemp1,4.6);
-        Review reviewTemp2=new Review(vacationHouseTemp2,clientTemp1,5.0,"Sve u fullu, ispostovano");
-        Review reviewTemp3=new Review(vacationHouseTemp2,clientTemp1,4.8);
-        Review reviewTemp4=new Review(vacHouseOwnerTemp1,clientTemp1,5.0,"NAJJACI");
-        clientTemp1.addReview(reviewTemp4);
-        vacHouseOwnerTemp1.addReview(reviewTemp4);
-        vacHouseRep.save(vacHouseOwnerTemp1);
+
 
         Reservation r = new Reservation( "Rakovac", 5, new ArrayList<>(), 100.0,
                 vacationHouseTemp, clientTemp2,LocalDateTime.of(2022,3,1, 20, 15), Duration.ofDays(3), fee.getValue());
         reservationRep.save(r);
 
 
-
-
-        vacationHouseTemp2.addReview(reviewTemp1);
-        vacationHouseTemp2.addReview(reviewTemp2);
-        vacationHouseTemp2.addReview(reviewTemp3);
-        clientTemp1.addReview(reviewTemp1);
-        clientTemp1.addReview(reviewTemp2);
-        clientTemp1.addReview(reviewTemp3);
-        vacationHouseRep.save(vacationHouseTemp2);
 
 
         Complaint complaintTemp1=new Complaint(clientTemp1,vacationHouseTemp,"UZASAN SMRAD UBIO ME");
@@ -513,7 +501,27 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         clientTemp1.addSubscription(vacationHouseTemp2);
         clientRep.save(clientTemp1);
 
+        Review reviewTemp1=new Review(vacationHouseTemp2,clientTemp1,4.6);
+        reviewTemp1.setApproved(true);
+        Review reviewTemp2=new Review(vacationHouseTemp2,clientTemp1,5.0,"Sve u fullu, ispostovano");
+        Review reviewTemp3=new Review(vacationHouseTemp2,clientTemp1,4.8);
+        reviewTemp3.setApproved(true);
+        Review reviewTemp4=new Review(vacHouseOwnerTemp1,clientTemp1,5.0,"NAJJACI");
+        clientTemp1.addReview(reviewTemp4);
+        clientTemp1.addReview(reviewTemp3);
+        clientTemp1.addReview(reviewTemp2);
+        clientTemp1.addReview(reviewTemp1);
+        vacationHouseTemp2.addReview(reviewTemp3);
+        vacationHouseTemp2.addReview(reviewTemp1);
 
+
+
+        reviewRepository.save(reviewTemp1);
+        reviewRepository.save(reviewTemp2);
+        reviewRepository.save(reviewTemp3);
+        reviewRepository.save(reviewTemp4);
+
+        vacHouseRep.save(vacHouseOwnerTemp1);
 
         Path currentRelativePath = Paths.get("");
         String s = currentRelativePath.toAbsolutePath().toString();
