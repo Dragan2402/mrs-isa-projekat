@@ -154,4 +154,19 @@ public class AdminController {
         List<ReservationDTO> reservationDTOS = reservationService.findAllDTO();
         return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
     }
+
+    @PutMapping(value = "/loggedAdmin", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDTO> updateLoggedClient(Principal adminP, @RequestBody UserDTO userDTO) {
+        if (utilityService.validateName(userDTO.getFirstName()) && utilityService.validateName(userDTO.getLastName())
+                && userDTO.getAddress().length() > 2 && userDTO.getCity().length() > 2
+                && userDTO.getCountry().length() > 2 && utilityService.validatePhoneNum(userDTO.getPhoneNum())) {
+            Admin admin = adminService.findByUsername(adminP.getName());
+            admin.update(userDTO);
+            Admin updatedAdmin = adminService.save(admin);
+            return new ResponseEntity<>(new UserDTO(updatedAdmin), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new UserDTO(), HttpStatus.BAD_REQUEST);
+    }
+
 }

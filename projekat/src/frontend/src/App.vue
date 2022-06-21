@@ -8,11 +8,19 @@
         <button type="button" v-if="signIn" @click="jmpToLoginPage()" class="custom-btn button-primary">Sign in</button>
         <button type="button"  v-if="signUp" @click="jmpToRegistrationPage()"  style="margin-right: 0" class="custom-btn button-primary">Register</button>
       </div>
-      <div class="nav-right" v-else>
-        <img v-bind:src="'data:image/jpeg;base64,' + loggedPicture" style="width: 50px; height: 40px;" @click="jmpToUserProfile()">
-        <!--        <router-link v-if="loggedUser.accountType==='CLIENT'" class="link-light text-decoration-none" :to="{name: 'clientProfile'}">{{loggedUser.username}}</router-link>-->
-        <label class="link-light text-decoration-none" @click="jmpToUserProfile()">{{loggedUser.username}}</label>
-        <button type="button"  @click="logout()" class="custom-btn button-outline" >Logout</button>
+      <div class="dropdown" v-else>
+        <button class="transparent-button" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        <label style="cursor: pointer" class="link-light text-decoration-none">{{loggedUser.username}}</label>
+        <img v-bind:src="'data:image/jpeg;base64,' + loggedPicture" style="width: 40px; height: 40px; border-radius: 20px; object-fit: cover; margin-left: 10px">
+        </button>
+        <ul style="text-align: right;" class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+          <li class="dropdown-info" style="margin-top: 10px; font-weight: bold">{{loggedUser.firstName}} {{loggedUser.lastName}}</li>
+          <li class="dropdown-info">{{loggedUser.email}}</li>
+          <li class="dropdown-info">{{loggedUser.address}}</li>
+          <li class="dropdown-info">{{loggedUser.city}}, {{loggedUser.country}}</li>
+          <li class="dropdown-link" @click="jmpToUserProfile">My Profile</li>
+          <li class="dropdown-link" @click="logout">Logout</li>
+        </ul>
       </div>
     </div>
     
@@ -119,6 +127,27 @@ nav {
   }
 
 .brand:hover {
+  cursor: pointer;
+}
+
+.transparent-button {
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+}
+
+.dropdown-info {
+  margin: 0 20px 10px 20px;
+}
+
+.dropdown-link {
+  margin: 0 20px 10px 20px;
+  color: #00587a;
   cursor: pointer;
 }
 

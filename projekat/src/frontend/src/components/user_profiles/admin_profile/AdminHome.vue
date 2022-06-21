@@ -137,6 +137,7 @@ export default {
 <style scoped>
 
 .nav-button {
+  width: 115px;
   color: #00587a;
   font-weight: bold;
 }
