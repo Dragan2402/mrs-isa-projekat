@@ -11,7 +11,7 @@
       <div class="dropdown" v-else>
         <button class="transparent-button" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
         <label style="cursor: pointer" class="link-light text-decoration-none">{{loggedUser.username}}</label>
-        <img v-bind:src="'data:image/jpeg;base64,' + loggedPicture" style="width: 40px; height: 40px; border-radius: 20px; object-fit: cover; margin-left: 10px">
+        <img v-bind:src="'data:image/jpeg;base64,' + loggedPicture" style="width: 40px; height: 40px; border-radius: 20px; object-fit: cover; margin-left: 10px; border: 1px solid white">
         </button>
         <ul style="text-align: right;" class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
           <li class="dropdown-info" style="margin-top: 10px; font-weight: bold">{{loggedUser.firstName}} {{loggedUser.lastName}}</li>

@@ -28,8 +28,8 @@
           <div class="modal-body">
             <img id="profile-pic" v-bind:src="'data:image/jpeg;base64,' + profilePicture" alt="Profile picture"
                  style="width: 200px; height: 200px; object-fit: cover; border-radius: 5px">
-            <div>
-              <input type="file" @change="changePicture" accept="image/png, image/jpeg">
+            <div style="margin: 10px 0 10px 120px">
+              <input style="cursor: pointer" type="file" @change="changePicture" accept="image/png, image/jpeg">
             </div>
             <div class="form-floating mb-3">
               <input v-model="loggedAdmin.firstName" type="text" class="form-control" id="modalFirstName"
@@ -210,6 +210,27 @@ export default {
 
 .info-wrapper div {
   padding-bottom: 10px;
+}
+
+input[type=file]::file-selector-button {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid white;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  color: white;
+  background-color: #00587a;
+  cursor: pointer;
 }
 
 </style>
