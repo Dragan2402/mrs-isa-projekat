@@ -36,6 +36,25 @@ public class UserController {
     @Autowired
     private UtilityService utilityService;
 
+
+    @GetMapping(value = "/userPreview/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDTO> getUserDto(@PathVariable("username") String username) {
+        User user = userService.findByUsername(username);
+        if (user == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        UserDTO userDTO=new UserDTO(user);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/userPreview/{username}/picture", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getUserPicture(@PathVariable("username") String username) {
+        User user = userService.findByUsername(username);
+        if (user == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        String picturePath=user.getPicture();
+        return new ResponseEntity<>(utilityService.getPictureEncoded(picturePath), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/loggedUser")
     @PreAuthorize("hasAnyRole('ADMIN','CLIENT','SHIP_OWNER','VH_OWNER','FC_INSTRUCTOR')")
     public ResponseEntity<UserDTO> getLoggedUser(Principal userP) {
