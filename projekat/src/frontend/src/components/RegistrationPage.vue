@@ -57,7 +57,7 @@
           <label for="countryInput">Country</label>
         </div>
         <div class="form-floating input-group-width mb-2">
-            <input v-model="phoneNum" style="max-width: 250px;" type="text" placeholder="Phone Number:" class="form-control" aria-label="Username" aria-describedby="city">
+            <input v-model="phoneNum" type="text" placeholder="Phone Number:" class="form-control" >
           <label for="phoneNumInput">Phone Number</label>
         </div>
         <div v-if="role!=='addClient'" class="form-floating input-group-width">
@@ -107,7 +107,7 @@ export default {
   },
   mounted(){
     this.$root.signUp=false;
-    this.$root.signIn=false;
+    this.$root.signIn=true;
   },
   methods:{
     signUp() {
@@ -219,6 +219,7 @@ export default {
                   }else{
                     this.$toast.success("Registration successful");
                     this.$root.signUp=true;
+                    this.$root.signIn=true;
                     this.$router.push("/");
                   }
                 });
