@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.nio.file.Path;
@@ -115,6 +114,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         Client clientTemp1= new Client("peropero@maildrop.cc","peroPero",passwordEncoderComponent.encode("Pero123"),"pictures/user_pictures/2.png","Pero"
                 ,"Peric","Jovanova 14","Novi Sad","Serbia","+38165656565");
         clientTemp1.setVerified(true);
+        clientTemp1.setEnabled(true);
         clientTemp1.setRoles(rolesClient);
         clientTemp1.addPenalty();
         clientTemp1.addPenalty();
@@ -125,6 +125,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         Client clientTemp2= new Client("jovo@maildrop.cc","jovo",passwordEncoderComponent.encode("Jovo123"),"pictures/user_pictures/0.png","Jovo"
                 ,"Jovic","Jovanovska 19","Novi Sad","Serbia","+381656565222");
         clientTemp2.setVerified(true);
+        clientTemp2.setEnabled(true);
         clientTemp2.setRoles(rolesClient);
         clientRep.save(clientTemp2);
 
@@ -135,6 +136,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         VacationHouseOwner vacHouseOwnerTemp1= new VacationHouseOwner("dimpet96@maildrop.cc","dimitrije",passwordEncoderComponent.encode("Dimpet123"),"pictures/user_pictures/0.png","Dimitrije"
                 ,"Petrov","Somborska 55","Novi Sad","Serbia","+381650000000",vacHouseOwner1AddSrvc);
         vacHouseOwnerTemp1.setVerified(true);
+        vacHouseOwnerTemp1.setEnabled(true);
         vacHouseOwnerTemp1.setRoles(rolesVHOwner);
         vacHouseRep.save(vacHouseOwnerTemp1);
 
@@ -145,6 +147,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         ShipOwner shipOwnerTemp1=new ShipOwner("krtolinat@maildrop.cc","tkrtolina",passwordEncoderComponent.encode("Tomo123"),"pictures/user_pictures/0.png","Tomo"
                 ,"Krtolina","Balkan","Subotica","Serbia","+381653232322",shipOwnerServices);
         shipOwnerTemp1.setVerified(true);
+        shipOwnerTemp1.setEnabled(true);
         shipOwnerTemp1.setRoles(rolesShipOwner);
         shipOwnerRep.save(shipOwnerTemp1);
 
@@ -154,6 +157,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         fishingInstructorAddSrvcs.add("Bites");
         FishingInstructor fishingInstructorTemp=new FishingInstructor("aki96@maildrop.cc","AkiKavasaki",passwordEncoderComponent.encode("Asiasi123"),"pictures/user_pictures/0.png","Andrej","Culjak","Futoska 70","Novi Sad","Serbia","+381611155777",fishingInstructorAddSrvcs);
         fishingInstructorTemp.setVerified(true);
+        fishingInstructorTemp.setEnabled(true);
         fishingInstructorTemp.setRoles(rolesFCInstructor);
         fishingInstructorRep.save(fishingInstructorTemp);
 
@@ -164,6 +168,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         VacationHouseOwner vacHouseOwnerTemp2= new VacationHouseOwner("bokiboki@maildrop.cc","Boris",passwordEncoderComponent.encode("Boki222"),"pictures/user_pictures/0.png","Boris"
                 ,"Brejca","Tuzna ulica","Tuzni Grad","Serbia","+381650000111",vacHouseOwner2AddSrvc);
         vacHouseOwnerTemp2.setVerified(true);
+        vacHouseOwnerTemp2.setEnabled(true);
         vacHouseOwnerTemp2.setRoles(rolesVHOwner);
         vacHouseRep.save(vacHouseOwnerTemp2);
 

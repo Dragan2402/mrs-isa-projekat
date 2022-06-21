@@ -129,8 +129,7 @@
         <div class="home-entity-description">
           <i class="bi bi-geo-alt-fill"></i> {{ entity.address }}
         </div>
-        <vue3-star-ratings class="star-ratings" v-model="entity.rating" starSize="15" :showControl=false :disableClick=true :step=0 />
-        <span style="color: #585858;">({{entity.reviewsNumber}})</span>
+        <label>{{Math.round(entity.rating * 10) / 10}} &#11088;</label>
       </div>
       <div class="home-entity-price h-100 d-flex">
         <div class="align-self-center">
@@ -393,6 +392,7 @@ export default {
           .catch(error => {
             console.log(error.response);
           });
+      loadData();
     }
 
     function updateEntity(entity) {

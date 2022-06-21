@@ -2,16 +2,16 @@
   <nav class="navbar" >
     <div class="navbar-top" style="min-width: 1000px">
       <div class="nav-left">
-        <h4 class="brand" @click="jumpToHomePage()">Renting Buddy</h4>
+        <h4 class="brand pointer" @click="jumpToHomePage()">Renting Buddy</h4>
       </div>
       <div class="nav-right" v-if="this.signedIn==false">
         <button type="button" v-if="signIn" @click="jmpToLoginPage()" class="custom-btn button-primary">Sign in</button>
         <button type="button"  v-if="signUp" @click="jmpToRegistrationPage()"  style="margin-right: 0" class="custom-btn button-primary">Register</button>
       </div>
       <div class="nav-right" v-else>
-        <img v-bind:src="'data:image/jpeg;base64,' + loggedPicture" style="width: 50px; height: 40px;" @click="jmpToUserProfile()">
+        <img class="pointer" v-bind:src="'data:image/jpeg;base64,' + loggedPicture" style="width: 50px; height: 40px;" @click="jmpToUserProfile()">
         <!--        <router-link v-if="loggedUser.accountType==='CLIENT'" class="link-light text-decoration-none" :to="{name: 'clientProfile'}">{{loggedUser.username}}</router-link>-->
-        <label class="link-light text-decoration-none" @click="jmpToUserProfile()">{{loggedUser.username}}</label>
+        <label class="link-light text-decoration-none pointer" id="username-label" @click="jmpToUserProfile()">{{loggedUser.username}}</label>
         <button type="button"  @click="logout()" class="custom-btn button-outline" >Logout</button>
       </div>
     </div>
@@ -119,7 +119,7 @@ nav {
   margin-inline: 10px;
   }
 
-.brand:hover {
+.pointer:hover {
   cursor: pointer;
 }
 

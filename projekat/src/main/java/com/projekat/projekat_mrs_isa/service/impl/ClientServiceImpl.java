@@ -186,9 +186,6 @@ public class ClientServiceImpl implements ClientService {
             {
                 LocalDateTime reservationHourBefore = reservation.getStart().minusHours(1);
                 LocalDateTime reservationHourAfter = reservation.getStart().plusHours(1);
-                System.out.println(reservationHourBefore);
-                System.out.println(reservationHourAfter);
-                System.out.println(reservation_made.getStart());
                 if(reservation_made.getStart().compareTo(reservationHourBefore)>=0 && reservation_made.getStart().compareTo(reservationHourAfter)<=0)
                     return false;
             }
@@ -211,13 +208,12 @@ public class ClientServiceImpl implements ClientService {
         Fee fee = feeService.findFee(1L);
         Reservation reservation= new Reservation(offer.getPlace(),offer.getClientLimit(), new ArrayList<>(offer.getAdditionalServices()),
                 offer.getPrice(),offer.getRentingEntity(),clientLogged,offer.getStart(),offer.getDuration(), fee.getValue());
-        clientLogged.addReservation(reservation);
         offer.getRentingEntity().addReservation(reservation);
         reservationRepository.save(reservation);
         offer.setDeleted(true);
         offerService.save(offer);
         emailService.confirmReservationMail(clientLogged,reservation);
-        return  true;
+        return true;
     }
 
     @Override

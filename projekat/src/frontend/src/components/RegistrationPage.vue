@@ -207,7 +207,7 @@ export default {
               return;
             }else{
                 const user={'firstName':this.firstName,'lastName':this.lastName,'username':this.username,'email':this.email,'password':this.password,"confirmPassword":this.confirmPassword,
-                'address':this.address,'city':this.city,'country':this.country,'phoneNum':this.validNumber};
+                'address':this.address,'city':this.city,'country':this.country,'phoneNum':this.phoneNum};
 
                 if (this.role !== "addClient") {
                   user.registrationReason = this.registrationReason;
