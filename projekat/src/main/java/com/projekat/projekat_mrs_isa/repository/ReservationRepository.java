@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation,Long> {
-    @Query("select reservation from Reservation reservation where reservation.rentingEntity = ?1")
-    List<Reservation> findAllFromEntity(RentingEntity entity);
+    @Query("select r from Reservation r join fetch r.rentingEntity join fetch r.client where r.rentingEntity = ?1")
+    List<Reservation> getAllFromEntity(RentingEntity entity);
 }
+// rentingEntity
+// client

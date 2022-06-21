@@ -10,11 +10,8 @@ import com.projekat.projekat_mrs_isa.service.VacationHouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +119,7 @@ public class VacationHouseServiceImpl implements VacationHouseService {
     public List<Reservation> findAllReservations(Long vacationHouseId) {
         VacationHouse vacationHouse = findById(vacationHouseId);
         if(vacationHouse != null)
-            return reservationRepository.findAllFromEntity(vacationHouse);
+            return reservationRepository.getAllFromEntity(vacationHouse);
         else
             return new ArrayList<>();
     }

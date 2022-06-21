@@ -37,6 +37,7 @@ import UserProfile from "@/components/user_profiles/UserProfile"
 import OwnerProfile from "@/components/user_profiles/owner_profiles/OwnerProfile";
 import OwnerHome from "@/components/user_profiles/owner_profiles/OwnerHome";
 import OwnerInfo from "@/components/user_profiles/owner_profiles/OwnerInfo";
+import OwnerReservations from "@/components/user_profiles/owner_profiles/OwnerReservations";
 
 
 const routes = [
@@ -63,7 +64,8 @@ const routes = [
                 component: OwnerProfile,
                 children: [
                     { name: "ownerHome", path: "/home", component: OwnerHome },
-                    { name: "ownerInfo", path: "/info", component: OwnerInfo }
+                    { name: "ownerInfo", path: "/info", component: OwnerInfo },
+                    { name: "ownerReservations", path: "/client_reservations", component: OwnerReservations }
                 ]
             },
             {

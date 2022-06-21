@@ -1,21 +1,34 @@
 <template>
   <div class="main-container">
-    <div style="display: flex" class="mb-3">
-      <div style="float: left; width: 70%">
+    <div style="display: flex" class="">
+      <div style="float: left; width: 50%">
         <h3 class="name-heading">{{owner.firstName}} {{owner.lastName}}</h3>
         <h5 class="username-heading">@{{owner.username}}</h5>
       </div>
-      <div style="width: 30%; margin-top: 20px">
-        <div style="float: right; display: flex; overflow: hidden;">
-          <div>
-            <input class="radio" type="radio" id="homePageRadio" name="page" value="homePage" v-model="page" @change="routePage">
-            <label class="custom-btn button-primary me-3" for="homePageRadio">{{buttonLabel}}</label>
-          </div>
-          <div>
-            <input class="radio" type="radio" id="infoPageRadio" name="page" value="infoPage" v-model="page" @change="routePage">
-            <label class="custom-btn button-primary " for="infoPageRadio">Profile Information</label>
-          </div>
-        </div>
+<!--      <div style="width: 30%; margin-top: 20px">-->
+<!--        <div style="float: right; display: flex; overflow: hidden;">-->
+<!--          <div>-->
+<!--            <input class="radio" type="radio" id="homePageRadio" name="page" value="homePage" v-model="page" @change="routePage">-->
+<!--            <label class="custom-btn button-primary me-3" for="homePageRadio">{{buttonLabel}}</label>-->
+<!--          </div>-->
+<!--          <div>-->
+<!--            <input class="radio" type="radio" id="infoPageRadio" name="page" value="infoPage" v-model="page" @change="routePage">-->
+<!--            <label class="custom-btn button-primary " for="infoPageRadio">Profile Information</label>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+      <div>
+        <ul class="nav nav-tabs justify-content-end">
+          <li class="nav-item">
+            <a class="nav-link" :class="{active: page==='homePage' || page==null}" aria-current="page" @click="routePage('homePage')">{{ buttonLabel }}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" :class="{active: page==='infoPage'}" @click="routePage('infoPage')">Profile Information</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" :class="{active: page==='reservationsPage'}" @click="routePage('reservationsPage')">Reservations</a>
+          </li>
+        </ul>
       </div>
     </div>
     <router-view></router-view>
@@ -61,12 +74,15 @@ export default {
           });
     });
 
-    function routePage() {
-      console.log("ownerProfile routePage home")
+    function routePage(pageName) {
+      page.value = pageName;
+
       if(page.value === "homePage")
         router.push({name: "ownerHome"});
       else if(page.value === "infoPage")
         router.push({name: "ownerInfo"});
+      else if (page.value === "reservationsPage")
+        router.push({name: "ownerReservations"});
     }
 
     return {

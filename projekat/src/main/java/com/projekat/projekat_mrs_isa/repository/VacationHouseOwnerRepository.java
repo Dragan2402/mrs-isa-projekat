@@ -11,6 +11,6 @@ public interface VacationHouseOwnerRepository  extends JpaRepository<VacationHou
     @Query(value = "SELECT vhOwner FROM VacationHouseOwner vhOwner JOIN FETCH vhOwner.additionalServices where vhOwner.id=?1")
     Optional<VacationHouseOwner> findById(Long id);
 
-    @Query("select vho from VacationHouseOwner vho where vho.username = ?1")
+    @Query("select vho from VacationHouseOwner vho join fetch vho.vacationHouses where vho.username = ?1")
     VacationHouseOwner findByUsername(String username);
 }

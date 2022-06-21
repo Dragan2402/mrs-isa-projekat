@@ -23,6 +23,9 @@ public class ReservationDTO {
     private LocalDateTime start;
     private Long duration;
 
+    @JsonFormat(pattern = ("dd.MM.yyyy HH:mm"))
+    private LocalDateTime end;
+
     public ReservationDTO() {}
 
     public ReservationDTO(@NotNull Reservation reservation) {
@@ -36,6 +39,7 @@ public class ReservationDTO {
         this.clientId = reservation.getClient().getId();
         this.start = reservation.getStart();
         this.duration = reservation.getDuration().toMillis();
+        this.end = this.start.plus(reservation.getDuration());
     }
 
 
@@ -142,5 +146,12 @@ public class ReservationDTO {
 
     public void setRentingEntityOwnerId(Long rentingEntityOwnerId) {
         this.rentingEntityOwnerId = rentingEntityOwnerId;
+    }
+
+    public LocalDateTime getEnd() {
+        return end;
+    }
+    public void setEnd(LocalDateTime end) {
+        this.end = end;
     }
 }

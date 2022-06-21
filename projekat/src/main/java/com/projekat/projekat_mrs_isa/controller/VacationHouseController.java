@@ -6,8 +6,10 @@ import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
 import com.projekat.projekat_mrs_isa.model.Offer;
 import com.projekat.projekat_mrs_isa.model.Reservation;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
+import com.projekat.projekat_mrs_isa.model.VacationHouseOwner;
 import com.projekat.projekat_mrs_isa.service.OfferService;
 import com.projekat.projekat_mrs_isa.service.UtilityService;
+import com.projekat.projekat_mrs_isa.service.VacationHouseOwnerService;
 import com.projekat.projekat_mrs_isa.service.VacationHouseService;
 import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -38,6 +40,8 @@ import java.util.List;
 public class VacationHouseController {
     @Autowired
     private VacationHouseService vacationHouseService;
+    @Autowired
+    private VacationHouseOwnerService vacationHouseOwnerService;
     @Autowired
     private OfferService offerService;
     @Autowired
@@ -173,6 +177,21 @@ public class VacationHouseController {
             }
         }
         return new ResponseEntity<>(encodedPictures, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/loggedVacationHouseOwner/")
+    @PreAuthorize("hasRole('VH_OWNER')")
+    public ResponseEntity<Boolean> createVacationHouse(@RequestBody VacationHouseDTO vacationHouseDTO, Principal ownerPrincipal) {
+        VacationHouseOwner owner = vacationHouseOwnerService.findByUsername(ownerPrincipal.getName());
+        if(owner == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        VacationHouse vacationHouse = new VacationHouse(vacationHouseDTO);
+        owner.addVacationHouse(vacationHouse);
+
+        vacationHouseService.save(vacationHouse);
+        vacationHouseOwnerService.save(owner);
+
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
     @PutMapping(value = "/loggedVacationHouseOwner/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
