@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.service.impl;
 
 import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
+import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.Role;
 import com.projekat.projekat_mrs_isa.model.ShipOwner;
 import com.projekat.projekat_mrs_isa.repository.RoleRepository;
@@ -71,4 +72,7 @@ public class ShipOwnerServiceImpl implements ShipOwnerService {
         shipOwnerRepository.save(so);
         return so;
         }
+
+    @Override
+    public List<UserDTO> findAllDTO() { return shipOwnerRepository.findAllDTO(); }
 }

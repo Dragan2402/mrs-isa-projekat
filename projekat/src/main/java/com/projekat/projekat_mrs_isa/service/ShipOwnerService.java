@@ -1,5 +1,6 @@
 package com.projekat.projekat_mrs_isa.service;
 
+import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.ShipOwner;
 
 import java.util.List;
@@ -19,5 +20,7 @@ public interface ShipOwnerService {
     List<ShipOwner> findAll();
 
     ShipOwner save(ShipOwner shipOwner);
+
+    List<UserDTO> findAllDTO();
 
 }

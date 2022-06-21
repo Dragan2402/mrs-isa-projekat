@@ -1,11 +1,10 @@
 package com.projekat.projekat_mrs_isa.controller;
 
+import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
 import com.projekat.projekat_mrs_isa.dto.OfferDTO;
 import com.projekat.projekat_mrs_isa.dto.ShipDTO;
-import com.projekat.projekat_mrs_isa.model.Offer;
-import com.projekat.projekat_mrs_isa.model.Reservation;
-import com.projekat.projekat_mrs_isa.model.Ship;
-import com.projekat.projekat_mrs_isa.model.VacationHouse;
+import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
+import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.service.RentingEntityService;
 import com.projekat.projekat_mrs_isa.service.ShipService;
 import com.projekat.projekat_mrs_isa.service.UtilityService;
@@ -215,5 +214,22 @@ public class ShipController {
 
         shipService.remove(id);
         return new ResponseEntity<>(new ShipDTO(ship), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/all")
+    public ResponseEntity<List<ShipDTO>> getAllShips() {
+        List<ShipDTO> shipDTOS = shipService.findAllDTO();
+        return new ResponseEntity<>(shipDTOS, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/delete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public ResponseEntity<Boolean> deleteShip(@RequestBody ShipDTO shipDTO) {
+        Ship ship = shipService.findById(shipDTO.getId());
+        if (ship == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        ship.setDeleted(true);
+        shipService.save(ship);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }
