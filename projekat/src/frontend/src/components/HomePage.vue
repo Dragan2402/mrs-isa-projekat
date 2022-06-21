@@ -67,7 +67,7 @@
           <div class="entity-name"><h4 @click="jumpToPreview(vacationHouse)" style="font-weight: bold; cursor: pointer">{{ vacationHouse.name }}</h4>
             <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> <b>{{ vacationHouse.address }}</b> </div>
             <div class="entity-description">{{ vacationHouse.promoDescription }}</div>
-            <label>{{vacationHouse.rating}} &#11088;</label> 
+            <label>{{Math.round(vacationHouse.rating * 10) / 10}} &#11088;</label> 
             <span style="color: #585858;">({{vacationHouse.reviewsNumber}})</span>
           </div>
           <div class="entity-price">

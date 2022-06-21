@@ -2,6 +2,7 @@ package com.projekat.projekat_mrs_isa.controller;
 
 import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
 import com.projekat.projekat_mrs_isa.dto.OfferDTO;
+import com.projekat.projekat_mrs_isa.dto.ReviewDisplayDTO;
 import com.projekat.projekat_mrs_isa.model.FishingClass;
 import com.projekat.projekat_mrs_isa.model.Offer;
 import com.projekat.projekat_mrs_isa.model.RentingEntity;
@@ -105,6 +106,16 @@ public class FishingClassController {
         }
         return new ResponseEntity<>(rentingEntityService.getOffersByREId(fishingClass),HttpStatus.OK);
 
+    }
+
+    @GetMapping(value = "/anyUser/{id}/reviews", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
+    public ResponseEntity<List<ReviewDisplayDTO>> getReviews(@PathVariable("id") Long id) {
+        FishingClass fishingClass = fishingClassService.findById(id);
+        if (fishingClass == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(rentingEntityService.getReviewsByRentingEntityIdOrOwnerId(fishingClass.getId(),fishingClass.getFishingInstructor().getId()),HttpStatus.OK);
     }
 
 

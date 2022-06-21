@@ -114,6 +114,7 @@ nav {
   min-width: 500px;
   }
 
+
 .navbar-top button {
   margin-inline: 10px;
   }

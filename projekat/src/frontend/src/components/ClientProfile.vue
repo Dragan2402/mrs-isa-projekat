@@ -420,7 +420,7 @@ export default {
         return;
       }
       const request={"id":0,'submitterId':this.user.id,'submitterUsername':this.user.username,'text':this.text,'type':0};
-      console.log(request);
+
       axios.post("/api/users/submitRequest",request,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Request Sent");}else{
           this.$toast.error("Error");
       }})
@@ -510,20 +510,21 @@ export default {
       }else{
       const fd=new FormData();
       fd.append('image',this.selectedFile,this.selectedFile.name);
-      axios.post("/api/users/loggedUser/picture",fd,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} },{
+      axios.put("/api/users/loggedUser/picture",fd,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} },{
         onUploadProgress: uploadEvent => {
           console.log("Upload Progress: "+ Math.round(uploadEvent.loaded/uploadEvent.total * 100) + '%');
         }
-      }).then(response => (this.picture=response.data))
+      }).then(response => { 
+        this.picture=response.data;
+        this.$root.loggedPicture=response.data;
+        })
     }}
     },
     dateFromLocal(dateString){
       if(dateString==null){
         return new Date();
       }
-      
       const parts=dateString.split(" ");
-      
       if( parts.length !=2){
         return new Date();
       }

@@ -3,7 +3,7 @@
     <div class="heading-flex">
       <div class="heading-left">
         <h3 class="main-heading">{{rentingEntity.name}}</h3>
-        <h5 class="star-heading">{{rentingEntity.rating}} &#11088; ({{rentingEntity.reviewsNumber}})</h5>
+        <h5 class="rating-container star-heading" data-bs-toggle="modal" @click="loadReviews()" data-bs-target="#modalReviews">{{Math.round(rentingEntity.rating * 10) / 10}} &#11088; ({{rentingEntity.reviewsNumber}})</h5>
       </div>
       <div class="heading-right">
         <div class="heading-right-buttons">
@@ -98,6 +98,65 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="modalReviews" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div v-if="reviewsEntity.length>0 || reviewsOwner.length>0" class="reviews-container">            
+              <h4 v-if="this.reviewsEntity.length > 0">{{reviewsEntity.at(0).entityName}} reviews:</h4>
+              <div class="overflow-auto" style="max-height:250px;min-height:250px;">
+              <div class="single-review" v-for="review in this.reviewsEntity"   :key="review" style="border-bottom: 0.1px solid #00587a;">
+                <div class="mt-2">
+                  <div class="d-flex flex-row p-3">
+                    <img v-bind:src="'data:image/jpeg;base64,' + review.commenterImage" width="60" height="60" style="margin-right:20px;" class="rounded float-start" alt="PP">
+                    <div class="w-100">
+                          <div class="d-flex justify-content-between align-items-center">
+                              <div class="d-flex flex-row align-items-center">
+                                <span class="mr-2">{{review.commenter}}</span>                              
+                              </div>                            
+                          </div>
+                      <div class="d-flex float-end flex-row user-feed">
+                          <span class="wish"><i class="fa fa-heartbeat mr-2"></i>{{review.rating}} &#11088;</span>                                          
+                      </div>   
+                      <p class="text-justify comment-text mb-0">{{review.text}}</p>                                       
+                    </div>                   
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h4 v-if="this.reviewsOwner.length > 0" style="margin-top:20px;">{{reviewsOwner.at(0).ownerName}} reviews:</h4>
+            <div class="overflow-auto" style="max-height:250px;min-height:250px;">
+            <div class="single-review" v-for="review in this.reviewsOwner"  :key="review" style="border-bottom: 0.1px solid #00587a;">
+              <div class="mt-2">
+                <div class="d-flex flex-row p-3">
+                  <img v-bind:src="'data:image/jpeg;base64,' + review.commenterImage" width="60" height="60" style="margin-right:20px;" class="rounded float-start" alt="PP">
+                  <div class="w-100">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-row align-items-center">
+                              <span class="mr-2">{{review.commenter}}</span>                              
+                            </div>                            
+                        </div>
+                    <div class="d-flex float-end flex-row user-feed">
+                        <span class="wish"><i class="fa fa-heartbeat mr-2"></i>{{review.rating}} &#11088;</span>                                          
+                    </div>   
+                    <p class="text-justify comment-text mb-0">{{review.text}}</p>                                       
+                  </div>                   
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+          <div v-else>
+            No reviews to display currently
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="custom-btn button-primary" id="close-btn" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -115,6 +174,8 @@ export default {
       selected:false,
       date:null,
       pictures:[],
+      reviewsOwner:[],
+      reviewsEntity:[],
       isSubscribed:false,
       index:0,     
       offers: [],
@@ -340,8 +401,6 @@ methods:{
           const availableFromDate = this.dateFromLocal(this.rentingEntity.availableFrom);
       const availableToDate = this.dateFromLocal(this.rentingEntity.availableTo);
       const now = new Date();
-      console.log(availableFromDate);
-      console.log(availableToDate);
 
     if(availableFromDate<=now){
       this.minDate=now;     
@@ -454,6 +513,27 @@ methods:{
       this.$toast.error("Select free date");
     }
   },
+  classifyReview(review){
+    if(review.forOwner){
+      this.reviewsOwner.push(review);
+    }else{
+      this.reviewsEntity.push(review);
+    }
+  },
+  loadReviews(){
+
+    let pathReviews;
+    if(this.displayType==0 && this.id != undefined){      
+      pathReviews="/api/vacationHouses/anyUser/"+this.id+"/reviews";
+      }
+    else if(this.displayType==1 && this.id != undefined){
+      pathReviews="/api/ships/anyUser/"+this.id+"/reviews";
+    }
+    else if(this.id != undefined){
+      pathReviews="/api/fishingClasses/anyUser/"+this.id+"/reviews";
+    }
+    axios.get(pathReviews).then(response =>{response.data.forEach(this.classifyReview)});
+  },
 
   makeReservation(offer,index){
 
@@ -487,6 +567,28 @@ methods:{
 </script>
 
 <style scoped>
+
+.rating-container{
+    max-width: 110px;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.rating-container:hover{
+  background-color: #09658a;
+  cursor: pointer;
+}
 
 .inner-offer-container {
   display: flex;

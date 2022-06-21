@@ -2,6 +2,7 @@ package com.projekat.projekat_mrs_isa.controller;
 
 
 import com.projekat.projekat_mrs_isa.dto.OfferDTO;
+import com.projekat.projekat_mrs_isa.dto.ReviewDisplayDTO;
 import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
 import com.projekat.projekat_mrs_isa.model.Offer;
 import com.projekat.projekat_mrs_isa.model.RentingEntity;
@@ -105,7 +106,18 @@ public class VacationHouseController {
         }
 
         return new ResponseEntity<>(rentingEntityService.getOffersByREId(vacationHouse),HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/anyUser/{id}/reviews", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
+    public ResponseEntity<List<ReviewDisplayDTO>> getReviews(@PathVariable("id") Long id) {
+        VacationHouse vacationHouse = vacationHouseService.findById(id);
+        if (vacationHouse == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        return new ResponseEntity<>(rentingEntityService.getReviewsByRentingEntityIdOrOwnerId(vacationHouse.getId(),vacationHouse.getVacationHouseOwner().getId()),HttpStatus.OK);
+    }
 
 
 

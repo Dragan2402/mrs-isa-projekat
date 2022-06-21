@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.controller;
 
 import com.projekat.projekat_mrs_isa.dto.OfferDTO;
+import com.projekat.projekat_mrs_isa.dto.ReviewDisplayDTO;
 import com.projekat.projekat_mrs_isa.dto.ShipDTO;
 import com.projekat.projekat_mrs_isa.model.Offer;
 import com.projekat.projekat_mrs_isa.model.Reservation;
@@ -127,6 +128,16 @@ public class ShipController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(rentingEntityService.getOffersByREId(ship),HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/anyUser/{id}/reviews", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
+    public ResponseEntity<List<ReviewDisplayDTO>> getReviews(@PathVariable("id") Long id) {
+        Ship ship = shipService.findById(id);
+        if (ship == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(rentingEntityService.getReviewsByRentingEntityIdOrOwnerId(ship.getId(),ship.getShipOwner().getId()),HttpStatus.OK);
     }
 
 //    public String encodeImage(RentingEntity rentingEntity){
