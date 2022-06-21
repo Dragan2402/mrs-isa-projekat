@@ -47,9 +47,20 @@ export default {
           this.signIn=false;
           this.signUp=false;
           this.signedIn=true; 
-
-        });
-        axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.loggedPicture=response.data));
+        }).catch((errorP) => {
+        
+            if(errorP.response.status===403 || errorP.response.status===402 || errorP.response.status===401 ||errorP.response.status===401){          
+              this.logout();
+            }
+       
+      });  
+        axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.loggedPicture=response.data)).catch((errorP) => {
+        
+            if(errorP.response.status===403 || errorP.response.status===402 || errorP.response.status===401 ||errorP.response.status===401){          
+              this.logout();
+            }
+       
+      });
       }else{
         this.signIn=true;
         this.signUp=true;

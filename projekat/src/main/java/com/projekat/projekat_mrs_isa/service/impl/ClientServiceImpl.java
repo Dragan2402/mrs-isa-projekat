@@ -95,32 +95,42 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Boolean subscribe(Client client, Long reId) {
+    public Boolean subscribe(Client clientCached, Long reId) {
+        Client client= findById(clientCached.getId());
         RentingEntity rentingEntity = rentingEntityRepository.findById(reId).orElse(null);
+        List<RentingEntity> subscriptions=rentingEntityRepository.getSubscribedRentingEntitiesByClient(client.getId());
         if (rentingEntity == null)
             return false;
-        rentingEntity.addSubscription(client);
-        save(client);
+        if(!subscriptions.contains(rentingEntity)) {
+            rentingEntity.addSubscription(client);
+            rentingEntityRepository.save(rentingEntity);
+            clientRepository.save(client);
+        }
         return true;
 
     }
 
     @Override
-    public Boolean unSubscribe(Client client, Long id) {
+    public Boolean unSubscribe(Client clientCached, Long id) {
+        Client client= findById(clientCached.getId());
         RentingEntity rentingEntity = rentingEntityService.findById(id);
         if (rentingEntity == null)
             return false;
         rentingEntity.removeSubscription(client);
-        save(client);
+        rentingEntityRepository.save(rentingEntity);
+        clientRepository.save(client);
         return true;
     }
 
     @Override
-    public Boolean isSubscribed(Client client, Long id) {
+    public Boolean isSubscribed(Client clientCached, Long id) {
+        Client client= findById(clientCached.getId());
         RentingEntity rentingEntity = rentingEntityRepository.findById(id).orElse(null);
+        List<RentingEntity> subscriptions=rentingEntityRepository.getSubscribedRentingEntitiesByClient(client.getId());
+
         if (rentingEntity == null)
             return false;
-        return client.isSubscribed(rentingEntity);
+        return subscriptions.contains(rentingEntity);
     }
 
     @Override

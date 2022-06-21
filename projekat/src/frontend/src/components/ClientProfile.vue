@@ -136,8 +136,8 @@
             </div>
           </div>
           <div class="reservation-right">
-            <button style="margin-right: 10px" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#modalRate">Rate</button>
-            <button class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#modalReport">Report</button>
+            <button style="margin-right: 10px" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#modalRate" @click="selectRE(reservationHistory)">Rate</button>
+            <button class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#modalReport" @click="selectRE(reservationHistory)">Report</button>
           </div>
         </div>
       
@@ -152,27 +152,21 @@
               <div class="modal-body">
                 <div>
                   <div class="rating"> 
-                    <input v-model="ratingRE" type="radio" name="rating" value="5" id="5"><label for="5">☆</label> 
-                    <input v-model="ratingRE" type="radio" name="rating" value="4" id="4"><label for="4">☆</label> 
-                    <input v-model="ratingRE" type="radio" name="rating" value="3" id="3"><label for="3">☆</label> 
-                    <input v-model="ratingRE" type="radio" name="rating" value="2" id="2"><label for="2">☆</label> 
-                    <input v-model="ratingRE" type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+                    <input v-model="rating" type="radio" name="ratingRE" value="5" id="5"><label for="5">☆</label> 
+                    <input v-model="rating" type="radio" name="ratingRE" value="4" id="4"><label for="4">☆</label> 
+                    <input v-model="rating" type="radio" name="ratingRE" value="3" id="3"><label for="3">☆</label> 
+                    <input v-model="rating" type="radio" name="ratingRE" value="2" id="2"><label for="2">☆</label> 
+                    <input v-model="rating" type="radio" name="ratingRE" value="1" id="1"><label for="1">☆</label>
                   </div>
-                  <textarea v-model="commentRatingRE" style="height: 100px" type="text" class="form-control" placeholder="Comment..."></textarea><br>
-                  <button class="custom-btn button-primary" @click="rateRE(reservationHistory)">Rate renting entity</button>
+                  <textarea v-model="comment" style="height: 100px" type="text" class="form-control" placeholder="Comment..."></textarea><br>
+                  <div style="display:flex;flex-direction:row;align-items:center;justify-content:center;">
+                    <button class="custom-btn button-primary" style="margin-right:10px;" @click="rateRE(reservationHistory)">Rate renting entity</button>
+                    <button class="custom-btn button-primary" @click="rateRO(reservationHistory)">Rate owner</button>
+                  </div>
                 </div>
-                <div>
-                  <div class="rating"> 
-                    <input v-model="ratingRO" type="radio" name="rating" value="5" id="5"><label for="5">☆</label> 
-                    <input v-model="ratingRO" type="radio" name="rating" value="4" id="4"><label for="4">☆</label> 
-                    <input v-model="ratingRO" type="radio" name="rating" value="3" id="3"><label for="3">☆</label> 
-                    <input v-model="ratingRO" type="radio" name="rating" value="2" id="2"><label for="2">☆</label> 
-                    <input v-model="ratingRO" type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
-                </div>
-                  <textarea v-model="commentRatingRO" style="height: 100px" type="text" class="form-control" placeholder="Comment..."></textarea><br>
+           
 
-                  <button class="custom-btn button-primary" @click="rateRO(reservationHistory)">Rate owner</button>
-                </div>
+       
               </div>
               <div class="modal-footer">
                 <button type="button" class="custom-btn button-primary" data-bs-dismiss="modal">Close</button>
@@ -185,13 +179,13 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-body">
+                <label>Reason for report:</label>
                 <div>
-                  <textarea v-model="commentReportRE" style="height: 100px" type="text" class="form-control" placeholder="Comment..."></textarea><br>
-                  <button class="custom-btn button-primary" @click="reportRE(reservationHistory)">Submit Report</button>
-                </div>
-                <div>
-                  <br><textarea v-model="commentReportRO" style="height: 100px" type="text" class="form-control" placeholder="Comment..."></textarea><br>
-                  <button class="custom-btn button-primary" @click="reportRO(reservationHistory)">Submit Report</button><br>
+                  <textarea v-model="commentReport" style="height: 100px" type="text" class="form-control" placeholder="Comment..."></textarea><br>
+                  <div style="display:flex;flex-direction:row;align-items:center;justify-content:center;">
+                    <button class="custom-btn button-primary" style="margin-right:10px;" @click="reportRE(reservationHistory)">Report renting entity</button>
+                    <button class="custom-btn button-primary" @click="reportRO(reservationHistory)">Report owner</button><br>
+                  </div>
                 </div>
               </div>
               <div class="modal-footer">
@@ -291,14 +285,11 @@ export default {
       reservations:[],
       filterR:"",
       filterH: "",
-      ratingRE:5,
-      commentRatingRE:"",
-      commentRatingRO:"",
-      ratingRO:5,
+      comment:"",
+      rating:5,
       sortTypeR:0,
       sortTypeH: 0,
-      commentReportRE:"",
-      commentReportRO:"",
+      commentReport:"",
 
             }
     },
@@ -548,6 +539,10 @@ export default {
       const date= new Date(year,month-1,day,hours,minutes);
       return date;
     }, 
+    selectRE(rentingEntity){
+
+      this.selectedReservationHistory=rentingEntity;
+    },
     cancelReservation(reservation, index){
       
       const date=this.dateFromLocal(reservation.start);
@@ -584,37 +579,40 @@ export default {
 
       return dDisplay
   },
-  rateRE(reservationHistory){
-    const review={"id":0,'rentingEntityId':reservationHistory.rentingEntityId,'rentingOwnerId':reservationHistory.rentingEntityOwnerId,'clientId':0,'rating':this.ratingRE,'comment':this.commentRatingRE};
-    axios.post("/api/clients/addReviewRE",review,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Review Added");}else{
+  rateRE(){
+    const reservationHistory=this.selectedReservationHistory;
+    const review={"id":0,'rentingEntityId':reservationHistory.rentingEntityId,'rentingOwnerId':reservationHistory.rentingEntityOwnerId,'clientId':0,'rating':this.rating,'comment':this.comment};
+    axios.post("/api/clients/addReviewRE",review,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Review Added");this.comment="";}else{
       this.$toast.error("Error");
     }})
   },
-  rateRO(reservationHistory){
-    const review={"id":0,'rentingEntityId':reservationHistory.rentingEntityId,'rentingOwnerId':reservationHistory.rentingEntityOwnerId,'clientId':0,'rating':this.ratingRO,'comment':this.commentRatingRO};
-    axios.post("/api/clients/addReviewRO",review,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Review Added");}else{
+  rateRO(){
+    const reservationHistory=this.selectedReservationHistory;
+    const review={"id":0,'rentingEntityId':reservationHistory.rentingEntityId,'rentingOwnerId':reservationHistory.rentingEntityOwnerId,'clientId':0,'rating':this.rating,'comment':this.comment};
+    axios.post("/api/clients/addReviewRO",review,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Review Added");this.comment="";}else{
       this.$toast.error("Error");
     }})
 
   },
-  reportRE(reservationHistory){
-    if(this.commentReportRE.length<5){
-        this.$toast.error("Provide a comment");
+  reportRE(){
+    if(this.commentReport.length<5){
+        this.$toast.error("Provide a valid reason");
         return;
       }
- 
-    const complaint={"id":0,"complainantId":0,"rentingEntityId":reservationHistory.rentingEntityId,"respodentId":0,"text":this.commentReportRE};
-    axios.post("/api/clients/addComplaintRE",complaint,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Complaint Sent");}else{
+    const reservationHistory=this.selectedReservationHistory;
+    const complaint={"id":0,"complainantId":0,"rentingEntityId":reservationHistory.rentingEntityId,"respodentId":0,"text":this.commentReport};
+    axios.post("/api/clients/addComplaintRE",complaint,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Complaint Sent");this.commentReport="";}else{
           this.$toast.error("Error");
         }})
   },
-  reportRO(reservationHistory){
-    if(this.commentReportRO.length<5){
-        this.$toast.error("Provide a comment");
+  reportRO(){
+    if(this.commentReport.length<5){
+        this.$toast.error("Provide a valid reason");
         return;
       }
-    const complaint={"id":0,"complainantId":0,"rentingEntityId":0,"respodentId":reservationHistory.rentingEntityOwnerId,"text":this.commentReportRO};
-    axios.post("/api/clients/addComplaintRO",complaint,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Complaint Sent");}else{
+    const reservationHistory=this.selectedReservationHistory;
+    const complaint={"id":0,"complainantId":0,"rentingEntityId":0,"respodentId":reservationHistory.rentingEntityOwnerId,"text":this.commentReport};
+    axios.post("/api/clients/addComplaintRO",complaint,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => {if(response.data==true){this.$toast.success("Complaint Sent");this.commentReport="";}else{
           this.$toast.error("Error");
         }})
   },

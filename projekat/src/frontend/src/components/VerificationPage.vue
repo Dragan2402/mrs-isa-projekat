@@ -7,7 +7,6 @@
     <img src="../assets/confused.png" height="200" width="200">
     <p style="color:red;">Error.....</p>
   </div>
-
 </template>
 
 <script>

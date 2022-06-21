@@ -146,7 +146,6 @@ export default {
   },
   
   methods: {       
-
     formatRange(dates){
       let from = dates[0];
       let to = dates[1];
