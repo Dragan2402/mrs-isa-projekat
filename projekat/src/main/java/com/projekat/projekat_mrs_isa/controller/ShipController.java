@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.controller;
 
 import com.projekat.projekat_mrs_isa.dto.OfferDTO;
+import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
 import com.projekat.projekat_mrs_isa.dto.ShipDTO;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.service.ShipOwnerService;

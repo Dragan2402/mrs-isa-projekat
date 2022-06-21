@@ -4,7 +4,10 @@
   </div>
 
   <div class="home-entities-div">
-    <div class="home-list-entities" v-for="reservation in reservations" :key="reservation.id">
+    <div class="w-100" style="text-align: center;" v-if="reservations.length==0">
+      <h4 style="font-weight: bold;">No reservations to show yet</h4>
+    </div>
+    <div class="home-list-entities" v-else v-for="reservation in reservations" :key="reservation.id">
       <div class="home-entity-picture">
         <img v-bind:src="'data:image/jpeg;base64,' + reservation.img" v-bind:alt="reservation.id" style="width: 200px; height: 150px; cursor: pointer">
       </div>
@@ -46,7 +49,7 @@ export default {
               };
             } else if (response.data.accountType === "SH_OWNER") {
               entityTypeInfo.value = {
-                urlPart: "shipOwner/loggedShipOwner"
+                urlPart: "shipOwners/loggedShipOwner"
               };
             } else {
               router.push({name: "homePage"});
