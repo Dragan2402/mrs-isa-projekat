@@ -126,7 +126,7 @@ public class VacationHouseServiceImpl implements VacationHouseService {
     public List<Reservation> findAllReservations(Long vacationHouseId) {
         VacationHouse vacationHouse = findById(vacationHouseId);
         if(vacationHouse != null)
-            return reservationRepository.getAllFromEntity(vacationHouse);
+            return reservationRepository.findAllFromEntity(vacationHouse);
         else
             return new ArrayList<>();
     }

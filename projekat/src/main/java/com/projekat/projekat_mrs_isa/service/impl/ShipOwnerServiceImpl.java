@@ -63,7 +63,7 @@ public class ShipOwnerServiceImpl implements ShipOwnerService {
         List<ReservationDTO> reservationDTOList = new ArrayList<>();
         List<Ship> ships = shipRepository.findAllFromOwner(owner.getUsername());
         for (Ship s : ships) {
-            List<Reservation> entityReservationList = reservationRepository.getAllFromEntity(s);
+            List<Reservation> entityReservationList = reservationRepository.findAllFromEntity(s);
             List<ReservationDTO> entityReservationDTOList = new ArrayList<>();
             for (Reservation r : entityReservationList) {
                 ReservationDTO reservationDTO = new ReservationDTO(r);

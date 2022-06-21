@@ -66,7 +66,7 @@ public class VacationHouseOwnerServiceImpl implements VacationHouseOwnerService 
         List<ReservationDTO> reservationDTOList = new ArrayList<>();
         List<VacationHouse> vacationHouses = vacationHouseRepository.findAllFromOwner(owner.getUsername());
         for (VacationHouse vh : vacationHouses) {
-            List<Reservation> entityReservationList = reservationRepository.getAllFromEntity(vh);
+            List<Reservation> entityReservationList = reservationRepository.findAllFromEntity(vh);
             List<ReservationDTO> entityReservationDTOList = new ArrayList<>();
             for (Reservation r : entityReservationList) {
                 ReservationDTO reservationDTO = new ReservationDTO(r);

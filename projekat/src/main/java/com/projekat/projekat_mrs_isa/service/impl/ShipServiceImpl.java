@@ -105,7 +105,7 @@ public class ShipServiceImpl implements ShipService {
     public List<Reservation> findAllReservations(Long shipId) {
         Ship ship = findById(shipId);
         if(ship != null)
-            return reservationRepository.getAllFromEntity(ship);
+            return reservationRepository.findAllFromEntity(ship);
         else
             return new ArrayList<>();
     }
