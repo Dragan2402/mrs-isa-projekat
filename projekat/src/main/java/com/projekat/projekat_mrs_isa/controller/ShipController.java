@@ -8,6 +8,10 @@ import com.projekat.projekat_mrs_isa.model.Reservation;
 import com.projekat.projekat_mrs_isa.model.Ship;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
 import com.projekat.projekat_mrs_isa.service.RentingEntityService;
+import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
+import com.projekat.projekat_mrs_isa.dto.ShipDTO;
+import com.projekat.projekat_mrs_isa.model.*;
+import com.projekat.projekat_mrs_isa.service.ShipOwnerService;
 import com.projekat.projekat_mrs_isa.service.ShipService;
 import com.projekat.projekat_mrs_isa.service.UtilityService;
 import org.apache.commons.io.FileUtils;
@@ -39,6 +43,8 @@ import java.util.List;
 public class ShipController {
     @Autowired
     private ShipService shipService;
+    @Autowired
+    private ShipOwnerService shipOwnerService;
 
     @Autowired
     private ResourceLoader resourceLoader;
@@ -168,6 +174,21 @@ public class ShipController {
         }
 
         return new ResponseEntity<>(rentingEntityService.getPicturesByRentingEntity(ship),HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/loggedShipOwner/")
+    @PreAuthorize("hasRole('SHIP_OWNER')")
+    public ResponseEntity<Boolean> createShip(@RequestBody ShipDTO shipDTO, Principal ownerPrincipal) {
+        ShipOwner owner = shipOwnerService.findByUsername(ownerPrincipal.getName());
+        if(owner == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Ship ship = new Ship(shipDTO);
+        owner.addShip(ship);
+
+        shipService.save(ship);
+        shipOwnerService.save(owner);
+
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
     @PutMapping(value = "/loggedShipOwner/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

@@ -37,6 +37,7 @@ import UserProfile from "@/components/user_profiles/UserProfile"
 import OwnerProfile from "@/components/user_profiles/owner_profiles/OwnerProfile";
 import OwnerHome from "@/components/user_profiles/owner_profiles/OwnerHome";
 import OwnerInfo from "@/components/user_profiles/owner_profiles/OwnerInfo";
+import OwnerReservations from "@/components/user_profiles/owner_profiles/OwnerReservations";
 import FirstLogin from "@/components/user_profiles/admin_profile/FirstLogin";
 import AdminComplaints from "@/components/user_profiles/admin_profile/AdminComplaints";
 import AdminEntities from "@/components/user_profiles/admin_profile/AdminEntities";
@@ -65,21 +66,21 @@ const routes = [
     { name: "forgotPasswordPage", path: "/forgotPasswordPage", component: ForgotPasswordPage },
     {
         name: "userProfile",
-        path: "/profile",
+        path: "/user",
         component: UserProfile,
-        children: [
-            {
+        children: [{
                 name: "ownerProfile",
-                path: "/profileO",
+                path: "/owner",
                 component: OwnerProfile,
                 children: [
-                    { name: "ownerHome", path: "/profileO", component: OwnerHome },
-                    { name: "ownerInfo", path: "/profileO", component: OwnerInfo }
+                    { name: "ownerHome", path: "/ownerHome", component: OwnerHome },
+                    { name: "ownerInfo", path: "/ownerInfo", component: OwnerInfo },
+                    { name: "ownerReservations", path: "/ownerReservations", component: OwnerReservations }
                 ]
             },
             {
                 name: "clientProfile",
-                path: "/profileC",
+                path: "/clientProfile",
                 component: ClientProfile
             },
             {

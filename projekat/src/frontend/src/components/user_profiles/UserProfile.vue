@@ -13,27 +13,29 @@ export default {
     const router = useRouter();
 
     onMounted(() => {
-      axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
+      console.log("userProfile onMounted")
+      axios
+          .get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
-            console.log(response);
             if(response.data.accountType === "CLIENT") {
               router.push({name: "clientProfile"});
 
-            } else if (response.data.accountType === undefined ||
-                       response.data.accountType === null ||
-                       response.data.accountType === "") {
-              router.push({name: "loginPage"});
+            }
+            
+            else if (response.data.accountType === "VH_OWNER" ||
+                response.data.accountType === "SH_OWNER" ||
+                response.data.accountType === "INSTRUCTOR"){
+              router.push({name: "ownerHome"});
+
             }
 
             else if (response.data.accountType === "ADMIN"){
-              router.push({name: "adminProfile"})
+              router.push({name: "adminHome"});
             }
-
+            
             else {
-              // console.log(`UserProfile push: ${response.data.accountType}`);
-              router.push({name: "ownerHome"});
+              router.push({name: "loginPage"});
             }
-            // ADMIN?
           });
     })
   }

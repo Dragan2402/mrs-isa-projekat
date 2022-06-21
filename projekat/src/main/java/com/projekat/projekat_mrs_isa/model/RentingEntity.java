@@ -6,6 +6,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -99,6 +100,20 @@ public abstract class RentingEntity  implements Serializable {
         this.rating=0.0;
         this.reviewsNumber=0;
         reservationsCounter=0;
+        this.deleted = false;
+    }
+
+    public RentingEntity(RentingEntityDTO rentingEntityDTO) {
+        this.name = rentingEntityDTO.getName();
+        this.address = rentingEntityDTO.getAddress();
+        this.promoDescription = rentingEntityDTO.getPromoDescription();
+        this.pictures = new ArrayList<>();
+        this.behaviourRules = rentingEntityDTO.getBehaviourRules();
+        this.priceList = rentingEntityDTO.getPriceList();
+        this.additionalInfo = rentingEntityDTO.getAdditionalInfo();
+        this.cancellationConditions = rentingEntityDTO.getCancellationConditions();
+        this.rating = 0.0;
+        this.reviewsNumber = 0;
         this.deleted = false;
     }
 
