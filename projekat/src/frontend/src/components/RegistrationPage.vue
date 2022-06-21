@@ -57,7 +57,7 @@
           <label for="countryInput">Country</label>
         </div>
         <div class="form-floating input-group-width mb-2">
-          <vue-tel-input id="phoneNumInput" class="form-control" v-model="phoneNum" @validate="telValidate"></vue-tel-input>
+            <input v-model="phoneNum" style="max-width: 250px;" type="text" placeholder="Phone Number:" class="form-control" aria-label="Username" aria-describedby="city">
           <label for="phoneNumInput">Phone Number</label>
         </div>
         <div v-if="role!=='addClient'" class="form-floating input-group-width">
@@ -98,7 +98,6 @@ export default {
       address: '',
       city: '',
       country: '',
-      validNumber: '',
       phoneNum: null,
       registrationReason: '',
 
@@ -179,11 +178,16 @@ export default {
         return;
       }
       
-      if(this.validNumber===''){
-        this.$toast.error("Phone number invalid");
+      var phoneRegex= /^\+?\d{8,13}$/;
+      if(this.phoneNum ===''){
+        this.$toast.error("Provide a phone number");
         return;
       }
-
+          
+      if(phoneRegex.test(this.phoneNum)===false){
+        this.$toast.error("Invalid phone number");
+        return;
+      }
       if(this.role !== 'addClient' && this.registrationReason === '') {
         this.$toast.error("Provide a reason for registering");
         return;
@@ -228,13 +232,6 @@ export default {
     
             
      
-    },
-    telValidate(phoneNum) {
-      if (phoneNum.valid) {
-        this.validNumber = phoneNum.number;
-      } else {
-        this.validNumber = '';
-      } 
     },
     validateEmail(email){
       var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;      
