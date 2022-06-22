@@ -269,7 +269,7 @@
 </template>
 
 <script>
-import {computed, ref, onMounted} from "vue";
+import {computed, onMounted, ref} from "vue";
 import axios from "axios";
 import {useRouter} from "vue-router";
 

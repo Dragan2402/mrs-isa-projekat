@@ -1,8 +1,6 @@
 package com.projekat.projekat_mrs_isa.service.impl;
 
-import com.projekat.projekat_mrs_isa.dto.ComplaintDTO;
 import com.projekat.projekat_mrs_isa.dto.ReportDTO;
-import com.projekat.projekat_mrs_isa.model.Complaint;
 import com.projekat.projekat_mrs_isa.model.Report;
 import com.projekat.projekat_mrs_isa.repository.ReportRepository;
 import com.projekat.projekat_mrs_isa.service.ReportService;

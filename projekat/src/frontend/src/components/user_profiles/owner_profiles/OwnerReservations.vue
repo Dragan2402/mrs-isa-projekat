@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import {ref, onMounted, computed} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import axios from "axios";
 import {Modal} from "bootstrap";

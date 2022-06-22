@@ -1,11 +1,10 @@
 package com.projekat.projekat_mrs_isa.service.impl;
 
 import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
-import com.projekat.projekat_mrs_isa.dto.ComplaintDTO;
 import com.projekat.projekat_mrs_isa.dto.PasswordChangeDTO;
 import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
-import com.projekat.projekat_mrs_isa.dto.UserDTO;
-import com.projekat.projekat_mrs_isa.model.*;
+import com.projekat.projekat_mrs_isa.model.Admin;
+import com.projekat.projekat_mrs_isa.model.Role;
 import com.projekat.projekat_mrs_isa.repository.AdminRepository;
 import com.projekat.projekat_mrs_isa.repository.ReservationRepository;
 import com.projekat.projekat_mrs_isa.repository.RoleRepository;

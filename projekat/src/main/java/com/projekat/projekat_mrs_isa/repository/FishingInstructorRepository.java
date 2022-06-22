@@ -1,9 +1,7 @@
 package com.projekat.projekat_mrs_isa.repository;
 
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
-import com.projekat.projekat_mrs_isa.model.Client;
 import com.projekat.projekat_mrs_isa.model.FishingInstructor;
-import com.projekat.projekat_mrs_isa.model.VacationHouseOwner;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

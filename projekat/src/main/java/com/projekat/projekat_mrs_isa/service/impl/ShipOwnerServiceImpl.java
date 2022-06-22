@@ -2,11 +2,12 @@ package com.projekat.projekat_mrs_isa.service.impl;
 
 import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
 import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
-import com.projekat.projekat_mrs_isa.model.*;
-import com.projekat.projekat_mrs_isa.repository.ReservationRepository;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
+import com.projekat.projekat_mrs_isa.model.Reservation;
 import com.projekat.projekat_mrs_isa.model.Role;
+import com.projekat.projekat_mrs_isa.model.Ship;
 import com.projekat.projekat_mrs_isa.model.ShipOwner;
+import com.projekat.projekat_mrs_isa.repository.ReservationRepository;
 import com.projekat.projekat_mrs_isa.repository.RoleRepository;
 import com.projekat.projekat_mrs_isa.repository.ShipOwnerRepository;
 import com.projekat.projekat_mrs_isa.repository.ShipRepository;

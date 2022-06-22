@@ -3,7 +3,6 @@ package com.projekat.projekat_mrs_isa.model;
 
 import org.hibernate.annotations.SQLDelete;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity

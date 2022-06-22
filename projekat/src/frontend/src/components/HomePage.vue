@@ -91,6 +91,7 @@
 <script>
 import axios from "axios"
 import Slider from '@vueform/slider'
+
 export default {
 
   name: "HomePage",
