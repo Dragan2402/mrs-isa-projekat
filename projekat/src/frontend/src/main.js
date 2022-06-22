@@ -28,7 +28,6 @@ import './assets/common-profile.css';
 import 'v-calendar/dist/style.css';
 import "@vueform/slider/themes/default.css"
 import VCalendar from 'v-calendar';
-import UserProfile from "@/components/user_profiles/UserProfile"
 // import VacationHouseOwnerProfile from "@/components/user_profiles/vacation_house_owner/VacationHouseOwnerProfile"
 // import VacationHouseOwnerInfo from "@/components/user_profiles/vacation_house_owner/VacationHouseOwnerInfo"
 // import VacationHouseOwnerHome from "@/components/user_profiles/vacation_house_owner/VacationHouseOwnerHome"
@@ -65,18 +64,13 @@ const routes = [
     { name: "newPasswordPage", path: "/newPassword/:token", component: NewPasswordPage },
     { name: "forgotPasswordPage", path: "/forgotPasswordPage", component: ForgotPasswordPage },
     {
-        name: "userProfile",
-        path: "/profile",
-        component: UserProfile,
-        children: [
-            {
-                name: "ownerProfile",
-                path: "/profileO",
-                component: OwnerProfile,
-                children: [
-                    { name: "ownerHome", path: "/profileO", component: OwnerHome },
-                    { name: "ownerInfo", path: "/profileO", component: OwnerInfo }
-                ]
+            name: "ownerProfile",
+            path: "/profileO",
+            component: OwnerProfile,
+            children: [
+                { name: "ownerHome", path: "/profileO", component: OwnerHome },
+                { name: "ownerInfo", path: "/profileO", component: OwnerInfo }
+            ]
             },
             {
                 name: "clientProfile",
@@ -105,8 +99,6 @@ const routes = [
                 path: "/firstLogin",
                 component: FirstLogin
             },
-        ]
-    }
 ];
 
 const router = new createRouter({

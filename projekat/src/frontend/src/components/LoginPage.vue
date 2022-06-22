@@ -27,6 +27,8 @@ export default {
     return {
       username: "",
       password: "",
+      accountType: "",
+      firstLogin: null
     };
   },
     mounted(){
@@ -71,11 +73,12 @@ export default {
         axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
             .then(response => {
               this.$root.loggedUser=response.data
-              this.$root.accountType = response.data.accountType;
-              console.log(response.data.accountType)
+              this.accountType = response.data.accountType;
+              this.firstLogin = response.data.firstLogin;
+              axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.$root.loggedPicture=response.data));
+              if(this.accountType === "ADMIN" && this.firstLogin) this.$router.push({name: "firstLogin"})
+              else this.$router.push("/");
             });
-        axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.$root.loggedPicture=response.data));
-        this.$router.push("/");  
       
       }).catch((error) => {
         if(error.response.status === 404)

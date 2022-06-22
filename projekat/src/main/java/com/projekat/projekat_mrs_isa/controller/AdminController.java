@@ -150,8 +150,8 @@ public class AdminController {
 
     @GetMapping(value = "/reservations/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<ReservationDTO>> getAllReservations() {
-        List<ReservationDTO> reservationDTOS = reservationService.findAllDTO();
+    public ResponseEntity<List<ReservationDTO>> getFilteredReservations() {
+        List<ReservationDTO> reservationDTOS = adminService.getPastReservations();
         return new ResponseEntity<>(reservationDTOS, HttpStatus.OK);
     }
 

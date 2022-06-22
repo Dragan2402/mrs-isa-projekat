@@ -3,14 +3,18 @@ package com.projekat.projekat_mrs_isa.service.impl;
 import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
 import com.projekat.projekat_mrs_isa.dto.ComplaintDTO;
 import com.projekat.projekat_mrs_isa.dto.PasswordChangeDTO;
+import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.repository.AdminRepository;
+import com.projekat.projekat_mrs_isa.repository.ReservationRepository;
 import com.projekat.projekat_mrs_isa.repository.RoleRepository;
 import com.projekat.projekat_mrs_isa.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +25,8 @@ public class AdminServiceImpl implements AdminService {
     private AdminRepository adminRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private ReservationRepository reservationRepository;
     @Autowired
     private PasswordEncoderComponent passwordEncoderComponent;
 
@@ -43,8 +49,18 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Boolean updatePassword(Admin loggedAdmin, PasswordChangeDTO passwordChangeDTO) {
         loggedAdmin.setPassword(passwordEncoderComponent.encode(passwordChangeDTO.getNewPassword()));
+        loggedAdmin.setFirstLogin(false);
         save(loggedAdmin);
         return true;
+    }
+
+    @Override
+    public List<ReservationDTO> getPastReservations() {
+        List<ReservationDTO> reservationsDTOS = new ArrayList<>();
+        for (ReservationDTO reservationDTO : reservationRepository.findAllDTO()) {
+            if (reservationDTO.getStart().plus(Duration.ofMillis(reservationDTO.getDuration())).compareTo(LocalDateTime.now()) < 0) reservationsDTOS.add(reservationDTO);
+        }
+        return reservationsDTOS;
     }
 
     @Override

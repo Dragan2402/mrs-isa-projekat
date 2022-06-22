@@ -3,8 +3,10 @@
     <div class="for-container" v-for="(review, index) in this.reviews" v-bind:index="index" :key="review.id">
       <div class="inner-container">
         <div class="left-container">
-          <div><b>Comment:</b> {{ review.comment }}</div>
-          <div><b>Approved:</b> {{ review.approved }}</div>
+          <div v-if="review.comment"><b>Comment:</b> {{ review.comment }}</div>
+          <div v-if="review.entityName"><b>Entity:</b> {{ review.entityName }}</div>
+          <div v-if="review.ownerName "><b>Owner:</b> {{ review.ownerName }}</div>
+          <div><b>Client:</b> {{ review.clientName }}</div>
         </div>
         <div class="right-container">
           <button class="custom-btn button-primary" style="width: 120px" @click="approveReview(review, index)">Approve</button>
@@ -33,7 +35,7 @@ export default {
       axios.put("api/admins/reviews", review, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
         if (response.data == true) {
           this.$toast.success("Approved");
-          this.reviews[index].approved = true;
+          this.reviews.splice(index,1);
         } else {
           this.$toast.error("Problem has occurred!");
         }

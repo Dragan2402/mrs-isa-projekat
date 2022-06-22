@@ -1,5 +1,6 @@
 <template>
-    <div style="width: 70%; margin: 20px auto">
+  <div><h5>Register new Admin</h5></div>
+    <div>
       <div class="form-floating input-group-width mb-2">
         <input id="firstNameInput" class="form-control" type="text" v-model="firstName" placeholder="First Name">
         <label for="firstNameInput">First Name</label>
@@ -35,18 +36,15 @@
         <label for="cityInput">City</label>
       </div>
       <div class="form-floating input-group-width mb-2">
-        <country-select id="countryInput" class="form-control" v-model="country" :usei18n="false"
-                        :autocomplete="true"
-                        :countryName="true"/>
+        <input id="countryInput" class="form-control" type="text" v-model="country" placeholder="Country"/>
         <label for="countryInput">Country</label>
       </div>
       <div class="form-floating input-group-width mb-2">
-        <vue-tel-input id="phoneNumInput" class="form-control" v-model="phoneNum"
-                       @validate="telValidate"></vue-tel-input>
+        <input id="phoneNumInput" class="form-control" type="text" v-model="phoneNum" placeholder="Phone number"/>
         <label for="phoneNumInput">Phone Number</label>
       </div>
       <div>
-        <button class="custom-btn button-primary" @click="addAdmin">Sign up</button>
+        <button class="custom-btn button-primary" style="width: 150px; margin-top: 15px" @click="addAdmin">Sign up</button>
       </div>
     </div>
 </template>
@@ -67,8 +65,7 @@ export default {
       address: '',
       city: '',
       country: '',
-      validNumber: '',
-      phoneNum: null
+      phoneNum: ''
     }
   },
   mounted() {
@@ -135,12 +132,12 @@ export default {
         return;
       }
 
-      if (this.country == "") {
+      if (this.country === "") {
         this.$toast.error("Provide country");
         return;
       }
 
-      if (this.validNumber === '') {
+      if (this.phoneNum === '') {
         this.$toast.error("Phone number invalid");
         return;
       }
@@ -167,27 +164,29 @@ export default {
                 'address': this.address,
                 'city': this.city,
                 'country': this.country,
-                'phoneNum': this.validNumber
+                'phoneNum': this.phoneNum
               };
               axios.post("/api/auth/addAdmin", admin).then(response => {
                 if (response.data == false) {
                   this.$toast.error("Registration failed");
                 } else {
                   this.$toast.success("Registration successful");
+                  this.firstName = ''
+                  this.lastName = ''
+                  this.username = ''
+                  this.email = ''
+                  this.password = ''
+                  this.confirmPassword = ''
+                  this.address = ''
+                  this.city = ''
+                  this.country = ''
+                  this.phoneNum = ''
                 }
               });
             }
           })
         }
       });
-    },
-
-    telValidate(phoneNum) {
-      if (phoneNum.valid) {
-        this.validNumber = phoneNum.number;
-      } else {
-        this.validNumber = '';
-      }
     },
 
     validateEmail(email) {

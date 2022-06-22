@@ -12,28 +12,70 @@ public class ComplaintDTO {
     private String text;
     private Boolean approved;
 
-    public ComplaintDTO(){}
+    private String entityName;
 
-    public ComplaintDTO(Long id,Long complainantId,Long rentingEntityId,Long respodentId ,String text, Boolean approved){
-        this.id=id;
-        this.complainantId=complainantId;
-        this.rentingEntityId=rentingEntityId;
-        this.respodentId=respodentId;
-        this.text=text;
-        this.approved=approved;
+    private String ownerName;
+
+    private String clientName;
+
+    public ComplaintDTO() {
+    }
+
+    public ComplaintDTO(Long id, Long complainantId, Long rentingEntityId, Long respodentId, String text, Boolean approved) {
+        this.id = id;
+        this.complainantId = complainantId;
+        this.rentingEntityId = rentingEntityId;
+        this.respodentId = respodentId;
+        this.text = text;
+        this.approved = approved;
     }
 
     public ComplaintDTO(@NotNull Complaint complaint) {
-        id=complaint.getId();
-        complainantId=complaint.getComplainant().getId();
-        if (complaint.getRentingEntity() != null) rentingEntityId=complaint.getRentingEntity().getId();
-        else rentingEntityId = 0L;
-        if (complaint.getRespondent() != null) respodentId=complaint.getRespondent().getId();
-        else respodentId = 0L;
-        text=complaint.getText();
-        approved=complaint.isApproved();
+        id = complaint.getId();
+        complainantId = complaint.getComplainant().getId();
+        if (complaint.getRentingEntity() != null) {
+            rentingEntityId = complaint.getRentingEntity().getId();
+            entityName = complaint.getRentingEntity().getName();
+        } else {
+            rentingEntityId = 0L;
+            entityName = null;
+        }
+        if (complaint.getRespondent() != null){
+            respodentId = complaint.getRespondent().getId();
+            ownerName = complaint.getRespondent().getUsername();
+        }
+        else{
+            respodentId = 0L;
+            ownerName = null;
+        }
+        clientName = complaint.getComplainant().getUsername();
+        text = complaint.getText();
+        approved = complaint.isApproved();
     }
 
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
 
     public Long getId() {
         return id;

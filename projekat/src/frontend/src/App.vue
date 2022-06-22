@@ -54,11 +54,11 @@ export default {
           this.accountType = response.data.accountType;
           this.signIn=false;
           this.signUp=false;
-          this.signedIn=true; 
+          this.signedIn=true;
 
         });
         axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.loggedPicture=response.data));
-      }else{
+     }else{
         this.signIn=true;
         this.signUp=true;
         this.signedIn=false;
