@@ -8,4 +8,6 @@ public interface AdminRepository extends JpaRepository<Admin,Long> {
 
     @Query("select a from Admin a where a.email= ?1")
     public Admin findByEmail(String email);
+
+    Admin findByUsername(String username);
 }

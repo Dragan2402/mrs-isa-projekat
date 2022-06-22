@@ -24,6 +24,9 @@ public class Request {
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
+    @Column(name = "approved", nullable = false)
+    private boolean approved;
+
     public Request(){}
 
     public Request(User submitter,String text,RequestType requestType){
@@ -31,6 +34,7 @@ public class Request {
         this.text=text;
         this.type=requestType;
         this.deleted=false;
+        this.approved=false;
     }
 
     public Long getId() {
@@ -39,6 +43,14 @@ public class Request {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 
     public User getSubmitter() {

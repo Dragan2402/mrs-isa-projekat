@@ -29,7 +29,6 @@
     "vue-router": "^4.0.14",
     "vue-toastr": "^2.1.2",
     "vue3-country-region-select": "^1.0.0",
-    "vue3-star-ratings": "^1.1.0",
     "vue3-tags-input": "^1.0.2",
     "vue3-tel-input": "^1.0.4"
   },

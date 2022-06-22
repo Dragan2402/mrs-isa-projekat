@@ -1,8 +1,17 @@
 <template>
-  <div align='center'>
-    <br>
-    <input type="text" v-model="email" placeholder="E-mail"> <br><br>
-    <button class="btn btn-primary" @click="sendResetPasswordMail()">Send reset password email</button>
+
+  <div style="display:flex; flex-direction:column;align-items: center;
+    justify-content: center;min-height:600px;">
+    
+    <div style="align-self:center; background-color: #00587a;width:40%;align-items:center;justify-content: center;padding:3%;">
+      <div class="form-floating input-group-width mb-4">
+          <input id="emailInput" class="form-control" type="text" v-model="email" placeholder="Email">
+          <label for="emailInput">Email</label>
+      </div>
+      <div>
+        <button class="custom-btn button-secondary input-group-width mb-3 mt-5" style="margin-left:25%;max-width:350px;" @click="sendResetPasswordMail()">Send reset password email</button>
+      </div>
+    </div>
   </div>
 </template>
 

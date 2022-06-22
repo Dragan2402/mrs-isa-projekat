@@ -1,6 +1,8 @@
 package com.projekat.projekat_mrs_isa.service.impl;
 
+import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
 import com.projekat.projekat_mrs_isa.model.Reservation;
+import com.projekat.projekat_mrs_isa.repository.RentingEntityRepository;
 import com.projekat.projekat_mrs_isa.repository.ReservationRepository;
 import com.projekat.projekat_mrs_isa.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,16 +11,22 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
     @Autowired
     private ReservationRepository reservationRepository;
 
+    @Autowired
+    RentingEntityRepository rentingEntityRepository;
+
     @Override
     public Reservation findById(Long id) {
         return reservationRepository.findById(id).orElse(null);
     }
+
+    public List<ReservationDTO> findAllDTO() { return reservationRepository.findAllDTO(); }
 
     @Override
     public Reservation save(Reservation reservation) { return reservationRepository.save(reservation); }

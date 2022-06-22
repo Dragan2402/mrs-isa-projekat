@@ -55,7 +55,13 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
     private ReservationRepository reservationRep;
 
     @Autowired
+    private FeeRepository feeRepository;
+
+    @Autowired
     private RequestService requestService;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -93,10 +99,13 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         List<Role> rolesVHOwner = roleRepository.findByName("ROLE_VH_OWNER");
         List<Role> rolesFCInstructor = roleRepository.findByName("ROLE_FC_INSTRUCTOR");
 
+        Fee fee = new Fee(0.02);
+        feeRepository.save(fee);
 
-        Admin adminTemp= new Admin("email@maildrop.cc","gageMadjija",passwordEncoderComponent.encode("Gage123"),"src/main/resources/pictures/user_pictures/0.png","Dragan"
+        Admin adminTemp= new Admin("email@maildrop.cc","Andrej",passwordEncoderComponent.encode("Aage123"),"src/main/resources/pictures/user_pictures/0.png","Dragan"
         ,"Mirkovic","Hopovska 4","Novi Sad","Serbia","+381692402000");
         adminTemp.setVerified(true);
+        adminTemp.setEnabled(true);
         adminTemp.setRoles(rolesAdmin);
         adminRep.save(adminTemp);
 
@@ -104,6 +113,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         Client clientTemp1= new Client("peropero@maildrop.cc","peroPero",passwordEncoderComponent.encode("Pero123"),"src/main/resources/pictures/user_pictures/2.png","Pero"
                 ,"Peric","Jovanova 14","Novi Sad","Serbia","+38165656565");
         clientTemp1.setVerified(true);
+        clientTemp1.setEnabled(true);
         clientTemp1.setRoles(rolesClient);
         clientTemp1.addPenalty();
         clientTemp1.addPenalty();
@@ -114,6 +124,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         Client clientTemp2= new Client("jovo@maildrop.cc","jovo",passwordEncoderComponent.encode("Jovo123"),"src/main/resources/pictures/user_pictures/0.png","Jovo"
                 ,"Jovic","Jovanovska 19","Novi Sad","Serbia","+381656565222");
         clientTemp2.setVerified(true);
+        clientTemp2.setEnabled(true);
         clientTemp2.setRoles(rolesClient);
         clientRep.save(clientTemp2);
 
@@ -124,6 +135,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         VacationHouseOwner vacHouseOwnerTemp1= new VacationHouseOwner("dimpet96@maildrop.cc","dimitrije",passwordEncoderComponent.encode("Dimpet123"),"src/main/resources/pictures/user_pictures/0.png","Dimitrije"
                 ,"Petrov","Somborska 55","Novi Sad","Serbia","+381650000000",vacHouseOwner1AddSrvc);
         vacHouseOwnerTemp1.setVerified(true);
+        vacHouseOwnerTemp1.setEnabled(true);
         vacHouseOwnerTemp1.setRoles(rolesVHOwner);
         vacHouseRep.save(vacHouseOwnerTemp1);
 
@@ -134,6 +146,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         ShipOwner shipOwnerTemp1=new ShipOwner("krtolinat@maildrop.cc","tkrtolina",passwordEncoderComponent.encode("Tomo123"),"src/main/resources/pictures/user_pictures/0.png","Tomo"
                 ,"Krtolina","Balkan","Subotica","Serbia","+381653232322",shipOwnerServices);
         shipOwnerTemp1.setVerified(true);
+        shipOwnerTemp1.setEnabled(true);
         shipOwnerTemp1.setRoles(rolesShipOwner);
         shipOwnerRep.save(shipOwnerTemp1);
 
@@ -143,6 +156,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         fishingInstructorAddSrvcs.add("Bites");
         FishingInstructor fishingInstructorTemp=new FishingInstructor("aki96@maildrop.cc","AkiKavasaki",passwordEncoderComponent.encode("Asiasi123"),"src/main/resources/pictures/user_pictures/0.png","Andrej","Culjak","Futoska 70","Novi Sad","Serbia","+381611155777",fishingInstructorAddSrvcs);
         fishingInstructorTemp.setVerified(true);
+        fishingInstructorTemp.setEnabled(true);
         fishingInstructorTemp.setRoles(rolesFCInstructor);
         fishingInstructorRep.save(fishingInstructorTemp);
 
@@ -153,6 +167,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         VacationHouseOwner vacHouseOwnerTemp2= new VacationHouseOwner("bokiboki@maildrop.cc","Boris",passwordEncoderComponent.encode("Boki222"),"src/main/resources/pictures/user_pictures/0.png","Boris"
                 ,"Brejca","Tuzna ulica","Tuzni Grad","Serbia","+381650000111",vacHouseOwner2AddSrvc);
         vacHouseOwnerTemp2.setVerified(true);
+        vacHouseOwnerTemp2.setEnabled(true);
         vacHouseOwnerTemp2.setRoles(rolesVHOwner);
         vacHouseRep.save(vacHouseOwnerTemp2);
 
@@ -350,27 +365,13 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
 
         vacationHouseRep.save(vacationHouseTemp);
         vacationHouseRep.save(vacationHouseTemp2);
-        Review reviewTemp1=new Review(vacationHouseTemp2,clientTemp1,4.6);
-        Review reviewTemp2=new Review(vacationHouseTemp2,clientTemp1,5.0,"Sve u fullu, ispostovano");
-        Review reviewTemp3=new Review(vacationHouseTemp2,clientTemp1,4.8);
-        Review reviewTemp4=new Review(vacHouseOwnerTemp1,clientTemp1,5.0,"NAJJACI");
-        clientTemp1.addReview(reviewTemp4);
-        vacHouseOwnerTemp1.addReview(reviewTemp4);
-        vacHouseRep.save(vacHouseOwnerTemp1);
+
 
         Reservation r = new Reservation( "Rakovac", 5, new ArrayList<>(), 100.0,
-                vacationHouseTemp, clientTemp2,
-                LocalDateTime.of(2022,3,1, 20, 15), Duration.ofDays(3));
+                vacationHouseTemp, clientTemp2,LocalDateTime.of(2022,3,1, 20, 15), Duration.ofDays(3), fee.getValue());
         reservationRep.save(r);
 
 
-        vacationHouseTemp2.addReview(reviewTemp1);
-        vacationHouseTemp2.addReview(reviewTemp2);
-        vacationHouseTemp2.addReview(reviewTemp3);
-        clientTemp1.addReview(reviewTemp1);
-        clientTemp1.addReview(reviewTemp2);
-        clientTemp1.addReview(reviewTemp3);
-        vacationHouseRep.save(vacationHouseTemp2);
 
 
         Complaint complaintTemp1=new Complaint(clientTemp1,vacationHouseTemp,"UZASAN SMRAD UBIO ME");
@@ -398,7 +399,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
                 vacationHouseTemp,
                 clientTemp1,
                 LocalDateTime.of(2022,1,24,20,10),
-                Duration.ofDays(3)
+                Duration.ofDays(3), fee.getValue()
         );
 
         Reservation reservationTemp2 = new Reservation(
@@ -409,7 +410,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
                 vacationHouseTemp,
                 clientTemp1,
                 LocalDateTime.of(2022,9,24,20,10),
-                Duration.ofDays(3)
+                Duration.ofDays(3), fee.getValue()
         );
 
         Reservation reservationTemp3 = new Reservation(
@@ -420,7 +421,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
                 vacationHouseTemp,
                 clientTemp1,
                 LocalDateTime.of(2022,5,20,20,10),
-                Duration.ofDays(3)
+                Duration.ofDays(3), fee.getValue()
         );
 
         vacationHouseTemp.addReservation(reservationTemp3);
@@ -504,7 +505,27 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         clientTemp1.addSubscription(vacationHouseTemp2);
         clientRep.save(clientTemp1);
 
+        Review reviewTemp1=new Review(vacationHouseTemp2,clientTemp1,4.6);
+        reviewTemp1.setApproved(true);
+        Review reviewTemp2=new Review(vacationHouseTemp2,clientTemp1,5.0,"Sve u fullu, ispostovano");
+        Review reviewTemp3=new Review(vacationHouseTemp2,clientTemp1,4.8);
+        reviewTemp3.setApproved(true);
+        Review reviewTemp4=new Review(vacHouseOwnerTemp1,clientTemp1,5.0,"NAJJACI");
+        clientTemp1.addReview(reviewTemp4);
+        clientTemp1.addReview(reviewTemp3);
+        clientTemp1.addReview(reviewTemp2);
+        clientTemp1.addReview(reviewTemp1);
+        vacationHouseTemp2.addReview(reviewTemp3);
+        vacationHouseTemp2.addReview(reviewTemp1);
 
+
+
+        reviewRepository.save(reviewTemp1);
+        reviewRepository.save(reviewTemp2);
+        reviewRepository.save(reviewTemp3);
+        reviewRepository.save(reviewTemp4);
+
+        vacHouseRep.save(vacHouseOwnerTemp1);
 
         Path currentRelativePath = Paths.get("");
         String s = currentRelativePath.toAbsolutePath().toString();

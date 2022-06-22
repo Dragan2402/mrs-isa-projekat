@@ -12,15 +12,34 @@ public class ReviewDTO {
     private String comment;
     private Boolean approved;
 
+    private String entityName;
+
+    private String ownerName;
+
+    private String clientName;
+
     private ReviewDTO(){}
 
     public ReviewDTO(@NotNull Review review){
         this.id=review.getId();
-        if (review.getRentingEntity() != null) rentingEntityId=review.getRentingEntity().getId();
-        else rentingEntityId = 0L;
-        if (review.getRentingOwner() != null) rentingEntityId=review.getRentingOwner().getId();
-        else rentingOwnerId = 0L;
+        if (review.getRentingEntity() != null){
+            this.rentingEntityId=review.getRentingEntity().getId();
+            this.entityName=review.getRentingEntity().getName();
+        }
+        else {
+            this.rentingEntityId = 0L;
+            this.entityName = null;
+        }
+        if (review.getRentingOwner() != null){
+            this.rentingOwnerId=review.getRentingOwner().getId();
+            this.ownerName=review.getRentingOwner().getUsername();
+        }
+        else{
+            this.rentingOwnerId = 0L;
+            this.ownerName = null;
+        }
         this.clientId=review.getClient().getId();
+        this.clientName=review.getClient().getUsername();
         this.rating=review.getRating();
         this.comment=review.getComment();
         this.approved=review.isApproved();
@@ -36,6 +55,30 @@ public class ReviewDTO {
         this.rating = rating;
         this.comment = comment;
         this.approved = approved;
+    }
+
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
     }
 
     public Long getId() {

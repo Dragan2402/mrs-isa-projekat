@@ -19,11 +19,17 @@
   <div class="modal-button-div">
     <button type="button" class="custom-btn button-primary me-5" data-bs-toggle="modal" data-bs-target="#pictureModal">Change Picture</button>
     <button type="button" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#infoModal">Change Info</button>
+    <button type="button" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#passwordModal">Change Password</button>
+    <button type="button" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Account</button>
   </div>
 
+<!--  Change Info Modal-->
   <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
+        <div class="modal-header">
+          <h5>Change Information</h5>
+        </div>
         <div class="modal-body">
           <div class="form-floating mb-3">
             <input v-model="owner.firstName" type="text" class="form-control" id="modalFirstName" placeholder="First Name">
@@ -61,11 +67,79 @@
       </div>
     </div>
   </div>
+
+  <!--  Change Password Modal-->
+  <div class="modal fade" id="passwordModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5>Change Password</h5>
+          </div>
+          <div class="modal-body">
+            <div class="form-floating mb-3">
+              <input v-model="oldPassword" type="text" class="form-control" id="modalOldPassword" placeholder="Old Password">
+              <label for="modalOldPassword">Old Password</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input v-model="newPassword" type="text" class="form-control" id="modalNewPassword" placeholder="New Password">
+              <label for="modalNewPassword">New Password</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input v-model="confirmPassword" type="text" class="form-control" id="modalConfirmPassword" placeholder="Confirm Password">
+              <label for="modalConfirmPassword">Confirm Password</label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="custom-btn button-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" @click="changePassword" class="custom-btn button-primary" data-bs-dismiss="modal">Change</button>
+          </div>
+        </div>
+    </div>
+  </div>
+
+<!--  Change Pasword Alert-->
+  <div class="modal fade" id="changePasswordAlertModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5>{{changePasswordAlertTitle}}</h5>
+        </div>
+        <div class="modal-body">
+          <p>{{changePasswordAlertText}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="custom-btn button-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--  Delete Request Modal-->
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5>Send Request to Delete Your Account</h5>
+        </div>
+        <div class="modal-body">
+          <div class="form-floating input-group-width">
+            <textarea id="reasonInput" class="form-control textarea-height" v-model="deleteReason"></textarea>
+            <label for="reasonInput">Why do you want to delete your account?</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="custom-btn button-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" @click="sendDeleteRequest" class="custom-btn button-primary" data-bs-dismiss="modal">Send Request</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
+import {Modal} from "bootstrap";
 import axios from "axios";
 
 export default {
@@ -94,6 +168,12 @@ export default {
     let phoneNum = ref(null);
     let validatedPhoneNum = ref("")
     let picture = ref("");
+    let deleteReason = ref("");
+    let oldPassword = ref("");
+    let newPassword = ref("");
+    let confirmPassword = ref("");
+    let changePasswordAlertTitle = ref("");
+    let changePasswordAlertText = ref("");
     let page = ref("homePage");
 
     onMounted(() => {
@@ -158,13 +238,121 @@ export default {
           });
     }
 
+    function changePassword() {
+      let passwordRegex=/^[\dA-Za-z]+$/;
+
+      // let changeModal = new Modal(document.getElementById('passwordModal'), {});
+      let alertModal = new Modal(document.getElementById('changePasswordAlertModal'), {});
+
+
+      if(newPassword.value.length < 5 || newPassword.value.length > 20){
+        changePasswordAlertText.value = "New password must be between 5 and 20 characters";
+        changePasswordAlertTitle.value = "Password Change Unsuccessful";
+        // changeModal.hide();
+        // changeModal.dispose();
+        alertModal.show();
+        return;
+      }
+      if(!passwordRegex.test(newPassword.value)){
+        changePasswordAlertText.value = "New password can only contain letters and numbers";
+        changePasswordAlertTitle.value = "Password Change Unsuccessful";
+        // changeModal.hide();
+        // changeModal.dispose();
+        alertModal.show();
+        return;
+      }
+      if(oldPassword.value.length < 5 || oldPassword.value.length > 20){
+        changePasswordAlertText.value = "Old password must be between 5 and 20 characters";
+        changePasswordAlertTitle.value = "Password Change Unsuccessful";
+        // changeModal.hide();
+        // changeModal.dispose();
+        alertModal.show();
+        return;
+      }
+      if(!passwordRegex.test(oldPassword.value)){
+        changePasswordAlertText.value = "Old password can only contain letters and numbers";
+        changePasswordAlertTitle.value = "Password Change Unsuccessful";
+        // changeModal.hide();
+        // changeModal.dispose();
+        alertModal.show();
+        return;
+      }
+
+      if(newPassword.value === oldPassword.value){
+        changePasswordAlertText.value = "New password cannot be the same as the old one";
+        changePasswordAlertTitle.value = "Password Change Unsuccessful";
+        // changeModal.hide();
+        // changeModal.dispose();
+        alertModal.show();
+        return;
+      }
+
+      if(newPassword.value !== confirmPassword.value){
+        changePasswordAlertText.value = "New password and confirmed password do not match";
+        changePasswordAlertTitle.value = "Password Change Unsuccessful";
+        // changeModal.hide();
+        // changeModal.dispose();
+        alertModal.show();
+        return;
+      }
+
+      const passwordChange = {
+        oldPassword : oldPassword.value,
+        newPassword : newPassword.value,
+        newPasswordConfirm : confirmPassword.value
+      };
+
+      axios.put(`/api/users/loggedUser/changePassword`, passwordChange,
+          { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
+          .then(response => {
+            if (response.data === true) {
+              changePasswordAlertTitle.value = "Password Change Successful";
+              changePasswordAlertText.value = "You have successfully changed your password";
+            } else {
+              changePasswordAlertTitle.value = "Password Change Unsuccessful";
+              changePasswordAlertText.value = "Old password you entered does not match your current password";
+            }
+            // changeModal.hide();
+            alertModal.show();
+          });
+    }
+
+    function sendDeleteRequest() {
+      if(deleteReason.value == "") {
+        return;
+      }
+      let request = {
+        id: null,
+        submitterId: owner.value.id,
+        submitterUsername: owner.value.username,
+        text: deleteReason.value,
+        type: "DELETE_ACCOUNT"
+      }
+      axios.post("/api/users/submitRequest",
+          request,
+          { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
+          .then(response => {
+            if(response.data == false) {
+              console.log(response.data)
+            }
+          })
+    }
+
     return {
       owner,
       phoneNum,
       picture,
+      oldPassword,
+      newPassword,
+      confirmPassword,
+      changePasswordAlertTitle,
+      changePasswordAlertText,
+      deleteReason,
       page,
       telValidate,
-      saveInfoEdit
+      saveInfoEdit,
+      sendDeleteRequest,
+      changePassword
     }
   }
 }

@@ -46,15 +46,21 @@ public class Reservation implements Serializable {
     private Duration duration;
 
     @Version
-    @Column(name = "version",nullable = false,unique = false)
+    @Column(name = "version", nullable = false, unique = false)
     private Integer version;
+
+    @Column(name = "fee", nullable = false)
+    private Double fee;
+
+    @Column(name = "reviewed", nullable = false)
+    private boolean reviewed;
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
     public Reservation() {}
 
-    public Reservation(Offer offer, Client client) {
+    public Reservation(Offer offer, Client client, Double fee) {
         this.place = offer.getPlace();
         this.clientLimit = offer.getClientLimit();
         this.additionalServices = offer.getAdditionalServices();
@@ -63,6 +69,8 @@ public class Reservation implements Serializable {
         this.client = client;
         this.start = offer.getStart();
         this.duration = offer.getDuration();
+        this.fee = fee;
+        this.reviewed = false;
         this.deleted = false;
     }
 
@@ -75,11 +83,12 @@ public class Reservation implements Serializable {
         this.client = client;
         this.start = reservationDTO.getStart();
         this.duration = Duration.ofMillis(reservationDTO.getDuration());
+        this.fee = reservationDTO.getFee();
         this.deleted = false;
     }
 
     public Reservation( String place, Integer clientLimit, List<String> additionalServices, Double price,
-                        RentingEntity rentingEntity, Client client, LocalDateTime start, Duration duration) {
+                        RentingEntity rentingEntity, Client client, LocalDateTime start, Duration duration, Double fee) {
 
         this.place = place;
         this.clientLimit = clientLimit;
@@ -89,6 +98,8 @@ public class Reservation implements Serializable {
         this.client = client;
         this.start = start;
         this.duration = duration;
+        this.fee = fee;
+        this.reviewed = false;
         this.deleted = false;
     }
 
@@ -162,6 +173,22 @@ public class Reservation implements Serializable {
 
     public void setDuration(Duration duration) {
         this.duration = duration;
+    }
+
+    public Double getFee() {
+        return fee;
+    }
+
+    public void setFee(Double fee) {
+        this.fee = fee;
+    }
+
+    public boolean isReviewed() {
+        return reviewed;
+    }
+
+    public void setReviewed(boolean reviewed) {
+        this.reviewed = reviewed;
     }
 
     public boolean isDeleted() {

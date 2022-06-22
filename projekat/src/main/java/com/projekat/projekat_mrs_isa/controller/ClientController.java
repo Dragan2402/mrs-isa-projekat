@@ -10,10 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -47,6 +45,9 @@ public class ClientController {
     @Autowired
     private ReviewService reviewService;
 
+    @Autowired
+    private ReportService reportService;
+
     @GetMapping(value = "/all")
     public ResponseEntity<List<UserDTO>> getAllClients() {
         List<UserDTO> clients = clientService.findAllDTO();
@@ -74,8 +75,8 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Review review = new Review(rentingEntity, client, reviewDTO.getRating(), reviewDTO.getComment());
-        rentingEntity.addReview(review);
-        client.addReview(review);
+        //rentingEntity.addReview(review);
+        //client.addReview(review);
         Review saved = reviewService.save(review);
         if (saved == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -93,8 +94,8 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Complaint complaint=new Complaint(client,rentingEntity,complaintDTO.getText());
-        rentingEntity.addComplaint(complaint);
-        client.sendComplaint(complaint);
+        //rentingEntity.addComplaint(complaint);
+        //client.sendComplaint(complaint);
         Complaint complaintSaved = complaintService.save(complaint);
         if (complaintSaved == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -112,8 +113,8 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Complaint complaint=new Complaint(client,respodent,complaintDTO.getText());
-        respodent.recieveComplaint(complaint);
-        client.sendComplaint(complaint);
+        //respodent.recieveComplaint(complaint);
+        //client.sendComplaint(complaint);
         Complaint complaintSaved = complaintService.save(complaint);
         if (complaintSaved == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -132,8 +133,8 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Review review = new Review(user, client, reviewDTO.getRating(), reviewDTO.getComment());
-        user.addReview(review);
-        client.addReview(review);
+        //user.addReview(review);
+        //client.addReview(review);
         Review saved = reviewService.save(review);
         if (saved == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -288,11 +289,9 @@ public class ClientController {
             Client clientToUpdate = clientService.findByUsername(clientP.getName());
             clientToUpdate.update(userDTO);
             Client updatedCLient = clientService.save(clientToUpdate);
-
-
             if (updatedCLient == null)
-                return new ResponseEntity<UserDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
-            return new ResponseEntity<UserDTO>(new UserDTO(updatedCLient), HttpStatus.OK);
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new UserDTO(updatedCLient), HttpStatus.OK);
         } else {
 
             return new ResponseEntity<>(new UserDTO(), HttpStatus.BAD_REQUEST);
@@ -315,9 +314,29 @@ public class ClientController {
         if (resp && resp2) {
             return new ResponseEntity<>(utilityService.getPictureEncoded(updatedClient.getPicture()), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new UserDTO(), HttpStatus.BAD_REQUEST);
         }
     }
-
-
+    
+    @PostMapping(value = "/loggedOwner/sendReservationReport", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('VH_OWNER', 'SHIP_OWNER', 'FC_INSTRUCTOR')")
+    public ResponseEntity<Boolean> createReservationReport(Principal userPrincipal, @RequestBody ReportDTO reportDTO) {
+        User user = userService.findByUsername(userPrincipal.getName());
+        if (user == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Reservation reservation = reservationService.findById(reportDTO.getReservationId());
+        Client client = clientService.findById(reportDTO.getClientId());
+        if (reservation == null || client == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Report report = new Report(reportDTO.getText(), reportDTO.getType(), reservation, client, user);
+        if (report.getType() == ReportType.NO_SHOW) {
+            client.addPenalty();
+            report.setReviewed(true);
+            clientService.save(client);
+        } else if (report.getType() == ReportType.GOOD)
+            report.setReviewed(true);
+        reservation.setReviewed(true);
+        reservationService.save(reservation);
+        return new ResponseEntity<>(reportService.save(report), HttpStatus.OK);
+    }
 }

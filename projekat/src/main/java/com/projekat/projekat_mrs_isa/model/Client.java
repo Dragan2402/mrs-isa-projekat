@@ -19,8 +19,8 @@ public class Client extends User {
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Review> reviews = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(name = "subscribed", joinColumns = @JoinColumn(name = "client_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "renting_entity_id", referencedColumnName = "id"))
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "subscribed",joinColumns = @JoinColumn(name = "client_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "renting_entity_id", referencedColumnName = "id"))
     private Set<RentingEntity> subscriptions = new HashSet<RentingEntity>();
 
     public Client() {
@@ -30,6 +30,7 @@ public class Client extends User {
                   String country, String phoneNum) {
         super(email, username, password, picture, firstName, lastName, address, city, country, phoneNum);
         super.setType(AccountType.CLIENT);
+        super.setEnabled(true);
 
     }
 

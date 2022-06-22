@@ -36,6 +36,13 @@ public class VacationHouse extends RentingEntity {
         this.clientLimit=roomsQuantity*bedsPerRoom;
     }
 
+    public VacationHouse(VacationHouseDTO vacationHouseDTO) {
+        super(vacationHouseDTO);
+        this.roomsQuantity = vacationHouseDTO.getRoomsQuantity();
+        this.bedsPerRoom = vacationHouseDTO.getBedsPerRoom();
+        this.clientLimit=roomsQuantity*bedsPerRoom;
+    }
+
     public Integer getRoomsQuantity() {
         return roomsQuantity;
     }

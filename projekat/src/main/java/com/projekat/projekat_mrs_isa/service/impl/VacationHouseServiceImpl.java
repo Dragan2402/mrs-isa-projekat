@@ -32,7 +32,6 @@ public class VacationHouseServiceImpl implements VacationHouseService {
     @Override
     public VacationHouse findById(Long id) {
         {
-            LOG.info("Vacation house with id:"+id+" successfully cached");
             return vacationHouseRepository.findById(id).orElse(null);
         }
     }

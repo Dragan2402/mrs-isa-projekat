@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface FishingClassService {
 
-    @Cacheable(value = "rentingEntity",key = "#id")
+    @Cacheable(value = "rentingEntity",key = "#id",unless="#result == null")
     FishingClass findById(Long id);
 
     FishingClassDTO findFishingClassDTO(Long id);

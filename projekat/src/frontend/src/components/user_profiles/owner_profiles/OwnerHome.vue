@@ -3,7 +3,9 @@
 
 
   <div class="left-bar">
-    <h5 style="color: white; font-weight: bold">Search</h5>
+    <button class="custom-btn button-secondary w-100 mb-3" data-bs-toggle="modal" data-bs-target="#addModal" >Add {{entityTypeInfo.title}}</button>
+
+    <h5 class="left-bar-heading">Search</h5>
     <div class="left-bar-text">Destination name:</div>
     <div>
       <input class="input-group-text" type="text" placeholder="Filter by name, address..." v-model="filter"/>
@@ -37,6 +39,86 @@
     </div>
   </div>
 
+<!--  Add Entity Modal-->
+  <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          Add {{entityTypeInfo.title}}
+        </div>
+
+        <div class="modal-body">
+          <div class="form-floating mb-3">
+            <input v-model="newEntity.name" type="text" class="form-control" id="addName" placeholder="Title">
+            <label for="addName">Title</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="newEntity.address" type="text" class="form-control" id="addAddress" placeholder="Address">
+            <label for="addAddress">Address</label>
+          </div>
+          <div class="form-floating mb-3">
+            <textarea style="height: 100px" v-model="newEntity.promoDescription" type="text" class="form-control" id="addPromoDescription" placeholder="Description"></textarea>
+            <label for="addPromoDescription">Description</label>
+          </div>
+          <div class="form-floating mb-3">
+            <textarea style="height: 100px" v-model="newEntity.behaviourRules" type="text" class="form-control" id="addBehaviourRules" placeholder="Behaviour rules"></textarea>
+            <label for="addBehaviourRules">Behaviour rules</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="newEntity.priceList" type="text" class="form-control" id="addPriceList" placeholder="Price">
+            <label for="addPriceList">Price</label>
+          </div>
+          <div class="form-floating mb-3">
+            <textarea style="height: 100px" v-model="newEntity.additionalInfo" type="text" class="form-control" id="addAdditionalInfo" placeholder="Additional info"></textarea>
+            <label for="addAdditionalInfo">Additional info</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input v-model="newEntity.cancellationConditions" type="text" class="form-control" id="addCancellationConditions" placeholder="Cancellation conditions">
+            <label for="addCancellationConditions">Cancellation conditions</label>
+          </div>
+          <!-- Vacation House specific attributes -->
+          <div v-if="entityTypeInfo.name==='vacation house'" class="form-floating mb-3">
+            <input v-model="newEntity.roomsQuantity" type="text" class="form-control" id="addRoomsQuantity" placeholder="Rooms quantity">
+            <label for="addRoomsQuantity">Rooms quantity</label>
+          </div>
+          <div v-if="entityTypeInfo.name==='vacation house'" class="form-floating mb-3">
+            <input v-model="newEntity.bedsPerRoom" type="text" class="form-control" id="addBedsPerRoom" placeholder="Beds per room">
+            <label for="addBedsPerRoom">Beds per room</label>
+          </div>
+          <!-- Ship specific attributes -->
+          <div v-if="entityTypeInfo.name==='ship'" class="form-floating mb-3">
+            <input v-model="newEntity.type" type="text" class="form-control" id="addType" placeholder="Type">
+            <label for="addType">Type</label>
+          </div>
+          <div v-if="entityTypeInfo.name==='ship'" class="form-floating mb-3">
+            <input v-model="newEntity.length" type="text" class="form-control" id="addLength" placeholder="Length">
+            <label for="addLength">Length</label>
+          </div>
+          <div v-if="entityTypeInfo.name==='ship'" class="form-floating mb-3">
+            <input v-model="newEntity.engineNumber" type="text" class="form-control" id="addEngineNumber" placeholder="Engine number">
+            <label for="addEngineNumber">Engine number</label>
+          </div>
+          <div v-if="entityTypeInfo.name==='ship'" class="form-floating mb-3">
+            <input v-model="newEntity.enginePower" type="text" class="form-control" id="addEnginePower" placeholder="Engine power">
+            <label for="addEnginePower">Engine power</label>
+          </div>
+          <div v-if="entityTypeInfo.name==='ship'" class="form-floating mb-3">
+            <input v-model="newEntity.topSpeed" type="text" class="form-control" id="addTopSpeed" placeholder="Top speed">
+            <label for="addTopSpeed">Top speed</label>
+          </div>
+          <div v-if="entityTypeInfo.name==='ship'" class="form-floating mb-3">
+            <input v-model="newEntity.clientLimit" type="text" class="form-control" id="addClientLimit" placeholder="Client limit">
+            <label for="addClientLimit">Client limit</label>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="custom-btn button-primary" data-bs-dismiss="modal">Close</button>
+          <button type="button" @click="addEntity" class="custom-btn button-primary" data-bs-dismiss="modal">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
   <div class="home-entities-div">
@@ -47,8 +129,7 @@
         <div class="home-entity-description">
           <i class="bi bi-geo-alt-fill"></i> {{ entity.address }}
         </div>
-        <vue3-star-ratings class="star-ratings" v-model="entity.rating" starSize="15" :showControl=false :disableClick=true :step=0 />
-        <span style="color: #585858;">({{entity.reviewsNumber}})</span>
+        <label>{{Math.round(entity.rating * 10) / 10}} &#11088;</label>
       </div>
       <div class="home-entity-price h-100 d-flex">
         <div class="align-self-center">
@@ -186,6 +267,7 @@ export default {
       routeName: ""
     });
 
+    let newEntity = ref({});
     let entities  = ref([{}]);
     let filter = ref("");
     let availabilityInterval = ref(null);
@@ -230,13 +312,16 @@ export default {
     // })
 
     onMounted(() => {
+      console.log("ownerHome onMounted")
       axios
           .get("https://renting-buddy-spring.herokuapp.com/api/users/loggedUser",
           { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
+            console.log("ownerHome axios then")
             if(response.data.accountType === "VH_OWNER") {
               entityTypeInfo.value = {
                 name: "vacation house",
+                title: "Vacation House",
                 urlPart: "vacationHouses/loggedVacationHouseOwner",
                 routeName: "vacationHouseProfile"
               };
@@ -244,6 +329,7 @@ export default {
             } else if (response.data.accountType === "SH_OWNER") {
               entityTypeInfo.value = {
                 name: "ship",
+                title: "Ship",
                 urlPart: "ships/loggedShipOwner",
                 routeName: "shipProfile"
               };
@@ -251,6 +337,8 @@ export default {
             // else if INSTRUCTOR, ADMIN
 
             } else {
+
+              console.log("ownerHome axios then push")
               router.push({name: "homePage"});
             }
 
@@ -265,8 +353,6 @@ export default {
     });
 
     function loadData() {
-      console.log("loadData:")
-      console.log(entityTypeInfo.value);
       axios
           .get(`https://renting-buddy-spring.herokuapp.com/api/${entityTypeInfo.value.urlPart}/all`,
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
@@ -294,6 +380,19 @@ export default {
           .then(response => {
             hasReservations.value = response.data;
           });
+    }
+
+    function addEntity() {
+      axios
+          .post(`api/${entityTypeInfo.value.urlPart}/`, newEntity.value,
+              { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
+          .then(response => {
+            console.log(response.data);
+          })
+          .catch(error => {
+            console.log(error.response);
+          });
+      loadData();
     }
 
     function updateEntity(entity) {
@@ -477,10 +576,12 @@ export default {
       filteredEntities,
       hasReservations,
       range,
+      newEntity,
       // attributes,
       // minDate,
       // maxDate,
       entityHasReservations,
+      addEntity,
       updateEntity,
       deleteEntity,
       openEntityProfile

@@ -1,11 +1,21 @@
 package com.projekat.projekat_mrs_isa.controller;
 
 
+import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
 import com.projekat.projekat_mrs_isa.dto.OfferDTO;
+import com.projekat.projekat_mrs_isa.dto.ReviewDisplayDTO;
 import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
 import com.projekat.projekat_mrs_isa.model.Reservation;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
 import com.projekat.projekat_mrs_isa.service.RentingEntityService;
+import com.projekat.projekat_mrs_isa.model.VacationHouseOwner;
+import com.projekat.projekat_mrs_isa.dto.UserDTO;
+import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
+import com.projekat.projekat_mrs_isa.model.*;
+import com.projekat.projekat_mrs_isa.service.OfferService;
+import com.projekat.projekat_mrs_isa.service.RentingEntityService;
+import com.projekat.projekat_mrs_isa.service.UtilityService;
+import com.projekat.projekat_mrs_isa.service.VacationHouseOwnerService;
 import com.projekat.projekat_mrs_isa.service.VacationHouseService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +38,14 @@ import java.util.List;
 public class VacationHouseController {
     @Autowired
     private VacationHouseService vacationHouseService;
+    @Autowired
+    private VacationHouseOwnerService vacationHouseOwnerService;
+    @Autowired
+    private OfferService offerService;
+    @Autowired
+    private UtilityService utilityService;
+    @Autowired
+    private ResourceLoader resourceLoader;
 
 
     @Autowired
@@ -93,7 +111,18 @@ public class VacationHouseController {
         }
 
         return new ResponseEntity<>(rentingEntityService.getOffersByREId(vacationHouse),HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/anyUser/{id}/reviews", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
+    public ResponseEntity<List<ReviewDisplayDTO>> getReviews(@PathVariable("id") Long id) {
+        VacationHouse vacationHouse = vacationHouseService.findById(id);
+        if (vacationHouse == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        return new ResponseEntity<>(rentingEntityService.getReviewsByRentingEntityIdOrOwnerId(vacationHouse.getId(),vacationHouse.getVacationHouseOwner().getId()),HttpStatus.OK);
+    }
 
 
 
@@ -107,6 +136,21 @@ public class VacationHouseController {
         }
 
         return new ResponseEntity<>(rentingEntityService.getPicturesByRentingEntity(vacationHouse),HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/loggedVacationHouseOwner/")
+    @PreAuthorize("hasRole('VH_OWNER')")
+    public ResponseEntity<Boolean> createVacationHouse(@RequestBody VacationHouseDTO vacationHouseDTO, Principal ownerPrincipal) {
+        VacationHouseOwner owner = vacationHouseOwnerService.findByUsername(ownerPrincipal.getName());
+        if(owner == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        VacationHouse vacationHouse = new VacationHouse(vacationHouseDTO);
+        owner.addVacationHouse(vacationHouse);
+
+        vacationHouseService.save(vacationHouse);
+        vacationHouseOwnerService.save(owner);
+
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
     @PutMapping(value = "/loggedVacationHouseOwner/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -165,5 +209,23 @@ public class VacationHouseController {
 
         vacationHouseService.remove(id);
         return new ResponseEntity<>(new VacationHouseDTO(vacationHouse), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/all")
+    public ResponseEntity<List<VacationHouseDTO>> getAllVacationHouses() {
+        List<VacationHouseDTO> vacationHouseDTOS = vacationHouseService.findAllDTO();
+        return new ResponseEntity<>(vacationHouseDTOS, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/delete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public ResponseEntity<Boolean> deleteVacationHouse(@RequestBody VacationHouseDTO vacationHouseDTO) {
+        VacationHouse vacationHouse = vacationHouseService.findById(vacationHouseDTO.getId());
+        if (vacationHouse == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        rentingEntityService.deleteReviewsByRentingEntity(vacationHouse);
+        vacationHouse.setDeleted(true);
+        vacationHouseService.save(vacationHouse);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

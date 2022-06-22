@@ -54,6 +54,8 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private FeeService feeService;
 
     @Autowired
     private UtilityService utilityService;
@@ -93,32 +95,42 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Boolean subscribe(Client client, Long reId) {
+    public Boolean subscribe(Client clientCached, Long reId) {
+        Client client= findById(clientCached.getId());
         RentingEntity rentingEntity = rentingEntityRepository.findById(reId).orElse(null);
+        List<RentingEntity> subscriptions=rentingEntityRepository.getSubscribedRentingEntitiesByClient(client.getId());
         if (rentingEntity == null)
             return false;
-        rentingEntity.addSubscription(client);
-        save(client);
+        if(!subscriptions.contains(rentingEntity)) {
+            rentingEntity.addSubscription(client);
+            rentingEntityRepository.save(rentingEntity);
+            clientRepository.save(client);
+        }
         return true;
 
     }
 
     @Override
-    public Boolean unSubscribe(Client client, Long id) {
+    public Boolean unSubscribe(Client clientCached, Long id) {
+        Client client= findById(clientCached.getId());
         RentingEntity rentingEntity = rentingEntityService.findById(id);
         if (rentingEntity == null)
             return false;
         rentingEntity.removeSubscription(client);
-        save(client);
+        rentingEntityRepository.save(rentingEntity);
+        clientRepository.save(client);
         return true;
     }
 
     @Override
-    public Boolean isSubscribed(Client client, Long id) {
+    public Boolean isSubscribed(Client clientCached, Long id) {
+        Client client= findById(clientCached.getId());
         RentingEntity rentingEntity = rentingEntityRepository.findById(id).orElse(null);
+        List<RentingEntity> subscriptions=rentingEntityRepository.getSubscribedRentingEntitiesByClient(client.getId());
+
         if (rentingEntity == null)
             return false;
-        return client.isSubscribed(rentingEntity);
+        return subscriptions.contains(rentingEntity);
     }
 
     @Override
@@ -164,9 +176,10 @@ public class ClientServiceImpl implements ClientService {
         RentingEntity rentingEntity=rentingEntityService.findById(reservationRequestDTO.getRentingEntityId());
         if (rentingEntity==null)
             return false;
+        Fee fee = feeService.findFee(1L);
         Reservation reservation= new Reservation(reservationRequestDTO.getPlace(), reservationRequestDTO.getClientLimit(),
                 reservationRequestDTO.getAdditionalServices(),reservationRequestDTO.getPrice(),rentingEntity,
-                logged,reservationRequestDTO.getStart(),duration);
+                logged,reservationRequestDTO.getStart(),duration,fee.getValue());
         if(haveNotMadeReservationBefore(logged,reservation)){
             rentingEntity.addReservation(reservation);
             reservationRepository.save(reservation);
@@ -183,16 +196,12 @@ public class ClientServiceImpl implements ClientService {
             {
                 LocalDateTime reservationHourBefore = reservation.getStart().minusHours(1);
                 LocalDateTime reservationHourAfter = reservation.getStart().plusHours(1);
-                System.out.println(reservationHourBefore);
-                System.out.println(reservationHourAfter);
-                System.out.println(reservation_made.getStart());
                 if(reservation_made.getStart().compareTo(reservationHourBefore)>=0 && reservation_made.getStart().compareTo(reservationHourAfter)<=0)
                     return false;
             }
-        }
-        return true;
-
+        } return true;
     }
+
 
     @Override
     public Boolean updatePassword(Client logged, PasswordChangeDTO passwordChangeDTO) {
@@ -206,14 +215,15 @@ public class ClientServiceImpl implements ClientService {
     @Override
     @Transactional
     public Boolean makeQuickReservation(Client clientLogged, Offer offer) throws ObjectOptimisticLockingFailureException {
+        Fee fee = feeService.findFee(1L);
         Reservation reservation= new Reservation(offer.getPlace(),offer.getClientLimit(), new ArrayList<>(offer.getAdditionalServices()),
-                offer.getPrice(),offer.getRentingEntity(),clientLogged,offer.getStart(),offer.getDuration());
+                offer.getPrice(),offer.getRentingEntity(),clientLogged,offer.getStart(),offer.getDuration(), fee.getValue());
         offer.getRentingEntity().addReservation(reservation);
         reservationRepository.save(reservation);
         offer.setDeleted(true);
         offerService.save(offer);
         emailService.confirmReservationMail(clientLogged,reservation);
-        return  true;
+        return true;
     }
 
     @Override
