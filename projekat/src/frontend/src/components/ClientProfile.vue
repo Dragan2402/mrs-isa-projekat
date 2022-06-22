@@ -391,7 +391,7 @@ export default {
       }
 
       const passwordChange={"oldPassword":this.oldPassword,"newPassword":this.newPassword,"newPasswordConfirm":this.confirmPassword};
-      console.log(passwordChange);
+  
       axios.put(`https://renting-buddy-spring.herokuapp.com/api/clients/changePassword`,passwordChange,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response =>{
         if(response.data==true){
           this.$root.accessToken=null;
@@ -501,7 +501,7 @@ export default {
       }else{
       const fd=new FormData();
       fd.append('image',this.selectedFile,this.selectedFile.name);
-      axios.put("https://renting-buddy-spring.herokuapp.com/api/clients/loggedClient/picture",fd,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} },{
+      axios.put("https://renting-buddy-spring.herokuapp.com/api/users/loggedClient/picture",fd,{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} },{
         onUploadProgress: uploadEvent => {
           console.log("Upload Progress: "+ Math.round(uploadEvent.loaded/uploadEvent.total * 100) + '%');
         }
