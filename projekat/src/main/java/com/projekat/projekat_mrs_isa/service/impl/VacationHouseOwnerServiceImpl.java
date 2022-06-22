@@ -98,7 +98,7 @@ public class VacationHouseOwnerServiceImpl implements VacationHouseOwnerService 
                 (String) userMap.get("country"),
                 (String) userMap.get("phoneNum"),services
         );
-        List<Role> vacationHouseOwnerRoles = roleRepository.findByName("ROLE_CLIENT");
+        List<Role> vacationHouseOwnerRoles = roleRepository.findByName("ROLE_VH_OWNER");
         vho.setRoles(vacationHouseOwnerRoles);
         vacationHouseOwnerRepository.save(vho);
         return vho;

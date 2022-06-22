@@ -425,9 +425,24 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
                 Duration.ofDays(3), fee.getValue()
         );
 
+        Reservation reservationTemp4 = new Reservation(
+                "Rakovac",
+                10,
+                services,
+                50.0,
+                vacationHouseTemp,
+                clientTemp1,
+                LocalDateTime.of(2022,6,20,20,10),
+                Duration.ofDays(14), fee.getValue()
+        );
+
         vacationHouseTemp.addReservation(reservationTemp3);
         clientTemp1.addReservation(reservationTemp3);
         reservationRep.save(reservationTemp3);
+
+        vacationHouseTemp.addReservation(reservationTemp4);
+        clientTemp1.addReservation(reservationTemp4);
+        reservationRep.save(reservationTemp4);
 
         vacationHouseTemp.addReservation(reservationTemp);
         clientTemp1.addReservation(reservationTemp);

@@ -99,7 +99,7 @@ public class ShipOwnerServiceImpl implements ShipOwnerService {
                     (String) userMap.get("phoneNum"),services
                     );
 
-        List<Role> shipOwnerRoles = roleRepository.findByName("ROLE_CLIENT");
+        List<Role> shipOwnerRoles = roleRepository.findByName("ROLE_SHIP_OWNER");
         so.setRoles(shipOwnerRoles);
         shipOwnerRepository.save(so);
         return so;
