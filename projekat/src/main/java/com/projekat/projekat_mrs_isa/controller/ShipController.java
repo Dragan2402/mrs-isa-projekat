@@ -1,21 +1,14 @@
 package com.projekat.projekat_mrs_isa.controller;
 
-import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
 import com.projekat.projekat_mrs_isa.dto.OfferDTO;
 import com.projekat.projekat_mrs_isa.dto.ReviewDisplayDTO;
 import com.projekat.projekat_mrs_isa.dto.ShipDTO;
-import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
-import com.projekat.projekat_mrs_isa.model.*;
+import com.projekat.projekat_mrs_isa.model.Reservation;
+import com.projekat.projekat_mrs_isa.model.Ship;
+import com.projekat.projekat_mrs_isa.model.ShipOwner;
 import com.projekat.projekat_mrs_isa.service.*;
-import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
-import com.projekat.projekat_mrs_isa.dto.ShipDTO;
-import com.projekat.projekat_mrs_isa.model.*;
-import org.apache.commons.io.FileUtils;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
-
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

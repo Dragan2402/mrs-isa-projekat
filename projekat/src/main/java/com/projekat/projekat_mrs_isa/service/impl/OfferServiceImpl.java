@@ -5,6 +5,7 @@ import com.projekat.projekat_mrs_isa.repository.OfferRepository;
 import com.projekat.projekat_mrs_isa.service.OfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
