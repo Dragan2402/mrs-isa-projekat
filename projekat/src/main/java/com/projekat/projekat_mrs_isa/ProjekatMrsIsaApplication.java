@@ -158,7 +158,7 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         List<String> fishingInstructorAddSrvcs=new ArrayList<>();
         fishingInstructorAddSrvcs.add("Fishing Rods");
         fishingInstructorAddSrvcs.add("Bites");
-        FishingInstructor fishingInstructorTemp=new FishingInstructor("aki96@maildrop.cc","AkiKavasaki",passwordEncoderComponent.encode("Asiasi123"),"pictures/user_pictures/0.png","Andrej","Culjak","Futoska 70","Novi Sad","Serbia","+381611155777",fishingInstructorAddSrvcs);
+        FishingInstructor fishingInstructorTemp=new FishingInstructor("aki96@maildrop.cc","andrej12",passwordEncoderComponent.encode("andrej12"),"pictures/user_pictures/0.png","Andrej","Culjak","Futoska 70","Novi Sad","Serbia","+381611155777",fishingInstructorAddSrvcs);
         fishingInstructorTemp.setVerified(true);
         fishingInstructorTemp.setEnabled(true);
         fishingInstructorTemp.setRoles(rolesFCInstructor);

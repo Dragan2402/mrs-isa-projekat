@@ -1,8 +1,12 @@
 package com.projekat.projekat_mrs_isa.service.impl;
 
 import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
+import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
 import com.projekat.projekat_mrs_isa.model.FishingClass;
+import com.projekat.projekat_mrs_isa.model.Reservation;
+import com.projekat.projekat_mrs_isa.model.VacationHouse;
 import com.projekat.projekat_mrs_isa.repository.FishingClassRepository;
+import com.projekat.projekat_mrs_isa.repository.ReservationRepository;
 import com.projekat.projekat_mrs_isa.service.FishingClassService;
 import com.projekat.projekat_mrs_isa.service.UtilityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +24,8 @@ public class FishingClassServiceImpl implements FishingClassService {
     private FishingClassRepository fishingClassRepository;
     @Autowired
     private UtilityService utilityService;
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     @Override
     public FishingClass findById(Long id) {
@@ -106,5 +112,31 @@ public class FishingClassServiceImpl implements FishingClassService {
     @Override
     public List<FishingClass> findAllFromOwner(String username) {
         return fishingClassRepository.findAllFromOwner(username);
+    }
+
+    public List<FishingClassDTO> convertToDto(List<FishingClass> fishingClasses) {
+        List<FishingClassDTO> fishingClassDTOS=new ArrayList<>();
+        for (FishingClass fishingClass : fishingClasses){
+            FishingClassDTO fishingClassDTO= new FishingClassDTO(fishingClass);
+            String picturePath="pictures/renting_entities/0.png";
+            if(fishingClass.getPictures().size()>0){
+                picturePath=fishingClass.getPictures().get(0);
+            }
+            fishingClassDTO.setImg(utilityService.getPictureEncoded(picturePath));
+            fishingClassDTOS.add(fishingClassDTO);
+        }
+        return fishingClassDTOS;
+    }
+
+    @Override
+    public List<Reservation> findAllReservations(Long id) {
+        FishingClass fishingClass = findById(id);
+        if(fishingClass != null) return reservationRepository.findAllFromEntity(fishingClass);
+        else return new ArrayList<>();
+    }
+
+    @Override
+    public List<FishingClass> findAllFromInstructor(String name) {
+        return fishingClassRepository.findAllFromInstructor(name);
     }
 }

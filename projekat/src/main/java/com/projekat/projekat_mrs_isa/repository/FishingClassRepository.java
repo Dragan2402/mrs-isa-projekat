@@ -28,4 +28,7 @@ public interface FishingClassRepository extends JpaRepository<FishingClass, Long
 
     @Query("select distinct fc from FishingClass fc left join fetch fc.pictures where fc.fishingInstructor.username = ?1")
     List<FishingClass> findAllFromOwner(String username);
+    
+    @Query("select distinct fc from FishingClass fc left join fetch fc.pictures where fc.fishingInstructor.username = ?1")
+    List<FishingClass> findAllFromInstructor(String username);
 }

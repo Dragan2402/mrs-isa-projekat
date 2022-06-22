@@ -4,9 +4,13 @@ import com.projekat.projekat_mrs_isa.model.FishingClass;
 import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
+
 public class FishingClassDTO extends RentingEntityDTO {
     private String instructorBiography;
     private Integer clientLimit;
+
+    private Set<String> fishingEquipment;
 
     public FishingClassDTO() {
     }
@@ -31,5 +35,13 @@ public class FishingClassDTO extends RentingEntityDTO {
 
     public void setClientLimit(Integer clientLimit) {
         this.clientLimit = clientLimit;
+    }
+
+    public Set<String> getFishingEquipment() {
+        return fishingEquipment;
+    }
+
+    public void setFishingEquipment(Set<String> fishingEquipment) {
+        this.fishingEquipment = fishingEquipment;
     }
 }

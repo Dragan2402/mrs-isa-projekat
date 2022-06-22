@@ -174,7 +174,7 @@ export default {
     jmpToUserProfile(){
       if(this.loggedUser.accountType==="CLIENT"){
         this.$router.push({name: "clientProfile"});
-      }else if (this.loggedUser.accountType==="VH_OWNER"){
+      }else if (this.loggedUser.accountType==="VH_OWNER" || this.loggedUser.accountType==="SH_OWNER" || this.loggedUser.accountType==="INSTRUCTOR"){
         this.$router.push({name: "ownerHome"});
       }else if(this.loggedUser.accountType==="ADMIN"){
        this.$router.push({name: "adminHome"})

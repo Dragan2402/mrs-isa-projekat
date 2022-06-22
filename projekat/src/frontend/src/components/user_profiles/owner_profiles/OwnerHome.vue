@@ -110,6 +110,15 @@
             <input v-model="newEntity.clientLimit" type="text" class="form-control" id="addClientLimit" placeholder="Client limit">
             <label for="addClientLimit">Client limit</label>
           </div>
+          <!-- Fishing class specific attributes -->
+          <div v-if="entityTypeInfo.name==='fishing class'" class="form-floating mb-3">
+            <input v-model="newEntity.instructorBiography" type="text" class="form-control" id="addTopSpeed" placeholder="Instructor Biography">
+            <label for="addTopSpeed">Instructor Biography</label>
+          </div>
+          <div v-if="entityTypeInfo.name==='fishing class'" class="form-floating mb-3">
+            <input v-model="newEntity.clientLimit" type="text" class="form-control" id="addClientLimitInstructor" placeholder="Client limit">
+            <label for="addClientLimitInstructor">Client limit</label>
+          </div>
         </div>
 
         <div class="modal-footer">
@@ -217,6 +226,14 @@
 
 
               <!-- Fishing Class specific attributes -->
+              <div v-if="entityTypeInfo.name==='fishing class'" class="form-floating mb-3">
+                <input v-model="entity.instructorBiography" type="text" class="form-control" id="floatInstructorBiography" placeholder="Instructor Biography">
+                <label for="floatInstructorBiography">Instructor Biography</label>
+              </div>
+              <div v-if="entityTypeInfo.name==='fishing class'" class="form-floating mb-3">
+                <input v-model="entity.clientLimit" type="text" class="form-control" id="floatClientLimitInstructor" placeholder="Client Limit">
+                <label for="floatClientLimitInstructor">Client Limit</label>
+              </div>
 
 
 
@@ -334,7 +351,13 @@ export default {
                 routeName: "shipProfile"
               };
 
-            // else if INSTRUCTOR,
+            } else if (response.data.accountType === "INSTRUCTOR") {
+              entityTypeInfo.value = {
+                name: "fishing class",
+                title: "Fishing Class",
+                urlPart: "fishingClasses/loggedFishingInstructor",
+                routeName: "fishingClassProfile"
+              };
 
             } else {
 

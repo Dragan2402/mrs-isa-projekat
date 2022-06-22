@@ -58,7 +58,7 @@ const routes = [
     { path: "/registrationPage", component: RegistrationPage },
     { name: "loginPage", path: "/loginPage", component: LoginPage },
     { name: "clientProfile", path: "/clientProfile", component: ClientProfile },
-    { path: "/fishingClassProfile", component: FishingClassProfile },
+    { name: "fishingClassProfile", path: "/fishingClassProfile", component: FishingClassProfile },
     { name: "vacationHouseProfile", path: "/vacationHouseProfile", component: VacationHouseProfile },
     { name: "shipProfile", path: "/shipProfile", component: ShipProfile },
     { name: "rentingEntityPreview", path: "/rentingEntityPreview/rID:id$dT:displayType", component: RentingEntityPreview },
