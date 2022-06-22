@@ -4,7 +4,6 @@ package com.projekat.projekat_mrs_isa.controller;
 import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.FishingInstructor;
-import com.projekat.projekat_mrs_isa.model.VacationHouseOwner;
 import com.projekat.projekat_mrs_isa.service.FishingInstructorService;
 import com.projekat.projekat_mrs_isa.service.UtilityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ public class FishingInstructorController {
     private UtilityService utilityService;
 
     @GetMapping(value = "/getServices/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('CLIENT')")
+    @PreAuthorize("hasAnyRole('CLIENT', 'FC_INSTRUCTOR')")
     public ResponseEntity<List<String>> fishingInstructorServices(@PathVariable("id") Long id) {
         FishingInstructor instructor = fishingInstructorService.findById(id);
         if (instructor == null)

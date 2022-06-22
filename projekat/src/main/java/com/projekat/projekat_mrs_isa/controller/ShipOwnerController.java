@@ -27,7 +27,7 @@ public class ShipOwnerController {
     private UtilityService utilityService;
 
     @GetMapping(value = "/getServices/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('CLIENT')")
+    @PreAuthorize("hasAnyRole('CLIENT', 'SHIP_OWNER')")
     public ResponseEntity<List<String>> shipOwnerServices(@PathVariable("id") Long id) {
         ShipOwner shipOwner = shipOwnerService.findById(id);
         if (shipOwner == null)

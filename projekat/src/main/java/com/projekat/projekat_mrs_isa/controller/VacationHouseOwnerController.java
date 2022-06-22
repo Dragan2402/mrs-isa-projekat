@@ -55,7 +55,7 @@ public class VacationHouseOwnerController {
 
 
     @GetMapping(value = "/getServices/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('CLIENT')")
+    @PreAuthorize("hasAnyRole('CLIENT', 'VH_OWNER')")
     public ResponseEntity<List<String>> rentingOwnerServices(@PathVariable("id") Long id) {
         VacationHouseOwner owner = vacationHouseOwnerService.findById(id);
         if (owner == null)

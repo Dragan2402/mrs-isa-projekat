@@ -149,7 +149,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<TakenPeriodDTO> rentingEntityAvailability(Client client, Long id) {
+    public List<TakenPeriodDTO> rentingEntityAvailability(Long id) {
         RentingEntity rentingEntity = rentingEntityService.findById(id);
         if (rentingEntity == null)
             return null;
