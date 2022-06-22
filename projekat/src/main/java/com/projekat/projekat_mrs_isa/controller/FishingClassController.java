@@ -99,15 +99,7 @@ public class FishingClassController {
         return new ResponseEntity<>(fishingClassService.findDTOById(id), HttpStatus.OK);
     }
 
-//    @PutMapping(value = "update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<FishingClassDTO> updateFishingClass(@RequestBody FishingClassDTO fishingClassDTO) throws Exception {
-//        FishingClass fishingClassToUpdate = fishingClassService.findById(2L);
-//        fishingClassToUpdate.update(fishingClassDTO);
-//        FishingClass updatedFishingClass = fishingClassService.save(fishingClassToUpdate);
-//        if (updatedFishingClass == null)
-//            return new ResponseEntity<FishingClassDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        return new ResponseEntity<FishingClassDTO>(new FishingClassDTO(updatedFishingClass), HttpStatus.OK);
-//    }
+
 
 
     @GetMapping(value = "/anyUser/{id}/offers", produces = MediaType.APPLICATION_JSON_VALUE)

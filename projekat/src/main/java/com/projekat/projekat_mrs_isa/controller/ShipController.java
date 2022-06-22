@@ -25,8 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
-import java.io.File;
-import java.io.IOException;
+
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -42,8 +41,7 @@ public class ShipController {
     @Autowired
     private ShipOwnerService shipOwnerService;
 
-    @Autowired
-    private ResourceLoader resourceLoader;
+
 
     @Autowired
     private ReservationService reservationService;
@@ -145,24 +143,6 @@ public class ShipController {
         return new ResponseEntity<>(rentingEntityService.getReviewsByRentingEntityIdOrOwnerId(ship.getId(),ship.getShipOwner().getId()),HttpStatus.OK);
     }
 
-//    public String encodeImage(RentingEntity rentingEntity){
-//        String picturePath="pictures/renting_entities/0.png";
-//        if(rentingEntity.getPictures().size() > 0){
-//            picturePath=rentingEntity.getPictures().get(0);
-//        }
-//
-//        Resource r = resourceLoader.getResource("classpath:" + picturePath);
-//        try {
-//            File file = r.getFile();
-//            byte[] picture = FileUtils.readFileToByteArray(file);
-//            return Base64.encodeBase64String(picture);
-//
-//        } catch (IOException e) {
-//            return "ERROR";
-//        }
-//
-//
-//    }
 
     @GetMapping(value = "/anyUser/{shipId}/pictures/all", produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional

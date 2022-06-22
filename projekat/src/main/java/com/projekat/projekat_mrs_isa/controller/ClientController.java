@@ -76,8 +76,6 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Review review = new Review(rentingEntity, client, reviewDTO.getRating(), reviewDTO.getComment());
-        //rentingEntity.addReview(review);
-        //client.addReview(review);
         Review saved = reviewService.save(review);
         if (saved == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

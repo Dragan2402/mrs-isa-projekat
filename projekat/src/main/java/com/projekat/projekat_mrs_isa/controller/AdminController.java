@@ -39,18 +39,10 @@ public class AdminController {
 
     @Autowired
     private ReportService reportService;
-    @Autowired
-    private VacationHouseService vacationHouseService;
-    @Autowired
-    private ShipService shipService;
-    @Autowired
-    private FishingClassService fishingClassService;
 
     @Autowired
     private EmailService emailService;
 
-    @Autowired
-    private ReservationService reservationService;
 
     @Autowired
     private ComplaintService complaintService;
@@ -154,10 +146,10 @@ public class AdminController {
     @Transactional
     public ResponseEntity<Boolean> approveReport(@RequestBody ReportDTO reportDTO) {
         Report report = reportService.findById(reportDTO.getId());
+        if (report == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         User client = userService.findById(reportDTO.getClientId());
         User submitter = userService.findById(report.getSubmitter().getId());
         if (client == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        if (report == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         client.addPenalty();
         report.setReviewed(true);
         reportService.save(report);
