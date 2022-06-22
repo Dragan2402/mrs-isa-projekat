@@ -21,6 +21,7 @@
     <button type="button" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#infoModal">Change Info</button>
     <button type="button" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#passwordModal">Change Password</button>
     <button type="button" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Account</button>
+    <button type="button" class="custom-btn button-primary" data-bs-toggle="modal" data-bs-target="#statisticsModal">Statistics</button>
   </div>
 
 <!--  Change Info Modal-->
@@ -114,6 +115,34 @@
     </div>
   </div>
 
+  <div class="modal fade" id="statisticsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5>Statistics</h5>
+        </div>
+        <div class="modal-body" style="display:flex;flex-direction:row;">
+          <div style="display:flex;flex-direction:column;flex-grow:1;">
+            <v-date-picker style="width: 100%;" v-model="range" mode='dateTime' color="blue" is24hr :minute-increment="30" is-range  :max-date=maxDate>
+            </v-date-picker>
+            <button @click="getStatistics()" class="custom-btn button-primary" style="margin-top:5%;">Inspect</button>
+          </div>
+          <div style="display:flex;flex-grow:2;align-items:center;justify-content:top;flex-direction:column;">
+            <div style="margin-top:5%;margin-bottom:5%;">
+              <h4>Avarage entity rating: {{Math.round(avarage_rating * 10) / 10}} &#11088;</h4>
+            </div>
+            <div>
+              <h4>In selected period you have made: {{money_earned}}  &euro;</h4>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="custom-btn button-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!--  Delete Request Modal-->
   <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -166,8 +195,12 @@ export default {
       accountType: null
     });
     let phoneNum = ref(null);
-    let validatedPhoneNum = ref("")
+    let range=ref([]);
+    const maxDate=new Date();
+    let validatedPhoneNum = ref("");
     let picture = ref("");
+    let avarage_rating = ref("");
+    let money_earned = ref("");
     let deleteReason = ref("");
     let oldPassword = ref("");
     let newPassword = ref("");
@@ -205,6 +238,9 @@ export default {
             // localStorage.setItem("jwt", null);
             // router.push("/loginPage");
           });
+      axios.get("/api/vacationHouses/loggedVacationHouseOwner/getEntitiesRating",
+              { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
+          .then(response => (avarage_rating.value = response.data));
       axios
           .get("/api/users/loggedUser/picture",
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
@@ -236,6 +272,43 @@ export default {
           .catch(error => {
             console.log(error.response);
           });
+    }
+
+    function padTo2Digits(num) {
+  return num.toString().padStart(2, '0');
+}
+
+    function formatDate(date) {
+      return (
+        [
+          date.getFullYear(),
+          padTo2Digits(date.getMonth() + 1),
+          padTo2Digits(date.getDate()),
+        ].join('_') +
+        ' ' +
+        [
+          padTo2Digits(date.getHours()),
+          padTo2Digits(date.getMinutes()),
+          padTo2Digits(date.getSeconds()),
+        ].join(':')
+      );
+}
+
+    function getStatistics(){
+
+        const start= range.value.start;
+        const end = range.value.end;
+        if(start ==null){return;}
+        if(end == null){return ;}
+        
+        const startString = formatDate(start);
+        const endString =formatDate(end);
+        console.log(startString);
+        console.log(endString);
+        axios.get(`/api/vacationHouses/loggedVacationHouseOwner/getMoneyEarned/${startString}-${endString}`,
+              { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`}})
+          .then(response => (money_earned.value = response.data));
+
     }
 
     function changePassword() {
@@ -344,12 +417,17 @@ export default {
       picture,
       oldPassword,
       newPassword,
+      range,
+      maxDate,
+      avarage_rating,
+      money_earned,
       confirmPassword,
       changePasswordAlertTitle,
       changePasswordAlertText,
       deleteReason,
       page,
       telValidate,
+      getStatistics,
       saveInfoEdit,
       sendDeleteRequest,
       changePassword

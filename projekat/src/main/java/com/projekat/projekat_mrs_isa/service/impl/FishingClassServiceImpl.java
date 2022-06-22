@@ -102,4 +102,9 @@ public class FishingClassServiceImpl implements FishingClassService {
         }
         return fishingClassDTOS;
     }
+
+    @Override
+    public List<FishingClass> findAllFromOwner(String username) {
+        return fishingClassRepository.findAllFromOwner(username);
+    }
 }

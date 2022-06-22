@@ -1,23 +1,15 @@
 package com.projekat.projekat_mrs_isa.controller;
 
 
-import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
-import com.projekat.projekat_mrs_isa.dto.OfferDTO;
-import com.projekat.projekat_mrs_isa.dto.ReviewDisplayDTO;
-import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
+import com.projekat.projekat_mrs_isa.dto.*;
 import com.projekat.projekat_mrs_isa.model.Offer;
 import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.Reservation;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
 import com.projekat.projekat_mrs_isa.model.VacationHouseOwner;
-import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
 import com.projekat.projekat_mrs_isa.model.*;
-import com.projekat.projekat_mrs_isa.service.OfferService;
-import com.projekat.projekat_mrs_isa.service.RentingEntityService;
-import com.projekat.projekat_mrs_isa.service.UtilityService;
-import com.projekat.projekat_mrs_isa.service.VacationHouseOwnerService;
-import com.projekat.projekat_mrs_isa.service.VacationHouseService;
+import com.projekat.projekat_mrs_isa.service.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.jetbrains.annotations.NotNull;
@@ -55,6 +47,9 @@ public class VacationHouseController {
     private UtilityService utilityService;
     @Autowired
     private ResourceLoader resourceLoader;
+
+    @Autowired
+    private ReservationService reservationService;
 
 
     @Autowired
@@ -194,6 +189,34 @@ public class VacationHouseController {
         List<VacationHouseDTO> vacationHouseDTOs = getVacationHouseDTOList(vacationHouses);
         return new ResponseEntity<>(vacationHouseDTOs, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/loggedVacationHouseOwner/getEntitiesRating", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('VH_OWNER')")
+    public ResponseEntity<Double> getEntitiesRating(Principal ownerPrincipal) {
+        List<VacationHouse> vacationHouses = vacationHouseService.findAllFromOwner(ownerPrincipal.getName());
+        double rating=0;
+        for(VacationHouse vacationHouse : vacationHouses)
+            rating += vacationHouse.getRating();
+        return new ResponseEntity<>(rating, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/loggedVacationHouseOwner/getMoneyEarned/{startDate}-{endDate}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('VH_OWNER')")
+    public ResponseEntity<Double> getEntitiesRating(Principal ownerPrincipal,@PathVariable("startDate") String startDateString,@PathVariable("endDate") String endDateString) {
+        LocalDateTime dateStart=LocalDateTime.parse(startDateString, DateTimeFormatter.ofPattern("yyyy_MM_dd HH:mm:ss"));
+        LocalDateTime dateEnd=LocalDateTime.parse(endDateString, DateTimeFormatter.ofPattern("yyyy_MM_dd HH:mm:ss"));
+        List<VacationHouse> vacationHouses = vacationHouseService.findAllFromOwner(ownerPrincipal.getName());
+        double moneyEarned=0d;
+        for(VacationHouse vacationHouse : vacationHouses){
+
+            for(Reservation reservation : reservationService.getReservationsByDateAndEntity(dateStart,dateEnd,vacationHouse)) {
+                moneyEarned += reservation.getPrice();
+            }
+        }
+        return new ResponseEntity<>(moneyEarned, HttpStatus.OK);
+    }
+
+
 
     @GetMapping(value = "/loggedVacationHouseOwner/{id}/hasReservations")
     @PreAuthorize("hasRole('VH_OWNER')")

@@ -12,6 +12,7 @@ import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.service.FishingClassService;
 import com.projekat.projekat_mrs_isa.service.RentingEntityService;
+import com.projekat.projekat_mrs_isa.service.ReservationService;
 import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import javax.transaction.Transactional;
 import javax.websocket.server.PathParam;
 import java.io.File;
 import java.io.IOException;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -44,6 +46,8 @@ public class FishingClassController {
     @Autowired
     private RentingEntityService rentingEntityService;
 
+    @Autowired
+    private ReservationService reservationService;
 
 
     @GetMapping(value = "/anyUser/**")
@@ -150,6 +154,32 @@ public class FishingClassController {
         fishingClass.setDeleted(true);
         fishingClassService.save(fishingClass);
         return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/loggedFishingClassInstructor/getEntitiesRating", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('FC_INSTRUCTOR')")
+    public ResponseEntity<Double> getEntitiesRating(Principal ownerPrincipal) {
+        List<FishingClass> fishingClasses = fishingClassService.findAllFromOwner(ownerPrincipal.getName());
+        double rating=0;
+        for(FishingClass fishingClass : fishingClasses)
+            rating += fishingClass.getRating();
+        return new ResponseEntity<>(rating, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/loggedFishingClassInstructor/getMoneyEarned/{startDate}-{endDate}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('FC_INSTRUCTOR')")
+    public ResponseEntity<Double> getEntitiesRating(Principal ownerPrincipal,@PathVariable("startDate") String startDateString,@PathVariable("endDate") String endDateString) {
+        LocalDateTime dateStart=LocalDateTime.parse(startDateString, DateTimeFormatter.ofPattern("yyyy_MM_dd HH:mm:ss"));
+        LocalDateTime dateEnd=LocalDateTime.parse(endDateString, DateTimeFormatter.ofPattern("yyyy_MM_dd HH:mm:ss"));
+        List<FishingClass> fishingClasses = fishingClassService.findAllFromOwner(ownerPrincipal.getName());
+        double moneyEarned=0d;
+        for(FishingClass fishingClass : fishingClasses){
+
+            for(Reservation reservation : reservationService.getReservationsByDateAndEntity(dateStart,dateEnd,fishingClass)) {
+                moneyEarned += reservation.getPrice();
+            }
+        }
+        return new ResponseEntity<>(moneyEarned, HttpStatus.OK);
     }
 
 }

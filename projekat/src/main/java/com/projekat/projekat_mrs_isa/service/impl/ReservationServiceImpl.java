@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.service.impl;
 
 import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
+import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.Reservation;
 import com.projekat.projekat_mrs_isa.repository.RentingEntityRepository;
 import com.projekat.projekat_mrs_isa.repository.ReservationRepository;
@@ -10,6 +11,7 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -45,5 +47,11 @@ public class ReservationServiceImpl implements ReservationService {
         }else{
             return false;
         }
+    }
+
+    @Override
+    public List<Reservation> getReservationsByDateAndEntity(LocalDateTime dateStart, LocalDateTime dateEnd, RentingEntity rentingEntity) {
+        Duration duration=Duration.between(dateStart,dateEnd);
+        return reservationRepository.getReservationsByDateAndEntity(dateStart,duration,rentingEntity);
     }
 }

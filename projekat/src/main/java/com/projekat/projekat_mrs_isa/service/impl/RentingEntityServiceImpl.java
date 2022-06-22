@@ -2,10 +2,7 @@ package com.projekat.projekat_mrs_isa.service.impl;
 
 import com.projekat.projekat_mrs_isa.dto.OfferDTO;
 import com.projekat.projekat_mrs_isa.dto.ReviewDisplayDTO;
-import com.projekat.projekat_mrs_isa.model.Offer;
-import com.projekat.projekat_mrs_isa.model.RentingEntity;
-import com.projekat.projekat_mrs_isa.model.Review;
-import com.projekat.projekat_mrs_isa.model.VacationHouse;
+import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.repository.OfferRepository;
 import com.projekat.projekat_mrs_isa.repository.RentingEntityRepository;
 import com.projekat.projekat_mrs_isa.repository.ReviewRepository;
@@ -125,4 +122,6 @@ public class RentingEntityServiceImpl implements RentingEntityService {
     public void deleteReviewsByRentingEntity(RentingEntity rentingEntity) {
         reviewRepository.deleteReviewByRentingEntity(rentingEntity);
     }
+
+
 }
