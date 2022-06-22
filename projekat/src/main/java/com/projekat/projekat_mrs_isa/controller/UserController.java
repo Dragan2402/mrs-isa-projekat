@@ -117,8 +117,8 @@ public class UserController {
     @Transactional
     public ResponseEntity<String> updateLoggedUserPicture(Principal userP, @RequestPart("image") MultipartFile image) throws IOException {
         User userToUpdate = userService.findByUsername(userP.getName());
-        String pictureName = "src/main/resources/pictures/user_pictures/" + userToUpdate.getId().toString() + ".png";
-        userToUpdate.setPicture(pictureName);
+        String pictureName = "pictures/user_pictures/" + userToUpdate.getId().toString() + ".png";
+        userToUpdate.setPicture("src/main/resources/"+pictureName);
         User updatedUser = userService.save(userToUpdate);
         boolean resp = utilityService.saveFile("src/main/resources/", pictureName, image);
         boolean resp2 = utilityService.saveFile("target/classes/", pictureName, image);
