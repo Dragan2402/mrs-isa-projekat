@@ -20,4 +20,7 @@ public interface FishingInstructorRepository extends JpaRepository<FishingInstru
 
     @Query("select new com.projekat.projekat_mrs_isa.dto.UserDTO(f) from FishingInstructor f")
     public List<UserDTO> findAllDTO();
+
+    @Query("select fi from FishingInstructor fi join fetch fi.fishingClasses where fi.username = ?1")
+    FishingInstructor findByUsername(String username);
 }

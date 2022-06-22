@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.service;
 
 
+import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.FishingInstructor;
 import java.util.List;
@@ -25,4 +26,7 @@ public interface FishingInstructorService {
 
     List<UserDTO> findAllDTO();
 
+    FishingInstructor findByUsername(String username);
+
+    List<ReservationDTO> getReservationsFromInstructor(FishingInstructor instructor);
 }

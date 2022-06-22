@@ -1,19 +1,17 @@
 package com.projekat.projekat_mrs_isa.controller;
 
-import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
-import com.projekat.projekat_mrs_isa.dto.OfferDTO;
-import com.projekat.projekat_mrs_isa.dto.ReviewDisplayDTO;
+import com.projekat.projekat_mrs_isa.dto.*;
 import com.projekat.projekat_mrs_isa.model.FishingClass;
 import com.projekat.projekat_mrs_isa.model.Offer;
 import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.Ship;
-import com.projekat.projekat_mrs_isa.dto.ShipDTO;
-import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.service.FishingClassService;
+import com.projekat.projekat_mrs_isa.service.FishingInstructorService;
 import com.projekat.projekat_mrs_isa.service.RentingEntityService;
 import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -28,6 +26,7 @@ import javax.transaction.Transactional;
 import javax.websocket.server.PathParam;
 import java.io.File;
 import java.io.IOException;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -40,6 +39,9 @@ public class FishingClassController {
 
     @Autowired
     private FishingClassService fishingClassService;
+
+    @Autowired
+    private FishingInstructorService fishingInstructorService;
 
     @Autowired
     private RentingEntityService rentingEntityService;
@@ -81,58 +83,111 @@ public class FishingClassController {
 
     }
 
-
+    @NotNull
+    private List<FishingClassDTO> getFishingClassDTOList(List<FishingClass> fishingClasses) {
+        return fishingClassService.convertToDto(fishingClasses);
+    }
 
     @GetMapping(value = "/anyUser/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<FishingClassDTO> getFishingClassDTOById(@PathVariable("id") Long id) {
+    @Transactional
+    public ResponseEntity<FishingClassDTO> getFishingClass(@PathVariable("id") Long id) {
         FishingClass fishingClass = fishingClassService.findById(id);
-        if (fishingClass == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (fishingClass == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(fishingClassService.findDTOById(id), HttpStatus.OK);
     }
 
-    @PutMapping(value = "update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<FishingClassDTO> updateFishingClass(@RequestBody FishingClassDTO fishingClassDTO) throws Exception {
-        FishingClass fishingClassToUpdate = fishingClassService.findById(2L);
-        fishingClassToUpdate.update(fishingClassDTO);
-        FishingClass updatedFishingClass = fishingClassService.save(fishingClassToUpdate);
-        if (updatedFishingClass == null)
-            return new ResponseEntity<FishingClassDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
-        return new ResponseEntity<FishingClassDTO>(new FishingClassDTO(updatedFishingClass), HttpStatus.OK);
-    }
+//    @PutMapping(value = "update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<FishingClassDTO> updateFishingClass(@RequestBody FishingClassDTO fishingClassDTO) throws Exception {
+//        FishingClass fishingClassToUpdate = fishingClassService.findById(2L);
+//        fishingClassToUpdate.update(fishingClassDTO);
+//        FishingClass updatedFishingClass = fishingClassService.save(fishingClassToUpdate);
+//        if (updatedFishingClass == null)
+//            return new ResponseEntity<FishingClassDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        return new ResponseEntity<FishingClassDTO>(new FishingClassDTO(updatedFishingClass), HttpStatus.OK);
+//    }
 
 
     @GetMapping(value = "/anyUser/{id}/offers", produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     public ResponseEntity<List<OfferDTO>> getOffers(@PathVariable("id") Long id) {
         FishingClass fishingClass = fishingClassService.findById(id);
-        if (fishingClass == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        if (fishingClass == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(rentingEntityService.getOffersByREId(fishingClass),HttpStatus.OK);
-
     }
 
     @GetMapping(value = "/anyUser/{id}/reviews", produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     public ResponseEntity<List<ReviewDisplayDTO>> getReviews(@PathVariable("id") Long id) {
         FishingClass fishingClass = fishingClassService.findById(id);
-        if (fishingClass == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        if (fishingClass == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(rentingEntityService.getReviewsByRentingEntityIdOrOwnerId(fishingClass.getId(),fishingClass.getFishingInstructor().getId()),HttpStatus.OK);
     }
-
 
     @GetMapping(value = "/anyUser/{id}/pictures/all", produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     public ResponseEntity<List<String>> getAllPictures(@PathVariable("id") Long id) {
         FishingClass fishingClass = fishingClassService.findById(id);
-        if (fishingClass == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
+        if (fishingClass == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(rentingEntityService.getPicturesByRentingEntity(fishingClass),HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/loggedFishingInstructor/")
+    @PreAuthorize("hasRole('FC_INSTRUCTOR')")
+    public ResponseEntity<Boolean> createFishingClass(@RequestBody FishingClassDTO fishingClassDTO, Principal instructorPrincipal) {
+        FishingInstructor instructor = fishingInstructorService.findByUsername(instructorPrincipal.getName());
+        if(instructor == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        FishingClass fishingClass = new FishingClass(fishingClassDTO);
+        instructor.addFishingClass(fishingClass);
+        fishingClassService.save(fishingClass);
+        fishingInstructorService.save(instructor);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/loggedFishingInstructor/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('FC_INSTRUCTOR')")
+    @Transactional
+    public ResponseEntity<FishingClassDTO> updateFishingClass(@RequestBody FishingClassDTO fishingClassDTO, @PathVariable("id") Long id) {
+        LocalDateTime availableFrom = fishingClassDTO.getAvailableFrom();
+        LocalDateTime availableTo = fishingClassDTO.getAvailableTo();
+        if(availableFrom.isAfter(availableTo)) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        List<Reservation> reservations = fishingClassService.findAllReservations(id);
+        if(reservations.size() != 0) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        FishingClass fishingClass = fishingClassService.findById(fishingClassDTO.getId());
+        if (fishingClass == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        fishingClass.update(fishingClassDTO);
+        fishingClass = fishingClassService.save(fishingClass);
+        if (fishingClass == null) return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(new FishingClassDTO(fishingClass), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/loggedFishingInstructor/all")
+    @PreAuthorize("hasRole('FC_INSTRUCTOR')")
+    @Transactional
+    public ResponseEntity<List<FishingClassDTO>> getAllFishingClassesFromOwner(Principal instructorPrincipal) {
+        List<FishingClass> fishingClasses = fishingClassService.findAllFromInstructor(instructorPrincipal.getName());
+        List<FishingClassDTO> fishingClassDTOS = getFishingClassDTOList(fishingClasses);
+        return new ResponseEntity<>(fishingClassDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/loggedFishingInstructor/{id}/hasReservations")
+    @PreAuthorize("hasRole('FC_INSTRUCTOR')")
+    public ResponseEntity<Boolean> hasReservations(@PathVariable("id") Long id) {
+        List<Reservation> reservations = fishingClassService.findAllReservations(id);
+        Boolean hasReservations = reservations.size() != 0;
+        return new ResponseEntity<>(hasReservations, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/loggedFishingInstructor/{id}")
+    @PreAuthorize("hasRole('FC_INSTRUCTOR')")
+//    @Transactional
+    public ResponseEntity<FishingClassDTO> deleteFishingClass(@PathVariable("id") Long id, Principal instructorPrincipal) {
+        List<Reservation> reservations = fishingClassService.findAllReservations(id);
+        if(reservations.size() != 0) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        FishingClass fishingClass = fishingClassService.findById(id);
+        String username = fishingClass.getFishingInstructor().getUsername();
+        if(!username.equals(instructorPrincipal.getName())) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        fishingClassService.remove(id);
+        return new ResponseEntity<>(new FishingClassDTO(fishingClass), HttpStatus.OK);
     }
 
     @GetMapping(value = "/all")
@@ -154,5 +209,7 @@ public class FishingClassController {
         fishingClassService.save(fishingClass);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
+
+
 
 }
