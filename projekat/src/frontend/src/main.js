@@ -15,7 +15,7 @@ import ForgotPasswordPage from "./components/ForgotPasswordPage";
 import NewPasswordPage from "./components/NewPasswordPage";
 import VacationHouseProfile from "@/components/VacationHouseProfile";
 import RentingEntityPreview from "@/components/RentingEntityPreview";
-import UserPreviewProfile from "@/components/user_profiles/UserProfilePreview"; 
+import UserPreviewProfile from "@/components/user_profiles/UserProfilePreview";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -67,10 +67,6 @@ const routes = [
     { name: "forgotPasswordPage", path: "/forgotPasswordPage", component: ForgotPasswordPage },
     { name: "userProfilePreviewPage" , path: "/user/:username", component:UserPreviewProfile},
     {
-        name: "userProfile",
-        path: "/user",
-        component: UserProfile,
-        children: [{
                 name: "ownerProfile",
                 path: "/owner",
                 component: OwnerProfile,
@@ -107,8 +103,6 @@ const routes = [
                 path: "/firstLogin",
                 component: FirstLogin
             },
-        ]
-    },
     { name: "notFoundPage",path: '/:pathMatch(.*)*', component: NotFoundPage }
 ];
 

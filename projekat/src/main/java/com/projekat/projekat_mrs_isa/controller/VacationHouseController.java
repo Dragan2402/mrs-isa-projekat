@@ -232,6 +232,7 @@ public class VacationHouseController {
     public ResponseEntity<Boolean> deleteVacationHouse(@RequestBody VacationHouseDTO vacationHouseDTO) {
         VacationHouse vacationHouse = vacationHouseService.findById(vacationHouseDTO.getId());
         if (vacationHouse == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        rentingEntityService.deleteReviewsByRentingEntity(vacationHouse);
         vacationHouse.setDeleted(true);
         vacationHouseService.save(vacationHouse);
         return new ResponseEntity<>(true, HttpStatus.OK);

@@ -120,4 +120,9 @@ public class RentingEntityServiceImpl implements RentingEntityService {
         }
         return reviewsDisplay;
     }
+
+    @Override
+    public void deleteReviewsByRentingEntity(RentingEntity rentingEntity) {
+        reviewRepository.deleteReviewByRentingEntity(rentingEntity);
+    }
 }

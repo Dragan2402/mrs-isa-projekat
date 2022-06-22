@@ -21,4 +21,6 @@ public interface RentingEntityService {
     List<String> getPicturesByRentingEntity(RentingEntity rentingEntity);
 
     List<ReviewDisplayDTO> getReviewsByRentingEntityIdOrOwnerId(Long reID, Long roID);
+
+    void deleteReviewsByRentingEntity(RentingEntity rentingEntity);
 }
