@@ -114,6 +114,7 @@ public class FishingClassServiceImpl implements FishingClassService {
         return fishingClassRepository.findAllFromOwner(username);
     }
 
+    @Override
     public List<FishingClassDTO> convertToDto(List<FishingClass> fishingClasses) {
         List<FishingClassDTO> fishingClassDTOS=new ArrayList<>();
         for (FishingClass fishingClass : fishingClasses){

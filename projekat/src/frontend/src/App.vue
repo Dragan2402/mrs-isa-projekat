@@ -33,7 +33,7 @@
     </div>
     
   </nav>
-  <div style="min-height:800px;">
+  <div style="min-height:1000px;">
     <router-view ></router-view>
   </div>
   <footer class="text-white text-center text-lg-start" style="background-color:#004661;maring-top:5%">
