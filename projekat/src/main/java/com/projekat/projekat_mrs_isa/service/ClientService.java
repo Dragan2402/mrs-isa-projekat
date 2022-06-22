@@ -3,6 +3,7 @@ package com.projekat.projekat_mrs_isa.service;
 import com.projekat.projekat_mrs_isa.dto.*;
 import com.projekat.projekat_mrs_isa.model.Client;
 import com.projekat.projekat_mrs_isa.model.Offer;
+import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.Reservation;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -57,4 +58,6 @@ public interface ClientService {
     List<ReservationDTO> getClientReservationHistory(Client client);
 
     List<ReservationDTO> getClientReservations(Client client);
+
+    void notifySubscribersByRentingEntity(RentingEntity rentingEntity, Offer newOffer);
 }

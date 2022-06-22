@@ -47,6 +47,7 @@ public class OfferController {
         if (rentingEntity == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         Offer newOffer = new Offer(offerDTO, rentingEntity);
         offerService.save(newOffer);
+        clientService.notifySubscribersByRentingEntity(rentingEntity,newOffer);
         return new ResponseEntity<>(offerDTO, HttpStatus.OK);
     }
 

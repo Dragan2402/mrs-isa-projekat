@@ -1,10 +1,7 @@
 package com.projekat.projekat_mrs_isa.service.impl;
 
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
-import com.projekat.projekat_mrs_isa.model.Client;
-import com.projekat.projekat_mrs_isa.model.Reservation;
-import com.projekat.projekat_mrs_isa.model.Review;
-import com.projekat.projekat_mrs_isa.model.User;
+import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -85,6 +82,21 @@ public class EmailServiceImpl implements EmailService {
         mail.setSubject("Review approved");
         String text="Dear,\n"+owner.getFirstName() + " " + owner.getLastName() +"\n\n";
         text += client.getFirstName() + " " + client.getLastName() + " rated your property.";
+        mail.setText(text);
+        javaMailSender.send(mail);
+    }
+
+    @Override
+    @Async
+    public void sendNewOfferMail(Client client, RentingEntity rentingEntity, Offer newOffer) {
+        SimpleMailMessage mail=new SimpleMailMessage();
+        mail.setTo(client.getEmail());
+        mail.setFrom(environment.getProperty("spring.mail.username"));
+        mail.setSubject("New Offer at "+rentingEntity.getName());
+        String text="Dear,\n"+client.getFirstName()+" "+client.getLastName()+"\n\n";
+        text += "There is a new offer at RentingBuddy. Renting entity that you are following just created a new amazing offer." +
+                "To check the offer jump to our site and enjoy: \n" +
+                "http://localhost:3000/ \n\n\nThank you for using Renting Buddy service";
         mail.setText(text);
         javaMailSender.send(mail);
     }

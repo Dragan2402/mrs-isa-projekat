@@ -270,6 +270,12 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public void notifySubscribersByRentingEntity(RentingEntity rentingEntity, Offer newOffer) {
+        List<Client> clients = rentingEntityRepository.getSubscribersByRentingEntityId(rentingEntity.getId());
+        for(Client client :clients) emailService.sendNewOfferMail(client,rentingEntity,newOffer);
+    }
+
+    @Override
     public Client findByUsername(String name) {
         return clientRepository.findByUsername(name);
 
