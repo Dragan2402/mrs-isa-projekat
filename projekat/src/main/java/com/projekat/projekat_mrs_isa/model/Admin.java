@@ -10,8 +10,7 @@ import javax.persistence.Entity;
 @SQLDelete(sql = "UPDATE admin SET deleted = true WHERE id = ?")
 public class Admin extends User{
 
-    @Column(name = "firstLogin", nullable = false)
-    private Boolean firstLogin;
+
     public Admin() {}
 
     public Admin(String email,String username, String password,String picture, String firstName, String lastName, String address, String city,
@@ -20,14 +19,5 @@ public class Admin extends User{
         super.setType(AccountType.ADMIN);
         super.setEnabled(true);
         super.setVerified(true);
-        firstLogin=true;
-    }
-
-    public Boolean getFirstLogin() {
-        return firstLogin;
-    }
-
-    public void setFirstLogin(Boolean firstLogin) {
-        this.firstLogin = firstLogin;
     }
 }

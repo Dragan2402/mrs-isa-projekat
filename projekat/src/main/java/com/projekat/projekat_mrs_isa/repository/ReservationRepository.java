@@ -21,7 +21,7 @@ public interface ReservationRepository extends JpaRepository<Reservation,Long> {
     List<Reservation> getByClient(Client client);
 
 
-    @Query("select new com.projekat.projekat_mrs_isa.dto.ReservationDTO(r) from Reservation r")
+    @Query("select new com.projekat.projekat_mrs_isa.dto.ReservationDTO(r) from Reservation r where r.deleted=false")
     List<ReservationDTO> findAllDTO();
     
 //    @Query("select r from Reservation r join fetch r.rentingEntity join fetch r.client where r.rentingEntity = ?1")

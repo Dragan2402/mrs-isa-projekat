@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.service.impl;
 
 import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
+import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.FishingInstructor;
 import com.projekat.projekat_mrs_isa.model.Role;
 import com.projekat.projekat_mrs_isa.repository.FishingInstructorRepository;
@@ -71,5 +72,8 @@ public class FishingInstructorServiceImpl implements FishingInstructorService {
         fishingInstructorRepository.save(fi);
         return fi;
     }
+
+    @Override
+    public List<UserDTO> findAllDTO() { return fishingInstructorRepository.findAllDTO(); }
 
 }

@@ -29,7 +29,6 @@ import './assets/common-profile.css';
 import 'v-calendar/dist/style.css';
 import "@vueform/slider/themes/default.css"
 import VCalendar from 'v-calendar';
-import UserProfile from "@/components/user_profiles/UserProfile"
 // import VacationHouseOwnerProfile from "@/components/user_profiles/vacation_house_owner/VacationHouseOwnerProfile"
 // import VacationHouseOwnerInfo from "@/components/user_profiles/vacation_house_owner/VacationHouseOwnerInfo"
 // import VacationHouseOwnerHome from "@/components/user_profiles/vacation_house_owner/VacationHouseOwnerHome"

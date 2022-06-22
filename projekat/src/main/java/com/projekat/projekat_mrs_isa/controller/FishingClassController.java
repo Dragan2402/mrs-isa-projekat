@@ -7,6 +7,9 @@ import com.projekat.projekat_mrs_isa.model.FishingClass;
 import com.projekat.projekat_mrs_isa.model.Offer;
 import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.Ship;
+import com.projekat.projekat_mrs_isa.dto.ShipDTO;
+import com.projekat.projekat_mrs_isa.dto.UserDTO;
+import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.service.FishingClassService;
 import com.projekat.projekat_mrs_isa.service.RentingEntityService;
 import org.apache.commons.io.FileUtils;
@@ -18,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -30,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "api/fishingClasses")
 public class FishingClassController {
 
@@ -130,5 +135,21 @@ public class FishingClassController {
         return new ResponseEntity<>(rentingEntityService.getPicturesByRentingEntity(fishingClass),HttpStatus.OK);
     }
 
+    @GetMapping(value = "/all")
+    public ResponseEntity<List<FishingClassDTO>> getAllFishingClasses() {
+        List<FishingClassDTO> fishingClassDTOS = fishingClassService.findAllDTO();
+        return new ResponseEntity<>(fishingClassDTOS, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/delete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public ResponseEntity<Boolean> deleteFishingClass(@RequestBody FishingClassDTO fishingClassDTO) {
+        FishingClass fishingClass = fishingClassService.findById(fishingClassDTO.getId());
+        if (fishingClass == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        fishingClass.setDeleted(true);
+        fishingClassService.save(fishingClass);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
 
 }

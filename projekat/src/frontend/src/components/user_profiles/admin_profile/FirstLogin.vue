@@ -1,8 +1,17 @@
 <template>
-  <h2>TU SMO JACI SMO</h2>
-  <input v-model="newPassword" type="password" placeholder="New password">
-  <input v-model="confirmPassword" type="password" placeholder="Confirm new password">
-  <button class="btn btn-primary" @click="changePassword">Change</button>
+  <div style="text-align: center; margin: 15px">
+    <h4>Hello, please set a new password.</h4>
+    <br>
+  <div class="form-floating input-group-width mb-2" style="width: 300px">
+    <input id="lastNameInput" class="form-control" type="password" v-model="newPassword" placeholder="New password">
+    <label for="lastNameInput">New password</label>
+  </div>
+  <div class="form-floating input-group-width mb-2" style="width: 300px">
+    <input id="lastNameInput" class="form-control" type="password" v-model="confirmPassword" placeholder="Confirm new password">
+    <label for="lastNameInput">Confirm new password</label>
+  </div>
+  <button class="custom-btn button-primary mt-2" @click="changePassword">Change</button>
+  </div>
 </template>
 
 <script>

@@ -3,6 +3,11 @@ package com.projekat.projekat_mrs_isa.controller;
 import com.projekat.projekat_mrs_isa.dto.PasswordChangeDTO;
 import com.projekat.projekat_mrs_isa.dto.RequestDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
+import com.projekat.projekat_mrs_isa.dto.FeeDTO;
+import com.projekat.projekat_mrs_isa.dto.RequestDTO;
+import com.projekat.projekat_mrs_isa.dto.UserDTO;
+import com.projekat.projekat_mrs_isa.model.Client;
+import com.projekat.projekat_mrs_isa.model.Fee;
 import com.projekat.projekat_mrs_isa.model.Request;
 import com.projekat.projekat_mrs_isa.model.User;
 import com.projekat.projekat_mrs_isa.service.*;
@@ -17,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 
 @RestController
@@ -32,6 +38,18 @@ public class UserController {
 
     @Autowired
     private UtilityService utilityService;
+
+    @Autowired
+    private ClientService clientService;
+
+    @Autowired
+    private VacationHouseOwnerService vacationHouseOwnerService;
+
+    @Autowired
+    private ShipOwnerService shipOwnerService;
+
+    @Autowired
+    private FishingInstructorService fishingInstructorService;
 
 
     @GetMapping(value = "/userPreview/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -123,5 +141,25 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Boolean success = userService.updatePassword(logged, passwordChangeDTO);
         return new ResponseEntity<>(success, HttpStatus.OK);
+    }
+    
+    @GetMapping(value = "/all")
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = clientService.findAllDTO();
+        users.addAll(vacationHouseOwnerService.findAllDTO());
+        users.addAll(shipOwnerService.findAllDTO());
+        users.addAll(fishingInstructorService.findAllDTO());
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/delete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public ResponseEntity<Boolean> deleteUser(@RequestBody UserDTO userDTO) {
+        User user = userService.findById(userDTO.getId());
+        if (user == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        user.setDeleted(true);
+        userService.save(user);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

@@ -1,6 +1,9 @@
 <template>
-  <input v-model="fee"/>
-  <button class="custom-btn button-primary" @click="saveFee">Save fee</button>
+  <div class="form-floating input-group-width mb-2" style="width: 200px">
+    <input id="lastNameInput" class="form-control" type="text" v-model="fee" placeholder="Reservation fee">
+    <label for="lastNameInput">Reservation fee</label>
+  </div>
+  <button class="custom-btn button-primary mt-1" @click="saveFee">Save</button>
 </template>
 
 <script>

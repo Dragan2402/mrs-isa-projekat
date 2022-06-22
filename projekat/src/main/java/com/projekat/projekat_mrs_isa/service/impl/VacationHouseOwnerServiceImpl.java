@@ -3,6 +3,7 @@ package com.projekat.projekat_mrs_isa.service.impl;
 import com.projekat.projekat_mrs_isa.config.PasswordEncoderComponent;
 import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
 import com.projekat.projekat_mrs_isa.model.Reservation;
+import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.Role;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
 import com.projekat.projekat_mrs_isa.model.VacationHouseOwner;
@@ -102,4 +103,7 @@ public class VacationHouseOwnerServiceImpl implements VacationHouseOwnerService 
         vacationHouseOwnerRepository.save(vho);
         return vho;
     }
+
+    @Override
+    public List<UserDTO> findAllDTO() { return vacationHouseOwnerRepository.findAllDTO(); }
 }

@@ -2,6 +2,7 @@ package com.projekat.projekat_mrs_isa.service;
 
 import com.projekat.projekat_mrs_isa.dto.ComplaintDTO;
 import com.projekat.projekat_mrs_isa.dto.PasswordChangeDTO;
+import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.Admin;
 import com.projekat.projekat_mrs_isa.model.Client;
@@ -17,6 +18,8 @@ public interface AdminService {
     Admin findById(Long id);
 
     List<Admin> findAll();
+
+    List<ReservationDTO> getPastReservations();
 
     Admin findByUsername(String name);
 

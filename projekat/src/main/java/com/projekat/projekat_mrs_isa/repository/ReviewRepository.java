@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review,Long> {
 
-    @Query("select new com.projekat.projekat_mrs_isa.dto.ReviewDTO(r) from Review r")
+    @Query("select new com.projekat.projekat_mrs_isa.dto.ReviewDTO(r) from Review r where r.approved=false")
     List<ReviewDTO> findAllDTO();
 
     @Query("select r from Review r where r.rentingEntity.id=?1 or r.rentingOwner.id=?2 ")

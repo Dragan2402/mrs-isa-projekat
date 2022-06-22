@@ -1,6 +1,7 @@
 package com.projekat.projekat_mrs_isa.controller;
 
 
+import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
 import com.projekat.projekat_mrs_isa.dto.OfferDTO;
 import com.projekat.projekat_mrs_isa.dto.ReviewDisplayDTO;
 import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
@@ -9,6 +10,9 @@ import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.Reservation;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
 import com.projekat.projekat_mrs_isa.model.VacationHouseOwner;
+import com.projekat.projekat_mrs_isa.dto.UserDTO;
+import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
+import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.service.OfferService;
 import com.projekat.projekat_mrs_isa.service.RentingEntityService;
 import com.projekat.projekat_mrs_isa.service.UtilityService;
@@ -214,5 +218,22 @@ public class VacationHouseController {
 
         vacationHouseService.remove(id);
         return new ResponseEntity<>(new VacationHouseDTO(vacationHouse), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/all")
+    public ResponseEntity<List<VacationHouseDTO>> getAllVacationHouses() {
+        List<VacationHouseDTO> vacationHouseDTOS = vacationHouseService.findAllDTO();
+        return new ResponseEntity<>(vacationHouseDTOS, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/delete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public ResponseEntity<Boolean> deleteVacationHouse(@RequestBody VacationHouseDTO vacationHouseDTO) {
+        VacationHouse vacationHouse = vacationHouseService.findById(vacationHouseDTO.getId());
+        if (vacationHouse == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        vacationHouse.setDeleted(true);
+        vacationHouseService.save(vacationHouse);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

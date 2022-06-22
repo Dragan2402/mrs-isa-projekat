@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface ComplaintRepository extends JpaRepository<Complaint,Long> {
 
-    @Query("select new com.projekat.projekat_mrs_isa.dto.ComplaintDTO(c) from Complaint c")
+    @Query("select new com.projekat.projekat_mrs_isa.dto.ComplaintDTO(c) from Complaint c where c.approved=false")
     List<ComplaintDTO> findAllDTO();
 }
