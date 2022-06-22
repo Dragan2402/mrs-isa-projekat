@@ -36,6 +36,15 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private VacationHouseService vacationHouseService;
+    @Autowired
+    private ShipService shipService;
+    @Autowired
+    private FishingClassService fishingClassService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private ReservationService reservationService;
@@ -68,6 +77,17 @@ public class AdminController {
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
+    @PutMapping(value = "/complaints/reject", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public ResponseEntity<Boolean> rejectComplaint(@RequestBody ComplaintDTO complaintDTO) {
+        Complaint complaint = complaintService.findById(complaintDTO.getId());
+        if (complaint == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        complaint.setDeleted(true);
+        complaintService.save(complaint);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/reviews/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ReviewDTO>> getAllReviews() {
@@ -80,15 +100,31 @@ public class AdminController {
     @Transactional
     public ResponseEntity<Boolean> approveReview(@RequestBody ReviewDTO reviewDTO) {
         Review review = reviewService.findById(reviewDTO.getId());
+        User owner;
+        User client = userService.findById(reviewDTO.getClientId());
+        if (client == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         if (review == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         if (review.getRentingEntity() == null) {
-            User user = userService.findById(reviewDTO.getRentingOwnerId());
-            user.addReview(review);
+            owner = userService.findById(reviewDTO.getRentingOwnerId());
+            owner.addReview(review);
         } else {
             RentingEntity rentingEntity = rentingEntityService.findById(reviewDTO.getRentingEntityId());
+            owner = getRentingEntityOwner(rentingEntity.getId());
             rentingEntity.addReview(review);
         }
         review.setApproved(true);
+        reviewService.save(review);
+        emailService.sendReview(client, owner, review);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/reviews/reject", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public ResponseEntity<Boolean> rejectReview(@RequestBody ReviewDTO reviewDTO) {
+        Review review = reviewService.findById(reviewDTO.getId());
+        if (review == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        review.setDeleted(true);
         reviewService.save(review);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }
@@ -108,12 +144,23 @@ public class AdminController {
         if (request == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         User user = userService.findById(requestDTO.getSubmitterId());
         if (requestDTO.getType() == RequestType.DELETE_ACCOUNT) {
-            user.setDeleted(true);
+            user.setEnabled(false);
             userService.save(user);
         } else if (requestDTO.getType() == RequestType.BECOME_VH_OWNER || requestDTO.getType() == RequestType.BECOME_SH_OWNER || requestDTO.getType() == RequestType.BECOME_INSTRUCTOR) {
             user.setEnabled(true);
             userService.save(user);
         } else return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        request.setApproved(true);
+        requestService.save(request);
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/requests/reject", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public ResponseEntity<Boolean> rejectRequest(@RequestBody RequestDTO requestDTO) {
+        Request request = requestService.findById(requestDTO.getId());
+        if (request == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         request.setDeleted(true);
         requestService.save(request);
         return new ResponseEntity<>(true, HttpStatus.OK);
@@ -167,6 +214,17 @@ public class AdminController {
             return new ResponseEntity<>(new UserDTO(updatedAdmin), HttpStatus.OK);
         }
         return new ResponseEntity<>(new UserDTO(), HttpStatus.BAD_REQUEST);
+    }
+
+    private User getRentingEntityOwner(Long rentingEntityId) {
+        RentingEntity rentingEntity = rentingEntityService.findById(rentingEntityId);
+        if (rentingEntity.getREType().equals("VH")) {
+            return vacationHouseService.findById(rentingEntity.getId()).getVacationHouseOwner();
+        } else if (rentingEntity.getREType().equals("FC")) {
+            return fishingClassService.findById(rentingEntity.getId()).getFishingInstructor();
+        } else {
+            return shipService.findById(rentingEntity.getId()).getShipOwner();
+        }
     }
 
 }

@@ -8,9 +8,15 @@
           <div v-if="complaint.ownerName"><b>Owner:</b> {{ complaint.ownerName }}</div>
           <div><b>Client:</b> {{ complaint.clientName }}</div>
         </div>
-        <div class="right-container">
+        <div style="margin: auto 100px auto 200px">
+          <div class="form-floating input-group-width mb-2 w-100">
+            <input id="lastNameInput" class="form-control" type="text" v-model="complaint.adminResponse" placeholder="Reason">
+            <label for="lastNameInput">Reason</label>
+          </div>
+          <div class="right-container">
           <button class="custom-btn button-primary" style="width: 120px" @click="approveComplaint(complaint, index)">Approve</button>
-          <button class="custom-btn button-primary ms-5" style="width: 120px; background-color: indianred" @click="approveComplaint(complaint, index)">Reject</button>
+          <button class="custom-btn button-primary ms-5" style="width: 120px; background-color: indianred" @click="rejectComplaint(complaint, index)">Reject</button>
+          </div>
         </div>
       </div>
     </div>
@@ -24,7 +30,7 @@ export default {
   name: "AdminComplaints",
   data() {
     return {
-      complaints: []
+      complaints: [],
     }
   },
   mounted() {
@@ -32,9 +38,27 @@ export default {
   },
   methods: {
     approveComplaint(complaint, index) {
+      if (complaint.adminResponse === '') {
+        this.$toast.error("Provide a reason");
+        return;
+      }
       axios.put("api/admins/complaints", complaint, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
         if (response.data == true) {
           this.$toast.success("Approved");
+          this.complaints.splice(index,1);
+        } else {
+          this.$toast.error("Problem has occurred!");
+        }
+      });
+    },
+    rejectComplaint(complaint, index) {
+      if (complaint.adminResponse === '') {
+        this.$toast.error("Provide a reason");
+        return;
+      }
+      axios.put("api/admins/complaints/reject", complaint, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
+        if (response.data == true) {
+          this.$toast.success("Rejected!");
           this.complaints.splice(index,1);
         } else {
           this.$toast.error("Problem has occurred!");
@@ -71,7 +95,6 @@ export default {
 
 .right-container {
   display: flex;
-  margin: auto 100px auto 200px
 }
 
 </style>

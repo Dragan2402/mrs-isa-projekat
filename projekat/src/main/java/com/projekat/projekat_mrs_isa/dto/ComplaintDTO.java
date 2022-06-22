@@ -18,6 +18,8 @@ public class ComplaintDTO {
 
     private String clientName;
 
+    private String adminResponse;
+
     public ComplaintDTO() {
     }
 
@@ -49,6 +51,7 @@ public class ComplaintDTO {
             ownerName = null;
         }
         clientName = complaint.getComplainant().getUsername();
+        adminResponse = "";
         text = complaint.getText();
         approved = complaint.isApproved();
     }
@@ -67,6 +70,14 @@ public class ComplaintDTO {
 
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
+    }
+
+    public String getAdminResponse() {
+        return adminResponse;
+    }
+
+    public void setAdminResponse(String adminResponse) {
+        this.adminResponse = adminResponse;
     }
 
     public String getClientName() {

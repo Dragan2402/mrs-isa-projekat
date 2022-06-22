@@ -3,6 +3,8 @@ package com.projekat.projekat_mrs_isa.service.impl;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.Client;
 import com.projekat.projekat_mrs_isa.model.Reservation;
+import com.projekat.projekat_mrs_isa.model.Review;
+import com.projekat.projekat_mrs_isa.model.User;
 import com.projekat.projekat_mrs_isa.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -71,6 +73,19 @@ public class EmailServiceImpl implements EmailService {
         mail.setFrom(environment.getProperty("spring.mail.username"));
         mail.setSubject("Password Reset");
         mail.setText(resetPasswordMailGenerator(token));
+        javaMailSender.send(mail);
+    }
+
+    @Override
+    @Async
+    public void sendReview(User client, User owner, Review review) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(owner.getEmail());
+        mail.setFrom(environment.getProperty("spring.mail.username"));
+        mail.setSubject("Review approved");
+        String text="Dear,\n"+owner.getFirstName() + " " + owner.getLastName() +"\n\n";
+        text += client.getFirstName() + " " + client.getLastName() + " rated your property.";
+        mail.setText(text);
         javaMailSender.send(mail);
     }
 

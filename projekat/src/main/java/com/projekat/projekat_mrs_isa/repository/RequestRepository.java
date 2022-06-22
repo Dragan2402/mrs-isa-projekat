@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface RequestRepository extends JpaRepository<Request,Long> {
 
-    @Query("select new com.projekat.projekat_mrs_isa.dto.RequestDTO(r) from Request r")
+    @Query("select new com.projekat.projekat_mrs_isa.dto.RequestDTO(r) from Request r where r.approved=false")
     List<RequestDTO> findAllDTO();
 }

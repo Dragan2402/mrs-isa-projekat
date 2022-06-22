@@ -10,7 +10,7 @@
         </div>
         <div class="right-container">
           <button class="custom-btn button-primary" style="width: 120px" @click="approveReview(review, index)">Approve</button>
-          <button class="custom-btn button-primary ms-5" style="width: 120px; background-color: indianred" @click="approveReview(review, index)">Reject</button>
+          <button class="custom-btn button-primary ms-5" style="width: 120px; background-color: indianred" @click="rejectReview(review, index)">Reject</button>
         </div>
       </div>
     </div>
@@ -41,6 +41,16 @@ export default {
         }
       });
     },
+    rejectReview(review, index) {
+      axios.put("api/admins/reviews/reject", review, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
+        if (response.data == true) {
+          this.$toast.success("Rejected!");
+          this.reviews.splice(index,1);
+        } else {
+          this.$toast.error("Problem has occurred!");
+        }
+      });
+    }
   }
 }
 </script>

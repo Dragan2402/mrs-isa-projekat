@@ -12,6 +12,10 @@ public class RequestDTO {
     private String text;
     private RequestType type;
 
+    private Boolean approved;
+
+    private String adminResponse;
+
     public RequestDTO() {
     }
 
@@ -29,6 +33,8 @@ public class RequestDTO {
         this.submitterUsername=request.getSubmitter().getUsername();
         this.text=request.getText();
         this.type=request.getType();
+        this.approved=request.isApproved();
+        this.adminResponse="";
     }
 
     public Long getId() {
@@ -45,6 +51,14 @@ public class RequestDTO {
 
     public void setSubmitterId(Long submitterId) {
         this.submitterId = submitterId;
+    }
+
+    public String getAdminResponse() {
+        return adminResponse;
+    }
+
+    public void setAdminResponse(String adminResponse) {
+        this.adminResponse = adminResponse;
     }
 
     public String getSubmitterUsername() {

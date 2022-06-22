@@ -9,11 +9,16 @@
           <div v-if="request.type === 'BECOME_VH_OWNER'"><b>Type:</b> Vacation House Owner</div>
           <div v-if="request.type === 'BECOME_SH_OWNER'"><b>Type:</b> Ship Owner</div>
           <div v-if="request.type === 'BECOME_INSTRUCTOR'"><b>Type:</b> Fishing Instructor</div>
-
         </div>
-        <div class="right-container">
-          <button class="custom-btn button-primary" style="width: 120px" @click="approveRequest(request, index)">Approve</button>
-          <button class="custom-btn button-primary ms-5" style="width: 120px; background-color: indianred" @click="approveRequest(request, index)">Reject</button>
+        <div style="margin: auto 100px auto 200px">
+          <div class="form-floating input-group-width mb-2 w-100">
+            <input id="lastNameInput" class="form-control" type="text" v-model="request.adminResponse" placeholder="Reason">
+            <label for="lastNameInput">Reason</label>
+          </div>
+          <div class="right-container">
+            <button class="custom-btn button-primary" style="width: 120px" @click="approveRequest(request, index)">Approve</button>
+            <button class="custom-btn button-primary ms-5" style="width: 120px; background-color: indianred" @click="rejectRequest(request, index)">Reject</button>
+          </div>
         </div>
       </div>
     </div>
@@ -38,6 +43,20 @@ export default {
       axios.put("api/admins/requests", request, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
         if (response.data == true) {
           this.$toast.success("Success!");
+          this.requests.splice(index, 1);
+        } else {
+          this.$toast.error("Problem has occurred!");
+        }
+      });
+    },
+    rejectRequest(request, index) {
+      if (request.adminResponse === '') {
+        this.$toast.error("Provide a reason");
+        return;
+      }
+      axios.put("api/admins/requests/reject", request, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
+        if (response.data == true) {
+          this.$toast.success("Rejected!");
           this.requests.splice(index, 1);
         } else {
           this.$toast.error("Problem has occurred!");
@@ -74,7 +93,6 @@ export default {
 
 .right-container {
   display: flex;
-  margin: auto 100px auto 200px
 }
 
 </style>
