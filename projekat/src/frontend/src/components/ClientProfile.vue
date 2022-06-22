@@ -3,11 +3,11 @@
       <title>User Profile</title>
   </head>
   <body >     
-    <div class="main-client-container">    
+    <div class="main-client-container" style="min-height:900px;">    
      <div class="profile-main-container">
         <div class="top-user-container">
           <button  class="custom-icon bi bi-trash3"  data-bs-toggle="modal" data-bs-target="#modalRequest"></button> 
-          <button v-if="!this.editing" style="margin-left : 245px;"  @click="toggleEdit()" class="custom-icon bi bi-pencil-square"></button>      
+          <button v-if="!this.editing" style="margin-right : 16%;margin-left:auto;"  @click="toggleEdit()" class="custom-icon bi bi-pencil-square"></button>      
         </div>
       <div class="info-container">
         <div v-if="!this.editing" >
@@ -738,7 +738,7 @@ export default {
 }
 
 .reservation-container{
-  flex-grow: 8;
+  flex-grow: 9;
   margin-left: 50px;
 }
 

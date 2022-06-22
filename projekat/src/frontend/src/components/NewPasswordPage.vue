@@ -1,12 +1,19 @@
 <template>
-  <div align='center'>
-    <br>
-    <input type="password" v-model="newPassword" placeholder="New password">
-    <br><br>
-    <input type="password" v-model="confirmPassword" placeholder="Confirm password">
-    <br><br>
-    <button class="btn btn-primary" @click="setNewPassword()">Set new password</button>
-    
+  <div style="display:flex; flex-direction:column;align-items: center;
+    justify-content: center;min-height:600px;">    
+    <div style="align-self:center; background-color: #00587a;width:40%;align-items:center;justify-content: center;padding:3%;">
+      <div class="form-floating input-group-width mb-5">
+          <input id="passwordInput" class="form-control" type="password" v-model="newPassword" placeholder="New Password">
+          <label for="passwordInput">New Password</label>
+      </div>
+      <div class="form-floating input-group-width mb-5">
+          <input id="passwordInput" class="form-control" type="password" v-model="confirmPassword" placeholder="Confirm Password">
+          <label for="passwordInput">Confirm Password</label>
+      </div>
+      <div>
+        <button class="custom-btn button-secondary input-group-width mb-3 mt-5" style="margin-left:35%;max-width:200px;" @click="setNewPassword()">Set new password</button>
+      </div>
+    </div>
   </div>
 </template>
 

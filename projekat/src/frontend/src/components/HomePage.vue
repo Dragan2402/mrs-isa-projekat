@@ -1,5 +1,5 @@
 <template>
-  <div class="main-container">
+  <div class="main-container" style="min-height:600px;">
     <div class="left-bar">
       <h5 style="color: white; font-weight: bold">Search</h5>
       <div class="left-bar-text" style="margin-top: 0">Destination name:</div>

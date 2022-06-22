@@ -33,7 +33,81 @@
     </div>
     
   </nav>
-  <router-view></router-view>
+  <router-view ></router-view>
+  <footer class="text-white text-center text-lg-start" style="background-color:#004661;maring-top:5%">
+      <!-- Grid container -->
+      <div class="container p-4" style="background-color:#004661;">
+        <!--Grid row-->
+        <div class="row mt-4">
+          <!--Grid column-->
+          <div class="col-lg-4 col-md-12 mb-4 mb-md-0">
+            <h5 class="text-uppercase mb-4">About company</h5>
+
+            <p>
+              Our company was founded in 2010 and
+              it has been the leader in the region ever since. 
+              We are here to make your dreams come true and make it easier for you to choose where to spend your vacation.
+            </p>
+
+            <div class="mt-4">
+              <!-- Google + -->
+              <a type="button"  href="mailto:renting.buddy.co@gmail.com" class="btn btn-floating btn-light btn-lg"><i class="bi bi-google"></i></a>
+              <!-- Linkedin -->
+            </div>
+          </div>
+          <!--Grid column-->
+
+          <!--Grid column-->
+          <div class="col-lg-4 col-md-6 mb-4 mb-md-0" style="margin-top:5%;">
+
+            <ul class="fa-ul" style="margin-left: 1.65em;">
+              <li class="mb-3">
+                <span class="fa-li"><i class="fas fa-home"></i></span><span class="ms-2">Novi Sad, 21000, Serbia</span>
+              </li>
+              <li class="mb-3">
+                <span class="fa-li"><i class="fas fa-envelope"></i></span><span class="ms-2">renting.buddy.co@gmail.com</span>
+              </li>
+              <li class="mb-3">
+                <span class="fa-li"><i class="fas fa-phone"></i></span><span class="ms-2">+ 69 00 00 000</span>
+              </li>
+            </ul>
+          </div>
+          <!--Grid column-->
+
+          <!--Grid column-->
+          <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+            <h5 class="text-uppercase mb-4">Opening hours</h5>
+
+            <table class="table text-center text-white">
+              <tbody class="fw-normal">
+                <tr>
+                  <td>Mon - Thu:</td>
+                  <td>8am - 5pm</td>
+                </tr>
+                <tr>
+                  <td>Fri - Sat:</td>
+                  <td>8am - 3pm</td>
+                </tr>
+                <tr>
+                  <td>Sunday:</td>
+                  <td>Not working</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!--Grid column-->
+        </div>
+        <!--Grid row-->
+      </div>
+      <!-- Grid container -->
+
+      <!-- Copyright -->
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2020 Copyright:
+        <a class="text-white" href="http://www.trademarks-serbia.com/">Trademarks Serbia</a>
+      </div>
+      <!-- Copyright -->
+    </footer>
 </template>
 
 <script>

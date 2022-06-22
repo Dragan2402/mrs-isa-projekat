@@ -1,5 +1,5 @@
 <template>
-  <div align='center'>
+  <div align='center' style="min-height:1200px;margin-top:5%;">
     <div class="registration-div mt-3 mb-3">
       <div class="radio-div">
         <div>
