@@ -20,7 +20,7 @@
       </div>
       <div class="home-entity-price h-100 d-flex">
         <div class="align-self-center">
-          <button type="button" class="custom-btn button-primary d-block w-100">Client Profile</button>
+          <button @click="openClientPreview(reservation)" type="button" class="custom-btn button-primary d-block w-100">Client Profile</button>
           <button v-if="isFinished(reservation)" @click="selectReservation(reservation)" type="button" class="custom-btn button-primary d-block w-100" data-bs-toggle="modal" data-bs-target="#reportModal">Write Report</button>
         </div>
       </div>
@@ -36,18 +36,18 @@
                 <textarea style="height: 100px" v-model="report.text" type="text" class="form-control" id="reportText" placeholder="How did the reservation go?"></textarea>
                 <label for="reportText">How did the reservation go?</label>
               </div>
-              <label>How was your experience with the client?</label>
+              <label class="me-3">How was your experience with the client?</label>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="reportType" id="reportType1" value="GOOD" v-model="report.type">
                 <label class="form-check-label" for="reportType1">Good</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="reportType" id="reportType2" value="BAD" v-model="report.type">
-                <label class="form-check-label" for="reportType2">Bad</label>
+                <label class="form-check-label" style="background-color: white" for="reportType2">Bad</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="reportType" id="reportType3" value="NO_SHOW" v-model="report.type">
-                <label class="form-check-label" for="reportType3">They didn't show up</label>
+                <label class="form-check-label" style="background-color: white" for="reportType3">They didn't show up</label>
               </div>
             </div>
 
@@ -219,6 +219,15 @@ export default {
           });
     }
 
+    function openClientPreview(reservation) {
+      axios
+          .get(`/api/clients/${reservation.clientId}`,
+              { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
+          .then(response => {
+            router.push(`/user/${response.data.username}`);
+          })
+    }
+
     return {
       reservations,
       selectedReservation,
@@ -227,7 +236,8 @@ export default {
       alertText,
       isFinished,
       selectReservation,
-      sendReport
+      sendReport,
+      openClientPreview
     }
   }
 }

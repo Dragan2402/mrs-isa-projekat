@@ -113,16 +113,4 @@ export default {
   margin-top: 3px;
 }
 
-.radio {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-[type=radio]:checked + label {
-  background-color: white;
-  border-color: #00587a;
-  color: #00587a;
-}
-
 </style>
