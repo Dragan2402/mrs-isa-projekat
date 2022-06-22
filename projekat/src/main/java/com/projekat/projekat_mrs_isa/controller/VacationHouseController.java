@@ -19,6 +19,7 @@ import com.projekat.projekat_mrs_isa.service.VacationHouseOwnerService;
 import com.projekat.projekat_mrs_isa.service.VacationHouseService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
