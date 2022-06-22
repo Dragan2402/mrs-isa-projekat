@@ -1,21 +1,25 @@
 <template>
-  <div>
+  <div style="display:flex; flex-direction:column;align-items: center;
+    justify-content: center;min-height:600px;">
     
-    <div align="center">
-      <input v-model="username" placeholder="username" />
-      <br />
-      <br />
-      <input v-model="password" placeholder="password" type="password" />
-      <br />
-      <br />
-      <button @click="login">Login</button>
+    <div style="align-self:center; background-color: #00587a;width:40%;align-items:center;justify-content: center;padding:3%;">
+      <div class="form-floating input-group-width mb-4">
+          <input id="usernameInput" class="form-control" type="text" v-model="username" placeholder="Username">
+          <label for="usernameInput">Username</label>
+      </div>
+      <div class="form-floating input-group-width mb-5">
+          <input id="passwordInput" class="form-control" type="password" v-model="password" placeholder="Password">
+          <label for="passwordInput">Password</label>
+      </div>
       <div>
-        <p>
-          <router-link to="/forgotPasswordPage">Forgot your password?</router-link>
-        </p>
+        <button class="custom-btn button-secondary input-group-width mb-3 mt-5" style="margin-left:40%;max-width:100px;" @click="login">Login</button>
+        <div style="margin-left:35%;">
+          <p>
+            <router-link to="/forgotPasswordPage">Forgot your password?</router-link>
+          </p>
+        </div> 
       </div>
     </div>
-
   </div>
 </template>
 
@@ -27,6 +31,8 @@ export default {
     return {
       username: "",
       password: "",
+      accountType: "",
+      firstLogin: null
     };
   },
     mounted(){
@@ -71,11 +77,12 @@ export default {
         axios.get("/api/users/loggedUser",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
             .then(response => {
               this.$root.loggedUser=response.data
-              this.$root.accountType = response.data.accountType;
-              console.log(response.data.accountType)
+              this.accountType = response.data.accountType;
+              this.firstLogin = response.data.firstLogin;
+              axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.$root.loggedPicture=response.data));
+              if(this.accountType === "ADMIN" && this.firstLogin) this.$router.push({name: "firstLogin"})
+              else this.$router.push("/");
             });
-        axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.$root.loggedPicture=response.data));
-        this.$router.push("/");  
       
       }).catch((error) => {
         if(error.response.status === 404)
@@ -96,6 +103,19 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
+.login-div {
+  display:flex; 
+  flex-direction:column;
+  justify-content:center;
+  margin-top: 0;
+  min-height:500px;
+  padding: 10px;
+  border-radius: 5px;
+  width: 45%;
+  background-color: #00587a;
+  align-content: center;
+}
 
 </style>

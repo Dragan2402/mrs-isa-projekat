@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +23,7 @@ public interface VacationHouseRepository extends JpaRepository<VacationHouse, Lo
             countQuery = "SELECT count(vh) FROM VacationHouse vh WHERE  vh.name LIKE %?1% and vh.address LIKE %?2% and vh.clientLimit >= ?3 and vh.priceList >= ?4 and vh.priceList <= ?5")
     Page<VacationHouse> findByNoDateCriteria(String name, String address, Integer people, Double priceMin, Double priceMax, Pageable page);
 
-    @Query("select vh from VacationHouse vh where vh.vacationHouseOwner.username = ?1")
+    @Query("select distinct vh from VacationHouse vh left join fetch vh.pictures where vh.vacationHouseOwner.username = ?1")
     List<VacationHouse> findAllFromOwner(String ownerUsername);
 
     @Query("select vh from VacationHouse vh join fetch vh.vacationHouseOwner where vh.id = ?1")

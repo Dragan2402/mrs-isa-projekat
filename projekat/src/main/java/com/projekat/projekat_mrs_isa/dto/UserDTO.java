@@ -18,6 +18,10 @@ public class UserDTO {
     private Integer penalties;
     private AccountType accountType;
 
+    private Boolean firstLogin;
+
+    private Boolean enabled;
+
     public UserDTO() {
     }
 
@@ -46,6 +50,8 @@ public class UserDTO {
         phoneNum = user.getPhoneNum();
         penalties = user.getPenalties();
         accountType=user.getType();
+        firstLogin=user.getFirstLogin();
+        enabled=user.isEnabled();
     }
 
 
@@ -63,6 +69,14 @@ public class UserDTO {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Boolean getFirstLogin() {
+        return firstLogin;
+    }
+
+    public void setFirstLogin(Boolean firstLogin) {
+        this.firstLogin = firstLogin;
     }
 
     public String getEmail() {
@@ -135,5 +149,13 @@ public class UserDTO {
 
     public void setAccountType(AccountType accountType) {
         this.accountType = accountType;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 }

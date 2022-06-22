@@ -49,7 +49,7 @@ div {
     background-color: #004661;
 }
 
-.page{
+.page {
     text-align: center;
     margin: auto;
     padding: 50px;
@@ -60,7 +60,7 @@ div {
     width: 100%;
     margin: auto;
     background: white;
-  }
+}
 
 .main-container {
     width: 60%;
@@ -77,7 +77,12 @@ div {
     background-color: #00587a;
 }
 
-.left-bar-text{
+.left-bar-heading {
+    color: white;
+    font-weight: bold;
+}
+
+.left-bar-text {
     margin-top: 10px;
     color: white;
 }
@@ -105,7 +110,7 @@ div {
 }
 
 .home-entity-picture {
-    float:left;
+    float: left;
 }
 
 .home-entity-content {
@@ -127,11 +132,27 @@ div {
 
 .home-entity-price {
     float: right;
-    min-width: 150px;
+    min-width: 200px;
 }
 
 .home-entity-content .star-ratings {
     padding: 0;
     margin: 0;
     float: left;
+}
+
+.textarea-height {
+    height: 200px;
+}
+
+.nav-item {
+    cursor: pointer;
+}
+
+.nav-link {
+    color: #00587a;
+}
+
+.nav-link:hover {
+    color: black;
 }

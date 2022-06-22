@@ -1,5 +1,5 @@
 <template>
-  <div align='center'>
+  <div align='center' style="min-height:1200px;margin-top:5%;">
     <div class="registration-div mt-3 mb-3">
       <div class="radio-div">
         <div>
@@ -57,7 +57,7 @@
           <label for="countryInput">Country</label>
         </div>
         <div class="form-floating input-group-width mb-2">
-          <vue-tel-input id="phoneNumInput" class="form-control" v-model="phoneNum" @validate="telValidate"></vue-tel-input>
+            <input v-model="phoneNum" type="text" placeholder="Phone Number:" class="form-control" >
           <label for="phoneNumInput">Phone Number</label>
         </div>
         <div v-if="role!=='addClient'" class="form-floating input-group-width">
@@ -98,7 +98,6 @@ export default {
       address: '',
       city: '',
       country: '',
-      validNumber: '',
       phoneNum: null,
       registrationReason: '',
 
@@ -108,7 +107,7 @@ export default {
   },
   mounted(){
     this.$root.signUp=false;
-    this.$root.signIn=false;
+    this.$root.signIn=true;
   },
   methods:{
     signUp() {
@@ -179,11 +178,16 @@ export default {
         return;
       }
       
-      if(this.validNumber===''){
-        this.$toast.error("Phone number invalid");
+      var phoneRegex= /^\+?\d{8,13}$/;
+      if(this.phoneNum ===''){
+        this.$toast.error("Provide a phone number");
         return;
       }
-
+          
+      if(phoneRegex.test(this.phoneNum)===false){
+        this.$toast.error("Invalid phone number");
+        return;
+      }
       if(this.role !== 'addClient' && this.registrationReason === '') {
         this.$toast.error("Provide a reason for registering");
         return;
@@ -203,7 +207,7 @@ export default {
               return;
             }else{
                 const user={'firstName':this.firstName,'lastName':this.lastName,'username':this.username,'email':this.email,'password':this.password,"confirmPassword":this.confirmPassword,
-                'address':this.address,'city':this.city,'country':this.country,'phoneNum':this.validNumber};
+                'address':this.address,'city':this.city,'country':this.country,'phoneNum':this.phoneNum};
 
                 if (this.role !== "addClient") {
                   user.registrationReason = this.registrationReason;
@@ -215,6 +219,7 @@ export default {
                   }else{
                     this.$toast.success("Registration successful");
                     this.$root.signUp=true;
+                    this.$root.signIn=true;
                     this.$router.push("/");
                   }
                 });
@@ -228,13 +233,6 @@ export default {
     
             
      
-    },
-    telValidate(phoneNum) {
-      if (phoneNum.valid) {
-        this.validNumber = phoneNum.number;
-      } else {
-        this.validNumber = '';
-      } 
     },
     validateEmail(email){
       var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;      

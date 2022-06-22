@@ -23,6 +23,13 @@ public class ReservationDTO {
     private LocalDateTime start;
     private Long duration;
 
+    @JsonFormat(pattern = ("dd.MM.yyyy HH:mm"))
+    private LocalDateTime end;
+
+    private Double fee;
+
+    private Boolean reviewed;
+
     public ReservationDTO() {}
 
     public ReservationDTO(@NotNull Reservation reservation) {
@@ -36,9 +43,10 @@ public class ReservationDTO {
         this.clientId = reservation.getClient().getId();
         this.start = reservation.getStart();
         this.duration = reservation.getDuration().toMillis();
+        this.fee = reservation.getFee();
+        this.end = this.start.plus(reservation.getDuration());
+        this.reviewed = reservation.isReviewed();
     }
-
-
 
     public Long getId() {
         return id;
@@ -112,6 +120,14 @@ public class ReservationDTO {
         this.duration = duration;
     }
 
+    public Double getFee() {
+        return fee;
+    }
+
+    public void setFee(Double fee) {
+        this.fee = fee;
+    }
+
     public String getRentingEntityName() {
         return rentingEntityName;
     }
@@ -142,5 +158,20 @@ public class ReservationDTO {
 
     public void setRentingEntityOwnerId(Long rentingEntityOwnerId) {
         this.rentingEntityOwnerId = rentingEntityOwnerId;
+    }
+
+    public LocalDateTime getEnd() {
+        return end;
+    }
+    public void setEnd(LocalDateTime end) {
+        this.end = end;
+    }
+
+    public Boolean getReviewed() {
+        return reviewed;
+    }
+
+    public void setReviewed(Boolean reviewed) {
+        this.reviewed = reviewed;
     }
 }

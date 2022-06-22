@@ -1,5 +1,7 @@
 package com.projekat.projekat_mrs_isa.service;
 
+import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
+import com.projekat.projekat_mrs_isa.dto.UserDTO;
 import com.projekat.projekat_mrs_isa.model.VacationHouseOwner;
 import java.util.List;
 import java.util.Map;
@@ -19,4 +21,8 @@ public interface VacationHouseOwnerService {
     VacationHouseOwner save(VacationHouseOwner vacationHouseOwner);
 
     void remove(Long id);
+
+    List<ReservationDTO> getReservationsFromOwner(VacationHouseOwner owner);
+    
+    List<UserDTO> findAllDTO();
 }

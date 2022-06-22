@@ -26,4 +26,9 @@ public interface FishingClassRepository extends JpaRepository<FishingClass, Long
             countQuery = "SELECT count(fc) FROM FishingClass fc WHERE  fc.name LIKE %?1% and fc.address LIKE %?2% and fc.clientLimit >= ?3 and fc.priceList >= ?4 and fc.priceList <= ?5")
     Page<FishingClass> findByNoDateCriteria(String name, String address, Integer people, Double priceMin, Double priceMax, Pageable page);
 
+    @Query("select distinct fc from FishingClass fc left join fetch fc.pictures where fc.fishingInstructor.username = ?1")
+    List<FishingClass> findAllFromOwner(String username);
+    
+    @Query("select distinct fc from FishingClass fc left join fetch fc.pictures where fc.fishingInstructor.username = ?1")
+    List<FishingClass> findAllFromInstructor(String username);
 }

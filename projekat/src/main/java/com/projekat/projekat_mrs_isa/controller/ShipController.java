@@ -1,14 +1,15 @@
 package com.projekat.projekat_mrs_isa.controller;
 
+import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
 import com.projekat.projekat_mrs_isa.dto.OfferDTO;
+import com.projekat.projekat_mrs_isa.dto.ReviewDisplayDTO;
 import com.projekat.projekat_mrs_isa.dto.ShipDTO;
-import com.projekat.projekat_mrs_isa.model.Offer;
-import com.projekat.projekat_mrs_isa.model.Reservation;
-import com.projekat.projekat_mrs_isa.model.Ship;
-import com.projekat.projekat_mrs_isa.model.VacationHouse;
-import com.projekat.projekat_mrs_isa.service.RentingEntityService;
-import com.projekat.projekat_mrs_isa.service.ShipService;
-import com.projekat.projekat_mrs_isa.service.UtilityService;
+import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
+import com.projekat.projekat_mrs_isa.model.*;
+import com.projekat.projekat_mrs_isa.service.*;
+import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
+import com.projekat.projekat_mrs_isa.dto.ShipDTO;
+import com.projekat.projekat_mrs_isa.model.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.jetbrains.annotations.NotNull;
@@ -38,9 +39,14 @@ import java.util.List;
 public class ShipController {
     @Autowired
     private ShipService shipService;
+    @Autowired
+    private ShipOwnerService shipOwnerService;
 
     @Autowired
     private ResourceLoader resourceLoader;
+
+    @Autowired
+    private ReservationService reservationService;
 
     @Autowired
     private UtilityService utilityService;
@@ -129,6 +135,16 @@ public class ShipController {
         return new ResponseEntity<>(rentingEntityService.getOffersByREId(ship),HttpStatus.OK);
     }
 
+    @GetMapping(value = "/anyUser/{id}/reviews", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
+    public ResponseEntity<List<ReviewDisplayDTO>> getReviews(@PathVariable("id") Long id) {
+        Ship ship = shipService.findById(id);
+        if (ship == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(rentingEntityService.getReviewsByRentingEntityIdOrOwnerId(ship.getId(),ship.getShipOwner().getId()),HttpStatus.OK);
+    }
+
 //    public String encodeImage(RentingEntity rentingEntity){
 //        String picturePath="pictures/renting_entities/0.png";
 //        if(rentingEntity.getPictures().size() > 0){
@@ -157,6 +173,21 @@ public class ShipController {
         }
 
         return new ResponseEntity<>(rentingEntityService.getPicturesByRentingEntity(ship),HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/loggedShipOwner/")
+    @PreAuthorize("hasRole('SHIP_OWNER')")
+    public ResponseEntity<Boolean> createShip(@RequestBody ShipDTO shipDTO, Principal ownerPrincipal) {
+        ShipOwner owner = shipOwnerService.findByUsername(ownerPrincipal.getName());
+        if(owner == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Ship ship = new Ship(shipDTO);
+        owner.addShip(ship);
+
+        shipService.save(ship);
+        shipOwnerService.save(owner);
+
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
     @PutMapping(value = "/loggedShipOwner/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -192,6 +223,31 @@ public class ShipController {
         return new ResponseEntity<>(shipDTOList, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/loggedShipOwner/getEntitiesRating", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('SHIP_OWNER')")
+    public ResponseEntity<Double> getEntitiesRating(Principal ownerPrincipal) {
+        List<Ship> ships = shipService.findAllFromOwner(ownerPrincipal.getName());
+        double rating=0;
+        for(Ship ship : ships)
+            rating += ship.getRating();
+        return new ResponseEntity<>(rating, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/loggedShipOwner/getMoneyEarned/{startDate}-{endDate}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('SHIP_OWNER')")
+    public ResponseEntity<Double> getEntitiesRating(Principal ownerPrincipal,@PathVariable("startDate") String startDateString,@PathVariable("endDate") String endDateString) {
+        LocalDateTime dateStart=LocalDateTime.parse(startDateString, DateTimeFormatter.ofPattern("yyyy_MM_dd HH:mm:ss"));
+        LocalDateTime dateEnd=LocalDateTime.parse(endDateString, DateTimeFormatter.ofPattern("yyyy_MM_dd HH:mm:ss"));
+        List<Ship> ships = shipService.findAllFromOwner(ownerPrincipal.getName());
+        double moneyEarned=0d;
+        for(Ship ship : ships){
+            for(Reservation reservation : reservationService.getReservationsByDateAndEntity(dateStart,dateEnd,ship)) {
+                moneyEarned += reservation.getPrice();
+            }
+        }
+        return new ResponseEntity<>(moneyEarned, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/loggedShipOwner/{id}/hasReservations")
     @PreAuthorize("hasRole('SHIP_OWNER')")
     public ResponseEntity<Boolean> hasReservations(@PathVariable("id") Long id) {
@@ -215,5 +271,25 @@ public class ShipController {
 
         shipService.remove(id);
         return new ResponseEntity<>(new ShipDTO(ship), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/all")
+    public ResponseEntity<List<ShipDTO>> getAllShips() {
+        List<ShipDTO> shipDTOS = shipService.findAllDTO();
+        return new ResponseEntity<>(shipDTOS, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/delete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public ResponseEntity<Boolean> deleteShip(@RequestBody ShipDTO shipDTO) {
+        Ship ship = shipService.findById(shipDTO.getId());
+        if (ship == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        rentingEntityService.deleteReviewsByRentingEntity(ship);
+        rentingEntityService.deleteComplaintByRentingEntity(ship);
+        rentingEntityService.deleteReservationByRentingEntity(ship);
+        ship.setDeleted(true);
+        shipService.save(ship);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

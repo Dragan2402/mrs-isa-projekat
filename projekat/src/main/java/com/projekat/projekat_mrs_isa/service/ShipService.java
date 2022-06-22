@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface ShipService {
 
-    @Cacheable(value = "rentingEntity",key = "#id")
+    @Cacheable(value = "rentingEntity",key = "#id",unless="#result == null")
     Ship findById(Long id);
 
     List<Ship> findAll();

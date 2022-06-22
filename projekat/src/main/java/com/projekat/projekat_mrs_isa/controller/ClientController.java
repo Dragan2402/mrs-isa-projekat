@@ -1,6 +1,5 @@
 package com.projekat.projekat_mrs_isa.controller;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import com.projekat.projekat_mrs_isa.dto.*;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.service.*;
@@ -11,13 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -51,6 +46,9 @@ public class ClientController {
     @Autowired
     private ReviewService reviewService;
 
+    @Autowired
+    private ReportService reportService;
+
     @GetMapping(value = "/all")
     public ResponseEntity<List<UserDTO>> getAllClients() {
         List<UserDTO> clients = clientService.findAllDTO();
@@ -78,8 +76,8 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Review review = new Review(rentingEntity, client, reviewDTO.getRating(), reviewDTO.getComment());
-        rentingEntity.addReview(review);
-        client.addReview(review);
+        //rentingEntity.addReview(review);
+        //client.addReview(review);
         Review saved = reviewService.save(review);
         if (saved == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -97,8 +95,8 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Complaint complaint=new Complaint(client,rentingEntity,complaintDTO.getText());
-        rentingEntity.addComplaint(complaint);
-        client.sendComplaint(complaint);
+        //rentingEntity.addComplaint(complaint);
+        //client.sendComplaint(complaint);
         Complaint complaintSaved = complaintService.save(complaint);
         if (complaintSaved == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -116,8 +114,8 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Complaint complaint=new Complaint(client,respodent,complaintDTO.getText());
-        respodent.recieveComplaint(complaint);
-        client.sendComplaint(complaint);
+        //respodent.recieveComplaint(complaint);
+        //client.sendComplaint(complaint);
         Complaint complaintSaved = complaintService.save(complaint);
         if (complaintSaved == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -136,8 +134,8 @@ public class ClientController {
         if (client == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Review review = new Review(user, client, reviewDTO.getRating(), reviewDTO.getComment());
-        user.addReview(review);
-        client.addReview(review);
+        //user.addReview(review);
+        //client.addReview(review);
         Review saved = reviewService.save(review);
         if (saved == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -145,7 +143,7 @@ public class ClientController {
     }
 
     @PostMapping(value = "/makeReservationFull", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('CLIENT')")
+    @PreAuthorize("hasAnyRole('CLIENT')")
     @Transactional
     public ResponseEntity<Boolean> makeReservationFull(Principal clientP, @RequestBody ReservationRequestDTO reservationRequestDTO) {
         Client logged = clientService.findByUsername(clientP.getName());
@@ -153,6 +151,21 @@ public class ClientController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         try {
             return new ResponseEntity<>(clientService.makeClientReservation(logged,reservationRequestDTO),HttpStatus.OK);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(false,HttpStatus.LOCKED);
+        }
+    }
+
+    @PostMapping(value = "/makeReservationFull/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('VH_OWNER', 'SHIP_OWNER', 'FC_INSTRUCTOR')")
+    @Transactional
+    public ResponseEntity<Boolean> makeReservationForClient(@PathVariable("id") Long id, @RequestBody ReservationRequestDTO reservationRequestDTO) {
+        Client client = clientService.findById(id);
+        if (client == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try {
+            return new ResponseEntity<>(clientService.makeClientReservation(client,reservationRequestDTO),HttpStatus.OK);
         } catch (ObjectOptimisticLockingFailureException e) {
             e.printStackTrace();
             return new ResponseEntity<>(false,HttpStatus.LOCKED);
@@ -260,14 +273,16 @@ public class ClientController {
         return new ResponseEntity<>(clientService.isSubscribed(client,id), HttpStatus.OK);
     }
 
+
+
     @GetMapping(value = "/rentingEntityAvailability/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('CLIENT')")
+    @PreAuthorize("hasAnyRole('CLIENT', 'VH_OWNER', 'SHIP_OWNER', 'FC_INSTRUCTOR')")
     @Transactional
-    public ResponseEntity<List<TakenPeriodDTO>> rentingEntityAvailability(Principal clientP,@PathVariable("id") Long id) {
-        Client client = clientService.findByUsername(clientP.getName());
-        if (client == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(clientService.rentingEntityAvailability(client,id), HttpStatus.OK);
+    public ResponseEntity<List<TakenPeriodDTO>> rentingEntityAvailability(@PathVariable("id") Long id) {
+//        Client client = clientService.findByUsername(clientP.getName());
+//        if (client == null)
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(clientService.rentingEntityAvailability(id), HttpStatus.OK);
     }
 
 
@@ -292,36 +307,34 @@ public class ClientController {
             Client clientToUpdate = clientService.findByUsername(clientP.getName());
             clientToUpdate.update(userDTO);
             Client updatedCLient = clientService.save(clientToUpdate);
-
-
             if (updatedCLient == null)
-                return new ResponseEntity<UserDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
-            return new ResponseEntity<UserDTO>(new UserDTO(updatedCLient), HttpStatus.OK);
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new UserDTO(updatedCLient), HttpStatus.OK);
         } else {
 
             return new ResponseEntity<>(new UserDTO(), HttpStatus.BAD_REQUEST);
         }
     }
 
-
-    @PutMapping(value = "/loggedClient/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasRole('CLIENT')")
-    @Transactional
-    public ResponseEntity<String> updateLoggedClientPicture(Principal clientP, @RequestPart("image") MultipartFile image) throws IOException {
-
-        Client clientToUpdate = clientService.findByUsername(clientP.getName());
-        String pictureName = "pictures/user_pictures/" + clientToUpdate.getId().toString() + ".png";
-        clientToUpdate.setPicture(pictureName);
-        Client updatedClient = clientService.save(clientToUpdate);
-
-        boolean resp = utilityService.saveFile("src/main/resources/", pictureName, image);
-        boolean resp2 = utilityService.saveFile("target/classes/", pictureName, image);
-        if (resp && resp2) {
-            return new ResponseEntity<>(utilityService.getPictureEncoded(updatedClient.getPicture()), HttpStatus.OK);
-        } else {
+    @PostMapping(value = "/loggedOwner/sendReservationReport", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('VH_OWNER', 'SHIP_OWNER', 'FC_INSTRUCTOR')")
+    public ResponseEntity<Boolean> createReservationReport(Principal userPrincipal, @RequestBody ReportDTO reportDTO) {
+        User user = userService.findByUsername(userPrincipal.getName());
+        if (user == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Reservation reservation = reservationService.findById(reportDTO.getReservationId());
+        Client client = clientService.findById(reportDTO.getClientId());
+        if (reservation == null || client == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        Report report = new Report(reportDTO.getText(), reportDTO.getType(), reservation, client, user);
+        if (report.getType() == ReportType.NO_SHOW) {
+            client.addPenalty();
+            report.setReviewed(true);
+            clientService.save(client);
+        } else if (report.getType() == ReportType.GOOD)
+            report.setReviewed(true);
+        reservation.setReviewed(true);
+        reservationService.save(reservation);
+        return new ResponseEntity<>(reportService.save(report), HttpStatus.OK);
     }
-
-
 }

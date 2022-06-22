@@ -12,11 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +32,6 @@ public class VacationHouseServiceImpl implements VacationHouseService {
     @Override
     public VacationHouse findById(Long id) {
         {
-            LOG.info("Vacation house with id:"+id+" successfully cached");
             return vacationHouseRepository.findById(id).orElse(null);
         }
     }
@@ -99,7 +95,6 @@ public class VacationHouseServiceImpl implements VacationHouseService {
         List<VacationHouseDTO> vacationHouseDTOS=new ArrayList<>();
         for (VacationHouse vacationHouse : vacationHouses){
             VacationHouseDTO vacationHouseDTO= new VacationHouseDTO(vacationHouse);
-            LOG.info("Vacation house with id:"+vacationHouseDTO.getId()+" successfully cached");
             String picturePath="pictures/renting_entities/0.png";
             if(vacationHouse.getPictures().size()>0){
                 picturePath=vacationHouse.getPictures().get(0);

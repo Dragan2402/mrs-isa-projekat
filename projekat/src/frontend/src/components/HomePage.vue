@@ -1,5 +1,5 @@
 <template>
-  <div class="main-container">
+  <div class="main-container" style="min-height:600px;">
     <div class="left-bar">
       <h5 style="color: white; font-weight: bold">Search</h5>
       <div class="left-bar-text" style="margin-top: 0">Destination name:</div>
@@ -67,7 +67,7 @@
           <div class="entity-name"><h4 @click="jumpToPreview(vacationHouse)" style="font-weight: bold; cursor: pointer">{{ vacationHouse.name }}</h4>
             <div class="entity-description"><i class="bi bi-geo-alt-fill"></i> <b>{{ vacationHouse.address }}</b> </div>
             <div class="entity-description">{{ vacationHouse.promoDescription }}</div>
-            <vue3-star-ratings class="star-ratings" v-model="vacationHouse.rating" starSize="15"  :showControl=false :disableClick=true :step=0 />
+            <label>{{Math.round(vacationHouse.rating * 10) / 10}} &#11088;</label> 
             <span style="color: #585858;">({{vacationHouse.reviewsNumber}})</span>
           </div>
           <div class="entity-price">
@@ -146,7 +146,6 @@ export default {
   },
   
   methods: {       
-
     formatRange(dates){
       let from = dates[0];
       let to = dates[1];

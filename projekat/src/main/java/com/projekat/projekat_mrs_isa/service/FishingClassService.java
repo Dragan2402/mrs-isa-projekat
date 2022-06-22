@@ -2,6 +2,7 @@ package com.projekat.projekat_mrs_isa.service;
 
 import com.projekat.projekat_mrs_isa.dto.FishingClassDTO;
 import com.projekat.projekat_mrs_isa.model.FishingClass;
+import com.projekat.projekat_mrs_isa.model.Reservation;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public interface FishingClassService {
 
-    @Cacheable(value = "rentingEntity",key = "#id")
+    @Cacheable(value = "rentingEntity",key = "#id",unless="#result == null")
     FishingClass findById(Long id);
 
     FishingClassDTO findFishingClassDTO(Long id);
@@ -34,4 +35,13 @@ public interface FishingClassService {
 
 
     List<FishingClassDTO> findByNoDateCriteria(String name, String address, Integer people, Double priceMin, Double priceMax, Pageable page);
+
+    List<FishingClass> findAllFromOwner(String username);
+    
+    List<FishingClassDTO> convertToDto(List<FishingClass> fishingClasses);
+
+    List<Reservation> findAllReservations(Long id);
+
+    List<FishingClass> findAllFromInstructor(String name);
+
 }

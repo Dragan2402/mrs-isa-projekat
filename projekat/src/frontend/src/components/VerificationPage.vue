@@ -1,5 +1,5 @@
 <template>
-  <div v-if="verified" align='center'>
+  <div v-if="verified" align='center' style="min-height:600px;margin-top:5%;">
     <img src="../assets/verified.png" height="200" width="200">
     <p style="color:green;">Welcome to Renting Buddy</p>
   </div>
@@ -7,7 +7,6 @@
     <img src="../assets/confused.png" height="200" width="200">
     <p style="color:red;">Error.....</p>
   </div>
-
 </template>
 
 <script>

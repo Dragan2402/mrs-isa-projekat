@@ -58,6 +58,16 @@ public class Ship extends RentingEntity{
         this.fishingEquipment = fishingEquipment;
     }
 
+    public Ship(ShipDTO shipDTO) {
+        super(shipDTO);
+        this.type = shipDTO.getType();
+        this.length = shipDTO.getLength();
+        this.engineNumber = shipDTO.getEngineNumber();
+        this.enginePower = shipDTO.getEnginePower();
+        this.topSpeed = shipDTO.getTopSpeed();
+        this.clientLimit = shipDTO.getClientLimit();
+    }
+
     public String getType() {
         return type;
     }

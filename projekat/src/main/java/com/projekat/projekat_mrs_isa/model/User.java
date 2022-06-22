@@ -99,6 +99,9 @@ public abstract class User implements UserDetails {
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
 
+    @Column(name = "firstLogin", nullable = false)
+    private Boolean firstLogin;
+
     public User() {}
 
     public User( String email,String username,String password, String picture, String firstName, String lastName, String address, String city,
@@ -118,8 +121,9 @@ public abstract class User implements UserDetails {
         this.penalties=0;
         this.phoneNum = phoneNum;
         this.verified=false;
-        this.enabled=true;
+        this.enabled=false;
         this.deleted = false;
+        this.firstLogin = true;
     }
 
     public Long getId() {
@@ -136,6 +140,14 @@ public abstract class User implements UserDetails {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Boolean getFirstLogin() {
+        return firstLogin;
+    }
+
+    public void setFirstLogin(Boolean firstLogin) {
+        this.firstLogin = firstLogin;
     }
 
     public String getEmail() {
