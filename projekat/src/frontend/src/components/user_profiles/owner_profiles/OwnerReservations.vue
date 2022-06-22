@@ -190,6 +190,15 @@ export default {
                 entityUrlPart: "ships",
                 entityName: "Ship"
               };
+
+            } else if (response.data.accountType === "INSTRUCTOR") {
+              entityTypeInfo.value = {
+                urlPart: "fishingInstructors/loggedFishingInstructor",
+                ownerUrlPart: "fishingInstructors",
+                entityUrlPart: "fishingClasses",
+                entityName: "Fishing class"
+              };
+
             } else {
               router.push({name: "homePage"});
             }
@@ -311,52 +320,52 @@ export default {
           })
     }
 
-    // function generateBar(takenDTO) {
-    //   let color = "red";
-    //   if (takenDTO.type == "Offer") {
-    //     color = "blue";
-    //   }
-    //   let datesBars = [];
-    //   let takenTo = stringToDateTime(takenDTO.takenTo);
-    //   for (let d = stringToDateTime(takenDTO.takenFrom); d <= takenTo; d.setDate(d.getDate() + 1)) {
-    //     const date = new Date(d);
-    //     datesBars.push(date);
-    //   }
-    //   const bar = {
-    //     dates: datesBars,
-    //     bar: color
-    //   }
-    //   bars.value.push(bar)
-    // }
+    function generateBar(takenDTO) {
+      let color = "red";
+      if (takenDTO.type == "Offer") {
+        color = "blue";
+      }
+      let datesBars = [];
+      let takenTo = stringToDateTime(takenDTO.takenTo);
+      for (let d = stringToDateTime(takenDTO.takenFrom); d <= takenTo; d.setDate(d.getDate() + 1)) {
+        const date = new Date(d);
+        datesBars.push(date);
+      }
+      const bar = {
+        dates: datesBars,
+        bar: color
+      }
+      bars.value.push(bar)
+    }
 
-    // function generatePopover(takenDTO) {
-    //   let col = "red";
-    //   if (takenDTO.type == "Offer") {
-    //     col = "blue";
-    //   }
-    //   const takenStart = {
-    //     description: takenDTO.startsAt,
-    //     isComplete: false,
-    //     dates: stringToDateTime(takenDTO.takenFrom),
-    //     color: col
-    //   };
-    //   const takenEnd = {
-    //     description: takenDTO.endsAt,
-    //     isComplete: false,
-    //     dates: stringToDateTime(takenDTO.takenTo),
-    //     color: col
-    //   };
-    //   takenDatesPoppers.value.push(takenStart);
-    //   takenDatesPoppers.value.push(takenEnd);
-    // }
+    function generatePopover(takenDTO) {
+      let col = "red";
+      if (takenDTO.type == "Offer") {
+        col = "blue";
+      }
+      const takenStart = {
+        description: takenDTO.startsAt,
+        isComplete: false,
+        dates: stringToDateTime(takenDTO.takenFrom),
+        color: col
+      };
+      const takenEnd = {
+        description: takenDTO.endsAt,
+        isComplete: false,
+        dates: stringToDateTime(takenDTO.takenTo),
+        color: col
+      };
+      takenDatesPoppers.value.push(takenStart);
+      takenDatesPoppers.value.push(takenEnd);
+    }
 
-    // function takeCalendar(takenDatesParam) {
-    //   bars.value = [];
-    //   takenDatesPoppers.value = [];
-    //   takenDatesParam.forEach(generateBar);
-    //   takenDatesParam.forEach(generatePopover);
-    //   takenDates.value = takenDatesParam;
-    // }
+    function takeCalendar(takenDatesParam) {
+      bars.value = [];
+      takenDatesPoppers.value = [];
+      takenDatesParam.forEach(generateBar);
+      takenDatesParam.forEach(generatePopover);
+      takenDates.value = takenDatesParam;
+    }
 
     function toggleMakingReservation(reservation) {
       selectReservation(reservation);

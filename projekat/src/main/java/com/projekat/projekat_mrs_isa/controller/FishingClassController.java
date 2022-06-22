@@ -193,11 +193,11 @@ public class FishingClassController {
         return new ResponseEntity<>(new FishingClassDTO(fishingClass), HttpStatus.OK);
     }
 
-//    @GetMapping(value = "/all")
-//    public ResponseEntity<List<FishingClassDTO>> getAllFishingClasses() {
-//        List<FishingClassDTO> fishingClassDTOS = fishingClassService.findAllDTO();
-//        return new ResponseEntity<>(fishingClassDTOS, HttpStatus.OK);
-//    }
+    @GetMapping(value = "/all")
+    public ResponseEntity<List<FishingClassDTO>> getAllFishingClasses() {
+        List<FishingClassDTO> fishingClassDTOS = fishingClassService.findAllDTO();
+        return new ResponseEntity<>(fishingClassDTOS, HttpStatus.OK);
+    }
 
     @PutMapping(value = "/delete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
