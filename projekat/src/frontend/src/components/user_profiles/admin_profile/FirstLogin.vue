@@ -1,5 +1,5 @@
 <template>
-  <div style="text-align: center; margin: 15px">
+  <div style="text-align: center; margin: 15px;min-height:800px;">
     <h4>Hello, please set a new password.</h4>
     <br>
   <div class="form-floating input-group-width mb-2" style="width: 300px">

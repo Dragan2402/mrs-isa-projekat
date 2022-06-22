@@ -33,7 +33,9 @@
     </div>
     
   </nav>
-  <router-view ></router-view>
+  <div style="min-height:800px;">
+    <router-view ></router-view>
+  </div>
   <footer class="text-white text-center text-lg-start" style="background-color:#004661;maring-top:5%">
       <!-- Grid container -->
       <div class="container p-4" style="background-color:#004661;">
