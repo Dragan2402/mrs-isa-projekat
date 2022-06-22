@@ -143,7 +143,7 @@ public class ClientController {
     }
 
     @PostMapping(value = "/makeReservationFull", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('CLIENT')")
+    @PreAuthorize("hasAnyRole('CLIENT')")
     @Transactional
     public ResponseEntity<Boolean> makeReservationFull(Principal clientP, @RequestBody ReservationRequestDTO reservationRequestDTO) {
         Client logged = clientService.findByUsername(clientP.getName());
@@ -151,6 +151,21 @@ public class ClientController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         try {
             return new ResponseEntity<>(clientService.makeClientReservation(logged,reservationRequestDTO),HttpStatus.OK);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(false,HttpStatus.LOCKED);
+        }
+    }
+
+    @PostMapping(value = "/makeReservationFull/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('VH_OWNER', 'SHIP_OWNER', 'FC_INSTRUCTOR')")
+    @Transactional
+    public ResponseEntity<Boolean> makeReservationForClient(@PathVariable("id") Long id, @RequestBody ReservationRequestDTO reservationRequestDTO) {
+        Client client = clientService.findById(id);
+        if (client == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try {
+            return new ResponseEntity<>(clientService.makeClientReservation(client,reservationRequestDTO),HttpStatus.OK);
         } catch (ObjectOptimisticLockingFailureException e) {
             e.printStackTrace();
             return new ResponseEntity<>(false,HttpStatus.LOCKED);
@@ -259,13 +274,13 @@ public class ClientController {
     }
 
     @GetMapping(value = "/rentingEntityAvailability/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('CLIENT')")
+    @PreAuthorize("hasAnyRole('CLIENT', 'VH_OWNER', 'SHIP_OWNER', 'FC_INSTRUCTOR')")
     @Transactional
-    public ResponseEntity<List<TakenPeriodDTO>> rentingEntityAvailability(Principal clientP,@PathVariable("id") Long id) {
-        Client client = clientService.findByUsername(clientP.getName());
-        if (client == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(clientService.rentingEntityAvailability(client,id), HttpStatus.OK);
+    public ResponseEntity<List<TakenPeriodDTO>> rentingEntityAvailability(@PathVariable("id") Long id) {
+//        Client client = clientService.findByUsername(clientP.getName());
+//        if (client == null)
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(clientService.rentingEntityAvailability(id), HttpStatus.OK);
     }
 
 

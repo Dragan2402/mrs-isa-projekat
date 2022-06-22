@@ -44,7 +44,7 @@ public interface ClientService {
 
     List<SubscriptionDTO> getSubscriptions(Client client);
 
-    List<TakenPeriodDTO> rentingEntityAvailability(Client client, Long id);
+    List<TakenPeriodDTO> rentingEntityAvailability(Long id);
 
     Boolean makeClientReservation(Client logged, ReservationRequestDTO reservationRequestDTO) throws ObjectOptimisticLockingFailureException;
 
