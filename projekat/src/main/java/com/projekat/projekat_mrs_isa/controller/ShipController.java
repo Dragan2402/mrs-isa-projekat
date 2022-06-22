@@ -260,6 +260,9 @@ public class ShipController {
     public ResponseEntity<Boolean> deleteShip(@RequestBody ShipDTO shipDTO) {
         Ship ship = shipService.findById(shipDTO.getId());
         if (ship == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        rentingEntityService.deleteReviewsByRentingEntity(ship);
+        rentingEntityService.deleteComplaintByRentingEntity(ship);
+        rentingEntityService.deleteReservationByRentingEntity(ship);
         ship.setDeleted(true);
         shipService.save(ship);
         return new ResponseEntity<>(true, HttpStatus.OK);

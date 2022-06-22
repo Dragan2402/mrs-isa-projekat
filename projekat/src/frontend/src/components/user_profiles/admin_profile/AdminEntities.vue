@@ -1,6 +1,5 @@
 <template>
-  <div class="main-wrapper">
-
+  <h4>Users:</h4>
     <div class="for-container" v-for="(user, index) in this.users" v-bind:index="index" :key="user.id">
       <div class="inner-container">
         <div class="left-container">
@@ -11,19 +10,21 @@
           <div><b>City:</b> {{ user.city }}, {{ user.country }}</div>
           <div><b>Mobile number:</b> {{ user.phoneNum }}</div>
           <div><b>Penalties:</b> {{ user.penalties }}</div>
+          <div v-if="user.enabled"><b>Disabled:</b> No</div>
+          <div v-if="!user.enabled"><b>Disabled:</b> Yes</div>
           <div v-if="user.accountType==='CLIENT'"><b>Role:</b> Client</div>
           <div v-if="user.accountType==='VH_OWNER'"><b>Role:</b> Vacation House Owner</div>
           <div v-if="user.accountType==='SH_OWNER'"><b>Role:</b> Ship Owner</div>
           <div v-if="user.accountType==='INSTRUCTOR'"><b>Role:</b> Fishing Instructor</div>
         </div>
         <div class="right-container">
-          <button class="custom-btn button-primary" @click="deleteUser(user, index)">Delete</button>
+          <button class="custom-btn button-primary" @click="deleteUser(user, index)">Disable</button>
         </div>
       </div>
     </div>
 
     <hr>
-
+  <h4>Vacation Houses:</h4>
     <div class="for-container" v-for="(vacationHouse, index) in this.vacationHouses" v-bind:index="index" :key="vacationHouse.id">
       <div class="inner-container">
         <div class="left-container">
@@ -39,7 +40,7 @@
     </div>
 
     <hr>
-
+  <h4>Ships:</h4>
     <div class="for-container" v-for="(ship, index) in this.ships" v-bind:index="index" :key="ship.id">
       <div class="inner-container">
         <div class="left-container">
@@ -55,7 +56,7 @@
     </div>
 
     <hr>
-
+  <h4>Fishing Classes:</h4>
     <div class="for-container" v-for="(fishingClass, index) in this.fishingClasses" v-bind:index="index" :key="fishingClass.id">
       <div class="inner-container">
         <div class="left-container">
@@ -69,8 +70,7 @@
         </div>
       </div>
     </div>
-
-  </div>
+  <div class="main-wrapper"></div>
 </template>
 
 <script>
@@ -97,7 +97,7 @@ export default {
       axios.put("api/users/delete", user, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
         if (response.data == true) {
           this.$toast.success("Successfully deleted!");
-          this.users.splice(index,1);
+          this.users[index].enabled = false;
         } else {
           this.$toast.error("Problem has occurred!");
         }

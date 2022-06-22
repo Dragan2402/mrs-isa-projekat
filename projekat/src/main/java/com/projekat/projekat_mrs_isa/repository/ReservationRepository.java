@@ -5,6 +5,7 @@ import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
 import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -23,6 +24,10 @@ public interface ReservationRepository extends JpaRepository<Reservation,Long> {
 
     @Query("select new com.projekat.projekat_mrs_isa.dto.ReservationDTO(r) from Reservation r where r.deleted=false")
     List<ReservationDTO> findAllDTO();
+
+    @Modifying
+    @Query("update Reservation r set r.deleted=true where r.rentingEntity=?1")
+    void deleteReservationByRentingEntity(RentingEntity rentingEntity);
     
 //    @Query("select r from Reservation r join fetch r.rentingEntity join fetch r.client where r.rentingEntity = ?1")
 //    List<Reservation> getAllFromEntity(RentingEntity entity);

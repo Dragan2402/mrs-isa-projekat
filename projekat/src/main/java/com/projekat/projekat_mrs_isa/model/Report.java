@@ -32,6 +32,9 @@ public class Report {
     @Column(name = "reviewed")
     private Boolean reviewed;
 
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted;
+
     public Report() {}
 
     public Report(String text, ReportType type, Reservation reservation, Client client, User submitter) {
@@ -41,6 +44,7 @@ public class Report {
         this.client = client;
         this.submitter = submitter;
         this.reviewed = false;
+        this.deleted = false;
     }
 
     public Long getId() {
@@ -97,5 +101,13 @@ public class Report {
 
     public void setReviewed(Boolean reviewed) {
         this.reviewed = reviewed;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }
