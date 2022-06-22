@@ -23,10 +23,12 @@ public class ReservationDTO {
     private LocalDateTime start;
     private Long duration;
 
-    private Double fee;
-    
     @JsonFormat(pattern = ("dd.MM.yyyy HH:mm"))
     private LocalDateTime end;
+
+    private Double fee;
+
+    private Boolean reviewed;
 
     public ReservationDTO() {}
 
@@ -43,9 +45,8 @@ public class ReservationDTO {
         this.duration = reservation.getDuration().toMillis();
         this.fee = reservation.getFee();
         this.end = this.start.plus(reservation.getDuration());
+        this.reviewed = reservation.isReviewed();
     }
-
-
 
     public Long getId() {
         return id;
@@ -164,5 +165,13 @@ public class ReservationDTO {
     }
     public void setEnd(LocalDateTime end) {
         this.end = end;
+    }
+
+    public Boolean getReviewed() {
+        return reviewed;
+    }
+
+    public void setReviewed(Boolean reviewed) {
+        this.reviewed = reviewed;
     }
 }

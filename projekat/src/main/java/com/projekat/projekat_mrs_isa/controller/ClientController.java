@@ -1,6 +1,5 @@
 package com.projekat.projekat_mrs_isa.controller;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import com.projekat.projekat_mrs_isa.dto.*;
 import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.service.*;
@@ -11,13 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -50,6 +45,9 @@ public class ClientController {
 
     @Autowired
     private ReviewService reviewService;
+
+    @Autowired
+    private ReportService reportService;
 
     @GetMapping(value = "/all")
     public ResponseEntity<List<UserDTO>> getAllClients() {
@@ -299,5 +297,27 @@ public class ClientController {
 
             return new ResponseEntity<>(new UserDTO(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping(value = "/loggedOwner/sendReservationReport", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyRole('VH_OWNER', 'SHIP_OWNER', 'FC_INSTRUCTOR')")
+    public ResponseEntity<Boolean> createReservationReport(Principal userPrincipal, @RequestBody ReportDTO reportDTO) {
+        User user = userService.findByUsername(userPrincipal.getName());
+        if (user == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        Reservation reservation = reservationService.findById(reportDTO.getReservationId());
+        Client client = clientService.findById(reportDTO.getClientId());
+        if (reservation == null || client == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Report report = new Report(reportDTO.getText(), reportDTO.getType(), reservation, client, user);
+        if (report.getType() == ReportType.NO_SHOW) {
+            client.addPenalty();
+            report.setReviewed(true);
+            clientService.save(client);
+        } else if (report.getType() == ReportType.GOOD)
+            report.setReviewed(true);
+        reservation.setReviewed(true);
+        reservationService.save(reservation);
+        return new ResponseEntity<>(reportService.save(report), HttpStatus.OK);
     }
 }

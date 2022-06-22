@@ -2,7 +2,6 @@ package com.projekat.projekat_mrs_isa.model;
 
 import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -47,11 +46,14 @@ public class Reservation implements Serializable {
     private Duration duration;
 
     @Version
-    @Column(name = "version",nullable = false,unique = false)
+    @Column(name = "version", nullable = false, unique = false)
     private Integer version;
 
     @Column(name = "fee", nullable = false)
     private Double fee;
+
+    @Column(name = "reviewed", nullable = false)
+    private boolean reviewed;
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
@@ -68,6 +70,7 @@ public class Reservation implements Serializable {
         this.start = offer.getStart();
         this.duration = offer.getDuration();
         this.fee = fee;
+        this.reviewed = false;
         this.deleted = false;
     }
 
@@ -96,6 +99,7 @@ public class Reservation implements Serializable {
         this.start = start;
         this.duration = duration;
         this.fee = fee;
+        this.reviewed = false;
         this.deleted = false;
     }
 
@@ -177,6 +181,14 @@ public class Reservation implements Serializable {
 
     public void setFee(Double fee) {
         this.fee = fee;
+    }
+
+    public boolean isReviewed() {
+        return reviewed;
+    }
+
+    public void setReviewed(boolean reviewed) {
+        this.reviewed = reviewed;
     }
 
     public boolean isDeleted() {
