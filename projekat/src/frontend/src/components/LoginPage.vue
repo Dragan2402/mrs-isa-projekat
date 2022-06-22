@@ -80,12 +80,12 @@ export default {
               this.$root.loggedUser=response.data
               this.accountType = response.data.accountType;
               this.firstLogin = response.data.firstLogin;
-              axios.get("/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.$root.loggedPicture=response.data));
-              if(this.accountType === "ADMIN" && this.firstLogin) this.$router.push({name: "firstLogin"})
-              else this.$router.push("/");
+             
+              
             });
         axios.get("https://renting-buddy-spring.herokuapp.com/api/users/loggedUser/picture",{ headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} }).then(response => (this.$root.loggedPicture=response.data));
-        this.$router.push("/");  
+        if(this.accountType === "ADMIN" && this.firstLogin) this.$router.push({name: "firstLogin"})
+              else this.$router.push("/");        
       
       }).catch((error) => {
         if(error.response.status === 404)

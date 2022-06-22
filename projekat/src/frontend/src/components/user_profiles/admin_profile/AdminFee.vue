@@ -17,12 +17,12 @@ export default {
     }
   },
   mounted() {
-    axios.get("api/admins/fee", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.fee = response.data))
+    axios.get("https://renting-buddy-spring.herokuapp.com/api/admins/fee", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.fee = response.data))
   },
   methods: {
     saveFee() {
       const feeDTO = {id: 1, value: this.fee};
-      axios.put("api/admins/fee", feeDTO, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
+      axios.put("https://renting-buddy-spring.herokuapp.com/api/admins/fee", feeDTO, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
         if (response.data == true) {
           this.$toast.success("Successfully saved!");
         } else {

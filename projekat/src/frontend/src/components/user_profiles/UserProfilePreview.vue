@@ -27,7 +27,7 @@ export default {
   },
   mounted(){
     this.username =this.$route.params.username;
-    axios.get(`/api/users/userPreview/${this.username}`).then(response => {this.user=response.data;this.loaded=true;}).catch((errorP) => {
+    axios.get(`https://renting-buddy-spring.herokuapp.com//api/users/userPreview/${this.username}`).then(response => {this.user=response.data;this.loaded=true;}).catch((errorP) => {
         
         if(errorP.response.status===404){          
           this.$router.push({
@@ -36,7 +36,7 @@ export default {
         }
        
       });  
-    axios.get(`/api/users/userPreview/${this.username}/picture`).then(response => {this.picture=response.data})
+    axios.get(`https://renting-buddy-spring.herokuapp.com//api/users/userPreview/${this.username}/picture`).then(response => {this.picture=response.data})
   }
 
 

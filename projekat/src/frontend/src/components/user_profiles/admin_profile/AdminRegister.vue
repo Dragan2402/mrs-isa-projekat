@@ -142,13 +142,13 @@ export default {
         return;
       }
 
-      axios.get(`api/auth/isMailAvailable/${this.email}`).then(response => {
+      axios.get(`https://renting-buddy-spring.herokuapp.com/api/auth/isMailAvailable/${this.email}`).then(response => {
         if (response.data == false) {
           this.$toast.error("Email already taken");
           return;
         } else {
 
-          axios.get(`api/auth/isUsernameAvailable/${this.username}`).then(response => {
+          axios.get(`https://renting-buddy-spring.herokuapp.com/api/auth/isUsernameAvailable/${this.username}`).then(response => {
 
             if (response.data == false) {
               this.$toast.error("Username already taken");
@@ -166,7 +166,7 @@ export default {
                 'country': this.country,
                 'phoneNum': this.phoneNum
               };
-              axios.post("/api/auth/addAdmin", admin).then(response => {
+              axios.post("https://renting-buddy-spring.herokuapp.com/api/auth/addAdmin", admin).then(response => {
                 if (response.data == false) {
                   this.$toast.error("Registration failed");
                 } else {

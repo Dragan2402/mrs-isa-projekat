@@ -302,7 +302,7 @@ export default {
         newPasswordConfirm : confirmPassword.value
       };
 
-      axios.put(`/api/users/loggedUser/changePassword`, passwordChange,
+      axios.put(`https://renting-buddy-spring.herokuapp.com/api/users/loggedUser/changePassword`, passwordChange,
           { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             if (response.data === true) {
@@ -328,7 +328,7 @@ export default {
         text: deleteReason.value,
         type: "DELETE_ACCOUNT"
       }
-      axios.post("/api/users/submitRequest",
+      axios.post("https://renting-buddy-spring.herokuapp.com/api/users/submitRequest",
           request,
           { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {

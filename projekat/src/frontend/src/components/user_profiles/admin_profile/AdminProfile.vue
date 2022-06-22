@@ -125,7 +125,8 @@ export default {
       axios.put("https://renting-buddy-spring.herokuapp.com/api/admins/requests", request, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
         if (response.data == true) {
           this.$toast.success("Deleted");
-          this.requests[index].deleted = true;
+          this.requests[index].deleted = true;}
+  })},
 
     backupData() {
       this.backupAdmin = {

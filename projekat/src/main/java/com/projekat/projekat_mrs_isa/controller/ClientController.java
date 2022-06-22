@@ -10,8 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -314,7 +316,7 @@ public class ClientController {
         if (resp && resp2) {
             return new ResponseEntity<>(utilityService.getPictureEncoded(updatedClient.getPicture()), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new UserDTO(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST);
         }
     }
     

@@ -109,7 +109,7 @@ export default {
 
     onMounted(() => {
       axios
-          .get("/api/users/loggedUser",
+          .get("https://renting-buddy-spring.herokuapp.com/api/users/loggedUser",
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             owner.value = response.data;
@@ -134,7 +134,7 @@ export default {
 
     function loadData() {
       axios
-          .get(`api/${entityTypeInfo.value.urlPart}/reservations`,
+          .get(`https://renting-buddy-spring.herokuapp.com/api/${entityTypeInfo.value.urlPart}/reservations`,
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             reservations.value = response.data;
@@ -203,7 +203,7 @@ export default {
         return;
       }
       axios
-          .post(`/api/clients/loggedOwner/sendReservationReport`, report.value,
+          .post(`https://renting-buddy-spring.herokuapp.com/api/clients/loggedOwner/sendReservationReport`, report.value,
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             if (response.data === true) {

@@ -1,6 +1,6 @@
 import App from './App.vue';
 import {createApp} from 'vue'
-import {createRouter, createWebHistory} from 'vue-router'
+import {createRouter} from 'vue-router'
 import ClientProfile from "./components/ClientProfile";
 import Toaster from '@meforma/vue-toaster';
 import Datepicker from '@vuepic/vue-datepicker';

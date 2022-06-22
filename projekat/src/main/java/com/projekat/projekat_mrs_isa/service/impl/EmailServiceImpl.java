@@ -51,7 +51,7 @@ public class EmailServiceImpl implements EmailService {
         String text="Dear,\n"+clientName+"\n\n";
         text += "You have successfully created a profile on RentingBuddy. Your account is connected with this mail, but still not verified. You will not be able " +
                 "to login until you verify your account. To verify your account, please follow this link: \n" +
-                "http://localhost:3000/verification/aTvHtI"+id.toString()+" \n\n\nThank you for using Renting Buddy service";
+                "https://renting-buddy-spring.herokuapp.com/verification/aTvHtI"+id.toString()+" \n\n\nThank you for using Renting Buddy service";
         return text;
     }
     @Async
@@ -91,6 +91,6 @@ public class EmailServiceImpl implements EmailService {
 
     private String resetPasswordMailGenerator(String token) {
         return "You have successfully created a password reset request.\nTo complete your password reset please follow the provided link:\n" +
-                "http://localhost:3000/newPassword/"+token+"\n\n\nThank you for using Renting Buddy service";
+                "https://renting-buddy-spring.herokuapp.com/newPassword/"+token+"\n\n\nThank you for using Renting Buddy service";
     }
 }

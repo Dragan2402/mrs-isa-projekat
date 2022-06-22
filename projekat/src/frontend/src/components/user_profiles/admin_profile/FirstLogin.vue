@@ -48,7 +48,7 @@ export default {
 
       const passwordChange = {"oldPassword": null, "newPassword": this.newPassword, "newPasswordConfirm": this.confirmPassword};
       console.log(passwordChange);
-      axios.put(`/api/admins/changePassword`, passwordChange, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
+      axios.put(`https://renting-buddy-spring.herokuapp.com/api/admins/changePassword`, passwordChange, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
         if (response.data == true) {
           this.$router.push("/");
         } else {

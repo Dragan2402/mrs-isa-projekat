@@ -524,13 +524,13 @@ methods:{
 
     let pathReviews;
     if(this.displayType==0 && this.id != undefined){      
-      pathReviews="/api/vacationHouses/anyUser/"+this.id+"/reviews";
+      pathReviews="https://renting-buddy-spring.herokuapp.com/api/vacationHouses/anyUser/"+this.id+"/reviews";
       }
     else if(this.displayType==1 && this.id != undefined){
-      pathReviews="/api/ships/anyUser/"+this.id+"/reviews";
+      pathReviews="https://renting-buddy-spring.herokuapp.com/api/ships/anyUser/"+this.id+"/reviews";
     }
     else if(this.id != undefined){
-      pathReviews="/api/fishingClasses/anyUser/"+this.id+"/reviews";
+      pathReviews="https://renting-buddy-spring.herokuapp.com/api/fishingClasses/anyUser/"+this.id+"/reviews";
     }
     axios.get(pathReviews).then(response =>{response.data.forEach(this.classifyReview)});
   },

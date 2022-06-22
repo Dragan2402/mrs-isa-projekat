@@ -384,7 +384,7 @@ export default {
 
     function addEntity() {
       axios
-          .post(`api/${entityTypeInfo.value.urlPart}/`, newEntity.value,
+          .post(`https://renting-buddy-spring.herokuapp.com/api/${entityTypeInfo.value.urlPart}/`, newEntity.value,
               { headers: {"Authorization" : `Bearer ${localStorage.getItem("jwt")}`} })
           .then(response => {
             console.log(response.data);

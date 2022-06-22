@@ -87,14 +87,14 @@ export default {
     }
   },
   mounted() {
-    axios.get("api/users/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.users = response.data))
-    axios.get("api/vacationHouses/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.vacationHouses = response.data))
-    axios.get("api/ships/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.ships = response.data))
-    axios.get("api/fishingClasses/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.fishingClasses = response.data))
+    axios.get("https://renting-buddy-spring.herokuapp.com/api/users/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.users = response.data))
+    axios.get("https://renting-buddy-spring.herokuapp.com/api/vacationHouses/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.vacationHouses = response.data))
+    axios.get("https://renting-buddy-spring.herokuapp.com/api/ships/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.ships = response.data))
+    axios.get("https://renting-buddy-spring.herokuapp.com/api/fishingClasses/all", {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => (this.fishingClasses = response.data))
   },
   methods: {
     deleteUser(user, index) {
-      axios.put("api/users/delete", user, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
+      axios.put("https://renting-buddy-spring.herokuapp.com/api/users/delete", user, {headers: {"Authorization": `Bearer ${localStorage.getItem("jwt")}`}}).then(response => {
         if (response.data == true) {
           this.$toast.success("Successfully deleted!");
           this.users.splice(index,1);
