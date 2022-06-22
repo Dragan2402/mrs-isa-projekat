@@ -34,4 +34,6 @@ public interface FishingClassService {
 
 
     List<FishingClassDTO> findByNoDateCriteria(String name, String address, Integer people, Double priceMin, Double priceMax, Pageable page);
+
+    List<FishingClass> findAllFromOwner(String username);
 }

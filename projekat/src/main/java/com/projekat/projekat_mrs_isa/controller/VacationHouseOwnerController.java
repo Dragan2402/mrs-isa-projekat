@@ -3,6 +3,7 @@ package com.projekat.projekat_mrs_isa.controller;
 
 import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
+import com.projekat.projekat_mrs_isa.model.VacationHouse;
 import com.projekat.projekat_mrs_isa.model.VacationHouseOwner;
 import com.projekat.projekat_mrs_isa.service.UtilityService;
 import com.projekat.projekat_mrs_isa.service.VacationHouseOwnerService;
@@ -49,6 +50,9 @@ public class VacationHouseOwnerController {
         }
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
+
+
+
 
     @GetMapping(value = "/getServices/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('CLIENT')")

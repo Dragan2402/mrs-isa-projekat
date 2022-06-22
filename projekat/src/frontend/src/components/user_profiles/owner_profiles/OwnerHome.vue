@@ -132,7 +132,7 @@
         <label>{{Math.round(entity.rating * 10) / 10}} &#11088;</label>
       </div>
       <div class="home-entity-price h-100 d-flex">
-        <div class="align-self-center">
+        <div class="align-self-center w-100 p-4">
           <button type="button" class="custom-btn button-primary d-block w-100" @click="openEntityProfile(entity.id)">Open Profile</button>
           <button type="button" class="custom-btn button-primary d-block w-100" @click="entityHasReservations(entity.id)" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button>
           <button type="button" class="custom-btn button-primary d-block w-100" @click="entityHasReservations(entity.id)" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
@@ -334,7 +334,7 @@ export default {
                 routeName: "shipProfile"
               };
 
-            // else if INSTRUCTOR, ADMIN
+            // else if INSTRUCTOR,
 
             } else {
 

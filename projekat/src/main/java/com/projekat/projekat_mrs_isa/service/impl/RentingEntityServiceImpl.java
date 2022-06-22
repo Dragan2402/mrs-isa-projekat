@@ -7,6 +7,10 @@ import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.Review;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
 import com.projekat.projekat_mrs_isa.repository.*;
+import com.projekat.projekat_mrs_isa.model.*;
+import com.projekat.projekat_mrs_isa.repository.OfferRepository;
+import com.projekat.projekat_mrs_isa.repository.RentingEntityRepository;
+import com.projekat.projekat_mrs_isa.repository.ReviewRepository;
 import com.projekat.projekat_mrs_isa.service.ClientService;
 import com.projekat.projekat_mrs_isa.service.RentingEntityService;
 import com.projekat.projekat_mrs_isa.service.UtilityService;
@@ -139,4 +143,5 @@ public class RentingEntityServiceImpl implements RentingEntityService {
     public void deleteReservationByRentingEntity(RentingEntity rentingEntity) {
         reservationRepository.deleteReservationByRentingEntity(rentingEntity);
     }
+
 }

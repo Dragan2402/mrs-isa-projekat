@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation,Long> {
@@ -29,6 +31,9 @@ public interface ReservationRepository extends JpaRepository<Reservation,Long> {
     @Query("update Reservation r set r.deleted=true where r.rentingEntity=?1")
     void deleteReservationByRentingEntity(RentingEntity rentingEntity);
     
+    @Query("select r from Reservation r where r.start >= ?1 and r.duration < ?2 and r.rentingEntity = ?3 and r.deleted=false")
+    List<Reservation> getReservationsByDateAndEntity(LocalDateTime dateStart, Duration duration, RentingEntity rentingEntity);
+
 //    @Query("select r from Reservation r join fetch r.rentingEntity join fetch r.client where r.rentingEntity = ?1")
 //    List<Reservation> getAllFromEntity(RentingEntity entity);
 }

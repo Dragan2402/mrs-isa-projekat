@@ -6,13 +6,10 @@ import com.projekat.projekat_mrs_isa.dto.ReviewDisplayDTO;
 import com.projekat.projekat_mrs_isa.dto.ShipDTO;
 import com.projekat.projekat_mrs_isa.dto.VacationHouseDTO;
 import com.projekat.projekat_mrs_isa.model.*;
-import com.projekat.projekat_mrs_isa.service.RentingEntityService;
+import com.projekat.projekat_mrs_isa.service.*;
 import com.projekat.projekat_mrs_isa.dto.ReservationDTO;
 import com.projekat.projekat_mrs_isa.dto.ShipDTO;
 import com.projekat.projekat_mrs_isa.model.*;
-import com.projekat.projekat_mrs_isa.service.ShipOwnerService;
-import com.projekat.projekat_mrs_isa.service.ShipService;
-import com.projekat.projekat_mrs_isa.service.UtilityService;
 import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.jetbrains.annotations.NotNull;
@@ -47,6 +44,9 @@ public class ShipController {
 
     @Autowired
     private ResourceLoader resourceLoader;
+
+    @Autowired
+    private ReservationService reservationService;
 
     @Autowired
     private UtilityService utilityService;
@@ -221,6 +221,31 @@ public class ShipController {
         List<Ship> ships = shipService.findAllFromOwner(ownerPrincipal.getName());
         List<ShipDTO> shipDTOList = getShipDTOList(ships);
         return new ResponseEntity<>(shipDTOList, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/loggedShipOwner/getEntitiesRating", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('SHIP_OWNER')")
+    public ResponseEntity<Double> getEntitiesRating(Principal ownerPrincipal) {
+        List<Ship> ships = shipService.findAllFromOwner(ownerPrincipal.getName());
+        double rating=0;
+        for(Ship ship : ships)
+            rating += ship.getRating();
+        return new ResponseEntity<>(rating, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/loggedShipOwner/getMoneyEarned/{startDate}-{endDate}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('SHIP_OWNER')")
+    public ResponseEntity<Double> getEntitiesRating(Principal ownerPrincipal,@PathVariable("startDate") String startDateString,@PathVariable("endDate") String endDateString) {
+        LocalDateTime dateStart=LocalDateTime.parse(startDateString, DateTimeFormatter.ofPattern("yyyy_MM_dd HH:mm:ss"));
+        LocalDateTime dateEnd=LocalDateTime.parse(endDateString, DateTimeFormatter.ofPattern("yyyy_MM_dd HH:mm:ss"));
+        List<Ship> ships = shipService.findAllFromOwner(ownerPrincipal.getName());
+        double moneyEarned=0d;
+        for(Ship ship : ships){
+            for(Reservation reservation : reservationService.getReservationsByDateAndEntity(dateStart,dateEnd,ship)) {
+                moneyEarned += reservation.getPrice();
+            }
+        }
+        return new ResponseEntity<>(moneyEarned, HttpStatus.OK);
     }
 
     @GetMapping(value = "/loggedShipOwner/{id}/hasReservations")

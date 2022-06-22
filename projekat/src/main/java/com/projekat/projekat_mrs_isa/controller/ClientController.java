@@ -258,6 +258,8 @@ public class ClientController {
         return new ResponseEntity<>(clientService.isSubscribed(client,id), HttpStatus.OK);
     }
 
+
+
     @GetMapping(value = "/rentingEntityAvailability/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('CLIENT')")
     @Transactional
