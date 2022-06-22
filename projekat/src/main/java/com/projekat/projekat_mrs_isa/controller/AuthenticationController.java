@@ -91,7 +91,7 @@ public class AuthenticationController {
                     email.toLowerCase(),
                     username,
                     (String) userMap.get("password"),
-                    "pictures/user_pictures/0.png",
+                    "src/main/resources/pictures/user_pictures/0.png",
                     (String) userMap.get("firstName"),
                     (String) userMap.get("lastName"),
                     (String) userMap.get("address"),

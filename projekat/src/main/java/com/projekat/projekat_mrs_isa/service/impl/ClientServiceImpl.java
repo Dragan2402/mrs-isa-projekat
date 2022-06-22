@@ -239,7 +239,7 @@ public class ClientServiceImpl implements ClientService {
                 ReservationDTO reservationDTO = new ReservationDTO(reservation);
                 reservationDTO.setRentingEntityOwnerId(getRentingEntityOwnerId(reservation.getRentingEntity()));
                 reservationDTO.setRentingEntityOwner(getRentingEntityOwner(reservation.getRentingEntity()));
-                String picturePath = "pictures/renting_entities/0.png";
+                String picturePath = "src/main/resources/pictures/renting_entities/0.png";
                 if (reservation.getRentingEntity().getPictures().size() > 0) {
                     picturePath = reservation.getRentingEntity().getPictures().get(0);
                 }
@@ -258,7 +258,7 @@ public class ClientServiceImpl implements ClientService {
                 ReservationDTO reservationDTO = new ReservationDTO(reservation);
                 reservationDTO.setRentingEntityOwnerId(getRentingEntityOwnerId(reservation.getRentingEntity()));
                 reservationDTO.setRentingEntityOwner(getRentingEntityOwner(reservation.getRentingEntity()));
-                String picturePath = "pictures/renting_entities/0.png";
+                String picturePath = "src/main/resources/pictures/renting_entities/0.png";
                 if (reservation.getRentingEntity().getPictures().size() > 0) {
                     picturePath = reservation.getRentingEntity().getPictures().get(0);
                 }

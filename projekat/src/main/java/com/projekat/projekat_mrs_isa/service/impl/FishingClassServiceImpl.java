@@ -77,7 +77,7 @@ public class FishingClassServiceImpl implements FishingClassService {
         List<FishingClassDTO> fishingClassDTOS = new ArrayList<>();
         for (FishingClass fishingClass : fishingClasses) {
             FishingClassDTO fishingClassDTO = new FishingClassDTO(fishingClass);
-            String picturePath = "pictures/renting_entities/0.png";
+            String picturePath = "src/main/resources/pictures/renting_entities/0.png";
             if (fishingClass.getPictures().size() > 0) {
                 picturePath = fishingClass.getPictures().get(0);
             }
@@ -93,7 +93,7 @@ public class FishingClassServiceImpl implements FishingClassService {
         List<FishingClassDTO> fishingClassDTOS = new ArrayList<>();
         for (FishingClass fishingClass : fishingClasses) {
             FishingClassDTO fishingClassDTO = new FishingClassDTO(fishingClass);
-            String picturePath = "pictures/renting_entities/0.png";
+            String picturePath = "src/main/resources/pictures/renting_entities/0.png";
             if (fishingClass.getPictures().size() > 0) {
                 picturePath = fishingClass.getPictures().get(0);
             }

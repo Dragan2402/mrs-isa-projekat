@@ -59,7 +59,7 @@ public class FishingInstructorServiceImpl implements FishingInstructorService {
                 (String) userMap.get("email"),
                 (String) userMap.get("username"),
                 passwordEncoderComponent.encode((String) userMap.get("password")),
-                "pictures/user_pictures/0.png",
+                "src/main/resources/pictures/user_pictures/0.png",
                 (String) userMap.get("firstName"),
                 (String) userMap.get("lastName"),
                 (String) userMap.get("address"),

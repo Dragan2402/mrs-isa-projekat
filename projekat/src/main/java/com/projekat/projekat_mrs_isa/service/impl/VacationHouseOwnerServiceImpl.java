@@ -74,7 +74,7 @@ public class VacationHouseOwnerServiceImpl implements VacationHouseOwnerService 
                 if (vh.getPictures().size() > 0)
                     reservationDTO.setImg(vh.getPictures().get(0));
                 else
-                    reservationDTO.setImg("pictures/renting_entities/0.png");
+                    reservationDTO.setImg("src/main/resources/pictures/renting_entities/0.png");
                 entityReservationDTOList.add(reservationDTO);
             }
             reservationDTOList.addAll(entityReservationDTOList);

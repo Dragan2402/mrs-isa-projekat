@@ -73,7 +73,7 @@ public class ShipOwnerServiceImpl implements ShipOwnerService {
                 if (s.getPictures().size() > 0)
                     reservationDTO.setImg(s.getPictures().get(0));
                 else
-                    reservationDTO.setImg("pictures/renting_entities/0.png");
+                    reservationDTO.setImg("src/main/resources/pictures/renting_entities/0.png");
                 entityReservationDTOList.add(reservationDTO);
             }
             reservationDTOList.addAll(entityReservationDTOList);
@@ -90,7 +90,7 @@ public class ShipOwnerServiceImpl implements ShipOwnerService {
                     (String) userMap.get("email"),
                     (String) userMap.get("username"),
                     passwordEncoderComponent.encode((String) userMap.get("password")),
-                    "pictures/user_pictures/0.png",
+                    "src/main/resources/pictures/user_pictures/0.png",
                     (String) userMap.get("firstName"),
                     (String) userMap.get("lastName"),
                     (String) userMap.get("address"),

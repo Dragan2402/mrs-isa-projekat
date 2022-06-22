@@ -85,7 +85,7 @@ public class AdminServiceImpl implements AdminService {
                 (String) adminMap.get("email"),
                 (String) adminMap.get("username"),
                 passwordEncoderComponent.encode((String) adminMap.get("password")),
-                "pictures/user_pictures/0.png",
+                "src/main/resources/pictures/user_pictures/0.png",
                 (String) adminMap.get("firstName"),
                 (String) adminMap.get("lastName"),
                 (String) adminMap.get("address"),
