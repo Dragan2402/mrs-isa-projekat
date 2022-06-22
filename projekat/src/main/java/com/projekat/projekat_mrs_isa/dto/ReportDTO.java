@@ -2,6 +2,7 @@ package com.projekat.projekat_mrs_isa.dto;
 
 import com.projekat.projekat_mrs_isa.model.Report;
 import com.projekat.projekat_mrs_isa.model.ReportType;
+import org.jetbrains.annotations.NotNull;
 
 public class ReportDTO {
     private Long id;
@@ -27,7 +28,8 @@ public class ReportDTO {
         this.reviewed = reviewed;
     }
 
-    public ReportDTO(Report report) {
+    public ReportDTO(@NotNull Report report) {
+        this.id = report.getId();
         this.text = report.getText();
         this.type = report.getType();
         this.reservationId = report.getReservation().getId();

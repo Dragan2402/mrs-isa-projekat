@@ -20,6 +20,8 @@ public class UserDTO {
 
     private Boolean firstLogin;
 
+    private Boolean enabled;
+
     public UserDTO() {
     }
 
@@ -49,6 +51,7 @@ public class UserDTO {
         penalties = user.getPenalties();
         accountType=user.getType();
         firstLogin=user.getFirstLogin();
+        enabled=user.isEnabled();
     }
 
 
@@ -146,5 +149,13 @@ public class UserDTO {
 
     public void setAccountType(AccountType accountType) {
         this.accountType = accountType;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 }

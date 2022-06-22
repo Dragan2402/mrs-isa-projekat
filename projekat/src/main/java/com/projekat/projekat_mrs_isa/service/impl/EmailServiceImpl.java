@@ -1,10 +1,7 @@
 package com.projekat.projekat_mrs_isa.service.impl;
 
 import com.projekat.projekat_mrs_isa.dto.UserDTO;
-import com.projekat.projekat_mrs_isa.model.Client;
-import com.projekat.projekat_mrs_isa.model.Reservation;
-import com.projekat.projekat_mrs_isa.model.Review;
-import com.projekat.projekat_mrs_isa.model.User;
+import com.projekat.projekat_mrs_isa.model.*;
 import com.projekat.projekat_mrs_isa.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -87,6 +84,100 @@ public class EmailServiceImpl implements EmailService {
         text += client.getFirstName() + " " + client.getLastName() + " rated your property.";
         mail.setText(text);
         javaMailSender.send(mail);
+    }
+
+    @Override
+    public void sendReport(User client, User submitter, Report report) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(submitter.getEmail());
+        mail.setFrom(environment.getProperty("spring.mail.username"));
+        mail.setSubject("Penalty approved!");
+        String text="Dear,\n"+submitter.getFirstName() + " " + submitter.getLastName() +"\n\n";
+        text += "You successfully gave penalty to " + client.getUsername() + ".";
+        mail.setText(text);
+        javaMailSender.send(mail);
+
+        SimpleMailMessage mail2 = new SimpleMailMessage();
+        mail2.setTo(client.getEmail());
+        mail2.setFrom(environment.getProperty("spring.mail.username"));
+        mail2.setSubject("You've got penalty!");
+        String text2="Dear,\n"+client.getFirstName() + " " + client.getLastName() +"\n\n";
+        text2 += "You've got penalty from " + submitter.getUsername() + ".";
+        mail2.setText(text2);
+        javaMailSender.send(mail2);
+
+    }
+
+    @Override
+    public void sendDeleteAccount(User user) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(user.getEmail());
+        mail.setFrom(environment.getProperty("spring.mail.username"));
+        mail.setSubject("Delete approved!");
+        String text="Dear,\n"+user.getFirstName() + " " + user.getLastName() +"\n\n";
+        text += "Your account has been successfully deleted.";
+        mail.setText(text);
+        javaMailSender.send(mail);
+    }
+
+    @Override
+    public void sendRegistration(User user) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(user.getEmail());
+        mail.setFrom(environment.getProperty("spring.mail.username"));
+        mail.setSubject("Registration approved!");
+        String text="Dear,\n"+user.getFirstName() + " " + user.getLastName() +"\n\n";
+        text += "Your registration request is approved.";
+        mail.setText(text);
+        javaMailSender.send(mail);
+    }
+
+    @Override
+    public void sendRejectRequest(User user, String adminResponse) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(user.getEmail());
+        mail.setFrom(environment.getProperty("spring.mail.username"));
+        mail.setSubject("Request rejected!");
+        String text="Dear,\n"+user.getFirstName() + " " + user.getLastName() +"\n\n";
+        text += "Your request is rejected. Reason: " + adminResponse;
+        mail.setText(text);
+        javaMailSender.send(mail);
+    }
+
+    @Override
+    public void sendSuccessComplaint(User client, User owner, String adminResponse) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(owner.getEmail());
+        mail.setFrom(environment.getProperty("spring.mail.username"));
+        mail.setSubject("New report!");
+        String text="Dear,\n"+owner.getFirstName() + " " + owner.getLastName() +"\n\n";
+        text += "You have been reported by " + client.getUsername() + ".\n";
+        text += "Admin response: " + adminResponse;
+        mail.setText(text);
+        javaMailSender.send(mail);
+
+        SimpleMailMessage mail2 = new SimpleMailMessage();
+        mail2.setTo(client.getEmail());
+        mail2.setFrom(environment.getProperty("spring.mail.username"));
+        mail2.setSubject("Report accepted!");
+        String text2="Dear,\n"+client.getFirstName() + " " + client.getLastName() +"\n\n";
+        text2 += "Your report to " + owner.getUsername() + " has been accepted.\n";
+        text2 += "Admin response: " + adminResponse;
+        mail2.setText(text2);
+        javaMailSender.send(mail2);
+    }
+
+    @Override
+    public void sendRejectComplaint(User client, User owner, String adminResponse) {
+        SimpleMailMessage mail2 = new SimpleMailMessage();
+        mail2.setTo(client.getEmail());
+        mail2.setFrom(environment.getProperty("spring.mail.username"));
+        mail2.setSubject("Report rejected!");
+        String text2="Dear,\n"+client.getFirstName() + " " + client.getLastName() +"\n\n";
+        text2 += "Your report to " + owner.getUsername() + " has been rejected.\n";
+        text2 += "Reason: " + adminResponse;
+        mail2.setText(text2);
+        javaMailSender.send(mail2);
     }
 
     private String resetPasswordMailGenerator(String token) {

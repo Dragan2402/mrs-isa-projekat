@@ -233,6 +233,8 @@ public class VacationHouseController {
         VacationHouse vacationHouse = vacationHouseService.findById(vacationHouseDTO.getId());
         if (vacationHouse == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         rentingEntityService.deleteReviewsByRentingEntity(vacationHouse);
+        rentingEntityService.deleteComplaintByRentingEntity(vacationHouse);
+        rentingEntityService.deleteReservationByRentingEntity(vacationHouse);
         vacationHouse.setDeleted(true);
         vacationHouseService.save(vacationHouse);
         return new ResponseEntity<>(true, HttpStatus.OK);

@@ -158,7 +158,7 @@ public class UserController {
     public ResponseEntity<Boolean> deleteUser(@RequestBody UserDTO userDTO) {
         User user = userService.findById(userDTO.getId());
         if (user == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        user.setDeleted(true);
+        user.setEnabled(false);
         userService.save(user);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }

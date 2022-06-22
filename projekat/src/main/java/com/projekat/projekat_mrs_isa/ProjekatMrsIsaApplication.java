@@ -55,6 +55,9 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
     private ReservationRepository reservationRep;
 
     @Autowired
+    private ReportRepository reportRepository;
+
+    @Autowired
     private FeeRepository feeRepository;
 
     @Autowired
@@ -527,6 +530,20 @@ public class ProjekatMrsIsaApplication implements CommandLineRunner  {
         reviewRepository.save(reviewTemp4);
 
         vacHouseRep.save(vacHouseOwnerTemp1);
+
+        Report reportTemp1 = new Report("Djubre bio", ReportType.GOOD, reservationTemp, clientTemp1, vacHouseOwnerTemp1);
+        Report reportTemp2 = new Report("Bilo nako", ReportType.NO_SHOW, reservationTemp2, clientTemp2, vacHouseOwnerTemp1);
+        Report reportTemp3 = new Report("Pokrali me ko majmuna", ReportType.BAD, reservationTemp2, clientTemp1, vacHouseOwnerTemp1);
+        Report reportTemp4 = new Report("Odron i sljam Novog Sada", ReportType.BAD, reservationTemp, clientTemp1, vacHouseOwnerTemp2);
+        Report reportTemp5 = new Report("Sve okej proslo", ReportType.GOOD, reservationTemp2, clientTemp2, vacHouseOwnerTemp1);
+
+        reportRepository.save(reportTemp1);
+        reportRepository.save(reportTemp2);
+        reportRepository.save(reportTemp3);
+        reportRepository.save(reportTemp4);
+        reportRepository.save(reportTemp5);
+
+
 
         Path currentRelativePath = Paths.get("");
         String s = currentRelativePath.toAbsolutePath().toString();

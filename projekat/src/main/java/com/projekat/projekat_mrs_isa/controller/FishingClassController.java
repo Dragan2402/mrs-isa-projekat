@@ -147,6 +147,9 @@ public class FishingClassController {
     public ResponseEntity<Boolean> deleteFishingClass(@RequestBody FishingClassDTO fishingClassDTO) {
         FishingClass fishingClass = fishingClassService.findById(fishingClassDTO.getId());
         if (fishingClass == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        rentingEntityService.deleteReviewsByRentingEntity(fishingClass);
+        rentingEntityService.deleteComplaintByRentingEntity(fishingClass);
+        rentingEntityService.deleteReservationByRentingEntity(fishingClass);
         fishingClass.setDeleted(true);
         fishingClassService.save(fishingClass);
         return new ResponseEntity<>(true, HttpStatus.OK);

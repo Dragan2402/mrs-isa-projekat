@@ -6,9 +6,7 @@ import com.projekat.projekat_mrs_isa.model.Offer;
 import com.projekat.projekat_mrs_isa.model.RentingEntity;
 import com.projekat.projekat_mrs_isa.model.Review;
 import com.projekat.projekat_mrs_isa.model.VacationHouse;
-import com.projekat.projekat_mrs_isa.repository.OfferRepository;
-import com.projekat.projekat_mrs_isa.repository.RentingEntityRepository;
-import com.projekat.projekat_mrs_isa.repository.ReviewRepository;
+import com.projekat.projekat_mrs_isa.repository.*;
 import com.projekat.projekat_mrs_isa.service.ClientService;
 import com.projekat.projekat_mrs_isa.service.RentingEntityService;
 import com.projekat.projekat_mrs_isa.service.UtilityService;
@@ -37,6 +35,12 @@ public class RentingEntityServiceImpl implements RentingEntityService {
 
     @Autowired
     private ReviewRepository reviewRepository;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
+
+    @Autowired
+    private ComplaintRepository complaintRepository;
 
     @Autowired
     private ResourceLoader resourceLoader;
@@ -124,5 +128,15 @@ public class RentingEntityServiceImpl implements RentingEntityService {
     @Override
     public void deleteReviewsByRentingEntity(RentingEntity rentingEntity) {
         reviewRepository.deleteReviewByRentingEntity(rentingEntity);
+    }
+
+    @Override
+    public void deleteComplaintByRentingEntity(RentingEntity rentingEntity) {
+        complaintRepository.deleteComplaintByRentingEntity(rentingEntity);
+    }
+
+    @Override
+    public void deleteReservationByRentingEntity(RentingEntity rentingEntity) {
+        reservationRepository.deleteReservationByRentingEntity(rentingEntity);
     }
 }
