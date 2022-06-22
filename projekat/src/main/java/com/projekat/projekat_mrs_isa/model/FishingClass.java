@@ -45,7 +45,6 @@ public class FishingClass extends RentingEntity{
         super(fishingClassDTO);
         this.instructorBiography = fishingClassDTO.getInstructorBiography();
         this.clientLimit = fishingClassDTO.getClientLimit();
-        this.fishingEquipment = fishingClassDTO.getFishingEquipment();
     }
 
     public String getInstructorBiography() {

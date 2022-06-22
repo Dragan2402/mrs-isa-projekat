@@ -193,7 +193,10 @@ export default {
                 urlPart: "shipOwners"
               };
 
-              // else if INSTRUCTOR, ADMIN
+            } else if (response.data.accountType === "INSTRUCTOR") {
+              entityTypeInfo.value = {
+                urlPart: "fishingInstructors"
+              };
 
             } else {
               router.push({name: "homePage"});

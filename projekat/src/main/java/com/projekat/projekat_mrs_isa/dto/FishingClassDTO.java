@@ -19,7 +19,6 @@ public class FishingClassDTO extends RentingEntityDTO {
         super(fishingClass);
         instructorBiography = fishingClass.getInstructorBiography();
         clientLimit = fishingClass.getClientLimit();
-        fishingEquipment = fishingClass.getFishingEquipment();
     }
 
     public String getInstructorBiography() {

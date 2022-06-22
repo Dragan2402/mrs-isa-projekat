@@ -39,7 +39,7 @@ public class FishingInstructorController {
 
     @GetMapping(value = "loggedFishingInstructor", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('FC_INSTRUCTOR')")
-    public ResponseEntity<UserDTO> getLoggedVacationHouseOwner(Principal instructorPrincipal) {
+    public ResponseEntity<UserDTO> getLoggedFishingInstructor(Principal instructorPrincipal) {
         FishingInstructor fishingInstructor = fishingInstructorService.findByUsername(instructorPrincipal.getName());
         if (fishingInstructor == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

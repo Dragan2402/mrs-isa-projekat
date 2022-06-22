@@ -63,7 +63,8 @@ export default {
             } else if (response.data.accountType === "SH_OWNER") {
               buttonLabel.value = "Ships";
 
-            // else if INSTRUCTOR
+            } else if (response.data.accountType === "INSTRUCTOR") {
+              buttonLabel.value = "Fishing Classes";
 
             } else {
               router.push({name: "homePage"});
